@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<package>
+  <name>bender_gazebo</name>
+  <version>0.0.0</version>
+  <description>Config files and controllers for using Bender robot in Gazebo simulator</description>
+
+  <maintainer email="rorro.mr@gmail.com">Rodrigo Muñoz</maintainer>
+  <author email="rorro.mr@gmail.com">Rodrigo Muñoz</author>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>actionlib</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
+  <build_depend>angles</build_depend>
+  <build_depend>bender_description</build_depend>
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>control_msgs</build_depend> 
+  <build_depend>control_toolbox</build_depend>
+  <build_depend>controller_interface</build_depend> 
+  <build_depend>controller_manager</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
+  <build_depend>effort_controllers</build_depend>
+  <build_depend>forward_command_controller</build_depend>
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>hardware_interface</build_depend>
+  <build_depend>realtime_tools</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>trajectory_msgs</build_depend>
+  <build_depend>urdf</build_depend>
+  <build_depend>xacro</build_depend>
+
+  <run_depend>actionlib</run_depend>
+  <run_depend>actionlib_msgs</run_depend>
+  <run_depend>angles</run_depend>
+  <run_depend>bender_description</run_depend>
+  <run_depend>cmake_modules</run_depend>
+  <run_depend>control_msgs</run_depend> 
+  <run_depend>control_toolbox</run_depend>
+  <run_depend>controller_interface</run_depend>
+  <run_depend>controller_manager</run_depend>
+  <run_depend>dynamic_reconfigure</run_depend>
+  <run_depend>effort_controllers</run_depend>
+  <run_depend>forward_command_controller</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>gazebo_ros_control</run_depend>
+  <run_depend>hardware_interface</run_depend>
+  <run_depend>realtime_tools</run_depend>
+  <run_depend>ros_control</run_depend>
+  <run_depend>ros_controllers</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>rqt_joint_trajectory_controller</run_depend>
+  <run_depend>trajectory_msgs</run_depend>
+  <run_depend>urdf</run_depend>
+  <run_depend>xacro</run_depend>
+
+  <export>
+    <!-- Controllers plugins-->
+    <controller_interface plugin="${prefix}/effort_controllers_plugins.xml"/>
+  </export>
+  
+</package>

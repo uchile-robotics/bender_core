@@ -1,0 +1,4 @@
+string id
+bender_msgs/SemanticObject new_data
+---
+bender_msgs/SemanticObject[] data

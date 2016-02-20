@@ -1,0 +1,3 @@
+string response_namespace
+---
+sensor_msgs/Image im

@@ -1,0 +1,4 @@
+# Regla udev para el seteo de nombres para los lasers hokuyo
+# usados en el sistema de navegacion del robot bender
+
+KERNEL=="ttyACM[0-9]*", ACTION=="add", ATTRS{idVendor}=="15d1", MODE="0666", GROUP="dialout", PROGRAM="/opt/ros/indigo/env.sh rosrun hokuyo_node getID %N q", SYMLINK+="sensors/hokuyo_%c"

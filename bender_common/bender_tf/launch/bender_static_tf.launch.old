@@ -1,0 +1,78 @@
+<launch>
+  <!-- -- --  DEPRECATED  -- -- -->
+
+  <arg name="publish_period" value="100"/>
+
+
+  <!-- - - - - - - - - - - - - - - - - - -
+            B E N D E R   B O D Y 
+   - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- /odom   < - - -  /bender/base_link  -->
+  <node name="pioneer_tf" pkg="bender_tf" type="pioneer_tf" ns="/bender/tf/"/>
+
+  <!-- /bender/base_link  < - - -  /bender/torso_link -->
+  <node name="torso_link_tf" pkg="tf" type="static_transform_publisher"
+   args="0 0 0.90 0 0 0 /bender/base_link /bender/torso_link $(arg publish_period)" ns="/bender/tf/"/>
+
+  <!-- /bender/torso_link  < - - -  /bender/neck_link -->
+  <!-- Se comenta hasta obtener el encoder para el cuello!!! -->
+  <!--node name="neck_tf" pkg="bender_tf" type="neck_tf" ns="/bender/tf/"/-->
+  <node name="neck_link_tf" pkg="tf" type="static_transform_publisher"
+   args="0 -0.02 0.51.5 0 0 0 /bender/torso_link /bender/neck_link $(arg publish_period)" ns="/bender/tf/"/>
+
+
+  <!-- /bender/neck_link  < - - -  /bender/head_link -->
+  <node name="head_link_tf" pkg="tf" type="static_transform_publisher"
+   args="0 0 0.172 0 0 0 /bender/neck_link /bender/head_link $(arg publish_period)" ns="/bender/tf/"/>
+
+
+
+  <!-- - - - - - - - - - - - - - - - - - -
+                S E N S O R S 
+   - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- - -  C A M E R A S  - - -->
+
+  <!-- /bender/head_link  < - - -  /bender/sensors/camera_right_eye_link -->
+  <node name="right_eye_camera_tf" pkg="tf" type="static_transform_publisher"
+   args="0.09 -0.035 0 0 0 0 /bender/head_link /bender/sensors/camera_right_eye_link $(arg publish_period)" ns="/bender/tf/"/>
+
+  <!-- /bender/head_link  < - - -  /bender/sensors/camera_left_eye_link -->
+  <node name="left_eye_camera_tf" pkg="tf" type="static_transform_publisher"
+   args="0.09  0.035 0 0 0 0 /bender/head_link /bender/sensors/camera_left_eye_link $(arg publish_period)" ns="/bender/tf/"/>
+
+   <!-- /bender/head_link  < - - -  /bender/sensors/camera_forehead_link -->
+   <!--node name="forehead_camera_tf" pkg="tf" type="static_transform_publisher"
+   args="0.165 -0.02 0.11 0 0 0 /bender/head_link /bender/sensors/camera_forehead_link $(arg publish_period)" ns="/bender/tf/"/-->
+
+  <!-- - -  L A S E R S  - - -->
+
+  <!-- /bender/base_link  < - - -  /bender/sensors/laser_front_link -->
+  <node name="laser_front_tf" pkg="tf" type="static_transform_publisher"
+   args="0.240 0 0.175 0 0 3.141592 /bender/base_link /bender/sensors/laser_front_link $(arg publish_period)" ns="/bender/tf/"/>
+
+  <!-- /bender/base_link  < - - -  /bender/sensors/laser_rear_link -->
+  <node name="laser_rear_tf" pkg="tf" type="static_transform_publisher"
+   args="-0.215 0 0.12.5 3.141592 0 3.141592 /bender/base_link /bender/sensors/laser_rear_link $(arg publish_period)" ns="/bender/tf/"/>
+
+  <!-- /bender/base_link  < - - -  /bender/sensors/laser_virtual_link -->
+  <!--node name="laser_virtual_tf" pkg="tf" type="static_transform_publisher"
+   args="0 0 0.145 0 0 0 /bender/base_link /bender/sensors/laser_virtual_link $(arg publish_period)" ns="/bender/tf/"/-->
+
+
+  <!-- - -  K I N E C T S  - - -->
+
+  <!-- /bender/torso_link  < - - -  /bender/sensors/rgbd_waist_link -->
+  <node name="rgbd_waist_tf" pkg="tf" type="static_transform_publisher"
+   args="0.16 0 0 0 0 0 /bender/torso_link /bender/sensors/rgbd_waist_link $(arg publish_period)" ns="/bender/tf/"/>
+
+  <!-- /bender/head_link  15.0*3.1415/180.0 < - - -  /bender/sensors/rgbd_head_link -->
+  <node name="rgbd_head_tf" pkg="tf" type="static_transform_publisher"
+   args="0.105 0 0.01 0 1.1 0 /bender/head_link /bender/sensors/rgbd_head_link $(arg publish_period)" ns="/bender/tf/"/>
+
+  <!-- /bender/head_link  15.0*3.1415/180.0 < - - -  /bender/sensors/rgbd_head_link -->
+  <node name="rgbd_head_tf_2" pkg="tf" type="static_transform_publisher"
+   args="0.105 0 0.01 0 0.26 0 /bender/head_link /bender/sensors/rgbd_head_2_link $(arg publish_period)" ns="/bender/tf/"/>
+
+</launch>

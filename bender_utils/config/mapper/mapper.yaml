@@ -1,0 +1,17 @@
+unknown_class: unknown 
+
+
+classes : ["drinks","food","snacks","cleaningstuff","containers"]
+drinks: ["greentea", "papayamilk", "puremilk", "water","orangejuice","beer"]
+food:   ["biscuits","bubblegum","chocolates","tomatochips","barbecuechips","honeychip"]
+snacks: ["coconutcereals","cocoballs","eggstars","gramsoup","beansauce","apple","lemon","pear"]
+cleaningstuff: ["sponge","toiletpaper","soap","lotion","toothpaste","cloth"]
+containers: ["bowl","plate","tray"]
+
+unknown: []
+unknown_location: waste_bin
+drinks_location: kitchencounter
+food_location: kitchentable
+snacks_location: desk
+cleaningstuff_location: bookcase
+

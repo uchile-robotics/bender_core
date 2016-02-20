@@ -1,0 +1,38 @@
+<launch>
+
+  <arg name="prefix" default="bender/" />
+  <arg name="use_gui" default="false"  />
+  <arg name="rate" default="40" />
+  <arg name="model_type" default="asus" />
+  <!-- Cargar modelo -->
+  <include file="$(find bender_description)/launch/load_robot_description.launch">
+    <!-- prefix param para links -->
+    <arg name="prefix" value="$(arg prefix)" />
+    <arg name="model_type" value="$(arg model_type)" />
+  </include>
+
+  <!-- Crear TF a partir de joint states -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" ns="/bender/">
+    <param name="publish_frequency" value="$(arg rate)" />
+  </node>
+
+  <!-- TF dinamica 
+  <node name="dyn_state_publisher" pkg="bender_tf" type="dyn_state_publisher" ns="/bender/" output="screen">
+    <param name="publish_frequency" value="$(arg rate)" />
+  </node>
+  -->
+  
+  <!-- Unificar joint states -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="$(arg use_gui)" />
+    <param name="rate" value="$(arg rate)" />
+    <rosparam param="source_list">
+      ['bender/r_arm/joint_states',
+      'bender/r_gripper/joint_states',
+      'bender/l_arm/joint_states',
+      'bender/l_gripper/joint_states',
+      'bender/head/joint_states']</rosparam>
+    <remap from="joint_states" to="bender/joint_states"/>
+  </node>
+
+</launch>

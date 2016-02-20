@@ -1,0 +1,6 @@
+
+---
+int32[] cx
+int32[] cy
+bender_msgs/Rect[] BBoxes
+int32 n

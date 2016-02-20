@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<package>
+  <name>bender_sensors</name>
+  <version>0.0.0</version>
+  <description>The bender_sensors package
+
+    bender_sensors:
+
+    camera_service
+    --------------
+    Uses opencv to open a camera and retrive
+    images as a service. Date 06-05-13.
+    Future work: compressed images (image_transport?)
+
+    laser_merger
+    ------------
+    takes two planar laserScans and joins them
+
+
+    Fill me!
+
+  </description>
+  <maintainer email="bender.contacto@gmail.com">Bender Team - UChile Homebreakers</maintainer>
+  <license>TODO</license>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>bender_msgs</build_depend>
+  <build_depend>bender_srvs</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>libusb-1.0-dev</build_depend>
+  <build_depend>bender_utils</build_depend>
+  
+  <run_depend>bender_utils</run_depend>
+  
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>bender_msgs</run_depend>
+  <run_depend>bender_srvs</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>libusb-1.0-dev</run_depend>
+  
+  <export>
+  </export>
+</package>

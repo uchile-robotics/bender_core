@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Constants -->
+  <xacro:property name="M_PI" value="3.14159265359" />
+
+  <!-- Surface macro -->
+  <xacro:macro name="default_surface" params="name">
+    <gazebo reference="${name}_link" >
+      <mu1 value="100.0" />
+      <mu2 value="100.0" />
+      <kp  value="1000000.0" />
+      <kd  value="1.0" />
+    </gazebo>
+  </xacro:macro>
+ 
+  <xacro:macro name="gazebo_object_drive" params="base_frame topic ns">
+    <gazebo>
+      <plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
+        <commandTopic>${ns}/${topic}</commandTopic>
+        <odometryTopic>${ns}/odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <odometryRate>20.0</odometryRate>
+        <robotBaseFrame>${base_frame}</robotBaseFrame>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- Colors -->
+  <material name="light_grey">
+    <color rgba="0.7 0.7 0.7 1" />
+  </material>
+  <material name="dark_grey">
+    <color rgba="0.4 0.4 0.4 1" />
+  </material>
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1" />
+  </material>
+  <material name="red">
+    <color rgba="1.0 0.0 0.0 1" />
+  </material>
+
+</robot>
+

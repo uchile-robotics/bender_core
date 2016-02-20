@@ -1,0 +1,8 @@
+bool return_image
+bender_msgs/Rect bbox
+string name
+float64 distance
+---
+int32[] ids
+string[] names
+bender_msgs/Rect[] bboxes

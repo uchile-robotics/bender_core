@@ -1,0 +1,4 @@
+bool play
+string sound
+---
+bool success

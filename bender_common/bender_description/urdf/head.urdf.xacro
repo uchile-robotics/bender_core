@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<robot
+  xmlns:xacro="http://www.ros.org/wiki/xacro"
+  name="bender_head">
+  
+  <xacro:macro name="head" params="parent prefix" >
+    <!-- Gazebo Links material -->
+    <xacro:gazebo_link link="${prefix}neck_link" color="Grey" />
+    <xacro:gazebo_link link="${prefix}head_link" color="Grey" />
+  
+    <!-- Transmissions -->
+    <xacro:joint_transmission joint="neck_yaw_joint"/>
+  
+    <link
+      name="${prefix}neck_link">
+      <inertial>
+        <origin
+          xyz="0 0 0.04"
+          rpy="0 0 0" />
+        <mass value="0.05" />
+        <cuboid_inertia_def x="0.06" y="0.06" z="0.08" mass="0.05"/>
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/neck.stl" />
+        </geometry>
+        <material name="Head" />
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0.04"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.06 0.06 0.08"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="right_eye_joint"
+      type="fixed">
+      <origin
+        xyz="0.1 0.04 0.18"
+        rpy="0 0 0" />
+      <child
+        link="${prefix}sensors/camera_right_eye_link" />
+      <parent
+        link="${prefix}neck_link" />
+    </joint>
+    <joint
+      name="left_eye_joint"
+      type="fixed">
+      <origin
+        xyz="0.1 -0.04 0.18"
+        rpy="0 0 0" />
+      <child
+        link="${prefix}sensors/camera_left_eye_link" />
+      <parent
+        link="${prefix}neck_link" />
+    </joint>
+
+    <link
+      name="${prefix}sensors/camera_right_eye_link"  >
+       <xacro:dummy_inertial/>
+    </link>
+    
+    <link
+      name="${prefix}sensors/camera_left_eye_link"  >
+       <xacro:dummy_inertial/>
+    </link>
+    
+
+
+
+    <joint
+      name="neck_yaw_joint"
+      type="revolute">
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <parent
+        link="${parent}" />
+      <child
+        link="${prefix}neck_link" />
+      <axis xyz="0 0 1" />
+      <limit effort="${effort_head}" lower="${- M_PI / 4}" upper="${M_PI / 4}" velocity="${vel_head}"/>
+      <dynamics damping="${damping}" friction="${friccion}" />
+    </joint>
+
+    <link
+      name="${prefix}head_link">
+      <inertial>
+        <origin
+          xyz="0.02 0.06 0.1"
+          rpy="0 0 0" />
+        <mass value="1.0" />
+        <cuboid_inertia_def x="0.18" y="0.18" z="0.2" mass="1.0"/>
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/head.stl" />
+        </geometry>
+        <material name="Head" />
+      </visual>
+      <collision>
+        <origin
+          xyz="0.02 0.06 0.1"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.18 0.18 0.2"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="head_pitch_joint"
+      type="fixed">
+      <origin
+        xyz="0 -0.0585 0.067"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}neck_link" />
+      <child
+        link="${prefix}head_link" />
+    </joint>
+    <link
+      name="${prefix}head_up_link"  >
+       <xacro:dummy_inertial/>
+    </link>
+    <joint
+      name="head_up_joint"
+      type="fixed">
+      <origin
+        xyz="0.017 0.0585 0.17"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}head_link" />
+      <child
+        link="${prefix}head_up_link" />
+      <axis
+        xyz="1 0 0" />
+    </joint>
+  </xacro:macro> 
+</robot>

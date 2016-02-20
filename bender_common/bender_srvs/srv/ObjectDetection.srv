@@ -1,0 +1,14 @@
+int32 n
+---
+string[] name
+sensor_msgs/Image[] img
+geometry_msgs/PoseStamped[] pose
+float64[] x
+float64[] y
+float64[] z
+float64[] lenx
+float64[] leny
+float64[] lenz
+#obsoletos...type y detector
+string[] type
+string[] detector

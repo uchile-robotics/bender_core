@@ -1,0 +1,4 @@
+# rosaria configuration
+
+port: /dev/bender/base
+tf_prefix: bender

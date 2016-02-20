@@ -1,0 +1,10 @@
+int32[] ids
+string[] names
+float64[] x
+float64[] y
+float64[] z
+int32[] col
+int32[] row
+int32[] width
+int32[] height
+

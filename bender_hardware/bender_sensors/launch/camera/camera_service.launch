@@ -1,0 +1,19 @@
+<launch>
+
+	<arg name="cam_name" default="default_camera"/>
+	<arg name="cam_number" default="-1"/>
+	<arg name="cam_height" default="480"/>
+	<arg name="cam_width" default="640"/>
+	<arg name="cam_fov_h" default="60.0"/>
+	<arg name="cam_connect_at_start" default="true"/>
+
+	<node pkg="bender_sensors" type="camera_service" name="$(arg cam_name)" required="true" ns="/bender/sensors/">
+		<param name="cam_number" type="int" value="$(arg cam_number)"/>
+		<param name="width" type="int" value="$(arg cam_width)"/>
+		<param name="height" type="int" value="$(arg cam_height)"/>
+		<param name="name" type="str" value="$(arg cam_name)"/>
+		<param name="fov_h" type="double" value="$(arg cam_fov_h)"/>
+		<param name="connect_at_start" type="bool" value="$(arg cam_connect_at_start)"/>
+	</node>
+
+</launch>

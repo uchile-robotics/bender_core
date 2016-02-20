@@ -1,0 +1,362 @@
+<?xml version="1.0"?>
+<robot
+  xmlns:xacro="http://www.ros.org/wiki/xacro"
+  name="bender_arm">
+
+  <xacro:include filename="$(find bender_description)/urdf/gripper.urdf.xacro" />
+
+  <!-- Soft margin 5 deg -->
+  <xacro:property name="soft_margin" value="${M_PI/36}" />
+
+  <!-- Generado con script desde configuracion de motores Dynamixel -->
+  <xacro:property name="elbow_yaw_joint_upper" value="1.30387" />
+  <xacro:property name="elbow_yaw_joint_lower" value="-1.20161" />
+
+  <xacro:property name="shoulder_yaw_joint_upper" value="1.38057" />
+  <xacro:property name="shoulder_yaw_joint_lower" value="-1.48284" />
+
+  <xacro:property name="shoulder_pitch_joint_upper" value="1.94815" />
+  <xacro:property name="shoulder_pitch_joint_lower" value="-1.53397" />
+
+  <xacro:property name="wrist_pitch_joint_upper" value="1.22717" />
+  <xacro:property name="wrist_pitch_joint_lower" value="-1.07378" />
+
+  <xacro:property name="elbow_pitch_joint_upper" value="1.86378" />
+  <xacro:property name="elbow_pitch_joint_lower" value="-1.03543" />
+
+  <xacro:property name="shoulder_roll_joint_upper" value="1.51096" />
+  <xacro:property name="shoulder_roll_joint_lower" value="-0.23776" />
+
+  <!-- Links mass -->
+  <xacro:property name="link_mass" value="1.0" />
+  <xacro:property name="elbow_yaw_mass" value="${link_mass}" />
+  <xacro:property name="elbow_pitch_mass" value="${link_mass}" />
+  <xacro:property name="shoulder_yaw_mass" value="${link_mass}" />
+  <xacro:property name="shoulder_pitch_mass" value="${link_mass}" />
+  <xacro:property name="wrist_pitch_mass" value="${link_mass}" />
+  <xacro:property name="shoulder_roll_mass" value="${link_mass}" />
+
+  <!-- Effort -->
+  <xacro:property name="effort_shoulder" value="80" />
+  <xacro:property name="effort_elbow" value="30" />
+  <xacro:property name="effort_wrisp" value="15" />
+
+  
+  <xacro:macro name="bender_arm" params="side parent reflect prefix">
+
+    <!-- Gazebo elements -->
+
+    <!-- Gazebo Links material -->
+    <xacro:gazebo_link link="${prefix}${side}_shoulder_pitch_link" color="DarkGrey" />
+    <xacro:gazebo_link link="${prefix}${side}_shoulder_roll_link" color="Grey" />
+    <xacro:gazebo_link link="${prefix}${side}_shoulder_yaw_link" color="DarkGrey" />
+    <xacro:gazebo_link link="${prefix}${side}_elbow_pitch_link" color="Grey" />
+    <xacro:gazebo_link link="${prefix}${side}_elbow_yaw_link" color="DarkGrey" />
+    <xacro:gazebo_link link="${prefix}${side}_wrist_pitch_link" color="Grey" />
+
+    <!-- Transmissions -->
+    <xacro:joint_transmission joint="${side}_shoulder_pitch_joint"/>
+    <xacro:joint_transmission joint="${side}_shoulder_roll_joint"/>
+    <xacro:joint_transmission joint="${side}_shoulder_yaw_joint"/>
+    <xacro:joint_transmission joint="${side}_elbow_pitch_joint"/>
+    <xacro:joint_transmission joint="${side}_elbow_yaw_joint"/>
+    <xacro:joint_transmission joint="${side}_wrist_pitch_joint"/>
+
+    <link
+      name="${prefix}${side}_shoulder_pitch_link">
+      <inertial>
+        <origin
+          xyz="0 ${- reflect * 0.02} 0"
+          rpy="0 0 0" />
+        <mass value="${shoulder_pitch_mass}" />
+        <cuboid_inertia_def x="0.05" y="0.07" z="0.07" mass="${shoulder_pitch_mass}"/>
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/${side}_shoulder_pitch.stl" />
+        </geometry>
+        <material name="Grey1" />
+      </visual>
+      <collision>
+        <origin
+          xyz="0 ${- reflect * 0.02} 0"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.05 0.07 0.07"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="${side}_shoulder_pitch_joint"
+      type="revolute">
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <parent
+        link="${parent}" />
+      <child
+        link="${prefix}${side}_shoulder_pitch_link" />
+      <axis
+        xyz="0 -1 0" />
+      <limit
+        effort="${effort_shoulder}"
+        lower="${shoulder_pitch_joint_lower}"
+        upper="${shoulder_pitch_joint_upper}"
+        velocity="${vel_arm * M_PI / 180}"/>
+      <dynamics damping="${damping}" friction="${friccion}" />
+      <safety_controller soft_lower_limit="${shoulder_pitch_joint_lower-soft_margin}" soft_upper_limit="${shoulder_pitch_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
+    </joint>
+
+    <link
+      name="${prefix}${side}_shoulder_roll_link">
+      <inertial>
+        <origin
+          xyz="0.04 0 -0.075"
+          rpy="0 -0.25 0" />
+        <mass value="${shoulder_roll_mass}" />
+        <cuboid_inertia_def x="0.05" y="0.035" z="0.18" mass="${shoulder_roll_mass}"/>
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/shoulder_roll.stl" />
+        </geometry> 
+        <material name="Grey2" />
+      </visual>
+      <collision>
+        <origin
+          xyz="0.04 0 -0.075"
+          rpy="0 -0.25 0" />
+        <geometry>
+          <box size="0.05 0.035 0.18"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="${side}_shoulder_roll_joint"
+      type="revolute">
+      <origin
+        xyz="-0.02178 ${- reflect * 0.0339} -0.03"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}${side}_shoulder_pitch_link" />
+      <child
+        link="${prefix}${side}_shoulder_roll_link" />
+      <axis
+        xyz="${- reflect} 0 0" />
+      <limit
+        lower="${shoulder_roll_joint_lower}"
+        upper="${shoulder_roll_joint_upper}"
+        effort="${effort_shoulder}"
+        velocity="${vel_arm * M_PI / 180}" />
+      <dynamics damping="${damping}" friction="${friccion}" />
+      <safety_controller soft_lower_limit="${shoulder_roll_joint_lower-soft_margin}" soft_upper_limit="${shoulder_roll_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
+    </joint>
+
+    <link
+      name="${prefix}${side}_shoulder_yaw_link">
+      <inertial>
+        <origin
+          xyz="-0.015 0 -0.115"
+          rpy="0 0 0" />
+        <mass value="${shoulder_yaw_mass}" />
+        <cuboid_inertia_def x="0.05" y="0.035" z="0.23" mass="${shoulder_yaw_mass}"/>
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/shoulder_yaw.stl" />
+        </geometry>
+        <material name="Grey1" />
+      </visual>
+      <collision>
+        <origin
+          xyz="-0.015 0 -0.115"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.05 0.035 0.23"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="${side}_shoulder_yaw_joint"
+      type="revolute">
+      <origin
+        xyz="0.03218 0 -0.1366"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}${side}_shoulder_roll_link" />
+      <child
+        link="${prefix}${side}_shoulder_yaw_link" />
+      <axis
+        xyz="0 0 ${reflect}" />
+      <limit
+        lower="${shoulder_yaw_joint_lower}"
+        upper="${shoulder_yaw_joint_upper}"
+        effort="${effort_shoulder}"
+        velocity="${vel_arm * M_PI / 180}" />
+      <dynamics damping="${damping}" friction="${friccion}" />
+      <safety_controller soft_lower_limit="${shoulder_yaw_joint_lower-soft_margin}" soft_upper_limit="${shoulder_yaw_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
+    </joint>
+    
+    <link
+      name="${prefix}${side}_elbow_pitch_link">
+      <inertial>
+        <origin
+          xyz="0.015 -0.025 -0.05"
+          rpy="0 0 0" />
+        <mass value="${elbow_pitch_mass}" />
+        <cuboid_inertia_def x="0.05" y="0.07" z="0.10" mass="${elbow_pitch_mass}"/>
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/elbow_pitch.stl" />
+        </geometry>
+        <material name="Grey2" />
+      </visual>
+      <collision>
+        <origin
+          xyz="0.015 -0.025 -0.05"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.05 0.07 0.10"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="${side}_elbow_pitch_joint"
+      type="revolute">
+      <origin
+        xyz="-0.015898 0.02178 -0.21"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}${side}_shoulder_yaw_link" />
+      <child
+        link="${prefix}${side}_elbow_pitch_link" />
+      <axis
+        xyz="0 -1 0" />
+      <limit
+        lower="${elbow_pitch_joint_lower}"
+        upper="${elbow_pitch_joint_upper}"
+        effort="${effort_elbow}"
+        velocity="${vel_arm * M_PI / 180}" />
+      <dynamics damping="${damping}" friction="${friccion}" />
+      <safety_controller soft_lower_limit="${elbow_pitch_joint_lower-soft_margin}" soft_upper_limit="${elbow_pitch_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
+    </joint>
+    
+    <link
+      name="${prefix}${side}_elbow_yaw_link">
+      <inertial>
+        <origin
+          xyz="-0.015 0 -0.12"
+          rpy="0 0 0" />
+        <mass value="${elbow_yaw_mass}" />
+        <cuboid_inertia_def x="0.05" y="0.035" z="0.32" mass="${elbow_yaw_mass}"/>
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/elbow_yaw.stl" />
+        </geometry>
+        <material name="Grey1"/>
+      </visual>
+      <collision>
+        <origin
+          xyz="-0.015 0 -0.12"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.05 0.035 0.32"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="${side}_elbow_yaw_joint"
+      type="revolute">
+      <origin
+        xyz="-0.0136 -0.02228 -0.09218"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}${side}_elbow_pitch_link" />
+      <child
+        link="${prefix}${side}_elbow_yaw_link" />
+      <axis
+        xyz="0 0 ${reflect}" />
+      <limit
+        lower="${elbow_yaw_joint_lower}"
+        upper="${elbow_yaw_joint_upper}"
+        effort="${effort_elbow}"
+        velocity="${vel_arm * M_PI / 180}" />
+      <dynamics damping="${damping}" friction="${friccion}" />
+      <safety_controller soft_lower_limit="${elbow_yaw_joint_lower-soft_margin}" soft_upper_limit="${elbow_yaw_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
+    </joint>
+
+    <link
+      name="${prefix}${side}_wrist_pitch_link">
+      <inertial>
+        <origin
+          xyz="0 -0.02 -0.05"
+          rpy="0 0 0" />
+        <mass value="${wrist_pitch_mass}" />
+        <cuboid_inertia_def x="0.04" y="0.08" z="0.07" mass="${wrist_pitch_mass}"/>
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/wrist_pitch.stl" />
+        </geometry>
+        <material name="Grey2" />
+      </visual>
+      <collision>
+        <origin
+          xyz="0 -0.02 -0.05"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.04 0.08 0.07"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="${side}_wrist_pitch_joint"
+      type="revolute">
+      <origin
+        xyz="-0.018221 0.0171 -0.26272"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}${side}_elbow_yaw_link" />
+      <child
+        link="${prefix}${side}_wrist_pitch_link" />
+      <axis
+        xyz="0 -1 0" />
+      <limit
+        lower="${wrist_pitch_joint_lower}"
+        upper="${wrist_pitch_joint_upper}"
+        effort="${effort_wrisp}"
+        velocity="${vel_arm * M_PI / 180}" />
+      <dynamics damping="${damping}" friction="${friccion}" />
+      <safety_controller soft_lower_limit="${wrist_pitch_joint_lower-soft_margin}" soft_upper_limit="${wrist_pitch_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
+    </joint>
+    <!-- Gripper Joints -->
+    <xacro:gripper side="${side}" reflect="${reflect}" prefix="${prefix}" />
+    
+  </xacro:macro>
+</robot>

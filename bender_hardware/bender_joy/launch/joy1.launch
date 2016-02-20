@@ -1,0 +1,8 @@
+<launch>
+
+	<!-- joy node -->
+	<include file="$(find bender_joy)/launch/joy.launch">
+		<arg name="joy_number" value="1"/>
+	</include>
+
+</launch>

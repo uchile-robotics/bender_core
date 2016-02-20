@@ -1,0 +1,23 @@
+<launch>
+
+	<arg name="display" default="true"/>
+	<arg name="cam_name" default="camera_thermal"/>
+	<arg name="cam_number" default="7"/>
+	<arg name="cam_connect_at_start" default="true"/>
+
+	<!-- Camera Service -->
+	<include file="$(find bender_sensors)/launch/camera/camera_service.launch">
+		<arg name="cam_name" value="$(arg cam_name)"/>
+		<arg name="cam_number" value="$(arg cam_number)"/>
+		<arg name="cam_width" value="640"/>
+		<arg name="cam_height" value="480"/>
+		<arg name="cam_fov_h" value="60.0"/>
+		<arg name="cam_connect_at_start" value="$(arg cam_connect_at_start)"/>
+	</include>
+
+	<!-- Display -->
+	<include file="$(find bender_sensors)/launch/camera/camera_display.launch" if="$(arg display)">
+		<arg name="cam_name" value="$(arg cam_name)"/>
+	</include>
+
+</launch>

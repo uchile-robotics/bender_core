@@ -1,0 +1,10 @@
+
+sensor_msgs/Image image # image to process
+# sensor_msgs/RegionOfInterest roi
+bender_msgs/ROIArray[] detection_boxes
+sensor_msgs/RegionOfInterest[] detections
+---
+sensor_msgs/RegionOfInterest[] detections
+bender_msgs/ROIArray[] detection_boxes
+float32[] scores
+string state

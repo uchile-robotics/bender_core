@@ -1,0 +1,17 @@
+<launch>
+
+	<arg name="map_name" default="map"/>
+
+	<!-- set this to true to turn on debug mode -->
+	<arg name="debug" value="false"/>
+
+	<!-- Map Analyzer -->
+	<node pkg="bender_maps" type="map_analyzer" name="map_analyzer" ns="/bender/knowledge/">
+		<param name="tf_map_frame" value="/map"/>
+		<param name="debug"        value="$(arg debug)"/>
+		<rosparam file="$(find bender_maps)/maps/$(arg map_name).yaml" command="load"/>
+
+		<remap if="$(arg debug)" from="map_analyzer/test_cloud" to="/bender/sensors/rgbd_head/depth/points"/>
+	</node>
+
+</launch>

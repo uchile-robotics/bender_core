@@ -1,0 +1,27 @@
+int32 nplanos
+int8 planeIsFloor
+int8 planeIsTable
+int8 planeIsWall
+float64 heightOfPlane
+float64 visualPitch
+int8 nObjectFound
+float64[] xObj
+float64[] yObj
+float64[] zObj
+float64[] xObjBase
+float64[] yObjBase
+float64[] zObjBase
+int32[] idObj
+string[] names
+float64 siftTime
+int8 gripperFound
+float64 gripperX
+float64 gripperY
+float64 gripperZ
+float64 gripperXBase
+float64 gripperYBase
+float64 gripperZBase
+float64 gripperXBaseC
+float64 gripperYBaseC
+float64 gripperZBaseC
+

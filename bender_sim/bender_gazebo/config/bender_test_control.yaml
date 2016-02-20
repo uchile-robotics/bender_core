@@ -1,0 +1,10 @@
+bender:
+  # (Only!) Publish all joint states
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  l_shoulder_pitch_joint_controller:
+    type: effort_controllers/JointPositionController
+    joint: l_shoulder_pitch_joint
+    pid: {p: 150.0, i: 20.0, d: 10.0}

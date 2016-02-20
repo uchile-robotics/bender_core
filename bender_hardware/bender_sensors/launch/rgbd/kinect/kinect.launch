@@ -1,0 +1,41 @@
+<launch>
+
+	<!-- avaiable devices
+	  You can see the list with the available device id's on
+	'install/depth_devices.sh' (in this pkg).
+	 -->
+
+	<!-- launch parameters -->
+	<arg name="kinect_name" default="kinect"/>
+	<arg name="device_id"   default="#1"    />
+
+	<!-- Openni for kinect -->
+	<include file="$(find openni_launch)/launch/openni.launch" ns="/bender/sensors/">
+		<arg name="camera"    value="$(arg kinect_name)"/>
+		<arg name="device_id" value="$(arg device_id)"  />
+		<arg name="tf_prefix" value="bender/sensors"    />
+
+		<!-- Use OpenNI's factory-calibrated depth->RGB registration? -->
+  		<arg name="depth_registration" default="false" />
+
+		<!-- Processing Modules -->
+		<arg name="rgb_processing"                  default="true" />
+		<arg name="ir_processing"                   default="false" />
+		<arg name="depth_processing"                default="true"  />
+		<arg name="depth_registered_processing"     default="false" />
+		<arg name="disparity_processing"            default="false" />
+		<arg name="disparity_registered_processing" default="false" />
+		<arg name="hw_registered_processing"        default="false" />
+		<arg name="sw_registered_processing"        default="false" />
+
+	</include>
+
+	<!-- kinect_aux -->
+	<!--node name="$(arg camera)" pkg="bender_sensors" type="kinect_aux_node" ns="$(arg ns)"/-->
+	<!-- 
+	TODO: ver como hacer que kinect_aux funcione para el dispositivo (kinect) deseado,
+	por ahora, sólo se conectará al primer kinect que encuentre, así que sólo debe ser
+	usado si se está seguro de que se está haciendo.
+	-->
+
+</launch>

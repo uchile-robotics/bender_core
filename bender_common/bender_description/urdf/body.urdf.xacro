@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<robot
+  xmlns:xacro="http://www.ros.org/wiki/xacro"
+  name="body">
+
+  <xacro:macro name="base_wheel" params="name parent front reflect prefix">
+    <joint
+      name="${name}_wheel_joint"
+      type="continuous">
+      <origin
+        xyz="${front * 0.12203666128763} ${- reflect * 0.156680893055122} 0.101"
+        rpy="0 0 0" />
+      <parent
+        link="${parent}" />
+      <child
+        link="${prefix}${name}_wheel" />
+      <axis
+        xyz="0 1 0" />
+    </joint>
+    <link
+      name="${prefix}${name}_wheel">
+      <inertial>
+        <origin
+          xyz="0 ${- reflect * 0.025} 0"
+          rpy="${M_PI/2} 0 0" />
+        <cylinder_inertia_def length="0.05" radius="0.1" mass="10.0"/>
+        <mass value="10.0" />
+      </inertial>
+      <visual>
+        <xacro:if value="${(reflect+1)/2}">
+          <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+        </xacro:if>
+        <xacro:unless value="${(reflect+1)/2}">
+          <origin
+            xyz="0 0 0"
+            rpy="${M_PI} 0 0" />
+        </xacro:unless>
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/wheel.stl" />
+        </geometry>
+        <material name="Grey3" />
+      </visual>
+      <collision>
+        <origin
+          xyz="0 ${- reflect * 0.025} 0"
+          rpy="${M_PI/2} 0 0" />
+        <geometry>
+          <cylinder length="0.05" radius="0.1"/>
+        </geometry>
+      </collision>
+    </link>
+    <xacro:joint_transmission joint="${name}_wheel_joint" />
+    <xacro:gazebo_wheel_link link="${prefix}${name}_wheel" color="DarkGrey" reflect="${reflect}"/>
+  </xacro:macro>
+  
+  
+  <xacro:macro name="body" params="prefix">
+    <!-- Macro for wheels -->
+    <xacro:base_wheel parent="${prefix}body" name="front_right" front="1" reflect="1" prefix="${prefix}" />
+    <xacro:base_wheel parent="${prefix}body" name="rear_right" front="-1" reflect="1" prefix="${prefix}" />
+    <xacro:base_wheel parent="${prefix}body" name="front_left" front="1" reflect="-1" prefix="${prefix}" />
+    <xacro:base_wheel parent="${prefix}body" name="rear_left" front="-1" reflect="-1" prefix="${prefix}" />
+    
+
+    <!-- Gazebo P3AT Controller and transmissions-->
+    <xacro:p3at_controller ns="${prefix}nav" prefix="${prefix}"/>
+
+    <!-- base_footprint and base_link -->
+    <link name="${prefix}base_link" />
+
+    <link name="${prefix}base_footprint">
+       <xacro:dummy_inertial/>
+    </link>
+    <joint
+      name="base_fixed_jont"
+      type="fixed">
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <child
+        link="${prefix}base_footprint" />
+      <parent
+        link="${prefix}base_link" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+  
+    <link
+      name="${prefix}body">
+      <inertial>
+        <origin
+          xyz="0 0 0.7"
+          rpy="0 0 0" />
+        <mass value="100.0" />
+        <cuboid_inertia_def x="0.2" y="0.4" z="1.25" mass="100.0"/>
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/body.stl" />
+        </geometry>
+        <material name="Body" />
+      </visual>
+      <collision>
+        <!--
+        <origin
+          xyz="0 0 0.7"
+          rpy="0 0 0" />
+        -->
+        <geometry>
+          <!-- <box size="0.2 0.4 1.25"/> -->
+          <mesh
+            filename="package://bender_description/meshes/collision/body.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="body_fixed_jont"
+      type="fixed">
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}base_link" />
+      <child
+        link="${prefix}body" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+  
+    <link
+      name="${prefix}waist_base" >
+       <xacro:dummy_inertial/>
+    </link>
+    <joint
+      name="waist_base_joint"
+      type="fixed">
+      <origin
+        xyz="0.04 0 0.93"
+        rpy="0 0.47 0" />
+      <!-- waist position --> 
+      <origin
+        xyz="0 0 0.73"
+        rpy="0 0.21 0" />
+      <parent
+        link="${prefix}body" />
+      <child
+        link="${prefix}waist_base" />
+      <axis
+        xyz="0 1 0" />
+     <limit
+        effort="10"
+        lower="-1"
+        upper="1"
+        velocity="10"/>
+    </joint>
+
+    <link
+      name="${prefix}chest_base" >
+       <xacro:dummy_inertial/>
+    </link>
+    <joint
+      name="chest_base_joint"
+      type="fixed">
+      <origin
+        xyz="0.08 0 0.92"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}body" />
+      <child
+        link="${prefix}chest_base" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+
+
+    <link
+      name="${prefix}neck_base" >
+       <xacro:dummy_inertial/>
+    </link>
+    <joint
+      name="neck_base_joint"
+      type="fixed">
+      <origin
+        xyz="-0.00974876592757595 0 1.3411"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}body" />
+      <child
+        link="${prefix}neck_base" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+    <link
+      name="${prefix}l_arm_base" >
+       <xacro:dummy_inertial/>
+    </link>
+    <joint
+      name="l_arm_base_joint"
+      type="fixed">
+      <origin
+        xyz="${l_x + -0.01941} ${l_y + 0.238791} ${l_z + 1.2466}"
+        rpy="${l_r} ${l_p} ${l_y}" />
+      <parent
+        link="${prefix}body" />
+      <child
+        link="${prefix}l_arm_base" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+    <link
+      name="${prefix}r_arm_base"  >
+       <xacro:dummy_inertial/>
+    </link>
+    <joint
+      name="r_arm_base_joint"
+      type="fixed">
+      <origin
+        xyz="${r_x + -0.01941} ${r_y + -0.238791} ${r_z + 1.2466}"
+        rpy="${r_r} ${r_p} ${r_y}" />
+      <parent
+        link="${prefix}body" />
+      <child
+        link="${prefix}r_arm_base" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+
+    <!-- Gazebo Links material -->
+    <xacro:gazebo_link link="${prefix}base_footprint" color="Black" />
+    <xacro:gazebo_link link="${prefix}base_link" color="Black" />
+    <xacro:gazebo_link link="${prefix}chest_base" color="Black" />
+    <xacro:gazebo_link link="${prefix}waist_base" color="Black" />
+    <xacro:gazebo_link link="${prefix}body" color="Grey" />
+    
+  </xacro:macro>
+  
+</robot>

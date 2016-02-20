@@ -1,0 +1,9 @@
+<launch>
+
+	<arg name="cam_name" default="default_camera"/>
+
+	<node pkg="bender_sensors" type="camera_service_client" name="$(arg cam_name)_display" respawn="true" ns="/bender/sensors/">
+		<param name="cam_name" value="$(arg cam_name)"/>
+	</node>
+
+</launch>

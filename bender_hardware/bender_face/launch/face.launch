@@ -1,0 +1,12 @@
+<launch>
+
+	<!-- type of face: "serial" or "ethernet" -->
+	<arg name="face_type" default="serial"/>
+	<!-- <arg name="face_type" default="serial"/> -->
+
+	<!-- bender face -->
+	<node name="face" pkg="bender_face" type="face.py" ns="/bender/face/">
+		<param name="face_type" value="$(arg face_type)"/>
+	</node>
+
+</launch>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+  <name>bender_description</name>
+  <version>1.0.0</version>
+  <description>Contains URDF-related files for visualizing Bender robot</description>
+  <maintainer email="growolff@gmail.com">Gonzalo Olave</maintainer>
+  <maintainer email="rorro.mr@gmail.com">Rodrigo Muñoz</maintainer>
+  <license>TODO</license>
+
+
+  <author>Gonzalo Olave, Rodrigo Muñoz</author>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>urdf</run_depend>
+  <run_depend>rviz</run_depend>
+  <run_depend>xacro</run_depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+  </export>
+</package>

@@ -1,0 +1,76 @@
+navigate: go
+reach: go
+arrive: go
+move: go
+drive: go
+enter: go
+getinto: go
+visit: go
+access: go
+aproach: go
+
+get: grasp
+grab: grasp
+grip: grasp
+catch: grasp
+grapple: grasp
+hold: grasp
+hook: grasp
+
+carry: bring
+deliver: bring
+return: bring
+transport: bring
+give: bring
+fetch: bring
+look: find
+search: find
+detect: find
+encounter: find
+locate: find
+identify: find
+meet: find
+notice: find
+spot: find
+recognize: find
+sight: find
+
+suggest: offer
+
+enumerate: count
+calculate: count
+number: count
+
+inform: report
+notify: report
+
+present: introduce
+
+respond: answer
+resolve: answer
+solve: answer
+contest: answer
+
+accompany: guide
+lead: guide
+escort: guide
+conduct: guide
+route: guide
+
+leave: put
+lay: put
+place: put
+settle: put
+set: put
+deposit: put
+situate: put
+rest: put
+locate: put
+allocate: put
+stow: put
+
+speak: say
+tell: say
+talk: say
+
+request: ask

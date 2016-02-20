@@ -1,0 +1,48 @@
+A.- Archivo map.yaml
+---------------------------
+
+
+D----------------------C
+|                      | 
+|                      |
+|       y              |
+|       |              |
+|       o-->x          |
+|                      |
+|                      |
+|                      |
+A ---------------------B
+
+# nombre del mapa a usar
+image: map.pgm
+
+# resolución [m/px]
+resolution: 0.020000
+
+# origen: posici[on del punto "A", con respecto al origen "o" [m]
+origin: [-6.28, -10.10, 0.000000]
+
+# TODO
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+
+
+B.- Archivo map.yaml
+---------------------------
+
+Ésta carpeta contiene los mapas usados para navegación.
+
+- Es necesario que en la raiz (ésta carpeta) se encuentren los archivos usados
+actalmente para la navegación:
+  - map.yaml
+  - map.pgm
+  - map.sem_map
+
+
+- Los archivos para cada escenario deben ser almacenados en una carpeta con el formato: 
+    - ./lugar_día-mes-año
+
+- IMPORTANTE: Para disminuir la carga sobre el sistema de control de versiones, procurar almacenar en ésta carpeta sólo mapas relevantes en la actualidad. Los mapas antiguos deberán ser almacenados en el directorio: 
+
+   ./OldMaps

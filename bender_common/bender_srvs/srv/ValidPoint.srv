@@ -1,0 +1,6 @@
+
+geometry_msgs/Point point
+string frame_id
+---
+bool is_valid
+string[] data

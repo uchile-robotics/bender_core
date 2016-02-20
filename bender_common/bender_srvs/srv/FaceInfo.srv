@@ -1,0 +1,15 @@
+sensor_msgs/Image image
+bool use_image
+string database_filename
+bool return_full_image
+bool return_images
+#bool only_main_face
+bool det_eyes
+---
+sensor_msgs/Image image
+sensor_msgs/Image[] faces
+bender_msgs/Rect[] BBoxes
+bender_msgs/Rect[] eyes_positionL
+bender_msgs/Rect[] eyes_positionR
+int32 n_faces
+

@@ -1,0 +1,17 @@
+
+
+# nav
+nav_factor_linear: 0.7
+nav_factor_angular: 0.4
+
+# speech
+speech_phrases: [
+  "hola a todos",
+  "soy bender el robot de servicio de la universidad de chile",
+  "nac'i en 2007 en la facultad de ciencias f'isicas y matem'aticas",
+  "hola humanos, qu'e se siente observar mi grandeza",
+  "a mi no me construyeron, yo me dej'e armar por mis esclavos. perd'on. mi equipo",
+  "los voy a destruir a todos... perd'on. quise decir que les voy a sonreir a todos",
+  "c'omo est'an amigos?",
+  "cu'al es el colmo de un robot?... tener nervios de acero ja ja ja ja ",
+]

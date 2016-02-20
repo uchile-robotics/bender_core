@@ -1,0 +1,6 @@
+geometry_msgs/Pose pose #frame:base_link
+float64 height
+float64 radius
+
+---
+bool result

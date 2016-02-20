@@ -1,0 +1,6 @@
+
+---
+geometry_msgs/PoseStamped[] pose
+sensor_msgs/Image[] imgs
+bender_msgs/ROIArray[] detection_boxes
+sensor_msgs/RegionOfInterest[] detections

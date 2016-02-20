@@ -1,0 +1,48 @@
+
+# ocupa el driver del joystick para enviar datos de control
+joystick:
+
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+  # Xbox Controller Button List:                        #
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - #
+  # Axis:                                               #
+  # 0.- LS left, right   # 1.- LS up, down   # 2.- LT   #
+  # 3.- RS left, right   # 4.- RS up, down   # 5.- RT   #
+  #                                                     #
+  # Buttons:                                            #
+  # 0.- A   # 5.- RB     # 10.- RS                      #
+  # 1.- B   # 6.- Back   # 11.- Left                    #
+  # 2.- X   # 7.- Start  # 12.- Right                   #
+  # 3.- Y   # 8.- Xbox   # 13.- Up                      #
+  # 4.- LB  # 9.- LS     # 14.- Down                    #
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+  # Axes Index
+  a_idx_base_angular: 0 # LS left, right
+  a_idx_base_linear:  1 # LS up, down
+
+  # Button Index
+  b_idx_pause: 7 # Start
+
+  # Other
+  factor_linear: 0.7
+  factor_angular: 0.6
+
+
+# joy node: driver para el joystick
+joy:
+
+ dev: /dev/input/js0
+ deadzone: 0.30 # (0.05)
+ # Amount by which the joystick has to move before it is considered to be off-center.
+ # relative to an axis normalized between -1 and 1. Thus, 0.1 => 10% of the way to the edge.
+ # Linux does its own deadzone processing, so in many cases this value can be set to zero. 
+
+ # autorepeat_rate: 0.0
+ # Rate in Hz at which a joystick that has a non-changing state will resend the previously sent message.
+
+ # coalesce_interval: 0.001
+ # Axis events that are received within coalesce_interval (seconds) of each other are sent out in a single
+ # ROS message. Since the kernel sends each axis motion as a separate event, coalescing greatly reduces the
+ # rate at which messages are sent. This option can also be used to limit the rate of outgoing messages.
+ # Button events are always sent out immediately to avoid missing button presses.

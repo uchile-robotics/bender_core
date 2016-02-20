@@ -1,0 +1,11 @@
+<launch>
+
+	<!-- avaiable devices
+	  You can see the list with the available device id's on
+	'install/depth_devices.sh' (in this pkg).
+	 -->
+
+	<arg name="device" value="$(env BENDER_RGBD_DEVICE_HEAD)"/>
+	<include file="$(find bender_sensors)/launch/rgbd/$(arg device)/$(arg device)_head.launch"/>
+
+</launch>

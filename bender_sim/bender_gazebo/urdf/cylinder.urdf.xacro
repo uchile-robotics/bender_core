@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find bender_gazebo)/urdf/common.urdf.xacro" />
+
+   
+  <link name="base_footprint">
+   <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0.0 0 0.4" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+  </joint>
+
+  <!-- Ball -->
+  <link name="base_link">
+    <inertial>
+      <mass value="0.01" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+        iyy="1.0" iyz="0.0" 
+        izz="1.0" />
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="1.7" radius="0.25" />
+      </geometry>
+      <material name="red" />
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="1.7" radius="0.25" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <xacro:gazebo_object_drive base_frame="base_footprint" topic="cmd_vel" ns="cylinder" />
+  
+</robot>

@@ -1,0 +1,28 @@
+
+# ocupa el driver del joystick para enviar datos de control
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Xbox Controller Button List:                        #
+# - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Axis:                                               #
+# 0.- LS left, right   # 1.- LS up, down   # 2.- LT   #
+# 3.- RS left, right   # 4.- RS up, down   # 5.- RT   #
+#                                                     #
+# Buttons:                                            #
+# 0.- A   # 5.- RB     # 10.- RS                      #
+# 1.- B   # 6.- Back   # 11.- Left                    #
+# 2.- X   # 7.- Start  # 12.- Right                   #
+# 3.- Y   # 8.- Xbox   # 13.- Up                      #
+# 4.- LB  # 9.- LS     # 14.- Down                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Axes Index
+a_idx_base_angular: 0 # LS left, right
+a_idx_base_linear:  1 # LS up, down
+
+# Button Index
+b_idx_pause: 7 # Start
+
+# Other
+factor_linear: 0.7
+factor_angular: 0.4

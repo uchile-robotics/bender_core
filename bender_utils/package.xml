@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package>
+  <name>bender_utils</name>
+  <version>0.0.0</version>
+  <description>The bender_utils package</description>
+  <maintainer email="bender.contacto@gmail.com">Bender Team - UChile Homebreakers</maintainer>
+
+  <license>TODO</license>
+  <author >UChile Homebreakers</author>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>bender_msgs</build_depend>
+  <build_depend>bender_srvs</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <run_depend>bender_msgs</run_depend>
+  <run_depend>bender_srvs</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>std_srvs</run_depend>
+
+
+  <export>
+  </export>
+  
+</package>

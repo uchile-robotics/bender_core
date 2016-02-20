@@ -1,0 +1,53 @@
+<sdf version='1.4'>
+  <world name='default'>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <include>
+      <uri>model://bookshelf</uri>
+    </include>
+
+    <include>
+      <uri>model://beer</uri>
+    </include>
+
+    <!-- Global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Camera -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>4.927360 -4.376610 3.740080 0.000000 0.275643 2.356190</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+
+    <state world_name='default'>
+      <sim_time>113 151000000</sim_time>
+      <real_time>115 891581568</real_time>
+      <wall_time>1437133115 787993758</wall_time>
+      <model name='beer'>
+        <pose>0.45 -0.18 0.45 0 0 0</pose>
+        <link name='link'>
+          <pose>0.45 -0.18 0.45 0 0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='bookshelf'>
+        <pose>0.75 0 0 0 0 -1.57</pose>
+        <link name='link'>
+          <pose>0.75 0 0 0 0 -1.57</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+    </state>
+    
+  </world>
+</sdf>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package>
+  <name>bender_base</name>
+  <version>0.0.0</version>
+  <description>The bender_base package</description>
+  <maintainer email="matias@todo.todo">matias</maintainer>
+  <license>TODO</license>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>rosaria</run_depend>
+  
+  <export>
+  </export>
+</package>

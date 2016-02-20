@@ -1,0 +1,10 @@
+int32 ImageWidth
+int32 ImageHeight
+float64[] X
+float64[] Y
+float64[] Width
+float64[] Height
+float64[] Confidencia
+float64[] ID
+float64[] Distance
+float64[] Angle

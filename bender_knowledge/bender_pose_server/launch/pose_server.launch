@@ -1,0 +1,13 @@
+<launch>
+
+	<arg name="load_default_map" default="true"/>
+
+	<!-- Pose Server -->
+	<node pkg="bender_pose_server" type="pose_server" name="pose_server" respawn="true" ns="/bender/knowledge/" output="screen">
+		<param name="load_default_map" value="$(arg load_default_map)"/>
+	</node>
+
+	<!-- Pose Server Marker Plugin -->
+	<node pkg="bender_pose_server" type="pose_server_marker_plugin" name="pose_server_marker_plugin" respawn="true" ns="/bender/knowledge/" output="screen"/>
+
+</launch>

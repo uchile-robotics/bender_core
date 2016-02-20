@@ -1,0 +1,15 @@
+# srv utilizado por el package: bender_speech
+# Repreenta los datos necesarios para sintetizar una pregunta,
+# reconocer su respuesta y checkear su confirmacion
+
+
+string question     # pregunta a sintetizar
+string dictionary   # diccionario de donde reconocer la respuesta
+int32 max_attempts  # num_max de repeticiones de la pregunta, en caso de
+                    # negativas del interlocutor
+string[] hints      # hints para discriminar entre posibles respuestas irrelevantes
+                    # para el caso de usar diccionarios complejos
+float64 qx_sleep    # tiempo para esperar mientras se hace la pregunta
+---
+string answer       # ( respuesta detectada ) v  ( "max_attempts_reached" )
+

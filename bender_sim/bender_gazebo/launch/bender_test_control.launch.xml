@@ -1,0 +1,14 @@
+<launch>
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find bender_gazebo)/config/bender_effort_control.yaml" command="load"/>
+
+  <!-- Load the controllers, launch in other console -->
+  <node launch-prefix="xterm -T 'Gazebo controllers' -e" name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/bender" args="joint_state_controller
+		l_shoulder_pitch_controller
+		l_shoulder_roll_controller
+		l_shoulder_yaw_controller
+		l_elbow_pitch_controller
+		l_elbow_yaw_controller
+		l_wrist_pitch_controller"/>
+
+</launch>

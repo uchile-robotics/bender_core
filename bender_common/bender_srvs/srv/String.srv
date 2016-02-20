@@ -1,0 +1,6 @@
+# srv simple que provee 1 string de
+# request y 1 string de response
+
+string data
+---
+string data

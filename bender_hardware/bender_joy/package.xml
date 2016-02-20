@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package>
+  <name>bender_joy</name>
+  <version>0.0.0</version>
+  <description>The bender_joy package
+
+     bender_joy:
+
+     joystick for teleoperation
+
+  </description>
+  <maintainer email="bender.contacto@gmail.com">Bender Team - UChile Homebreakers</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <build_depend>bender_msgs</build_depend>
+  <build_depend>bender_srvs</build_depend>
+  <build_depend>joy</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  
+  <run_depend>bender_msgs</run_depend>
+  <run_depend>bender_srvs</run_depend>
+  <run_depend>joy</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+  <export>
+  </export>
+</package>
