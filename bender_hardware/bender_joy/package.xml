@@ -1,33 +1,74 @@
 <?xml version="1.0"?>
-<package>
-  <name>bender_joy</name>
-  <version>0.0.0</version>
-  <description>The bender_joy package
+<package format="2">
+    <!-- 
+      <depend>             : build, export, and execution dependencies 
+      <build_depend>       : pkgs needed at compile time (any file or library)
+      <build_export_depend>: pkgs needed to build libraries against this pkg
+      <exec_depend>        : pkgs needed to run this code. (e.g: shared libs)
+      <test_depend>        : only additional deps for unit testing (e.g: gtest)
+      <doc_depend>         : dependencies for documentation generation
 
-     bender_joy:
+      See also:
+      - http://wiki.ros.org/catkin/package.xml
+      - http://www.ros.org/reps/rep-0140.html
+    -->
 
-     joystick for teleoperation
 
-  </description>
-  <maintainer email="bender.contacto@gmail.com">Bender Team - UChile Homebreakers</maintainer>
-  <license>TODO</license>
+    <!-- PACKAGE INFORMATION -->
+    <!-- - - - - - - - - - - -->
 
-  <buildtool_depend>catkin</buildtool_depend>
+    <name>bender_joy</name>
+    <version>2.0.0</version>
+    
+    <description>Contains code for teleoperation of Bender using joysticks</description>
+
+    <!-- team -->
+    <maintainer email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</maintainer>
+    <author     email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</author>
+
+    <!-- specific developers -->
+    
+
+
+    <license>TODO</license>
+
+
+
+    <!-- SYSTEM DEPENDENCIES -->
+    <!-- - - - - - - - - - - -->
+
+    <!--  build system tool to build this package -->
+    <buildtool_depend>catkin</buildtool_depend>
+
+
+    <!-- build, export, and execution dependencies -->
+    <depend>bender_msgs</depend>
+    <depend>bender_srvs</depend>
+    <depend>joy</depend>
+    <depend>roscpp</depend>
+    <depend>sensor_msgs</depend>
+    <depend>std_msgs</depend>
+
+
+    <!-- build dependencies -->
+
+
+    <!-- export dependencies -->
+
+
+    <!-- excution dependencies -->
+
+
+    <!-- test dependencies -->
+
+
+    <!-- documentation dependencies -->
+
+
+    <export>
+    </export>
   
-  <build_depend>bender_msgs</build_depend>
-  <build_depend>bender_srvs</build_depend>
-  <build_depend>joy</build_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>sensor_msgs</build_depend>
-  <build_depend>std_msgs</build_depend>
-  
-  <run_depend>bender_msgs</run_depend>
-  <run_depend>bender_srvs</run_depend>
-  <run_depend>joy</run_depend>
-  <run_depend>roscpp</run_depend>
-  <run_depend>sensor_msgs</run_depend>
-  <run_depend>std_msgs</run_depend>
-
-  <export>
-  </export>
 </package>
+

@@ -1,37 +1,77 @@
 <?xml version="1.0"?>
-<package>
-  <name>bender_pose_server</name>
-  <version>0.0.0</version>
-  <description>The bender_pose_server package</description>
-  <maintainer email="matias.pavez.b@gmail.com">matias.pavez.b</maintainer>
-  <license>TODO</license>
-  
-  <buildtool_depend>catkin</buildtool_depend>
+<package format="2">
+    <!-- 
+      <depend>             : build, export, and execution dependencies 
+      <build_depend>       : pkgs needed at compile time (any file or library)
+      <build_export_depend>: pkgs needed to build libraries against this pkg
+      <exec_depend>        : pkgs needed to run this code. (e.g: shared libs)
+      <test_depend>        : only additional deps for unit testing (e.g: gtest)
+      <doc_depend>         : dependencies for documentation generation
 
-  <build_depend>bender_msgs</build_depend>
-  <build_depend>bender_srvs</build_depend>
-  <build_depend>geometry_msgs</build_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>roslib</build_depend>
-  <build_depend>rospy</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_depend>std_srvs</build_depend>
-  <build_depend>yaml-cpp</build_depend>
-  <build_depend>bender_utils</build_depend>
-  <build_depend>interactive_markers</build_depend>
-  
-  <run_depend>interactive_markers</run_depend>
-  <run_depend>bender_utils</run_depend>
-  <run_depend>bender_msgs</run_depend>
-  <run_depend>bender_srvs</run_depend>
-  <run_depend>geometry_msgs</run_depend>
-  <run_depend>roscpp</run_depend>
-  <run_depend>roslib</run_depend>
-  <run_depend>rospy</run_depend>
-  <run_depend>std_msgs</run_depend>
-  <run_depend>std_srvs</run_depend>
-  <run_depend>yaml-cpp</run_depend>
+      See also:
+      - http://wiki.ros.org/catkin/package.xml
+      - http://www.ros.org/reps/rep-0140.html
+    -->
 
-  <export>
-  </export>
+
+    <!-- PACKAGE INFORMATION -->
+    <!-- - - - - - - - - - - -->
+
+    <name>bender_pose_server</name>
+    <version>2.0.0</version>
+    
+    <description>The bender_pose_server package</description>
+
+    <!-- team -->
+    <maintainer email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</maintainer>
+    <author     email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</author>
+
+    <!-- specific developers -->
+    
+
+
+    <license>TODO</license>
+
+
+
+    <!-- SYSTEM DEPENDENCIES -->
+    <!-- - - - - - - - - - - -->
+
+    <!--  build system tool to build this package -->
+    <buildtool_depend>catkin</buildtool_depend>
+
+
+    <!-- build, export, and execution dependencies -->
+    <depend>bender_msgs</depend>
+    <depend>bender_srvs</depend>
+    <depend>geometry_msgs</depend>
+    <depend>roscpp</depend>
+    <depend>roslib</depend>
+    <depend>rospy</depend>
+    <depend>std_msgs</depend>
+    <depend>std_srvs</depend>
+    <depend>yaml-cpp</depend>
+    <depend>bender_utils</depend>
+    <depend>interactive_markers</depend>
+    
+    <!-- build dependencies -->
+
+
+    <!-- export dependencies -->
+
+
+    <!-- excution dependencies -->
+
+
+    <!-- test dependencies -->
+
+
+    <!-- documentation dependencies -->
+
+
+    <export>
+    </export>
+  
 </package>

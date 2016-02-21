@@ -17,23 +17,22 @@
     <!-- PACKAGE INFORMATION -->
     <!-- - - - - - - - - - - -->
 
-    <name>bender_base</name>
+    <name>bender_mock</name>
     <version>2.0.0</version>
     
-    <description>The bender_base package</description>
-
-    <!-- team -->
+    <description>The bender_mock package.</description>
     <maintainer email="bender.devel@gmail.com">
       Bender Team - UChile Homebreakers</maintainer>
     <author     email="bender.devel@gmail.com">
       Bender Team - UChile Homebreakers</author>
-
-    <!-- specific developers -->
-    
-
-
     <license>TODO</license>
 
+    <!-- about bender and related repository -->
+    <url type="website">bender.li2.uchile.cl</url>
+    <url type="bugtracker">
+      https://bitbucket.org/uchile-robotics-die/bender_base_layer/issues</url>
+    <url type="repository">
+      https://bitbucket.org/uchile-robotics-die/bender_base_layer</url>
 
 
     <!-- SYSTEM DEPENDENCIES -->
@@ -44,25 +43,29 @@
 
 
     <!-- build, export, and execution dependencies -->
+    <!-- -->
     
 
     <!-- build dependencies -->
+    <!-- -->
 
 
     <!-- export dependencies -->
+    <!-- -->
 
 
     <!-- excution dependencies -->
-	<exec_depend>rosaria</exec_depend>
+    <!-- -->
 
 
     <!-- test dependencies -->
+    <!-- -->
 
 
     <!-- documentation dependencies -->
-
+    <!-- -->
 
     <export>
     </export>
-  
+
 </package>

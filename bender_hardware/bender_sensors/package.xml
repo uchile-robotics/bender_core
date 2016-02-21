@@ -1,52 +1,77 @@
 <?xml version="1.0"?>
-<package>
-  <name>bender_sensors</name>
-  <version>0.0.0</version>
-  <description>The bender_sensors package
+<package format="2">
+    <!-- 
+      <depend>             : build, export, and execution dependencies 
+      <build_depend>       : pkgs needed at compile time (any file or library)
+      <build_export_depend>: pkgs needed to build libraries against this pkg
+      <exec_depend>        : pkgs needed to run this code. (e.g: shared libs)
+      <test_depend>        : only additional deps for unit testing (e.g: gtest)
+      <doc_depend>         : dependencies for documentation generation
 
-    bender_sensors:
-
-    camera_service
-    --------------
-    Uses opencv to open a camera and retrive
-    images as a service. Date 06-05-13.
-    Future work: compressed images (image_transport?)
-
-    laser_merger
-    ------------
-    takes two planar laserScans and joins them
+      See also:
+      - http://wiki.ros.org/catkin/package.xml
+      - http://www.ros.org/reps/rep-0140.html
+    -->
 
 
-    Fill me!
+    <!-- PACKAGE INFORMATION -->
+    <!-- - - - - - - - - - - -->
 
-  </description>
-  <maintainer email="bender.contacto@gmail.com">Bender Team - UChile Homebreakers</maintainer>
-  <license>TODO</license>
+    <name>bender_sensors</name>
+    <version>2.0.0</version>
+    
+    <description>The bender_sensors package</description>
+
+    <!-- team -->
+    <maintainer email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</maintainer>
+    <author     email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</author>
+
+    <!-- specific developers -->
+    
 
 
-  <buildtool_depend>catkin</buildtool_depend>
+    <license>TODO</license>
 
-  <build_depend>roscpp</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_depend>sensor_msgs</build_depend>
-  <build_depend>bender_msgs</build_depend>
-  <build_depend>bender_srvs</build_depend>
-  <build_depend>cv_bridge</build_depend>
-  <build_depend>image_transport</build_depend>
-  <build_depend>libusb-1.0-dev</build_depend>
-  <build_depend>bender_utils</build_depend>
+
+
+    <!-- SYSTEM DEPENDENCIES -->
+    <!-- - - - - - - - - - - -->
+
+    <!--  build system tool to build this package -->
+    <buildtool_depend>catkin</buildtool_depend>
+
+
+    <!-- build, export, and execution dependencies -->
+    <depend>roscpp</depend>
+    <depend>std_msgs</depend>
+    <depend>sensor_msgs</depend>
+    <depend>bender_msgs</depend>
+    <depend>bender_srvs</depend>
+    <depend>cv_bridge</depend>
+    <depend>image_transport</depend>
+    <depend>libusb-1.0-dev</depend>
+    <depend>bender_utils</depend>
+
+
+    <!-- build dependencies -->
+
+
+    <!-- export dependencies -->
+
+
+    <!-- excution dependencies -->
+
+
+    <!-- test dependencies -->
+
+
+    <!-- documentation dependencies -->
+
+
+    <export>
+    </export>
   
-  <run_depend>bender_utils</run_depend>
-  
-  <run_depend>roscpp</run_depend>
-  <run_depend>std_msgs</run_depend>
-  <run_depend>sensor_msgs</run_depend>
-  <run_depend>bender_msgs</run_depend>
-  <run_depend>bender_srvs</run_depend>
-  <run_depend>cv_bridge</run_depend>
-  <run_depend>image_transport</run_depend>
-  <run_depend>libusb-1.0-dev</run_depend>
-  
-  <export>
-  </export>
 </package>
+

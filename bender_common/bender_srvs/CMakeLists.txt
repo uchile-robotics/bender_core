@@ -17,8 +17,18 @@ find_package(catkin REQUIRED COMPONENTS
 # Generate services in the 'srv' folder
 add_service_files(
   FILES
-  ArmCommand.srv
   Bool.srv
+  String.srv
+  Float.srv
+  Dummy.srv
+  stringReturn.srv
+  stringService.srv
+  intInfo.srv
+  ID.srv
+  Onoff.srv
+  IsOn.srv
+  PoseStamped.srv
+  ArmCommand.srv
   AngVel.srv
   NavGoal.srv
   Detection.srv
@@ -37,7 +47,6 @@ add_service_files(
   objrecService.srv
   siftFileTrain.srv
   BlobList.srv
-  Onoff.srv
   GripperInfo.srv
   siftGuiTrain.srv
   DetectEmerg.srv
@@ -45,7 +54,6 @@ add_service_files(
   DoorDetector.srv
   PlaneHeight.srv
   siftOnlineTrain.srv
-  Dummy.srv
   FaceInfo.srv
   Slope.srv
   FaceRecognition.srv
@@ -55,20 +63,12 @@ add_service_files(
   Feedback.srv
   PlanIKGoal.srv
   State.srv
-  Float.srv
   PlanningGoalCartesian.srv
   States.srv
   getLaserScan.srv
   PlanningGoalState.srv
-  stringReturn.srv
-  intInfo.srv
-  ID.srv
   play_sound.srv
-  stringService.srv
   ImageService.srv
-  PoseStamped.srv
-  String.srv
-  IsOn.srv
   Punch.srv
   synthesize.srv
   load_dictionary_service.srv

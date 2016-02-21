@@ -1,16 +1,32 @@
 <?xml version="1.0"?>
-<package>
-  <name>bender_knowledge</name>
-  <version>0.0.0</version>
-  <description>The bender_knowledge package</description>  
-  <maintainer email="bender.admin@gmail.com">Bender Admin</maintainer>
-  <author email="matias.pavez.b@gmail.com">Matias Pavez</author>
-  <license>TODO</license>
+<package format="2">
+  
+    <!-- PACKAGE INFORMATION -->
+    <!-- - - - - - - - - - - -->
 
-  <buildtool_depend>catkin</buildtool_depend>
-  <!--   <run_depend>message_runtime</run_depend> -->
-  <export>
-    <metapackage/>
-  </export>
+    <name>bender_knowledge</name>
+    <version>2.0.0</version>
+
+    <description>Pakacges for database and runtime information management</description>
+    <maintainer email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</maintainer>
+    <author     email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</author>
+    <license>TODO</license>
+
+    <!-- about bender and related repository -->
+    <url type="website">bender.li2.uchile.cl</url>
+    <url type="bugtracker">
+      https://bitbucket.org/uchile-robotics-die/bender_base_layer/issues</url>
+    <url type="repository">
+      https://bitbucket.org/uchile-robotics-die/bender_base_layer</url>
+
+
+    <buildtool_depend>catkin</buildtool_depend>
+    
+    <export>
+      <metapackage/>
+    </export>
 
 </package>
+
