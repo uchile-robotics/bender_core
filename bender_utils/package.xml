@@ -32,6 +32,16 @@
     
 
 
+    <!-- about bender and related repository -->
+    <url type="website">bender.li2.uchile.cl</url>
+    <url type="bugtracker">
+      https://bitbucket.org/uchile-robotics-die/bender_base_layer/issues</url>
+    <url type="repository">
+      https://bitbucket.org/uchile-robotics-die/bender_base_layer</url>
+
+
+
+
     <license>TODO</license>
 
 
