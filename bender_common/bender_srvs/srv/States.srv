@@ -1,5 +1,0 @@
-bool[] select
----
-float64[] state
-float64[] load
-bool[] is_moving

@@ -24,62 +24,36 @@ add_service_files(
   Float.srv
   stringReturn.srv
   stringService.srv
-  intInfo.srv
   ID.srv
   Onoff.srv
   IsOn.srv
   PoseStamped.srv
-  AngVel.srv
   NavGoal.srv
   Detection.srv
   DetectState.srv
-  ObjectDetection2.srv
   Recognition.srv
-  PoseStampedArray.srv
   ObjectDetection.srv
-  ObjectManipulation.srv
   siftClearDatabase.srv
   objrecService.srv
   siftFileTrain.srv
   BlobList.srv
-  GripperInfo.srv
   siftGuiTrain.srv
   DetectEmerg.srv
   DoorDetector.srv
   PlaneHeight.srv
   siftOnlineTrain.srv
   FaceInfo.srv
-  Slope.srv
   FaceRecognition.srv
-  planeXY.srv
-  Speed.srv
-  posXYZ.srv
-  Feedback.srv
-  PlanIKGoal.srv
-  State.srv
-  PlanningGoalCartesian.srv
-  States.srv
-  getLaserScan.srv
-  PlanningGoalState.srv
   play_sound.srv
   ImageService.srv
-  Punch.srv
   synthesize.srv
   load_dictionary_service.srv
-  QuestionService.srv
   TableDetector.srv
-  LoadMode.srv
   ReportGenerator.srv
-  TorqueEnable.srv
   SearchPerson.srv
-  TorqueLimit.srv
-  Margin.srv
-  selectBrazo.srv
   Transformer.srv
   MaskInfo.srv
   SemMap.srv
-  moveRosaria.srv
-  sendPoseEstimation.srv
   ValidPoint.srv
   PointCloud2.srv
   PointCloud2Trasnform.srv

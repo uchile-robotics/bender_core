@@ -1,6 +1,0 @@
-bool choice
-string question
-string keyword
-string answer
----
-string answer

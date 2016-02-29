@@ -1,4 +1,6 @@
 
+// TODO!: agregar soporte para los brazos
+
 // C++
 #include <unistd.h>
 
@@ -14,13 +16,6 @@
 #include <bender_msgs/Emotion.h>  // face
 
 // services
-
-#include <bender_srvs/PlanningGoalCartesian.h> // arm
-#include <bender_srvs/PlanningGoalState.h>     // arm
-#include <bender_srvs/TorqueEnable.h>          // arm
-#include <bender_srvs/LoadMode.h>              // arm
-#include <bender_srvs/AngVel.h>                // arm
-
 #include <bender_srvs/synthesize.h>  // speech
 
 /*# # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -109,30 +104,6 @@ private:
 
 	// - - - -  Service Clients - - - -
 
-	// left arm
-	ros::ServiceClient planstateL;
-	ros::ServiceClient torqueenableL;
-	ros::ServiceClient inicialPoseL;
-	ros::ServiceClient premanip1L;
-	ros::ServiceClient premanip2L;
-	ros::ServiceClient plancartL;
-	ros::ServiceClient cerrarL;
-	ros::ServiceClient movergripL;
-	ros::ServiceClient movermunecaL;
-	ros::ServiceClient orientarL;
-
-	// right arm
-	ros::ServiceClient inicialPoseR;
-	ros::ServiceClient premanip1R;
-	ros::ServiceClient premanip2R;
-	ros::ServiceClient planstateR;
-	ros::ServiceClient torqueenableR;
-	ros::ServiceClient plancartR;
-	ros::ServiceClient cerrarR;
-	ros::ServiceClient movergripR;
-	ros::ServiceClient movermunecaR;
-	ros::ServiceClient orientarR;
-
 	// speech
 	ros::ServiceClient speech_serv_;
 
@@ -150,9 +121,6 @@ private:
 	// face
 	ros::Publisher face_pub_;
 
-	// left / right arm
-	ros::Publisher motoresL;
-	ros::Publisher motoresR;
 
 	// - - - - Button/Axes Indexes - - - -
 
@@ -176,12 +144,6 @@ private:
 
 	// joystick
 	bool is_paused_;
-
-	// arm
-	bool has_left_torque;
-	bool has_right_torque;
-	bool is_left_grip_opened;
-	bool is_right_grip_opened;
 
 	// face
 	int face_intensity;
@@ -230,30 +192,6 @@ Joystick::Joystick():
 
 	//  - - - - - service clients - - - -
 
-	// right arm
-	inicialPoseR = priv.serviceClient<std_srvs::Empty>("/right_arm/posicion_inicial");
-	premanip1R = priv.serviceClient<std_srvs::Empty>("/right_arm/posicion_premanipulacion1");
-	premanip2R = priv.serviceClient<std_srvs::Empty>("/right_arm/posicion_premanipulacion2");
-	planstateR = priv.serviceClient<bender_srvs::PlanningGoalCartesian>("/right_arm/grasp");
-	plancartR= priv.serviceClient<bender_srvs::PlanningGoalState>("/right_arm/plan_state");
-	torqueenableR = priv.serviceClient<bender_srvs::TorqueEnable>("/right_arm/torque_enable");
-	cerrarR = priv.serviceClient<bender_srvs::LoadMode>("/right_arm/cerrar_grip");
-    orientarR = priv.serviceClient<std_srvs::Empty>("/right_arm/orientar_grip");
-	movergripR = priv.serviceClient<bender_srvs::AngVel>("/right_arm/mover_grip_ang");
-	movermunecaR = priv.serviceClient<bender_srvs::AngVel>("/right_arm/mover_right_muneca_ang");
-
-	// left arm
-	inicialPoseL = priv.serviceClient<std_srvs::Empty>("/left_arm/posicion_inicial");
-	premanip1L = priv.serviceClient<std_srvs::Empty>("/left_arm/posicion_premanipulacion1");
-	premanip2L = priv.serviceClient<std_srvs::Empty>("/left_arm/posicion_premanipulacion2");
-	planstateL = priv.serviceClient<bender_srvs::PlanningGoalCartesian>("/left_arm/grasp");
-	plancartL= priv.serviceClient<bender_srvs::PlanningGoalState>("/left_arm/plan_state");
-	torqueenableL = priv.serviceClient<bender_srvs::TorqueEnable>("/left_arm/torque_enable");
-	cerrarL = priv.serviceClient<bender_srvs::LoadMode>("/left_arm/cerrar_grip");
-	orientarL = priv.serviceClient<std_srvs::Empty>("/left_arm/orientar_grip");
-	movergripL = priv.serviceClient<bender_srvs::AngVel>("/left_arm/mover_grip_ang");
-	movermunecaL = priv.serviceClient<bender_srvs::AngVel>("/left_arm/mover_muneca_ang");
-
 	// speech
 	speech_serv_ = priv.serviceClient<bender_srvs::synthesize>("/bender/speech/synthesizer/synthesize");
 
@@ -263,10 +201,6 @@ Joystick::Joystick():
 
 	// - - - - publishers - - -
 
-	// arms
-	motoresR = priv.advertise<bender_msgs::Command>("/right_arm_joints/command",1000);
-	motoresL = priv.advertise<bender_msgs::Command>("/left_arm_joints/command",1000);
-
 	// navigation
 	nav_pub_ = priv.advertise<geometry_msgs::Twist>("/bender/joy/joystick_nav/cmd_vel", 1);
 
@@ -275,12 +209,6 @@ Joystick::Joystick():
 
 	// joystick
 	is_paused_ = false;
-
-	// arm
-	has_left_torque = false;
-	has_right_torque = false;
-	is_left_grip_opened = false;
-	is_right_grip_opened = false;
 
 	// face
 	face_intensity = 1;
@@ -396,11 +324,6 @@ uint16_t Joystick::get_button_mask(const sensor_msgs::Joy::ConstPtr& joy) {
 void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 
 	std_srvs::Empty dum;
-	bender_srvs::TorqueEnable torque;
-	bender_srvs::LoadMode carga;
-	bender_srvs::AngVel angulovelocidad;
-	bender_msgs::Command saludoStateL, saludoStateR;
-    bender_srvs::PlanningGoalCartesian xyzL, xyzR;
 
 	uint16_t buttons = get_button_mask(joy);
 
@@ -455,13 +378,8 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 		switch (buttons) {
 			case ARM_TORQUE_OFF: {
 
-				has_left_torque = false;
-				has_right_torque = false;
-
-				torque.request.torque_enable = false;
-				ROS_INFO("TORQUE OFF");
-				torqueenableL.call(torque);
-				torqueenableR.call(torque);
+				// TODO
+				ROS_WARN("TORQUE OFF for both arms: NOT IMPLEMENTED");
 				break;
 			}
 			default:
@@ -475,87 +393,25 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 	if ( joy->axes[axe_idx_arm_left_] == ARM_IS_SELECTED && joy->axes[axe_idx_arm_right_] == ARM_IS_NOT_SELECTED ) {
 		switch (buttons) {
 			case ARM_TORQUE_OFF: {
-				has_left_torque = false;
-				torque.request.torque_enable = false;
-				ROS_INFO("Left arm TORQUE OFF");
-				torqueenableL.call(torque);
-
+				ROS_WARN("TORQUE OFF for left arm: NOT IMPLEMENTED");
 				break;
 			}
 			case ARM_INITIAL_POSE:{
-				ROS_INFO("Left -> posicion inicial");
-				inicialPoseL.call(dum);
-				has_left_torque = true;
-
+				ROS_WARN("ARM_INITIAL_POSE for left arm is NOT IMPLEMENTED");
 				break;
 			}
 			case ARM_PREPARE: {
-				ROS_INFO("Left -> premanipulacion 2");
-				premanip2L.call(dum);
-				has_left_torque = true;
-
+				ROS_WARN("ARM_PREPARE for left arm is NOT IMPLEMENTED");
 				break;
 			}
 			case ARM_GRAB: {
 
-				ROS_INFO("Left Arm: GRAB");
-//				saludoStateL.positions.resize(8);
-//				saludoStateL.speed.resize(8);
-//				saludoStateL.select.resize(8);
-//				for(int i=0;i<8;i++)
-//				{
-//					saludoStateL.positions[i] = 0;
-//					saludoStateL.speed[i] = 0;
-//					saludoStateL.select[i]=false;
-
-//					if(i==0) {
-//						saludoStateL.positions[i] = -1.27473803473;
-//						saludoStateL.speed[i] = 0.2;
-//						saludoStateL.select[i]=true;
-//					}
-//					if(i==1) {
-//						saludoStateL.positions[i] = -0.104310693576;
-//						saludoStateL.speed[i] = 0.2;
-//						saludoStateL.select[i]=true;
-//					}
-//					if(i==2) {
-//						saludoStateL.positions[i] = -0.0255663464648;
-//						saludoStateL.speed[i] = 0.2;
-//						saludoStateL.select[i]=true;
-//					}
-//					if(i==3) {
-//						saludoStateL.positions[i] = 1.51710699922;
-//						saludoStateL.speed[i] = 0.2;
-//						saludoStateL.select[i]=true;
-//					}
-//				}
-//				motoresL.publish(saludoStateL);
-
-                xyzL.request.x = 50;
-                xyzL.request.y = 20;
-                xyzL.request.z = 70;
-                plancartL.call(xyzL);
-
+				ROS_WARN("ARM_GRAB for left arm is NOT IMPLEMENTED");
 				break;
 			}
 			case ARM_GRIP: {
 
-				// close
-				if (is_left_grip_opened) {
-					ROS_INFO("Left -> cerrar grip con loadmode");
-					carga.request.loadmode = 0;
-                    cerrarL.call(carga);
-					is_left_grip_opened = false;
-				}
-				// open
-				else {
-					ROS_INFO("Left -> abrir grip");
-					angulovelocidad.request.angle = 0.7;
-					angulovelocidad.request.velocity = 0.3;
-					movergripL.call(angulovelocidad);
-					is_left_grip_opened = true;
-				}
-
+				ROS_WARN("ARM_GRIP usage for left arm is NOT IMPLEMENTED");
 				break;
 			}
 			default:
@@ -568,87 +424,23 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 	if ( joy->axes[axe_idx_arm_left_] == ARM_IS_NOT_SELECTED && joy->axes[axe_idx_arm_right_] == ARM_IS_SELECTED ) {
 		switch (buttons) {
 			case ARM_TORQUE_OFF: {
-
-				has_right_torque = false;
-				torque.request.torque_enable = false;
-				ROS_INFO("Right Arm TORQUE OFF");
-				torqueenableR.call(torque);
-
+				ROS_WARN("ARM_TORQUE_OFF for right arm is NOT IMPLEMENTED");
 				break;
 			}
 			case ARM_INITIAL_POSE:{
-				ROS_INFO("Right -> posicion inicial");
-				inicialPoseR.call(dum);
-				has_right_torque = true;
+				ROS_WARN("ARM_INITIAL_POSE for right arm is NOT IMPLEMENTED");
 				break;
 			}
 			case ARM_PREPARE: {
-				ROS_INFO("Right Arm: premanipulacion 2");
-				premanip2R.call(dum);
-				has_right_torque = true;
+				ROS_WARN("ARM_PREPARE for right arm is NOT IMPLEMENTED");
 				break;
 			}
 			case ARM_GRAB: {
-
-				ROS_INFO("Right Arm: GRAB");
-//				saludoStateR.positions.resize(8);
-//				saludoStateR.speed.resize(8);
-//				saludoStateR.select.resize(8);
-
-//				for(int i=0;i<8;i++)
-//				{
-//					//			ROS_INFO("1/2");
-//					saludoStateR.positions[i] = 0;
-//					saludoStateR.speed[i] = 0;
-//					saludoStateR.select[i]=false;
-//					//			ROS_INFO("1");
-//					if(i==0) {
-//						saludoStateR.positions[i] = 1.25019434213;
-//						saludoStateR.speed[i] = 0.2;
-//						saludoStateR.select[i]=true;
-//					}
-//					if(i==1) {
-//						saludoStateR.positions[i] = 0.0609435227219;
-//						saludoStateR.speed[i] = 0.2;
-//						saludoStateR.select[i]=true;
-//					}
-//					if(i==2) {
-//						saludoStateR.positions[i] = 0.219870579597;
-//						saludoStateR.speed[i] = 0.2;
-//						saludoStateR.select[i]=true;
-//					}
-//					if(i==3) {
-//						saludoStateR.positions[i] = 1.3928545554;
-//						saludoStateR.speed[i] = 0.2;
-//						saludoStateR.select[i]=true;
-//					}
-//				}
-//				motoresR.publish(saludoStateR);
-
-                xyzR.request.x = 50;
-                xyzR.request.y = -20;
-                xyzR.request.z = 70;
-                plancartR.call(xyzR);
-
+				ROS_WARN("ARM_GRAB for right arm is NOT IMPLEMENTED");
 				break;
 			}
 			case ARM_GRIP: {
-
-				// close
-				if (is_right_grip_opened) {
-					ROS_INFO("Right -> cerrar grip con loadmode");
-					carga.request.loadmode = 0;
-					cerrarR.call(carga);
-					is_right_grip_opened = false;
-				}
-				// open
-				else {
-					ROS_INFO("Right -> abrir grip");
-					angulovelocidad.request.angle = 0.7;
-					angulovelocidad.request.velocity = 0.3;
-					movergripR.call(angulovelocidad);
-					is_right_grip_opened = true;
-				}
+				ROS_WARN("ARM_GRIP usage for right arm is NOT IMPLEMENTED");
 				break;
 			}
 			default:

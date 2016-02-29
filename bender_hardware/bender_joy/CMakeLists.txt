@@ -47,14 +47,3 @@ target_link_libraries(joystick_face ${catkin_LIBRARIES})
 add_executable(joy_autoface src/joy_autoface.cpp)
 add_dependencies(joy_autoface ${catkin_EXPORTED_TARGETS})
 target_link_libraries(joy_autoface ${catkin_LIBRARIES})
-
-# Upper Arms Dance
-add_executable(joy_arms_dance src/joy_arms_dance.cpp)
-add_dependencies(joy_arms_dance ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joy_arms_dance ${catkin_LIBRARIES})
-
-# Upper Arms Complete
-add_executable(joy_arms_complete src/simple_arms_joy.cpp)
-add_dependencies(joy_arms_complete ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joy_arms_complete ${catkin_LIBRARIES})
-
