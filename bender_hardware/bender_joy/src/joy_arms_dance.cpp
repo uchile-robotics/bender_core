@@ -1,8 +1,8 @@
 #include <ros/ros.h>
+#include <std_srvs/Empty.h>
 #include <geometry_msgs/Twist.h>
 #include <sensor_msgs/Joy.h>
 #include <bender_msgs/Command.h>
-#include <bender_srvs/Dummy.h>
 #include <bender_srvs/PlanningGoalCartesian.h>
 #include <bender_srvs/PlanningGoalState.h>
 #include <bender_srvs/TorqueEnable.h>
@@ -60,17 +60,17 @@ Joystick::Joystick(){
 
 
 	// services
-	inicialPoseR = nh_.serviceClient<bender_srvs::Dummy>("right_arm/posicion_inicial");
-	premanip1R = nh_.serviceClient<bender_srvs::Dummy>("right_arm/posicion_premanipulacion1");
-	premanip2R = nh_.serviceClient<bender_srvs::Dummy>("right_arm/posicion_premanipulacion2");
+	inicialPoseR = nh_.serviceClient<std_srvs::Empty>("right_arm/posicion_inicial");
+	premanip1R = nh_.serviceClient<std_srvs::Empty>("right_arm/posicion_premanipulacion1");
+	premanip2R = nh_.serviceClient<std_srvs::Empty>("right_arm/posicion_premanipulacion2");
 	planstateR = nh_.serviceClient<bender_srvs::PlanningGoalCartesian>("right_arm/grasp");
 	plancartR= nh_.serviceClient<bender_srvs::PlanningGoalState>("right_arm/plan_state");
 	torqueenableR = nh_.serviceClient<bender_srvs::TorqueEnable>("right_arm/torque_enable");
 	cerrarR = nh_.serviceClient<bender_srvs::LoadMode>("right_arm/cerrar_grip");
 
-	inicialPoseL = nh_.serviceClient<bender_srvs::Dummy>("left_arm/posicion_inicial");
-	premanip1L = nh_.serviceClient<bender_srvs::Dummy>("left_arm/posicion_premanipulacion1");
-	premanip2L = nh_.serviceClient<bender_srvs::Dummy>("left_arm/posicion_premanipulacion2");
+	inicialPoseL = nh_.serviceClient<std_srvs::Empty>("left_arm/posicion_inicial");
+	premanip1L = nh_.serviceClient<std_srvs::Empty>("left_arm/posicion_premanipulacion1");
+	premanip2L = nh_.serviceClient<std_srvs::Empty>("left_arm/posicion_premanipulacion2");
 	planstateL = nh_.serviceClient<bender_srvs::PlanningGoalCartesian>("left_arm/grasp");
 	plancartL= nh_.serviceClient<bender_srvs::PlanningGoalState>("left_arm/plan_state");
 	torqueenableL = nh_.serviceClient<bender_srvs::TorqueEnable>("left_arm/torque_enable");
@@ -101,7 +101,7 @@ Joystick::Joystick(){
 
 void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 
-	bender_srvs::Dummy dum;
+	std_srvs::Empty dum;
 	bender_srvs::PlanningGoalCartesian planR,planL;
 	bender_srvs::PlanningGoalState botStateL, topState1L, topState2L, botStateR, topState1R, topState2R;
 	bender_srvs::TorqueEnable torque;

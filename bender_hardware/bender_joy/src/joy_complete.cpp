@@ -7,13 +7,13 @@
 #include <ros/package.h>
 
 // messages
+#include <std_srvs/Empty.h>
 #include <geometry_msgs/Twist.h>  // navigation
 #include <sensor_msgs/Joy.h>      // joystick
 #include <bender_msgs/Command.h>  // arm
 #include <bender_msgs/Emotion.h>  // face
 
 // services
-#include <bender_srvs/Dummy.h>
 
 #include <bender_srvs/PlanningGoalCartesian.h> // arm
 #include <bender_srvs/PlanningGoalState.h>     // arm
@@ -231,26 +231,26 @@ Joystick::Joystick():
 	//  - - - - - service clients - - - -
 
 	// right arm
-	inicialPoseR = priv.serviceClient<bender_srvs::Dummy>("/right_arm/posicion_inicial");
-	premanip1R = priv.serviceClient<bender_srvs::Dummy>("/right_arm/posicion_premanipulacion1");
-	premanip2R = priv.serviceClient<bender_srvs::Dummy>("/right_arm/posicion_premanipulacion2");
+	inicialPoseR = priv.serviceClient<std_srvs::Empty>("/right_arm/posicion_inicial");
+	premanip1R = priv.serviceClient<std_srvs::Empty>("/right_arm/posicion_premanipulacion1");
+	premanip2R = priv.serviceClient<std_srvs::Empty>("/right_arm/posicion_premanipulacion2");
 	planstateR = priv.serviceClient<bender_srvs::PlanningGoalCartesian>("/right_arm/grasp");
 	plancartR= priv.serviceClient<bender_srvs::PlanningGoalState>("/right_arm/plan_state");
 	torqueenableR = priv.serviceClient<bender_srvs::TorqueEnable>("/right_arm/torque_enable");
 	cerrarR = priv.serviceClient<bender_srvs::LoadMode>("/right_arm/cerrar_grip");
-    orientarR = priv.serviceClient<bender_srvs::Dummy>("/right_arm/orientar_grip");
+    orientarR = priv.serviceClient<std_srvs::Empty>("/right_arm/orientar_grip");
 	movergripR = priv.serviceClient<bender_srvs::AngVel>("/right_arm/mover_grip_ang");
 	movermunecaR = priv.serviceClient<bender_srvs::AngVel>("/right_arm/mover_right_muneca_ang");
 
 	// left arm
-	inicialPoseL = priv.serviceClient<bender_srvs::Dummy>("/left_arm/posicion_inicial");
-	premanip1L = priv.serviceClient<bender_srvs::Dummy>("/left_arm/posicion_premanipulacion1");
-	premanip2L = priv.serviceClient<bender_srvs::Dummy>("/left_arm/posicion_premanipulacion2");
+	inicialPoseL = priv.serviceClient<std_srvs::Empty>("/left_arm/posicion_inicial");
+	premanip1L = priv.serviceClient<std_srvs::Empty>("/left_arm/posicion_premanipulacion1");
+	premanip2L = priv.serviceClient<std_srvs::Empty>("/left_arm/posicion_premanipulacion2");
 	planstateL = priv.serviceClient<bender_srvs::PlanningGoalCartesian>("/left_arm/grasp");
 	plancartL= priv.serviceClient<bender_srvs::PlanningGoalState>("/left_arm/plan_state");
 	torqueenableL = priv.serviceClient<bender_srvs::TorqueEnable>("/left_arm/torque_enable");
 	cerrarL = priv.serviceClient<bender_srvs::LoadMode>("/left_arm/cerrar_grip");
-	orientarL = priv.serviceClient<bender_srvs::Dummy>("/left_arm/orientar_grip");
+	orientarL = priv.serviceClient<std_srvs::Empty>("/left_arm/orientar_grip");
 	movergripL = priv.serviceClient<bender_srvs::AngVel>("/left_arm/mover_grip_ang");
 	movermunecaL = priv.serviceClient<bender_srvs::AngVel>("/left_arm/mover_muneca_ang");
 
@@ -395,7 +395,7 @@ uint16_t Joystick::get_button_mask(const sensor_msgs::Joy::ConstPtr& joy) {
  */
 void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 
-	bender_srvs::Dummy dum;
+	std_srvs::Empty dum;
 	bender_srvs::TorqueEnable torque;
 	bender_srvs::LoadMode carga;
 	bender_srvs::AngVel angulovelocidad;

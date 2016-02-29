@@ -14,13 +14,14 @@ find_package(catkin REQUIRED COMPONENTS
 ## Declare ROS messages, services and actions ##
 ################################################
 
+
+
 # Generate services in the 'srv' folder
 add_service_files(
   FILES
   Bool.srv
   String.srv
   Float.srv
-  Dummy.srv
   stringReturn.srv
   stringService.srv
   intInfo.srv
@@ -28,20 +29,16 @@ add_service_files(
   Onoff.srv
   IsOn.srv
   PoseStamped.srv
-  ArmCommand.srv
   AngVel.srv
   NavGoal.srv
   Detection.srv
-  armGoal.srv
   DetectState.srv
   ObjectDetection2.srv
   Recognition.srv
-  ArmState.srv
   PoseStampedArray.srv
   ObjectDetection.srv
   ObjectManipulation.srv
   siftClearDatabase.srv
-  AskQuestion.srv
   objrecService.srv
   siftFileTrain.srv
   BlobList.srv

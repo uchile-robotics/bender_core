@@ -32,7 +32,7 @@ message(STATUS ${LIBUSB_LIBRARIES})
 ###################################
 
 catkin_package(
-  INCLUDE_DIRS include
+  #INCLUDE_DIRS include
   LIBRARIES bender_sensors
   CATKIN_DEPENDS bender_msgs bender_srvs cv_bridge image_transport roscpp sensor_msgs std_msgs bender_utils
   DEPENDS opencv2 LIBUSB_LIBRARIES
@@ -42,7 +42,8 @@ catkin_package(
 ## Build ##
 ###########
 
-include_directories(include
+include_directories(
+    #include
     ${catkin_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     ${LIBUSB_INCLUDE_DIRS}
