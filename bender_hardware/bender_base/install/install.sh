@@ -4,7 +4,7 @@
 # # # # # # # # # # # # # # # # # # # #
 
 # Useful Variables
-install_path=$(rospack find $pkg_base)/install
+install_path=$(rospack find bender_base)/install
 install_files=$install_path/files
 installer="[INSTALLER]:"
 

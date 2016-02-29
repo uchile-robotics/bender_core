@@ -32,12 +32,10 @@ add_service_files(
   AngVel.srv
   NavGoal.srv
   Detection.srv
-  setAnglesBaseArm.srv
   armGoal.srv
   DetectState.srv
   ObjectDetection2.srv
   Recognition.srv
-  setGoalBaseArm.srv
   ArmState.srv
   PoseStampedArray.srv
   ObjectDetection.srv
@@ -50,7 +48,6 @@ add_service_files(
   GripperInfo.srv
   siftGuiTrain.srv
   DetectEmerg.srv
-  orientBaseArm.srv
   DoorDetector.srv
   PlaneHeight.srv
   siftOnlineTrain.srv
@@ -77,7 +74,6 @@ add_service_files(
   LoadMode.srv
   ReportGenerator.srv
   TorqueEnable.srv
-  manipBaseArm.srv
   SearchPerson.srv
   TorqueLimit.srv
   Margin.srv
@@ -109,4 +105,3 @@ generate_messages(
 ## catkin specific configuration ##
 ###################################
 catkin_package()
-

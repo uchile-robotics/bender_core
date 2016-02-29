@@ -1,5 +1,0 @@
-float32 alpha
-float32 beta
-float32 gamma
----
-int8 received

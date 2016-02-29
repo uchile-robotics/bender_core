@@ -38,12 +38,6 @@ add_dependencies(joystick_complete ${catkin_EXPORTED_TARGETS})
 target_link_libraries(joystick_complete ${catkin_LIBRARIES})
 
 
-# Joystick Inauguracion Beucheff
-add_executable(joystick_inauguracion src/pres_arms_joy.cpp)
-add_dependencies(joystick_inauguracion ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joystick_inauguracion ${catkin_LIBRARIES})
-
-
 # Face Joystick
 add_executable(joystick_face src/joystick_face.cpp)
 add_dependencies(joystick_face ${catkin_EXPORTED_TARGETS})
@@ -53,11 +47,6 @@ target_link_libraries(joystick_face ${catkin_LIBRARIES})
 add_executable(joy_autoface src/joy_autoface.cpp)
 add_dependencies(joy_autoface ${catkin_EXPORTED_TARGETS})
 target_link_libraries(joy_autoface ${catkin_LIBRARIES})
-
-# Base Arm
-add_executable(joy_baseArm src/joy_baseArm.cpp)
-add_dependencies(joy_baseArm ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joy_baseArm ${catkin_LIBRARIES})
 
 # Upper Arms Dance
 add_executable(joy_arms_dance src/joy_arms_dance.cpp)
