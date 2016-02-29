@@ -12,9 +12,6 @@
 	<!-- static transform tree -->
 	<include file="$(find bender_tf)/launch/bender_static_tf.launch"/>
 
-	<!-- /odom   < - - -  /bender/base_link  -->
-  	<!--node name="pioneer_tf" pkg="bender_tf" type="pioneer_tf" ns="/bender/tf/"/-->
-
 	<!-- transformers -->
 	<include file="$(find bender_tf)/launch/transformers.launch"/>
 

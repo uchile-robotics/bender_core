@@ -65,16 +65,6 @@ add_library(dynamic_robot_state_publisher
 )
 target_link_libraries(dynamic_robot_state_publisher ${orocos_kdl_LIBRARIES} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
-## Declare a cpp executable
-# pioneer transform /bender/odom  --> /bender/base_link
-add_executable(pioneer_tf src/pioneer_tf.cpp)
-add_dependencies(pioneer_tf ${catkin_EXPORTED_TARGETS})
-target_link_libraries(pioneer_tf ${catkin_LIBRARIES})
-
-# neck transform /bender/torso_link --> /bender/neck_link
-add_executable(neck_tf src/neck_tf.cpp)
-add_dependencies(neck_tf ${catkin_EXPORTED_TARGETS})
-target_link_libraries(neck_tf ${catkin_LIBRARIES})
 
 # Pose transformer
 add_executable(simple_pose_transformer src/TransformPoseSimple.cpp)

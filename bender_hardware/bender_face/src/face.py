@@ -173,17 +173,21 @@ class Face():
 
     def update_tf_tree(self,angle):
 
-        update_client = rospy.ServiceProxy('/bender/tf/neck_tf/update', Float)
-        req = FloatRequest()
-        req.x1 = angle
+        # TODO
+        #
 
-        try:    
-            update_client(req)
+        # update_client = rospy.ServiceProxy('/bender/tf/neck_tf/update', Float)
+        # req = FloatRequest()
+        # req.x1 = angle
 
-        except:
-            # No nos interesa esperar bloquear el 
-            # nodo, si es que no se usar'a junto a las tf's
-            pass
+        # try:    
+        #     update_client(req)
+
+        # except:
+        #     # No nos interesa esperar bloquear el 
+        #     # nodo, si es que no se usar'a junto a las tf's
+        #     pass
+        pass
 
 
 def main():
