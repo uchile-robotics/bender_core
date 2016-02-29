@@ -50,10 +50,6 @@ include_directories(include
 )
 
 ## Declare a cpp executable
-# laser_merger
-#add_executable(laser_merger src/laser_merger.cpp)
-#add_dependencies(laser_merger ${catkin_EXPORTED_TARGETS})
-#target_link_libraries(laser_merger ${catkin_LIBRARIES})
 
 # laser_inverter
 add_executable(laser_inverter src/laser_inverter.cpp)

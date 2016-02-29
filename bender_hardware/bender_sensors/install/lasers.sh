@@ -3,8 +3,6 @@
 # - - - - - - S E T U P - - - - - - - -
 # # # # # # # # # # # # # # # # # # # #
 
-source "$BENDER_CONFIG"/setup.bash ;
-
 # Useful Variables
 pkg_name="bender_sensors";
 install_path=$(rospack find $pkg_name)/install;
