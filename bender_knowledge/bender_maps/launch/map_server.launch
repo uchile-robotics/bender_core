@@ -1,8 +1,0 @@
-<launch>
-
-	<arg name="map_name" default="map"/>
-
-	<!-- Map Server -->
-	<node pkg="map_server" type="map_server" name="map_server" respawn="true" args="$(find bender_maps)/maps/$(arg map_name).yaml"/>
-
-</launch>
