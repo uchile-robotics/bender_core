@@ -1,1 +1,4 @@
 meshes
+*.megadown
+tmp*
+
