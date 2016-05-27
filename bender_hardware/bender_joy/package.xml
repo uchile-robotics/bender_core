@@ -58,8 +58,9 @@
     <!-- export dependencies -->
 
 
-    <!-- excution dependencies -->
-
+    <!-- execution dependencies -->
+    <exec_depend>joystick_drivers</exec_depend>
+    
 
     <!-- test dependencies -->
 

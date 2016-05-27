@@ -4,11 +4,6 @@
 # - - - - - - I N S T A L L - - - - - -
 # # # # # # # # # # # # # # # # # # # #
 
-# Joystick
-sudo apt-get install ros-indigo-joystick-drivers
-rosdep install joy
-
-
 # Permisos para lectura/escritura Joysticks
 # ---------------------------------------------------------------
 echo -e "\nInstalling Joystick (must be connected)"

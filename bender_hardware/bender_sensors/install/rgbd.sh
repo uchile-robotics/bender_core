@@ -12,11 +12,6 @@ installer="[INSTALLER]:"
 # - - - - - - I N S T A L L - - - - - -
 # # # # # # # # # # # # # # # # # # # #
 
-# - - - - - - - - - ROS packages  - - - - - - - - - - -
-# RGBD drivers
-sudo apt-get install ros-indigo-openni-launch ;
-sudo apt-get install ros-indigo-openni2-launch ;
-
 # - - - - - - - - - NI Patch for Kinect - - - - - - - - - - -
 echo -e "\n$installer Installing NI Patch for Kinect device . . ."
 
