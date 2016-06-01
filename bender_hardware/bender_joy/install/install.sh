@@ -4,11 +4,6 @@
 # - - - - - - I N S T A L L - - - - - -
 # # # # # # # # # # # # # # # # # # # #
 
-# Joystick
-sudo apt-get install ros-indigo-joystick-drivers
-rosdep install joy
-
-
 # Permisos para lectura/escritura Joysticks
 # ---------------------------------------------------------------
 echo -e "\nInstalling Joystick (must be connected)"
@@ -21,16 +16,22 @@ if [ ! -c "/dev/input/js0" ]; then
   echo -e "Thats it"
   echo -e "\n\n\n"
 else 
-  # Joystick not connected!
+  # Joystick is connected!
+  echo "- giving a+rw permissions to /dev/input/js{01234}!!"
   sudo chmod a+rw /dev/input/js0
+  sudo chmod a+rw /dev/input/js1
+  sudo chmod a+rw /dev/input/js2
+  sudo chmod a+rw /dev/input/js3
+  sudo chmod a+rw /dev/input/js4
 fi
 
 # Permisos para lectura de puertos
 # ---------------------------------------------------------------
+echo "- checking port permissions!!"
 var_group=$(groups "$USER" | grep -o -w -c dialout)
 if [ "$var_group" = "0" ]; then
   # Si no esta en el grupo -> agregar
-  echo -e "\nPort permissions\n"
+  echo -e "\n- Giving dialout permissions to $USER\n"
   sudo usermod -a -G dialout "$USER"
 
   echo "The computer must be restarted in order to complete the installation"
@@ -46,7 +47,10 @@ if [ "$var_group" = "0" ]; then
   else
     echo "... Remember to reboot the computer!!!..."
     echo -e "\nDone.\n :)\n"
-  fi 
+  fi
+else
+  echo  "- nothing to do here"
 fi
+echo  "- OK"
 
 # :)

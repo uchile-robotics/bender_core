@@ -1,0 +1,12 @@
+<launch>
+
+	<arg name="joy_number" default="0"/>
+
+	<!-- joy node -->
+	<node respawn="true" pkg="joy" type="joy_node" name="driver$(arg joy_number)" ns="/bender/joy/">
+		<rosparam file="$(find bender_joy)/config/driver.yaml" command="load"/>
+		<param name="dev" value="/dev/input/js$(arg joy_number)"/>
+		<remap from="/bender/joy/joy" to="/bender/joy/driver$(arg joy_number)"/> 
+	</node>
+
+</launch>
