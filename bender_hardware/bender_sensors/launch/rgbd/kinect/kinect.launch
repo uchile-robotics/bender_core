@@ -30,12 +30,4 @@
 
 	</include>
 
-	<!-- kinect_aux -->
-	<!--node name="$(arg camera)" pkg="bender_sensors" type="kinect_aux_node" ns="$(arg ns)"/-->
-	<!-- 
-	TODO: ver como hacer que kinect_aux funcione para el dispositivo (kinect) deseado,
-	por ahora, sólo se conectará al primer kinect que encuentre, así que sólo debe ser
-	usado si se está seguro de que se está haciendo.
-	-->
-
 </launch>

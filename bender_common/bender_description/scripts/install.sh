@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# run: $ ./scripts/install.sh
+
 # The directory of the script
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # the temp directory used, within $DIR

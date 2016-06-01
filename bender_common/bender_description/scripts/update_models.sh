@@ -1,7 +1,10 @@
 #!/bin/bash
 # Create URDF and SDF files from xacro
 
-cd ../robots
+# run: ./scripts/update_models.sh
+
+BASEDIR=$(dirname "$0")
+cd "$BASEDIR"/../robots
 rm -rf bender.urdf
 rm -rf bender.sdf
 echo "Exporting URDF..."
