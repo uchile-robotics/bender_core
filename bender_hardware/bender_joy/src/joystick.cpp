@@ -360,15 +360,16 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 	// - - - - handle neck - - - -
 	float neck_side  = joy->axes[axe_idx_neck_sides_];
 	float neck_front = joy->axes[axe_idx_neck_front_];
-	int angle = (int)(180*atan2f(neck_side,neck_front)/M_PI);
-	angle = std::min(std::max(-NECK_ANGLE_LIMIT,angle),NECK_ANGLE_LIMIT);
-	ROS_INFO_STREAM_THROTTLE(0.1, " - (obs) neck angle: " << angle << "[deg]");
+	
 	if (buttons == NECK_ACTUATE) {
 
 		// command is valid only for axe limits
 		if ( neck_side*neck_side + neck_front*neck_front > 0.5 ) {
+
+			int angle = (int)(180*atan2f(neck_side,neck_front)/M_PI);
+			angle = std::min(std::max(-NECK_ANGLE_LIMIT,angle),NECK_ANGLE_LIMIT);
 			move_head(angle);
-			ROS_INFO_STREAM("Setting neck angle: " << angle << "[deg]");
+			ROS_INFO_STREAM_THROTTLE(0.5, "Setting neck angle: " << angle << "[deg]");
 		}
 	}
 

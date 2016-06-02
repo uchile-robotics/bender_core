@@ -4,7 +4,7 @@
 	<include file="$(find bender_base)/launch/base.launch"/>
 	
 	<!-- Joystick -->
-	<include file="$(find bender_joy)/launch/joystick.launch"/>
+	<include file="$(find bender_joy)/launch/common/complete.launch"/>
 
 	<!-- cmd_vel_mux -->
 	<include file="$(find bender_cmd_vel_mux)/launch/mux.launch"/>

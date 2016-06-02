@@ -4,6 +4,6 @@
 	<include file="$(find bender_face)/launch/face.launch"/>
 
 	<!-- joy node -->
-	<include file="$(find bender_joy)/launch/joystick.launch"/>
+	<include file="$(find bender_joy)/launch/common/complete.launch"/>
 
 </launch>
