@@ -9,7 +9,7 @@
   </include>
  
   <!-- Joystick complete -->
-  <node pkg="bender_joy" type="joystick_complete" name="joystick$(arg joy_number)" output="screen" ns="/bender/joy/">
+  <node pkg="bender_joy" type="joystick" name="joystick$(arg joy_number)" output="screen" ns="/bender/joy/">
     <rosparam file="$(find bender_joy)/config/joystick.yaml" command="load"/>
   </node>
 

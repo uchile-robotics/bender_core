@@ -545,19 +545,12 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 			break;
 	}
 
-
-
-
-
 }
 
 int main(int argc, char** argv) {
 
-	ros::init(argc, argv, "joystick_complete");
+	ros::init(argc, argv, "joystick");
 
 	Joystick joystick;
-
-
-//	joystick.inauguracion();
 	ros::spin();
 }

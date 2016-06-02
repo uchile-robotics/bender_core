@@ -24,26 +24,10 @@ catkin_package(
 ###########
 
 include_directories(
-	include
-	${catkin_INCLUDE_DIRS})
-
-# Joystick Nav
-add_executable(joystick_nav src/joystick_nav.cpp)
-add_dependencies(joystick_nav ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joystick_nav ${catkin_LIBRARIES})
+	${catkin_INCLUDE_DIRS}
+)
 
 # Joystick Complete
-add_executable(joystick_complete src/joy_complete.cpp)
-add_dependencies(joystick_complete ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joystick_complete ${catkin_LIBRARIES})
-
-
-# Face Joystick
-add_executable(joystick_face src/joystick_face.cpp)
-add_dependencies(joystick_face ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joystick_face ${catkin_LIBRARIES})
-
-# Face Auto Sequence Joystick
-add_executable(joy_autoface src/joy_autoface.cpp)
-add_dependencies(joy_autoface ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joy_autoface ${catkin_LIBRARIES})
+add_executable(joystick src/joystick.cpp)
+add_dependencies(joystick ${catkin_EXPORTED_TARGETS})
+target_link_libraries(joystick ${catkin_LIBRARIES})
