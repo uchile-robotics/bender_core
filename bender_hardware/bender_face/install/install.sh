@@ -1,18 +1,11 @@
 #!/bin/bash
 
-# - - - - - - S E T U P - - - - - - - -
-# # # # # # # # # # # # # # # # # # # #
-
-# Useful Variables
-install_path=$(rospack find bender_face)/install
-install_files="$install_path"/files
-
-
 # - - - - - - I N S T A L L - - - - - -
 # # # # # # # # # # # # # # # # # # # #
 
 # install face rules
-sudo cp "$install_files"/bender_head.rules /etc/udev/rules.d/bender_head.rules
+bender_cd bender_face
+sudo cp -f install/files/bender_head.rules /etc/udev/rules.d/bender_head.rules
 
 # Permisos para lectura de puertos
 var_group=$(groups "$USER" | grep -o -w -c dialout)
