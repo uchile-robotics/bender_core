@@ -23,7 +23,10 @@
 
         <!-- sound_play node remappings -->
         <remap from="robotsound"   to="tts/$(arg soundplay_name)/robotsound"/>
-        <remap from="~diagnostics" to="tts/$(arg soundplay_name)/diagnostics"/>    
+        <remap from="~diagnostics" to="tts/$(arg soundplay_name)/diagnostics"/>
+
+        <!-- hook for moving robot mouth -->
+        <remap from="~is_talking" to="head/move_mouth"/>
     </node>
 
 

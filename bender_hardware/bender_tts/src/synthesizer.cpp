@@ -33,8 +33,7 @@ synthesizer::synthesizer(): nh_("~") {
 
 
 	// - - - - - P u b l i s h e r s - - - - - - -
-	_status_pub = nh_.advertise<std_msgs::String>("status", 1);
-	_move_mouth_pub = nh_.advertise<std_msgs::String>("move_mouth", 1);
+	_is_talking_pub = nh_.advertise<std_msgs::Bool>("is_talking", 1);
 	_text_pub = nh_.advertise<std_msgs::String>("text", 1);
 
 	// - - - - - L i s t e n e r s - - - - - - - -
@@ -114,10 +113,10 @@ bool synthesizer::synthesize_server(bender_srvs::synthesize::Request &req,	bende
 	text_msg_.data = pronunciation_plugin(req.text);
 	//ROS_WARN_STREAM("synthesize updated: " << text);
 
-	_move_mouth_pub.publish(text_msg_);
-
 	// synthesize with modified text (ugly text, specialized for synthesis)
 	sc.say(text_msg_.data, _voice_name);
+	is_talking_msg_.data = true;	
+	_is_talking_pub.publish(is_talking_msg_);
 
 	// publish original text! (nice text)
 	std_msgs::String msg;
@@ -174,7 +173,7 @@ void synthesizer::status_calculation_callback(const diagnostic_msgs::DiagnosticA
 	// set 'talking' to true/false only the first time!
 	if(sound_playing) {
 
-		status_msg_.data = "Talking";
+		is_talking_msg_.data = true;
 
 		if (!_advertised_talking) {
 
@@ -184,7 +183,7 @@ void synthesizer::status_calculation_callback(const diagnostic_msgs::DiagnosticA
 		}
 	} else {
 
-		status_msg_.data = "Not Talking";
+		is_talking_msg_.data = false;
 
 		if (!_advertised_not_talking) {
 
@@ -196,7 +195,7 @@ void synthesizer::status_calculation_callback(const diagnostic_msgs::DiagnosticA
 	}
 
 	// publish always
-	_status_pub.publish(status_msg_);
+	_is_talking_pub.publish(is_talking_msg_);
 }
 
 } /* namespace bender_tts */

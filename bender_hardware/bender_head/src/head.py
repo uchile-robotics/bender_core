@@ -114,6 +114,8 @@ class Head():
         # do nothing
         if self.was_talking and is_talking:
             return
+        if not self.was_talking and not is_talking:
+            return
             
         if is_talking:
             # started talking

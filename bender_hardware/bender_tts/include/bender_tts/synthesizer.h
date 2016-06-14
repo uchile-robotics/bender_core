@@ -10,6 +10,7 @@
 // ROS
 #include <ros/ros.h>
 #include <std_msgs/String.h>
+#include <std_msgs/Bool.h>
 #include <std_srvs/Empty.h>
 #include <sound_play/sound_play.h>
 #include <diagnostic_msgs/DiagnosticArray.h>
@@ -37,11 +38,11 @@ private:
 	std::map<std::string, std::string> _language_dictionary;
 
 	// Base msgs
-	std_msgs::String status_msg_, text_msg_;
+	std_msgs::String text_msg_;
+	std_msgs::Bool is_talking_msg_;
 
 	// - - - - - P u b l i s h e r s - - - - - - -
-	ros::Publisher _status_pub;
-	ros::Publisher _move_mouth_pub;
+	ros::Publisher _is_talking_pub;
 	ros::Publisher _text_pub;
 
 	// - - - - - L i s t e n e r s - - - - - - - -
