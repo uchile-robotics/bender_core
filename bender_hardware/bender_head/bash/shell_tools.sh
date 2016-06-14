@@ -7,12 +7,12 @@
 
 bender-set_emotion()
 {
-	rostopic pub --once /bender/face/head bender_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}"
+	rostopic pub --once /bender/head/cmd bender_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}"
 }
 
 bender-set_mouth_state()
 {
-	rostopic pub --once /bender/face/head bender_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}" 
+	rostopic pub --once /bender/head/cmd bender_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}" 
 }
 
 bender-set_neck_yaw()
@@ -20,7 +20,7 @@ bender-set_neck_yaw()
     local _angle
 
     _angle="$1"
-	rostopic pub --once /bender/face/head bender_msgs/Emotion "{Order: 'MoveX', Action: '', X: $_angle}"
+	rostopic pub --once /bender/head/cmd bender_msgs/Emotion "{Order: 'MoveX', Action: '', X: $_angle}"
 }
 
 ##############################################################################################

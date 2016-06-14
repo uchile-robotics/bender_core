@@ -3,9 +3,9 @@
 # - - - - - - I N S T A L L - - - - - -
 # # # # # # # # # # # # # # # # # # # #
 
-# install face rules
-bender_cd bender_face
-sudo cp -f install/files/bender_head.rules /etc/udev/rules.d/bender_head.rules
+# install head rules
+bender_cd bender_head
+sudo cp -f install/bender_head.rules /etc/udev/rules.d/bender_head.rules
 
 # Permisos para lectura de puertos
 var_group=$(groups "$USER" | grep -o -w -c dialout)

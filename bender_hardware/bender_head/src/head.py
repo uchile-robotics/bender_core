@@ -4,7 +4,7 @@
 # last: 22/mar/2015
 
 import roslib
-roslib.load_manifest('bender_face')
+roslib.load_manifest('bender_head')
 
 import rospy
 import serial
@@ -12,12 +12,12 @@ from std_msgs.msg import String
 from bender_msgs.msg import Emotion
 from bender_srvs.srv import Float
 from bender_srvs.srv import FloatRequest
-from FaceSerialInterface import FaceSerialInterface
+from HeadSerialInterface import HeadSerialInterface
 from HeadHTTPInterface import HeadHTTPInterface
 
-# TODO: create service for: /bender_face/reached_neck_pose  
+# TODO: create service for: /bender/head/reached_neck_pose  
 #  a'un no se puede, pk no se puede sensar la posicion actual 
-class Face():
+class Head():
     
     def __init__(self):
 
@@ -33,22 +33,22 @@ class Face():
         ]
 
         # Parameter Server
-        face_type = rospy.get_param('~face_type', 'serial')
+        port_type = rospy.get_param('~port_type', 'serial')
 
         # Hardware Interface (Handles (re)connections, writing and reading to the hardware)
         self.hardware_interface = None
-        if face_type == 'serial':
-            self.hardware_interface = FaceSerialInterface(self.msg_types)
-            rospy.loginfo('Using Serial Face Interface')
-        elif face_type == 'ethernet':
+        if port_type == 'serial':
+            self.hardware_interface = HeadSerialInterface(self.msg_types)
+            rospy.loginfo('Using Serial Head Interface')
+        elif port_type == 'ethernet':
             self.hardware_interface = HeadHTTPInterface(self.msg_types)
-            rospy.loginfo('Using Ethernet Face Interface')
+            rospy.loginfo('Using Ethernet Head Interface')
         else:
-            rospy.logerr("Unkown face type")
+            rospy.logerr("Unkown head port type")
             exit('Bye. :p')
 
         # Connect to hardware
-        rospy.loginfo("Connecting to face hardware . . . ")
+        rospy.loginfo("Connecting to head hardware . . . ")
         self.hardware_interface.connect()
         while not rospy.is_shutdown() and not self.hardware_interface.is_connected():
             rospy.logwarn("Connection Failed. Reconnecting . . . ")
@@ -70,7 +70,7 @@ class Face():
         
         # We are ready to process requests . . .
         # - - - Subscriptions - - -
-        self.head_sub = rospy.Subscriber("head", Emotion, self.callback)
+        self.head_sub = rospy.Subscriber("cmd", Emotion, self.callback)
         self.mouth_sub = rospy.Subscriber("/bender/speech/synthesizer/move_mouth", String, self.start_move)
         self.status_sub = rospy.Subscriber("/bender/speech/synthesizer/status", String, self.check_talking_status)
 
@@ -83,7 +83,7 @@ class Face():
 
     def shutdown(self):
         
-        rospy.loginfo('Turning face off: Setting to defaults')
+        rospy.loginfo('Turning head off: Setting to defaults')
         self.rotate_head(0)
         self.set_emotion('serious')
         self.hardware_interface.loop()
@@ -148,7 +148,7 @@ class Face():
             else:
                 self.write('emotion',emotion)
             
-            rospy.loginfo("Setting face action: '" + emotion + "'")
+            rospy.loginfo("Setting head action: '" + emotion + "'")
 
         else:
             rospy.logwarn("For order 'changeFace', unknown action: '" + emotion 
@@ -192,19 +192,19 @@ class Face():
 
 def main():
 
-    rospy.init_node('face')
+    rospy.init_node('head')
 
-    face = Face()
+    head = Head()
 
     # on python, spin() is only meant for blocking the main thread until ros shutdown.
     #rospy.spin()
     r = rospy.Rate(30)
     while not rospy.is_shutdown():
-        face.loop()
+        head.loop()
         r.sleep()
 
     rospy.loginfo('Closing connection . . .')
-    face.shutdown()
+    head.shutdown()
     rospy.loginfo('Bye bye . . .')
 
 if __name__ == '__main__':

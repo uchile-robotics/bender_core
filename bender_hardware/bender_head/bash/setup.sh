@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # useful variables
-_THIS_DIR="$(rospack find bender_face)/bash"
+_THIS_DIR="$(rospack find bender_head)/bash"
 
 # configurations
 #export BENDER_HEAD_IP="192.168.0.40"

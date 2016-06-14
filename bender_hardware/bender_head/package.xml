@@ -17,10 +17,10 @@
     <!-- PACKAGE INFORMATION -->
     <!-- - - - - - - - - - - -->
 
-    <name>bender_face</name>
+    <name>bender_head</name>
     <version>2.0.0</version>
     
-    <description>The bender_face package</description>
+    <description>The bender_head package</description>
 
     <!-- team -->
     <maintainer email="bender.devel@gmail.com">
@@ -50,21 +50,6 @@
     <depend>rospy</depend>
     <depend>std_msgs</depend>
     <depend>std_srvs</depend>
-
-    <!-- build dependencies -->
-
-
-    <!-- export dependencies -->
-
-
-    <!-- excution dependencies -->
-
-
-    <!-- test dependencies -->
-
-
-    <!-- documentation dependencies -->
-
 
     <export>
     </export>

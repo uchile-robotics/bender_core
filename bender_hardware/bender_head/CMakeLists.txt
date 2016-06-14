@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bender_face)
+project(bender_head)
 
 find_package(catkin REQUIRED COMPONENTS
   bender_msgs

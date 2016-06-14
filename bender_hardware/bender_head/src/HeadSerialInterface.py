@@ -8,7 +8,7 @@ import serial
 
 # TODO: (locks) para colas que mantienen los mensajes??
 
-class FaceSerialInterface():
+class HeadSerialInterface():
     ''' Handles serial ports for communication with bender-head. It can reconnect itself if neccessary '''
 
     def __init__(self, msg_keys):
