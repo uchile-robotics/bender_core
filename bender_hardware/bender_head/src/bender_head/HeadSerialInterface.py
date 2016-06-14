@@ -6,9 +6,11 @@
 import rospy
 import serial
 
+from bender_head.AbstractHeadInterface import AbstractHeadInterface
+
 # TODO: (locks) para colas que mantienen los mensajes??
 
-class HeadSerialInterface():
+class HeadSerialInterface(AbstractHeadInterface):
     ''' Handles serial ports for communication with bender-head. It can reconnect itself if neccessary '''
 
     def __init__(self, msg_keys):

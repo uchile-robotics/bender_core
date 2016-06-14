@@ -6,9 +6,11 @@
 import rospy
 import httplib
 
+from bender_head.AbstractHeadInterface import AbstractHeadInterface
+
 # TODO: (locks) para colas que mantienen los mensajes??
 
-class HeadHTTPInterface():
+class HeadHTTPInterface(AbstractHeadInterface):
     ''' Handles HTTP-GET requests for communication with bender-head. '''
 
     def __init__(self, msg_keys):

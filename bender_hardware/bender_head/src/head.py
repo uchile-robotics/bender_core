@@ -1,19 +1,17 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Matias Pavez Bahamondes
-# 7/Nov/2014
-# last: 22/mar/2015
 
 import roslib
 roslib.load_manifest('bender_head')
 
 import rospy
 import serial
-from std_msgs.msg import String
+from std_msgs.msg import Bool
 from bender_msgs.msg import Emotion
 from bender_srvs.srv import Float
 from bender_srvs.srv import FloatRequest
-from HeadSerialInterface import HeadSerialInterface
-from HeadHTTPInterface import HeadHTTPInterface
+
 
 # TODO: create service for: /bender/head/reached_neck_pose  
 #  a'un no se puede, pk no se puede sensar la posicion actual 
@@ -33,33 +31,34 @@ class Head():
         ]
 
         # Parameter Server
-        port_type = rospy.get_param('~port_type', 'serial')
+        interface = rospy.get_param('~interface', 'serial')
 
         # Hardware Interface (Handles (re)connections, writing and reading to the hardware)
         self.hardware_interface = None
-        if port_type == 'serial':
-            self.hardware_interface = HeadSerialInterface(self.msg_types)
+        if interface == 'serial':
+            from bender_head import HeadSerialInterface as HSI
+            self.hardware_interface = HSI.HeadSerialInterface(self.msg_types)
             rospy.loginfo('Using Serial Head Interface')
-        elif port_type == 'ethernet':
-            self.hardware_interface = HeadHTTPInterface(self.msg_types)
+
+        elif interface == 'ethernet':
+            from bender_head import HeadHTTPInterface as HHI
+            self.hardware_interface = HHI.HeadHTTPInterface(self.msg_types)
             rospy.loginfo('Using Ethernet Head Interface')
+
+        elif interface == 'mock':
+            from bender_head import HeadMockInterface as HMI
+            self.hardware_interface = HMI.HeadMockInterface(self.msg_types)
+            rospy.logwarn("Using Mock Head Interface")
+
         else:
             rospy.logerr("Unkown head port type")
             exit('Bye. :p')
-
-        # Connect to hardware
-        rospy.loginfo("Connecting to head hardware . . . ")
-        self.hardware_interface.connect()
-        while not rospy.is_shutdown() and not self.hardware_interface.is_connected():
-            rospy.logwarn("Connection Failed. Reconnecting . . . ")
-            self.hardware_interface.connect()
-            rospy.sleep(2)
 
 
         # - - - Preparation - - -
         
         # Usado para manejar movimiento de la boca
-        self.last_state = 'Not Talking'
+        self.was_talking = False
         self.set_emotion('speakoff')
 
         # Center head
@@ -70,9 +69,8 @@ class Head():
         
         # We are ready to process requests . . .
         # - - - Subscriptions - - -
-        self.head_sub = rospy.Subscriber("cmd", Emotion, self.callback)
-        self.mouth_sub = rospy.Subscriber("/bender/speech/synthesizer/move_mouth", String, self.start_move)
-        self.status_sub = rospy.Subscriber("/bender/speech/synthesizer/status", String, self.check_talking_status)
+        self.head_sub = rospy.Subscriber("~cmd", Emotion, self.callback)
+        self.mouth_sub = rospy.Subscriber("~move_mouth", Bool, self.move_mouth_callback)
 
         # all ok
         rospy.loginfo('Ready to work')
@@ -104,36 +102,31 @@ class Head():
             self.rotate_head(angle)
         else:
             rospy.logwarn("Unkown order: '" + order + "' ... Please use 'changeFace/emotion' or 'MoveX/yaw' orders.")
-                
-    def start_move(self, info):
-        ''' Inicializa el movimiento de la boca (lo logra antes que usando el callback '.../status')'''
-        self.set_emotion("speakOn")
-
-    def check_talking_status(self, info):
-        ''' Utilizado para mantener la boca en movimiento y detenerla de ser necesario. '''
-
-        status = info.data
-
-        if self.last_state == status:
-            #rospy.logwarn('no hago nada . . .')
-            pass
             
+
+    def move_mouth_callback(self, msg):
+        """
+        callback para tópico "move_mouth". Inicia o detiene movimiento de la boca
+        """
+
+        is_talking = msg.data
+
+        # do nothing
+        if self.was_talking and is_talking:
+            return
+            
+        if is_talking:
+            # started talking
+            self.set_emotion("speakOn")
+            self.was_talking = True
+            rospy.loginfo('Empiezo a hablar . . .')
+
         else:
+            # stopped talking
+            self.set_emotion("speakOff")
+            self.was_talking = False
+            rospy.loginfo('Me callo . . .')
 
-            if status == "Not Talking":
-                # orden cuando deja de hablar publicada por speech_sinthesizer/status
-                self.set_emotion("speakOff")
-                self.last_state = status
-                rospy.loginfo('Me callo . . .')
-
-            elif status == "Talking":
-                self.set_emotion("speakOn")
-                self.last_state = status
-                rospy.loginfo('Empiezo a hablar . . .')
-
-            else:
-                #rospy.logwarn('lei basura :D')
-                pass    
 
     def set_emotion(self, emotion):
 

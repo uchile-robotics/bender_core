@@ -1,11 +1,11 @@
 <launch>
 
-	<!-- type of face: "serial" or "ethernet" -->
-	<arg name="port_type" default="serial"/>
+	<!-- hardware interface to the head: "serial", "ethernet" or "mock" -->
+	<arg name="interface" default="serial"/>
 
 	<!-- bender head -->
-	<node name="head" pkg="bender_head" type="head.py" ns="/bender/head/">
-		<param name="port_type" value="$(arg port_type)"/>
+	<node name="head" pkg="bender_head" type="head.py" ns="/bender/hw">
+		<param name="interface" value="$(arg interface)"/>
 	</node>
 
 </launch>

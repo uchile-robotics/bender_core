@@ -4,23 +4,31 @@
 # a period  will be printed for each dropped package
 #alias bender_test_head-icmp='ping  -i 1 -f $BENDER_HEAD_IP'
 
-
-bender-set_emotion()
+bender-head_move_mouth()
 {
-	rostopic pub --once /bender/head/cmd bender_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}"
+    rostopic pub --once /bender/hw/head/move_mouth std_msgs/Bool "data: true"
 }
 
-bender-set_mouth_state()
+bender-head_shutup()
 {
-	rostopic pub --once /bender/head/cmd bender_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}" 
+    rostopic pub --once /bender/hw/head/move_mouth std_msgs/Bool "data: false"
 }
 
-bender-set_neck_yaw()
+bender-head_emotion()
+{
+    rostopic pub --once /bender/hw/head/cmd bender_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}"
+}
+
+bender-head_mouth_state()
+{
+    rostopic pub --once /bender/hw/head/cmd bender_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}" 
+}
+
+bender-head_neck_yaw()
 {
     local _angle
-
     _angle="$1"
-	rostopic pub --once /bender/head/cmd bender_msgs/Emotion "{Order: 'MoveX', Action: '', X: $_angle}"
+    rostopic pub --once /bender/hw/head/cmd bender_msgs/Emotion "{Order: 'MoveX', Action: '', X: $_angle}"
 }
 
 ##############################################################################################
@@ -78,5 +86,5 @@ _bendercomplete_bender-set_mouth_state()
     fi
 }
 
-complete -F "_bendercomplete_bender-set_emotion" "bender-set_emotion"
-complete -F "_bendercomplete_bender-set_mouth_state" "bender-set_mouth_state"
+complete -F "_bendercomplete_bender-set_emotion"     "bender-head_emotion"
+complete -F "_bendercomplete_bender-set_mouth_state" "bender-head_mouth_state"

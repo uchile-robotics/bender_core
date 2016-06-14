@@ -16,13 +16,24 @@ import math
 import time
 
 # Messages
+from std_msgs.msg import Bool
 from bender_msgs.msg import Emotion
 
 rospy.init_node("test_head")
-head = rospy.Publisher('/bender/head/cmd', Emotion, queue_size=10)
+head  = rospy.Publisher('/bender/hw/head/cmd', Emotion, queue_size=10)
+mouth = rospy.Publisher('/bender/hw/head/move_mouth', Bool, queue_size=10)
 
 print "Presione Enter"
 signal = raw_input()
+
+
+print "Talking ... "
+mouth.publish(True)
+time.sleep(3)
+print "Stopping talk ... "
+mouth.publish(False)
+time.sleep(3)
+
 
 print "Yaw: 10 ..."
 head.publish("MoveX", "happy1", 10)
