@@ -33,16 +33,16 @@ synthesizer::synthesizer(): nh_("~") {
 
 
 	// - - - - - P u b l i s h e r s - - - - - - -
-	_is_talking_pub = nh_.advertise<std_msgs::Bool>("is_talking", 1);
-	_text_pub = nh_.advertise<std_msgs::String>("text", 1);
+	_is_talking_pub = nh_.advertise<std_msgs::Bool>("is_talking",1);
+	_text_pub = nh_.advertise<std_msgs::String>("text",1);
 
 	// - - - - - L i s t e n e r s - - - - - - - -
-	_voice_diagnostics_sub = nh_.subscribe("diagnostics", 1, &synthesizer::status_calculation_callback, this);
+	_voice_diagnostics_sub = nh_.subscribe("diagnostics",1,&synthesizer::status_calculation_callback,this);
 
 	// - - - - - - S e r v i c e s - - - - - - - -
-	_synthesize_server = nh_.advertiseService("say", &synthesizer::synthesize_server, this);
-	_set_language_server = nh_.advertiseService("set_language", &synthesizer::set_language_server, this);
-	_stop_server = nh_.advertiseService("stop_speech", &synthesizer::stop_server, this);
+	_synthesize_server = nh_.advertiseService("say",&synthesizer::synthesize_server,this);
+	_set_language_server = nh_.advertiseService("set_language", &synthesizer::set_language_server,this);
+	_stop_server = nh_.advertiseService("stop_speech",&synthesizer::stop_server,this);
 
 }
 
@@ -107,23 +107,23 @@ std::string synthesizer::pronunciation_plugin(std::string input) {
 	return output;
 }
 
-bool synthesizer::synthesize_server(bender_srvs::synthesize::Request &req,	bender_srvs::synthesize::Response &res) {
+bool synthesizer::synthesize_server(bender_srvs::String::Request &req,	bender_srvs::String::Response &res) {
 
-	//ROS_WARN_STREAM("synthesize: " << req.text);
-	text_msg_.data = pronunciation_plugin(req.text);
+	//ROS_WARN_STREAM("synthesize: " << req.data);
+	text_msg_.data = pronunciation_plugin(req.data);
 	//ROS_WARN_STREAM("synthesize updated: " << text);
 
 	// synthesize with modified text (ugly text, specialized for synthesis)
 	sc.say(text_msg_.data, _voice_name);
-	is_talking_msg_.data = true;	
+	is_talking_msg_.data = true;
 	_is_talking_pub.publish(is_talking_msg_);
 
 	// publish original text! (nice text)
 	std_msgs::String msg;
-	msg.data = req.text;
+	msg.data = req.data;
 	_text_pub.publish(msg);
 
-	res.status = "Talking";
+	res.data = "Talking";
 
 	nh_.setParam("talking",true);
 
@@ -198,7 +198,7 @@ void synthesizer::status_calculation_callback(const diagnostic_msgs::DiagnosticA
 	_is_talking_pub.publish(is_talking_msg_);
 }
 
-} /* namespace bender_tts */
+} /* namespace bender_speech */
 
 int main(int argc, char **argv) {
 	ros::init(argc, argv, "tts");

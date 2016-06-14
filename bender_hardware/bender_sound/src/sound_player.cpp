@@ -12,6 +12,8 @@
  
 // TODO: agregar funcionalidad para stop y rewind.
 
+std::string _sound_path;
+
 bool file_exists(const std::string &filename)
 {
   std::ifstream ifile(filename.c_str());
@@ -21,7 +23,8 @@ bool file_exists(const std::string &filename)
 bool playSound(bender_srvs::play_sound::Request  &req, bender_srvs::play_sound::Response &res){ 
 
     sound_play::SoundClient sc; 
-    std::string sound_path = req.sound_file;
+    std::string sound_path = _sound_path + req.sound_file + ".wav";
+    //ROS_WARN("%s",sound_path.c_str());
 
     // stop current sounds!
     if (req.play == false) {
@@ -49,6 +52,15 @@ int main(int argc, char **argv)
     ros::NodeHandle nh("~");
     sound_play::SoundClient sc; 
     ros::ServiceServer service = nh.advertiseService("play", playSound);
+
+    std::string bender_db_path = ros::package::getPath("bender_db");
+    if(bender_db_path.empty()){
+        ROS_WARN("Package bender_db not found");
+    }
+    nh.param<std::string>("sound_path", _sound_path, bender_db_path+"/sounds/");
+
+    ROS_INFO_STREAM("Using sound path: " << _sound_path);
+    
 
     ros::spin();
     return 0;

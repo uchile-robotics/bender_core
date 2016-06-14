@@ -8,6 +8,7 @@
     <!-- sound player -->
     <node name="sound" pkg="bender_sound" type="player" ns="/bender/hw/">
         <remap from="robotsound" to="~robotsound"/>
+        <param name="sound_path" value="$(find bender_db)/sounds/"/>
     </node>
 
 </launch>

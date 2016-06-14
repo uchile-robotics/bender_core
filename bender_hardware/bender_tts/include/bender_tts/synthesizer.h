@@ -16,7 +16,6 @@
 #include <diagnostic_msgs/DiagnosticArray.h>
 
 // Bender
-#include <bender_srvs/synthesize.h>
 #include <bender_srvs/String.h>
 #include <bender_utils/ParameterServerWrapper.h>
 
@@ -65,7 +64,7 @@ public:
 
 private:
 
-	bool synthesize_server(bender_srvs::synthesize::Request &req, bender_srvs::synthesize::Response &res);
+	bool synthesize_server(bender_srvs::String::Request &req, bender_srvs::String::Response &res);
 
 	bool stop_server(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
 
