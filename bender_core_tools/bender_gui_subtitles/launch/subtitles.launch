@@ -1,0 +1,8 @@
+<launch>
+	
+	<node pkg="bender_gui_subtitles" type="gui_subtitles" name="gui_subtitles"
+	 ns="/bender/gui/" output="screen">
+		<remap from="gui_subtitles/text" to="/bender/speech/synthesizer/text"/>
+	</node>
+
+</launch>
