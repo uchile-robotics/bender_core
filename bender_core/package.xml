@@ -40,10 +40,7 @@
       https://bitbucket.org/uchile-robotics-die/bender_base_layer</url>
 
 
-
-
     <license>TODO</license>
-
 
 
     <!-- SYSTEM DEPENDENCIES -->
@@ -52,8 +49,7 @@
     <!--  build system tool to build this package -->
     <buildtool_depend>catkin</buildtool_depend>
 
-
-    <!-- build, export, and execution dependencies -->
+    <!-- common ROS depends -->
     <depend>roscpp</depend>
     <depend>rospy</depend>
     <depend>std_msgs</depend>
@@ -71,23 +67,20 @@
     <depend>bender_utils</depend>
 
     <!-- hardware depends -->
-    <depend>bender_utils</depend>    
+    <depend>bender_base</depend>
+    <depend>bender_head</depend>
+    <depend>bender_joy</depend>
+    <depend>bender_sensors</depend>
 
-    
-    <!-- build dependencies -->
+    <!-- knowledge depends -->
+    <depend>bender_db</depend>
+    <depend>bender_maps</depend>
+    <depend>bender_pose_server</depend>
 
-
-    <!-- export dependencies -->
-
-
-    <!-- excution dependencies -->
-
-
-    <!-- test dependencies -->
-
-
-    <!-- documentation dependencies -->
-
+    <!-- simulation depends -->
+    <depend>bender_mock</depend>
+    <depend>bender_stage</depend>
+    <depend>bender_gazebo</depend>
 
     <export>
     </export>
