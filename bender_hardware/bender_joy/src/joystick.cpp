@@ -196,7 +196,7 @@ Joystick::Joystick():
 	speech_serv_ = priv.serviceClient<bender_srvs::synthesize>("/bender/speech/synthesizer/synthesize");
 
 	// face
-	face_pub_ = priv.advertise<bender_msgs::Emotion>("/bender/face/head", 1);
+	face_pub_ = priv.advertise<bender_msgs::Emotion>("/bender/head/cmd", 1);
 
 
 	// - - - - publishers - - -
