@@ -1,0 +1,27 @@
+# Goal
+
+# Descripcion geometrica
+moveit_msgs/CollisionObject target
+
+# Discretizacion del eje axial del objeto
+uint8 axial_resolution
+
+# Discretizacion angular del objeto
+uint8 angle_resolution
+
+---
+# Result
+
+# Grasps generados
+moveit_msgs/Grasp[] grasps
+
+trajectory_msgs/JointTrajectoryPoint[] ik_solutions
+
+uint32[] order 
+
+# Resultado satisfactorio si se encuentran soluciones factibles IK
+bool succeed
+
+---
+# Feedback
+# Dummy

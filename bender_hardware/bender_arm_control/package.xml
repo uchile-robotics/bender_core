@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<package format="2">
+    <!-- 
+      <depend>             : build, export, and execution dependencies 
+      <build_depend>       : pkgs needed at compile time (any file or library)
+      <build_export_depend>: pkgs needed to build libraries against this pkg
+      <exec_depend>        : pkgs needed to run this code. (e.g: shared libs)
+      <test_depend>        : only additional deps for unit testing (e.g: gtest)
+      <doc_depend>         : dependencies for documentation generation
+
+      See also:
+      - http://wiki.ros.org/catkin/package.xml
+      - http://www.ros.org/reps/rep-0140.html
+    -->
+
+
+    <!-- PACKAGE INFORMATION -->
+    <!-- - - - - - - - - - - -->
+
+    <name>bender_arm_control</name>
+    <version>2.0.0</version>
+    
+    <description>The bender_arm_control package</description>
+
+    <!-- team -->
+    <maintainer email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</maintainer>
+    <author     email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</author>
+
+    <!-- specific developers -->
+    <maintainer email="rorro.mr@gmail.com">Rodrigo Muñoz</maintainer>
+    <author>Rodrigo Muñoz</author>
+
+    <!-- about bender and related repository -->
+    <url type="website">bender.li2.uchile.cl</url>
+    <url type="bugtracker">
+      https://bitbucket.org/uchile-robotics-die/bender_manipulation/issues</url>
+    <url type="repository">
+      https://bitbucket.org/uchile-robotics-die/bender_manipulation</url>
+
+    <license>TODO</license>
+
+    <!-- SYSTEM DEPENDENCIES -->
+    <!-- - - - - - - - - - - -->
+
+    <!--  build system tool to build this package -->
+    <buildtool_depend>catkin</buildtool_depend>
+
+
+    <!-- build, export, and execution dependencies -->
+    <depend>actionlib</depend>
+    <depend>actionlib_msgs</depend>
+    <depend>dynamic_reconfigure</depend>
+    <depend>interactive_markers</depend>
+    <depend>moveit_core</depend>
+    <depend>moveit_msgs</depend>
+    <depend>moveit_ros_perception</depend>
+    <depend>moveit_ros_planning_interface</depend>
+    <depend>moveit_visual_tools</depend>
+    <depend>moveit_simple_grasps</depend>
+    <depend>octomap_msgs</depend>
+    <depend>pluginlib</depend>
+    <depend>roscpp</depend>
+    <depend>rospy</depend>
+    <depend>std_msgs</depend>
+
+
+
+    <!-- build dependencies -->
+    <build_depend>message_generation</build_depend>
+    <build_depend>cmake_modules</build_depend>
+    <build_depend>bender_arm_planning</build_depend>
+
+
+    <!-- export dependencies -->
+    <build_export_depend>message_runtime</build_export_depend>
+    <build_export_depend>moveit_fake_controller_manager</build_export_depend>
+    <build_export_depend>bender_arm_planning</build_export_depend>
+
+    <!-- excution dependencies -->
+    <exec_depend>message_runtime</exec_depend>
+    <exec_depend>moveit_fake_controller_manager</exec_depend>
+    <exec_depend>bender_arm_planning</exec_depend>
+
+    <!-- test dependencies -->
+
+
+    <!-- documentation dependencies -->
+
+
+    <!-- export -->
+    <export>
+    </export>
+
+</package>

@@ -1,0 +1,3 @@
+float64[] joints
+---
+moveit_msgs/MoveItErrorCodes error_code

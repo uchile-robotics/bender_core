@@ -1,0 +1,9 @@
+
+<launch>
+  <!-- l_arm -->
+  <include file="$(find bender_arm_control)/launch/l_arm.launch"/>
+  <!-- r_arm -->
+  <include file="$(find bender_arm_control)/launch/r_arm.launch"/>
+
+
+</launch>

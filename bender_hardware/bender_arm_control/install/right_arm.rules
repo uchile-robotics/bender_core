@@ -1,0 +1,5 @@
+# Regla udev para los controladores de los motores dynamixel
+# usados en los manipuladores (brazo derecho)
+
+
+SUBSYSTEMS=="usb", KERNEL=="ttyUSB[0-9]*",SUBSYSTEM=="tty",ATTRS{serial}=="A921PNVN", SYMLINK+="bender/right_arm"
