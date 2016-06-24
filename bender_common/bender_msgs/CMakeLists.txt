@@ -40,6 +40,8 @@ add_message_files(
   EmotionDetect.msg
   detections.msg
   CylindricalObject.msg
+  Marker.msg 
+  MarkerArray.msg 
 )
 
 # Generate added messages and services with any dependencies listed here
