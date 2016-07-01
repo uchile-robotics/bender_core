@@ -1,5 +1,6 @@
 
 // TODO!: agregar soporte para los brazos
+// TODO!: soporte para callar al robot
 
 // C++
 #include <unistd.h>
@@ -193,10 +194,10 @@ Joystick::Joystick():
 	//  - - - - - service clients - - - -
 
 	// speech
-	speech_serv_ = priv.serviceClient<bender_srvs::synthesize>("/bender/speech/synthesizer/synthesize");
+	speech_serv_ = priv.serviceClient<bender_srvs::synthesize>("/bender/hw/tts/say");
 
 	// face
-	face_pub_ = priv.advertise<bender_msgs::Emotion>("/bender/face/head", 1);
+	face_pub_ = priv.advertise<bender_msgs::Emotion>("/bender/hw/head/cmd", 1);
 
 
 	// - - - - publishers - - -

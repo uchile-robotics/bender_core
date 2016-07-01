@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<package format="2">
+    <!-- 
+      <depend>             : build, export, and execution dependencies 
+      <build_depend>       : pkgs needed at compile time (any file or library)
+      <build_export_depend>: pkgs needed to build libraries against this pkg
+      <exec_depend>        : pkgs needed to run this code. (e.g: shared libs)
+      <test_depend>        : only additional deps for unit testing (e.g: gtest)
+      <doc_depend>         : dependencies for documentation generation
+
+      See also:
+      - http://wiki.ros.org/catkin/package.xml
+      - http://www.ros.org/reps/rep-0140.html
+    -->
+
+
+    <!-- PACKAGE INFORMATION -->
+    <!-- - - - - - - - - - - -->
+
+    <name>bender_core</name>
+    <version>2.0.0</version>
+    
+    <description>The bender_core package</description>
+
+    <!-- team -->
+    <maintainer email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</maintainer>
+    <author     email="bender.devel@gmail.com">
+      Bender Team - UChile Homebreakers</author>
+
+    <!-- specific developers -->
+    
+
+
+    <!-- about bender and related repository -->
+    <url type="website">bender.li2.uchile.cl</url>
+    <url type="bugtracker">
+      https://bitbucket.org/uchile-robotics-die/bender_base_layer/issues</url>
+    <url type="repository">
+      https://bitbucket.org/uchile-robotics-die/bender_base_layer</url>
+
+
+    <license>TODO</license>
+
+
+    <!-- SYSTEM DEPENDENCIES -->
+    <!-- - - - - - - - - - - -->
+
+    <!--  build system tool to build this package -->
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <!-- common ROS depends -->
+    <depend>roscpp</depend>
+    <depend>rospy</depend>
+    <depend>std_msgs</depend>
+    <depend>std_srvs</depend>
+
+    <!-- === depends on all base_ws === -->
+    <!-- common depends -->
+    <depend>bender_msgs</depend>
+    <depend>bender_srvs</depend>
+    <depend>bender_tf</depend>
+    <depend>bender_description</depend>
+
+    <!-- core_tools depends -->
+    <depend>bender_cmd_vel_mux</depend>
+    <depend>bender_utils</depend>
+
+    <!-- hardware depends -->
+    <depend>bender_base</depend>
+    <depend>bender_head</depend>
+    <depend>bender_joy</depend>
+    <depend>bender_sensors</depend>
+
+    <!-- knowledge depends -->
+    <depend>bender_db</depend>
+    <depend>bender_maps</depend>
+    <depend>bender_pose_server</depend>
+
+    <!-- simulation depends -->
+    <depend>bender_mock</depend>
+    <depend>bender_stage</depend>
+    <depend>bender_gazebo</depend>
+
+    <export>
+    </export>
+  
+</package>

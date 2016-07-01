@@ -17,8 +17,9 @@ cd $WORK_DIR
 
 
 # Download bender_description meshes
-$BENDER_SYSTEM/bash/megadown/megadown 'https://mega.nz/#!a0930ZYB!sciM89vyDLtrpDpC5_CB-6BCXA6OE1p2Bzq8R6rWeRU'
+"$BENDER_SYSTEM"/bash/megadown/megadown 'https://mega.nz/#!a0930ZYB!sciM89vyDLtrpDpC5_CB-6BCXA6OE1p2Bzq8R6rWeRU'
+
 # Extract files
-unzip bender_description.zip -d $BENDER_WS/base_ws/src/bender_common/
+unzip bender_description.zip -d "$BENDER_WS"/base_ws/src/bender_common/
 
 
