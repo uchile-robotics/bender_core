@@ -1,0 +1,67 @@
+<launch>
+  <arg name="disble_torque" default="True" />
+  
+  <group ns="bender">
+    <!--
+    <node name="r_arm_dynamixel_manager" pkg="dynamixel_controllers" type="controller_manager.py" required="true" output="screen">
+      <rosparam file="$(find bender_arm)/config/r_arm_port.yaml" command="load"/>
+  	</node>
+  -->
+
+    <rosparam file="$(find bender_arm)/config/r_arm_controller.yaml" command="load"/>
+    <rosparam file="$(find bender_arm)/config/r_gripper_controller.yaml" command="load"/>
+
+    <node name="r_arm_controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
+            args="--manager=r_arm_manager
+                  --port=r_arm_port
+                  r_shoulder_pitch_controller
+                  r_shoulder_roll_controller
+                  r_shoulder_yaw_controller
+                  r_elbow_pitch_controller
+                  r_elbow_yaw_controller
+                  r_wrist_pitch_controller
+                  r_int_finger_controller
+                  r_ext_finger_controller"
+            output="screen"/>
+
+    <!-- FJTA for r_arm config file-->
+    <rosparam file="$(find bender_arm)/config/r_arm_trajectory.yaml" command="load"/>
+    <!-- Spawn FJTA for r_arm -->
+    <node name="r_arm_controller_spawner_meta" pkg="dynamixel_controllers" type="controller_spawner.py"
+            args="--manager=r_arm_manager
+                  --type=meta
+                  r_arm_controller
+                  r_shoulder_pitch_controller
+                  r_shoulder_roll_controller
+                  r_shoulder_yaw_controller
+                  r_elbow_pitch_controller
+                  r_elbow_yaw_controller
+                  r_wrist_pitch_controller"
+            output="screen"/>
+
+    <!-- Gripper Action for r_arm config file-->
+    <rosparam file="$(find bender_arm)/config/r_gripper_action.yaml" command="load"/>
+    <!-- Spawn Gripper Action for r_arm -->
+    <node name="r_gripper_controller_spawner_meta" pkg="dynamixel_controllers" type="controller_spawner.py"
+            args="--manager=r_arm_manager
+                  --type=meta
+                  r_gripper_controller
+                  r_int_finger_controller
+                  r_ext_finger_controller"
+            output="screen"/>
+    <node pkg="bender_arm" type="relax_servos.py" name="r_arm_relax_servos" output="screen">
+      <param name="start_disable" value="$(arg disble_torque)"/>
+      <rosparam param="controllers">
+        [r_shoulder_pitch_controller,
+        r_shoulder_roll_controller,
+        r_shoulder_yaw_controller,
+        r_elbow_pitch_controller,
+        r_elbow_yaw_controller,
+        r_wrist_pitch_controller,
+        r_int_finger_controller,
+        r_ext_finger_controller]
+      </rosparam>
+    </node>
+  </group>
+
+</launch>

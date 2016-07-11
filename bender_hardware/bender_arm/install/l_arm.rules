@@ -1,0 +1,4 @@
+# Regla udev para los controladores de los motores Dynamixel
+# Brazo izquierdo (l_arm)
+
+SUBSYSTEMS=="usb", KERNEL=="ttyUSB[0-9]*",SUBSYSTEM=="tty",ATTRS{serial}=="A9A9XRNN", SYMLINK+="bender/l_arm"
