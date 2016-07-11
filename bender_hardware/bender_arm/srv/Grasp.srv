@@ -1,5 +1,0 @@
-bender_msgs/CylindricalObject target
----
-trajectory_msgs/JointTrajectoryPoint[] points
-float64[] costs
-string[] joint_names

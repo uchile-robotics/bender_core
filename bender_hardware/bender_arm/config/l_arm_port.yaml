@@ -1,9 +1,0 @@
-# Config for r_arm and r_gripper
-namespace: l_arm_manager
-serial_ports:
-  l_arm_port:
-    port_name: "/dev/bender/left_arm"
-    baud_rate: 200000
-    min_motor_id: 1
-    max_motor_id: 20
-    update_rate: 30

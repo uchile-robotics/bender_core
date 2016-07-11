@@ -48,12 +48,9 @@
     <buildtool_depend>catkin</buildtool_depend>
 
     <!-- build, export, and execution dependencies -->
-    <depend>bender_msgs</depend>
-    <depend>moveit_msgs</depend>
     <depend>dynamic_reconfigure</depend>
     <depend>geometry_msgs</depend>
     <depend>interactive_markers</depend>
-    <depend>octomap_msgs</depend>
     <depend>roscpp</depend>
     <depend>rospy</depend>
     <depend>std_msgs</depend>
@@ -69,8 +66,11 @@
     <!-- excution dependencies -->
     <exec_depend>actionlib</exec_depend>
     <exec_depend>actionlib_msgs</exec_depend>
+    <exec_depend>bender_fieldbus</exec_depend>
+    <exec_depend>dynamixel_controllers</exec_depend>
+    <exec_depend>dynamixel_driver</exec_depend>
+    <exec_depend>dynamixel_msgs</exec_depend>
     <exec_depend>message_runtime</exec_depend>
-    <exec_depend>moveit_fake_controller_manager</exec_depend>
 
     <!-- test dependencies -->
 

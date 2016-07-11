@@ -1,30 +1,24 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bender_arm)
+project(bender_fieldbus)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  cmake_modules
-  dynamic_reconfigure
-  geometry_msgs
-  interactive_markers
-  message_generation
+  dynamixel_controllers
   roscpp
   rospy
   std_msgs
-  visualization_msgs
 )
 
 ## System dependencies are found with CMake's conventions
-find_package(Boost REQUIRED system filesystem date_time thread)
+# find_package(Boost REQUIRED COMPONENTS system)
 
-find_package(Eigen REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-catkin_python_setup()
+# catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -35,10 +29,10 @@ catkin_python_setup()
 ## * Let MSG_DEP_SET be the set of packages whose message types you use in
 ##   your messages/services/actions (e.g. std_msgs, actionlib_msgs, ...).
 ## * In the file package.xml:
+##   * add a build_depend tag for "message_generation"
 ##   * add a build_depend and a run_depend tag for each package in MSG_DEP_SET
-##   * If MSG_DEP_SET isn't empty the following dependencies might have been
-##     pulled in transitively but can be declared for certainty nonetheless:
-##     * add a build_depend tag for "message_generation"
+##   * If MSG_DEP_SET isn't empty the following dependency has been pulled in
+##     but can be declared for certainty nonetheless:
 ##     * add a run_depend tag for "message_runtime"
 ## * In this file (CMakeLists.txt):
 ##   * add "message_generation" and every package in MSG_DEP_SET to
@@ -60,27 +54,42 @@ catkin_python_setup()
 ## Generate services in the 'srv' folder
 # add_service_files(
 #   FILES
+#   Service1.srv
+#   Service2.srv
 # )
 
-# Generate actions in the 'action' folder
+## Generate actions in the 'action' folder
 # add_action_files(
 #   FILES
+#   Action1.action
+#   Action2.action
 # )
 
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs
 #   std_msgs
-#   trajectory_msgs
 # )
 
-generate_dynamic_reconfigure_options(
-  cfg/GripperParams.cfg
-  cfg/MotorParams.cfg
-  cfg/MotorMXParams.cfg
-)
-#add_dependencies(example_node ${PROJECT_NAME}_gencfg)
+################################################
+## Declare ROS dynamic reconfigure parameters ##
+################################################
+
+## To declare and build dynamic reconfigure parameters within this
+## package, follow these steps:
+## * In the file package.xml:
+##   * add a build_depend and a run_depend tag for "dynamic_reconfigure"
+## * In this file (CMakeLists.txt):
+##   * add "dynamic_reconfigure" to
+##     find_package(catkin REQUIRED COMPONENTS ...)
+##   * uncomment the "generate_dynamic_reconfigure_options" section below
+##     and list every .cfg file to be processed
+
+## Generate dynamic reconfigure parameters in the 'cfg' folder
+# generate_dynamic_reconfigure_options(
+#   cfg/DynReconf1.cfg
+#   cfg/DynReconf2.cfg
+# )
 
 ###################################
 ## catkin specific configuration ##
@@ -93,13 +102,10 @@ generate_dynamic_reconfigure_options(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES bender_arm
-  CATKIN_DEPENDS
-    interactive_markers
-    message_runtime
+#  LIBRARIES bender_fieldbus
+#  CATKIN_DEPENDS dynamixel_controllers roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
-
 
 ###########
 ## Build ##
@@ -109,36 +115,28 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
-  SYSTEM
-  ${Boost_INCLUDE_DIR}
-  ${EIGEN_INCLUDE_DIRS}
-)
-
-include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-## Declare a cpp library
-# add_library(bender_arm
-#   src/${PROJECT_NAME}/bender_arm.cpp
+## Declare a C++ library
+# add_library(bender_fieldbus
+#   src/${PROJECT_NAME}/bender_fieldbus.cpp
 # )
 
-## Declare a cpp executable
-# add_executable(bender_arm_node src/bender_arm_node.cpp)
-add_executable(tf_marker src/tf_marker.cpp)
-target_link_libraries(tf_marker ${catkin_LIBRARIES})
+## Add cmake target dependencies of the library
+## as an example, code may need to be generated before libraries
+## either from message generation or dynamic reconfigure
+# add_dependencies(bender_fieldbus ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-add_executable(joint_states_remap src/joint_states_remap.cpp)
-target_link_libraries(joint_states_remap ${catkin_LIBRARIES})
+## Declare a C++ executable
+# add_executable(bender_fieldbus_node src/bender_fieldbus_node.cpp)
 
-#install(TARGETS move_group_interface_tutorial DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-
-## Add cmake target dependencies of the executable/library
-## as an example, message headers may need to be generated before nodes
-# add_dependencies(bender_arm_node bender_arm_generate_messages_cpp)
+## Add cmake target dependencies of the executable
+## same as for the library above
+# add_dependencies(bender_fieldbus_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(bender_arm_node
+# target_link_libraries(bender_fieldbus_node
 #   ${catkin_LIBRARIES}
 # )
 
@@ -157,7 +155,7 @@ target_link_libraries(joint_states_remap ${catkin_LIBRARIES})
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS bender_arm bender_arm_node
+# install(TARGETS bender_fieldbus bender_fieldbus_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -182,7 +180,7 @@ target_link_libraries(joint_states_remap ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_bender_arm.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_bender_fieldbus.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

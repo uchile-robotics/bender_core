@@ -1,4 +1,0 @@
-float64 pitch
-bool wrt_base # Orientar con respecto a base_link
----
-bool reach
