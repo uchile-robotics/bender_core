@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bender_arm)
+project(bender_gripper)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -76,8 +76,7 @@ catkin_python_setup()
 # )
 
 generate_dynamic_reconfigure_options(
-  cfg/MotorParams.cfg
-  cfg/MotorMXParams.cfg
+  cfg/GripperParams.cfg
 )
 #add_dependencies(example_node ${PROJECT_NAME}_gencfg)
 
@@ -92,7 +91,7 @@ generate_dynamic_reconfigure_options(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES bender_arm
+#  LIBRARIES bender_gripper
   CATKIN_DEPENDS
     interactive_markers
     message_runtime
@@ -118,26 +117,21 @@ include_directories(
 )
 
 ## Declare a cpp library
-# add_library(bender_arm
-#   src/${PROJECT_NAME}/bender_arm.cpp
+# add_library(bender_gripper
+#   src/${PROJECT_NAME}/bender_gripper.cpp
 # )
 
 ## Declare a cpp executable
-# add_executable(bender_arm_node src/bender_arm_node.cpp)
-add_executable(tf_marker src/tf_marker.cpp)
-target_link_libraries(tf_marker ${catkin_LIBRARIES})
-
-add_executable(joint_states_remap src/joint_states_remap.cpp)
-target_link_libraries(joint_states_remap ${catkin_LIBRARIES})
+# add_executable(bender_gripper_node src/bender_gripper_node.cpp)
 
 #install(TARGETS move_group_interface_tutorial DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(bender_arm_node bender_arm_generate_messages_cpp)
+# add_dependencies(bender_gripper_node bender_gripper_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(bender_arm_node
+# target_link_libraries(bender_gripper_node
 #   ${catkin_LIBRARIES}
 # )
 
@@ -156,7 +150,7 @@ target_link_libraries(joint_states_remap ${catkin_LIBRARIES})
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS bender_arm bender_arm_node
+# install(TARGETS bender_gripper bender_gripper_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -181,7 +175,7 @@ target_link_libraries(joint_states_remap ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_bender_arm.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_bender_gripper.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

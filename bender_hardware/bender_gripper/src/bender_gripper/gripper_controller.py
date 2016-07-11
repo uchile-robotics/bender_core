@@ -17,7 +17,7 @@ from sensor_msgs.msg import JointState
 from control_msgs.msg import GripperCommand, GripperCommandAction, GripperCommandFeedback, GripperCommandResult
 # Dynamic reconfigure
 from dynamic_reconfigure.server import Server as DynamicReconfServer
-from bender_arm.cfg import GripperParamsConfig
+from bender_gripper.cfg import GripperParamsConfig
 # PID
 from control_util.pid import PID
 from std_msgs.msg import Float64
