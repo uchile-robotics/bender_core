@@ -7,8 +7,9 @@ Instalar *udev rules*
 Permite que los disositivos de control (USB2Dynamixel FTDI FT232RL) sea asignado a un puerto en especifico cada vez de se conecta.
 
 ~~~
-$ sudo cp l_port.rules /etc/udev/rules.d/l_port.rules
-$ sudo cp r_port.rules /etc/udev/rules.d/r_port.rules
+$ bender_cd bender_fieldbus
+$ sudo cp install/l_port.rules /etc/udev/rules.d/l_port.rules
+$ sudo cp install/r_port.rules /etc/udev/rules.d/r_port.rules
 ~~~
 
 Permisos para puertos
@@ -17,8 +18,8 @@ Permisos para puertos
 Permite que los usuarios puedan escribir y leer un puerto serial.
 
 ~~~
-$ sudo sudo chmod a+rw /dev/bender/l_port
-$ sudo sudo chmod a+rw /dev/bender/r_port
+$ sudo chmod a+rw /dev/bender/l_port
+$ sudo chmod a+rw /dev/bender/r_port
 $ sudo usermod -a -G dialout $USER
 ~~~
 
