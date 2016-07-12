@@ -1,9 +1,0 @@
-# Config for gripper test
-namespace: gripper_test_manager
-serial_ports:
-  gripper_test_port:
-    port_name: "/dev/bender/left_arm"
-    baud_rate: 200000
-    min_motor_id: 17
-    max_motor_id: 18
-    update_rate: 30

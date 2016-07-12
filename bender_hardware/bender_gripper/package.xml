@@ -49,17 +49,14 @@
 
     <!-- build, export, and execution dependencies -->
     <depend>dynamic_reconfigure</depend>
-    <depend>geometry_msgs</depend>
-    <depend>interactive_markers</depend>
     <depend>roscpp</depend>
     <depend>rospy</depend>
-    <depend>std_msgs</depend>
-    <depend>visualization_msgs</depend>
 
 
     <!-- build dependencies -->
     <build_depend>cmake_modules</build_depend>
     <build_depend>message_generation</build_depend>
+    <build_depend>bender_fieldbus</build_depend>
 
     <!-- export dependencies -->
 
@@ -67,11 +64,15 @@
     <exec_depend>actionlib</exec_depend>
     <exec_depend>actionlib_msgs</exec_depend>
     <exec_depend>bender_fieldbus</exec_depend>
+    <exec_depend>control_msgs</exec_depend>
+    <exec_depend>control_util</exec_depend>
     <exec_depend>dynamixel_controllers</exec_depend>
     <exec_depend>dynamixel_driver</exec_depend>
     <exec_depend>dynamixel_msgs</exec_depend>
     <exec_depend>message_runtime</exec_depend>
-
+    <exec_depend>sensor_msgs</exec_depend>
+    <exec_depend>std_msgs</exec_depend>
+    
     <!-- test dependencies -->
 
     <!-- documentation dependencies -->

@@ -1,6 +1,6 @@
 r_gripper_controller:
   controller:
-    package: bender_arm
+    package: bender_gripper
     module: gripper_controller
     type: GripperActionController
   gripper_action_node:
@@ -10,4 +10,4 @@ r_gripper_controller:
     stall_timeout: 3.0
     stalled_velocity_threshold: 0.1
     state_update_rate: 30
-    joint_states_topic: 'r_gripper/joint_states' # Local namespac
+    joint_states_topic: 'r_gripper/joint_states' # Local namespace

@@ -3,31 +3,25 @@
   <arg name="disble_torque" default="True" />
   
   <group ns="bender">
-    <node name="l_arm_dynamixel_manager" pkg="dynamixel_controllers" type="controller_manager.py" required="true" output="screen">
-      <rosparam file="$(find bender_arm)/config/l_arm_port.yaml" command="load"/>
-    </node>
-
+    <!-- l_arm low lovel config file -->
     <rosparam file="$(find bender_arm)/config/l_arm_controller.yaml" command="load"/>
-    <rosparam file="$(find bender_arm)/config/l_gripper_controller.yaml" command="load"/>
-
+    <!-- l_arm low lovel controller spawner -->
     <node name="l_arm_controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
-            args="--manager=l_arm_manager
-                  --port=l_arm_port
+            args="--manager=l_port_manager
+                  --port=l_port
                   l_shoulder_pitch_controller
                   l_shoulder_roll_controller
                   l_shoulder_yaw_controller
                   l_elbow_pitch_controller
                   l_elbow_yaw_controller
-                  l_wrist_pitch_controller
-                  l_int_finger_controller
-                  l_ext_finger_controller"
+                  l_wrist_pitch_controller"
             output="screen"/>
 
-    <!-- FJTA for l_arm config file-->
+    <!-- Follow joint trajectory action for l_arm config file -->
     <rosparam file="$(find bender_arm)/config/l_arm_trajectory.yaml" command="load"/>
-    <!-- Spawn FJTA for r_arm -->
+    <!-- Spawn Follow joint trajectory action for l_arm -->
     <node name="l_arm_controller_spawner_meta" pkg="dynamixel_controllers" type="controller_spawner.py"
-            args="--manager=l_arm_manager
+            args="--manager=l_port_manager
                   --type=meta
                   l_arm_controller
                   l_shoulder_pitch_controller
@@ -36,16 +30,6 @@
                   l_elbow_pitch_controller
                   l_elbow_yaw_controller
                   l_wrist_pitch_controller"
-            output="screen"/>
-    <!-- Gripper Action for l_arm config file-->
-    <rosparam file="$(find bender_arm)/config/l_gripper_action.yaml" command="load"/>
-    <!-- Spawn Gripper Action for l_arm -->
-    <node name="l_gripper_controller_spawner_meta" pkg="dynamixel_controllers" type="controller_spawner.py"
-            args="--manager=l_arm_manager
-                  --type=meta
-                  l_gripper_controller
-                  l_int_finger_controller
-                  l_ext_finger_controller"
             output="screen"/>
   </group>
 

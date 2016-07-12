@@ -5,21 +5,17 @@ project(bender_gripper)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  cmake_modules
+  bender_fieldbus
   dynamic_reconfigure
-  geometry_msgs
-  interactive_markers
   message_generation
   roscpp
   rospy
-  std_msgs
-  visualization_msgs
 )
 
 ## System dependencies are found with CMake's conventions
-find_package(Boost REQUIRED system filesystem date_time thread)
+#find_package(Boost REQUIRED system filesystem date_time thread)
 
-find_package(Eigen REQUIRED)
+#find_package(Eigen REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -89,14 +85,14 @@ generate_dynamic_reconfigure_options(
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
+#catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES bender_gripper
-  CATKIN_DEPENDS
-    interactive_markers
-    message_runtime
+#  CATKIN_DEPENDS
+#    interactive_markers
+#    message_runtime
 #  DEPENDS system_lib
-)
+#)
 
 
 ###########
@@ -107,12 +103,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
-  SYSTEM
-  ${Boost_INCLUDE_DIR}
-  ${EIGEN_INCLUDE_DIRS}
-)
-
-include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
 )
 

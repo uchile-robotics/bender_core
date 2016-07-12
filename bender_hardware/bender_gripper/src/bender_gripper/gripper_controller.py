@@ -14,7 +14,8 @@ import actionlib
 from dynamixel_driver.dynamixel_const import *
 # Msgs
 from sensor_msgs.msg import JointState
-from control_msgs.msg import GripperCommand, GripperCommandAction, GripperCommandFeedback, GripperCommandResult
+from control_msgs.msg import (GripperCommand, GripperCommandAction,
+    GripperCommandFeedback, GripperCommandResult)
 # Dynamic reconfigure
 from dynamic_reconfigure.server import Server as DynamicReconfServer
 from bender_gripper.cfg import GripperParamsConfig
@@ -25,30 +26,28 @@ from std_msgs.msg import Float64
 class GripperActionController():
     def __init__(self, controller_namespace, controllers):
         self.update_rate = 1000
-        
         self.controller_namespace = controller_namespace
-        self.joint_names = [c.joint_name for c in controllers]
-        
+        self.joint_names = [ctrl.joint_name for ctrl in controllers]
+        # Get joint to controller dict
         self.joint_to_controller = {}
-        for c in controllers:
-            self.joint_to_controller[c.joint_name] = c
-          
+        for ctrl in controllers:
+            self.joint_to_controller[ctrl.joint_name] = ctrl
+        # Get port to joints dicts
         self.port_to_joints = {}
-        for c in controllers:
-            if c.port_namespace not in self.port_to_joints:
-                self.port_to_joints[c.port_namespace] = []
-            self.port_to_joints[c.port_namespace].append(c.joint_name)
-          
+        for ctrl in controllers:
+            if ctrl.port_namespace not in self.port_to_joints:
+                self.port_to_joints[ctrl.port_namespace] = []
+            self.port_to_joints[ctrl.port_namespace].append(ctrl.joint_name)
+        # Get get port to io (DynamixelIO)
         self.port_to_io = {}
-        for c in controllers:
-            if c.port_namespace in self.port_to_io:
+        for ctrl in controllers:
+            if ctrl.port_namespace in self.port_to_io:
                 continue
-            self.port_to_io[c.port_namespace] = c.dxl_io
-          
-        self.joint_states = dict(zip(self.joint_names, [c.joint_state for c in controllers]))
+            self.port_to_io[ctrl.port_namespace] = ctrl.dxl_io
+        self.joint_states = dict(zip(self.joint_names,
+            [ctrl.joint_state for ctrl in controllers]))
         self.num_joints = len(self.joint_names)
         self.joint_to_idx = dict(zip(self.joint_names, range(self.num_joints)))
-
         # Base msgs
         # Feedback and result base msg
         self.feedback = GripperCommandFeedback()
@@ -59,48 +58,53 @@ class GripperActionController():
         self.joint_state.position = [0.0]*self.num_joints
         self.joint_state.velocity = [0.0]*self.num_joints
         self.joint_state.effort = [0.0]*self.num_joints
-
         # Current max effort
         self.current_goal = 0.0
         self.current_effort = 0.9
         # PID
         self.pid = dict()
         for joint in self.joint_names:
-            self.pid[joint]=PID(kp=1.3, ki=2.5, kd=0.0, i_clamp=1.1)
-
+            self.pid[joint] = PID(kp=1.3, ki=2.5, kd=0.0, i_clamp=1.1)
 
     def initialize(self):
         # Get controller parameters
         ns = self.controller_namespace + '/gripper_action_node' # Namespace
         # Parameters
         # Topic name for publish joint_states
-        self.joint_states_topic = rospy.get_param(ns + '/joint_states_topic', '/joint_states')
+        self.joint_states_topic = rospy.get_param(ns + '/joint_states_topic',
+            '/joint_states')
         # Goal position tolerance in rads
         self.goal_tolerance = rospy.get_param(ns + '/goal_tolerance', 0.01)
         # Max allowed effort for actions [0 - 1023]
         self.max_effort = int(abs(rospy.get_param(ns + '/max_effort', 900)))
         # Effort tolerance [0 - 1023]
-        self.effort_tolerance = abs(rospy.get_param(ns + '/effort_tolerance', 100))
+        self.effort_tolerance = abs(rospy.get_param(
+            ns + '/effort_tolerance', 100))
         # Stall timeout in seg
         self.stall_timeout = rospy.get_param(ns + '/stall_timeout', 1.0)
         #print 'timeout %d' % self.stall_timeout
         # Stalled velocity in rad/s
-        self.stalled_velocity_threshold = rospy.get_param(ns + '/stalled_velocity_threshold', 0.1)
+        self.stalled_velocity_threshold = rospy.get_param(
+            ns + '/stalled_velocity_threshold', 0.1)
         # State update rate for joint state s
-        self.state_update_rate = rospy.get_param(ns + '/state_update_rate', 10)
+        self.state_update_rate = rospy.get_param(
+            ns + '/state_update_rate', 10)
         # Dynamic reconfigure server, load dinamic parameters
-        self.reconfig_server = DynamicReconfServer(GripperParamsConfig, self.update_params)
-
+        self.reconfig_server = DynamicReconfServer(GripperParamsConfig,
+            self.update_params)
         return True
 
     def start(self):
         self.running = True
         self.last_movement_time = rospy.Time.now()
         # Joint state publisher
-        self.joint_states_pub = rospy.Publisher(self.joint_states_topic, JointState, queue_size = 20)
+        self.joint_states_pub = rospy.Publisher(self.joint_states_topic,
+            JointState, queue_size=20)
         # Action feedback publisher
-        self.state_pub = rospy.Publisher(self.controller_namespace + '/state', GripperCommandFeedback, queue_size=20)
-        self.action_server = actionlib.SimpleActionServer(self.controller_namespace + '/gripper_action', GripperCommandAction,
+        self.state_pub = rospy.Publisher(self.controller_namespace + '/state',
+            GripperCommandFeedback, queue_size=20)
+        self.action_server = actionlib.SimpleActionServer(
+            self.controller_namespace + '/gripper_action', GripperCommandAction,
             execute_cb=self.process_action, auto_start=False)
         self.action_server.start()
         Thread(target=self.update_state).start()
@@ -109,14 +113,16 @@ class GripperActionController():
     def update_params(self, config, level):
         # Update velocity
         self.velocity = config.gripper_vel
-        rospy.loginfo('Gripper velocity setting at {:.2f}'.format(config.gripper_vel))
+        rospy.loginfo('Gripper velocity setting at {:.2f}'.format(
+            config.gripper_vel))
         return config
 
     def stop(self):
         self.running = False
 
     def hold_position(self, effort):
-        rospy.loginfo('Holding current position with effort {:.2f}'.format(effort))
+        rospy.loginfo('Holding current position with effort \
+            {:.2f}'.format(effort))
         # Get current position
         pos = list()
         for joint in self.joint_names:
@@ -131,17 +137,13 @@ class GripperActionController():
             self.pid[joint].initialize()
         while self.running and not rospy.is_shutdown():
             for joint in self.joint_names:
-                #rospy.loginfo('{} INFO pos {:.2f} effort {:.2f}/{:.2f}'.format(joint, self.joint_states[joint].current_pos, self.joint_states[joint].load, self.current_effort))
                 # Joint state msg
                 error = self.current_goal - self.joint_states[joint].current_pos
                 # Check effort
                 if (abs(self.joint_states[joint].load) > self.current_effort*1.2):
-                    #self.pid[joint].initialize()          
-                    #rospy.logwarn('{} reach target effort {:.2f}/{:.2f}'.format(joint, self.joint_states[joint].load, self.current_effort))
-                    #continue
                     error *= -1.0
 
-                command = Float64(min(max(self.pid[joint].compute_output(error),-0.1),1.0))
+                command = Float64(min(max(self.pid[joint].compute_output(error), -0.1), 1.0))
                 # Send command
                 self.joint_to_controller[joint].process_command(command)
             rate.sleep()
@@ -188,8 +190,9 @@ class GripperActionController():
 
         # @TODO Check limits of position using URDF info
         # Check max effort
-        rospy.loginfo('Received new action with position={:.2f} effort={:.2f}'.format(command.position,command.max_effort))
-        effort = min(max(abs(command.max_effort),0.1),0.95)
+        rospy.loginfo('Received new action with position={:.2f} effort={:.2f}'.format(
+            command.position, command.max_effort))
+        effort = min(max(abs(command.max_effort), 0.1), 0.95)
         
         rospy.sleep(0.3)
         # Send Dynamixel command @TODO Data race
@@ -211,11 +214,10 @@ class GripperActionController():
                 mean_position += joint_state.current_pos
                 mean_effort += abs(joint_state.load)
                 #print 'goal tolerance %f' % abs(joint_state.current_pos - command.position)
-                if (abs(joint_state.current_pos - command.position) > self.goal_tolerance):
+                if abs(joint_state.current_pos - command.position) > self.goal_tolerance:
                     reach_goal_tolerance = False
             mean_position /= self.num_joints
             mean_effort /= self.num_joints
-
             # Send for goal tolerance
             if reach_goal_tolerance:
                 self.result.position = mean_position
@@ -223,19 +225,19 @@ class GripperActionController():
                 self.result.stalled = False
                 self.result.reached_goal = True
                 # Result msg
-                msg = 'Execution successfully, goal position reached with position={:.2f} effort={:.2f}'.format(mean_position,mean_effort)
+                msg = 'Execution successfully, goal position reached with \
+                position={:.2f} effort={:.2f}'.format(mean_position, mean_effort)
                 rospy.loginfo(msg)
                 self.action_server.set_succeeded(result=self.result, text=msg)
                 break
             else:
-                
                 # Check for stall velocity
                 reach_stall_velocity = True
                 for joint, joint_state in self.joint_states.items():
                     if (abs(joint_state.velocity) > self.stalled_velocity_threshold):
                         reach_stall_velocity = False
 
-                if (not reach_stall_velocity):
+                if not reach_stall_velocity:
                     self.last_movement_time = rospy.Time.now()
                 else:
                     # Gripper stalled
@@ -243,28 +245,27 @@ class GripperActionController():
                     reach_stall_effort = False
                     for joint in self.joint_names:
                         if (abs(self.joint_states[joint].load) > effort - self.effort_tolerance):
-                            #rospy.loginfo('joint {} reached effort with {:.2f}'.format(joint, self.joint_states[joint].load))
                             reach_stall_effort = True
-
                     if reach_stall_effort:
                         self.result.position = mean_position
                         self.result.effort = mean_effort
                         self.result.stalled = True
                         self.result.reached_goal = False
                         # Result msg
-                        msg = 'Execution stalled, position={:.2f} effort={:.2f}'.format(mean_position,mean_effort)
+                        msg = 'Execution stalled, position={:.2f} \
+                            effort={:.2f}'.format(mean_position, mean_effort)
                         rospy.logwarn(msg)
                         self.action_server.set_succeeded(result=self.result, text=msg)
                         break
-
                     # Check timeout
-                    elif ((rospy.Time.now() - self.last_movement_time).to_sec() > self.stall_timeout ):
+                    elif ((rospy.Time.now()-self.last_movement_time).to_sec() > self.stall_timeout):
                         self.result.position = mean_position
                         self.result.effort = mean_effort
                         self.result.stalled = True
                         self.result.reached_goal = False
                         # Result msg
-                        msg = 'Execution timeout, position={:.2f} effort={:.2f}'.format(mean_position,mean_effort)
+                        msg = 'Execution timeout, position={:.2f} \
+                            effort={:.2f}'.format(mean_position, mean_effort)
                         rospy.logwarn(msg)
                         self.action_server.set_aborted(result=self.result, text=msg)
                         break
