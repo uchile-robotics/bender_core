@@ -38,8 +38,7 @@ class HardwareCheck(object):
         Add children for check
         """
         if not issubclass(type(child), HardwareCheck):
-            HardwareCheck.print_error("{} is not derived class from \
-                HardwareCheck".format(child.__class__.__name__))
+            HardwareCheck.print_error("{} is not derived class from HardwareCheck".format(child.__class__.__name__))
             return
         self.child.append(child)
 
@@ -133,14 +132,14 @@ class DynamixelCheck(HardwareCheck):
 def main():
     # Check l_arm
     l_arm = HardwareCheck()
-    l_arm.add_child(FileCheck('/dev/bender/l_arm'))
-    l_arm.add_child(DynamixelCheck('/dev/bender/l_arm', 200000,
+    l_arm.add_child(FileCheck('/dev/bender/l_port'))
+    l_arm.add_child(DynamixelCheck('/dev/bender/l_port', 200000,
         [1, 2, 3, 4, 5, 6, 7, 8]))
     l_arm_res = l_arm.check()
     # Check r_arm
     r_arm = HardwareCheck()
-    r_arm.add_child(FileCheck('/dev/bender/r_arm'))
-    r_arm.add_child(DynamixelCheck('/dev/bender/r_arm', 200000,
+    r_arm.add_child(FileCheck('/dev/bender/r_port'))
+    r_arm.add_child(DynamixelCheck('/dev/bender/r_port', 200000,
         [11, 12, 13, 14, 15, 16, 17, 18]))
     r_arm_res = r_arm.check()
     # Return
