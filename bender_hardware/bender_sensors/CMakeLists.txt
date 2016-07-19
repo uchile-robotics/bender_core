@@ -44,13 +44,3 @@ add_executable(laser_inverter src/laser_inverter.cpp)
 add_dependencies(laser_inverter ${catkin_EXPORTED_TARGETS})
 target_link_libraries(laser_inverter ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
-
-# camera_service
-add_executable(camera_service src/camera_service_server.cpp)
-add_dependencies(camera_service ${catkin_EXPORTED_TARGETS})
-target_link_libraries(camera_service ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-
-add_executable(camera_service_client src/camera_service_client.cpp)
-add_dependencies(camera_service_client ${catkin_EXPORTED_TARGETS})
-target_link_libraries(camera_service_client ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-

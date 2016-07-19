@@ -53,7 +53,7 @@
     <depend>image_transport</depend>
     <depend>libusb-1.0-dev</depend>
     <depend>bender_utils</depend>
-
+    <depend>usb_cam</depend>
 
     <!-- build dependencies -->
 

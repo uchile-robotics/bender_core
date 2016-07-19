@@ -1,0 +1,42 @@
+<launch>
+
+	<arg name="display" default="false"/>
+	<arg name="camera_name" default="head_camera"/>
+	<arg name="video_device" default="0"/>
+	<arg name="image_height" default="480"/>
+	<arg name="image_width" default="640"/>
+	<arg name="pixel_format" default="mjpeg"/>
+	<arg name="io_method" default="mmap"/>
+	<arg name="framerate" default="30"/>
+	<arg name="contrast" default="32"/>
+	<arg name="brightness" default="32"/>
+	<arg name="saturation" default="32"/>
+	<arg name="sharpness" default="22"/>
+	<arg name="autofocus" default="false"/>
+	<arg name="focus" default="51.0"/>
+
+
+	<node pkg="usb_cam" type="usb_cam_node" name="$(arg camera_name)" required="true" ns="/bender/sensors/">
+		<param name="camera_name" type="str" value="$(arg camera_name)"/>
+		<param name="video_device" type="int" value="$(arg video_device)"/>
+		<param name="image_height" type="int" value="$(arg image_height )"/>
+		<param name="image_width" type="int" value="$(arg image_width)"/>
+		<param name="pixel_format" type="str" value="$(arg pixel_format)"/>
+		<param name="io_method" type="str" value="$(arg io_method)"/>
+		<param name="camera_frame_id" type="str" value="$(arg camera_name)"/>
+		<param name="framerate" type="double" value="$(arg framerate)"/>
+		<param name="contrast" type="double" value="$(arg contrast)"/>
+		<param name="brightness" type="double" value="$(arg brightness)"/>
+		<param name="saturation" type="double" value="$(arg saturation)"/>
+		<param name="sharpness" type="double" value="$(arg sharpness)"/>
+		<param name="autofocus" type="bool" value="$(arg autofocus)"/>
+		<param name="focus" type="double" value="$(arg focus)"/>
+	</node>
+
+	<!-- Display -->
+	<node pkg="image_view" type="image_view" name="image_view"  if="$(arg display)" >
+		<remap from="image" to="/bender/sensors/$(arg camera_name)/image_raw"/>
+	</node>
+
+</launch>
+
