@@ -17,10 +17,10 @@
     <!-- PACKAGE INFORMATION -->
     <!-- - - - - - - - - - - -->
 
-    <name>bender_arm</name>
+    <name>control_util</name>
     <version>2.0.0</version>
     
-    <description>Package for control Dynamixel based manipulators</description>
+    <description>The control_util package</description>
 
     <!-- team -->
     <maintainer email="bender.devel@gmail.com">
@@ -41,44 +41,39 @@
 
     <license>TODO</license>
 
+
+
     <!-- SYSTEM DEPENDENCIES -->
     <!-- - - - - - - - - - - -->
 
     <!--  build system tool to build this package -->
     <buildtool_depend>catkin</buildtool_depend>
 
+
     <!-- build, export, and execution dependencies -->
     <depend>dynamic_reconfigure</depend>
-    <depend>geometry_msgs</depend>
-    <depend>interactive_markers</depend>
     <depend>roscpp</depend>
     <depend>rospy</depend>
-    <depend>std_msgs</depend>
-    <depend>visualization_msgs</depend>
 
 
     <!-- build dependencies -->
-    <build_depend>cmake_modules</build_depend>
-    <build_depend>message_generation</build_depend>
+
 
     <!-- export dependencies -->
 
+
     <!-- excution dependencies -->
-    <exec_depend>actionlib</exec_depend>
-    <exec_depend>actionlib_msgs</exec_depend>
-    <exec_depend>bender_fieldbus</exec_depend>
-    <exec_depend>dynamixel_controllers</exec_depend>
-    <exec_depend>dynamixel_driver</exec_depend>
-    <exec_depend>dynamixel_msgs</exec_depend>
-    <exec_depend>message_runtime</exec_depend>
-    <exec_depend>control_util</exec_depend>
+
 
     <!-- test dependencies -->
 
+
     <!-- documentation dependencies -->
+
 
     <!-- export -->
     <export>
     </export>
 
 </package>
+
