@@ -2,7 +2,7 @@
 
 	<arg name="display" default="true"/>
 	<arg name="camera_name" default="camera_forehead"/>
-	<arg name="video_device" default="5"/>
+	<arg name="video_device" default="/dev/video1"/>
 	<arg name="framerate" default="30"/>
 
 
