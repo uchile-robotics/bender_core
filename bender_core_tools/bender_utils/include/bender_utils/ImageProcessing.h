@@ -7,6 +7,9 @@
 #ifndef IMAGEPROCESSING_H_
 #define IMAGEPROCESSING_H_
 
+#include <ros/ros.h> 
+ #include <ros/console.h>
+
 // C, C++
 #include <cstdio> // for EOF
 #include <string>
@@ -37,7 +40,7 @@ private:
 	ros::Subscriber _subs_rgb;
 	ros::Subscriber _subs_depth;
 
-protected:
+public:
   ros::NodeHandle priv;
 	bool display;
 	bool ready_rgb;
@@ -56,6 +59,7 @@ public:
 	ImageProcessing(std::string name = "~");
 	virtual ~ImageProcessing();
   bool _is_on;
+  bool _is_on_depth;
 
 protected:
 	/** - - - - ..... - - - - **/
@@ -67,34 +71,44 @@ protected:
   void _process_image(const sensor_msgs::ImageConstPtr& img);
   void _process_depth(const sensor_msgs::ImageConstPtr& img);
 
+  void Display(cv::Mat frame, std::vector<cv::Rect> faces);
 public:
 	bool _active_service_RGB(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res);
 	bool _active_service_RGBD(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res);
   bool _active_service_D(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res);
+  bool _active_service_RGB_D(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res); 
+  void set_topics (std::string rgb, std::string depth);
 
 };
 
 
-inline ImageProcessing::ImageProcessing(std::string name) {
+  void ImageProcessing::set_topics(std::string rgb, std::string depth) {   
+    _imageRGB_topic = rgb;
+    _imageDepth_topic = depth;
+  }
+
+
+ ImageProcessing::ImageProcessing(std::string name) {
 
 	priv = ros::NodeHandle(name);
 	display = true;
 	_is_on = false;
+  _is_on_depth =false;
 	ready_rgb = false;
 	ready_depth = false;
 }
 
-inline ImageProcessing::~ImageProcessing() {
+ ImageProcessing::~ImageProcessing() {
 
 }
 
 
-inline void ImageProcessing::equalizeImage(const cv::Mat& input, cv::Mat &output) {
+ void ImageProcessing::equalizeImage(const cv::Mat& input, cv::Mat &output) {
 	cv::cvtColor(input, output, CV_BGR2GRAY);
 	cv::equalizeHist(output, output);
 }
 
-inline geometry_msgs::Point ImageProcessing::get_point(cv::Mat src, cv::Point p){
+ geometry_msgs::Point ImageProcessing::get_point(cv::Mat src, cv::Point p){
     geometry_msgs::Point point;
     int img_width=src.cols;
     int img_height=src.rows;
@@ -106,14 +120,14 @@ inline geometry_msgs::Point ImageProcessing::get_point(cv::Mat src, cv::Point p)
     return point;
 }
 
-inline cv::Mat ImageProcessing::get_mat (sensor_msgs::ImageConstPtr sensor_img, std::string encoding){
+ cv::Mat ImageProcessing::get_mat (sensor_msgs::ImageConstPtr sensor_img, std::string encoding){
 
     cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy((sensor_img), encoding);
 
     return cv_ptr->image;
 }
 
-inline bool ImageProcessing::_active_service_RGB(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res) {
+ bool ImageProcessing::_active_service_RGB(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res) {
 
     if(req.select == true) {
         if (!_is_on) {
@@ -134,7 +148,7 @@ inline bool ImageProcessing::_active_service_RGB(bender_srvs::Onoff::Request  &r
     return true;
 }
 
-inline bool ImageProcessing::_active_service_RGBD(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res) {
+ bool ImageProcessing::_active_service_RGBD(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res) {
 
     if(req.select == true) {
         if (!_is_on) {
@@ -159,7 +173,7 @@ inline bool ImageProcessing::_active_service_RGBD(bender_srvs::Onoff::Request  &
     return true;
 }
 
-inline bool ImageProcessing::_active_service_D(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res) {
+ bool ImageProcessing::_active_service_D(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res) {
 
     if(req.select == true) {
         if (!_is_on) {
@@ -180,17 +194,68 @@ inline bool ImageProcessing::_active_service_D(bender_srvs::Onoff::Request  &req
     return true;
 }
 
-inline void ImageProcessing::_process_image(const sensor_msgs::ImageConstPtr& img){
+bool ImageProcessing::_active_service_RGB_D(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res) {
+
+    std::string _image_topic = _imageRGB_topic;
+
+    if(req.select == true) {
+        if (!_is_on) {
+            _subs_rgb = priv.subscribe(_imageRGB_topic, 1, &ImageProcessing::_process_image, this);
+            _is_on = true;
+            ROS_INFO_STREAM("Turning on "+_imageRGB_topic+". . . OK");
+
+            if (_image_topic.find("rgbd") !=std::string::npos) {
+                _is_on_depth = true;
+                std::string _depth_topic = _image_topic, rgb = "rgb";
+                _depth_topic.replace(_depth_topic.find(rgb), rgb.length(),"depth");
+                _imageDepth_topic = _depth_topic;
+                _subs_depth = priv.subscribe(_imageDepth_topic, 1, &ImageProcessing::_process_depth, this); 
+                ROS_INFO_STREAM("Turning on "+_imageDepth_topic+". . . OK");
+            }
+        } else ROS_DEBUG_STREAM("Already turned on");
+    }
+    else{
+        if (_is_on) {
+              _subs_rgb.shutdown();
+              if (_is_on_depth){
+                  _subs_depth.shutdown();
+                  _is_on_depth = false;
+                  ready_depth = false;
+                }
+              _is_on = false;
+              ready_rgb = false;
+              ROS_INFO_STREAM(" Turning off . . . OK");
+        } else  ROS_DEBUG_STREAM("Already turned off"); 
+    }
+    return true;
+}
+
+ void ImageProcessing::_process_image(const sensor_msgs::ImageConstPtr& img){
     if(!_is_on) return;
     image_in=img;
     ready_rgb = true;
 }
 
-inline void ImageProcessing::_process_depth(const sensor_msgs::ImageConstPtr& img){
+ void ImageProcessing::_process_depth(const sensor_msgs::ImageConstPtr& img){
     if(!_is_on) return;
     depth_in=img;
     ready_depth = true;
 }
+
+
+
+void ImageProcessing::Display( cv::Mat frame, std::vector<cv::Rect> faces) {
+
+    for (unsigned int i = 0; i < faces.size(); i++) {
+        cv::rectangle(frame, cv::Point(faces[i].x, faces[i].y),
+                cv::Point(faces[i].x + faces[i].width,
+                        faces[i].y + faces[i].height), cv::Scalar(255, 0, 0),5);
+    }
+
+    imshow("Faces Detection", frame);
+    cv::waitKey(10);
+}
+
 
 } /* namespace bender_utils */
 #endif /* ImageProcessing_H_ */
