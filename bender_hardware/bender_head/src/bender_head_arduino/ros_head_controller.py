@@ -8,12 +8,12 @@ import rospy
 from threading import Thread
 
 from std_msgs.msg import Bool, Int16, String
-from bender_msgs.msg import LedCommand2
-from bender_msgs.msg import ServoCommand
-from bender_msgs.msg import ServoState
+from bender_head_arduino.msg import LedCommand2
+from bender_head_arduino.msg import ServoCommand
+from bender_head_arduino.msg import ServoState
 
 # Use HW interface
-from head_hw_v3 import HeadHW, SERVO0, SERVO1, SERVO2, SERVO3, SERVO4, SERVO_SELECT_STATE, SERVO_POS_STATE, LED_SELECT_STATE, LED_COLOR_STATE
+from head_hw import HeadHW, SERVO0, SERVO1, SERVO2, SERVO3, SERVO4, SERVO_SELECT_STATE, SERVO_POS_STATE, LED_SELECT_STATE, LED_COLOR_STATE
 #from dynamixel_driver.dynamixel_io import DynamixelIO
 from dynamixel_io import DynamixelIO
 
@@ -68,14 +68,24 @@ class HeadController:
             self.head.swapServo(msg.pos)
             self.servos_state.lastCommand = "swap"
         else:
-            servo_selected = int(msg.select[5:])
+            #servo_selected = int(msg.select[5:])
+            if (msg.select == "oreja izq"): 
+                servo_selected = 0
+                self.servos_state.servo0 = msg.pos
+            elif (msg.select == "boca"): 
+                servo_selected = 1
+                self.servos_state.servo1 = msg.pos
+            elif (msg.select == "ceja izq"): 
+                servo_selected = 2
+                self.servos_state.servo2 = msg.pos
+            elif (msg.select == "oreja der"): 
+                servo_selected = 3
+                self.servos_state.servo3 = msg.pos
+            elif (msg.select == "ceja der"): 
+                servo_selected = 4
+                self.servos_state.servo4 = msg.pos
             self.head.moveServoTo(servo_selected, msg.pos)
             self.servos_state.lastCommand = "servo "+str(servo_selected)+": simple movement"
-            if (servo_selected==0): self.servos_state.servo0 = msg.pos
-            elif (servo_selected==1): self.servos_state.servo1 = msg.pos
-            elif (servo_selected==2): self.servos_state.servo2 = msg.pos
-            elif (servo_selected==3): self.servos_state.servo3 = msg.pos
-            elif (servo_selected==4): self.servos_state.servo4 = msg.pos
     def process_led_command(self, msg):
         if (msg.led == "surprised"):
             self.head.sendSurprised()

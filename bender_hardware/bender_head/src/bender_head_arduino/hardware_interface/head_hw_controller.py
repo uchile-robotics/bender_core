@@ -1,8 +1,12 @@
 #!/usr/bin/python
 
+import sys
 import time
 #from dynamixel_driver.dynamixel_io import DynamixelIO
 from dynamixel_io import DynamixelIO
+
+sys.path.append('/home/hernan/fuerte_workspace/bender/bender_head_arduino/src/hardware_interface')
+#set PYTHONPATH=/home/hernan/fuerte_workspace/bender/bender_head_arduino/src/hardware_interface
 
 # NON ROS HARDWARE INTERFACE
 
@@ -28,7 +32,7 @@ class HeadHW(object):
 	def __init__(self, dxl_io, dev_id = 1):
 		self.dxl = dxl_io
 		self.id = dev_id
-		self.state = 0
+		self.state = [0]
 
 	def ping(self):
 		result = []
@@ -46,7 +50,8 @@ class HeadHW(object):
 		except Exception as e:
 			print 'Exception thrown while reading addres %d' % (state_variable)
 			return e
-		self.state = result[5]
+		if (state_variable == LED_COLOR_STATE): self.state = [(result[5] & int('0b00110000',2))>>4, (result[5] & int('0b00001100',2))>>2, (result[5] & int('0b00000011',2))]
+		else: self.state = [result[5]]
 		return self.state
 
 	def select_command(self, com = 1):
@@ -90,15 +95,16 @@ class HeadHW(object):
 		for pos in range(180,0,-10):
 			for servo_i in range(5): self.moveServoTo(servo_i, pos)
 
-	def updateLedColor(self, numLed, color):
+	def updateLedColor(self, numLed, r_color, g_color, b_color):
 		if (numLed < 0) or (numLed > 36):
 			print 'command %d out of range' % (com)
 			#return
 		result = []
+		color_code = (r_color<<4) | (g_color<<2) | b_color
 		try:
 			result1 = self.dxl.write(self.id, LED_SELECT_STATE, [numLed])	# select LED i-esimo
 			time.sleep(0.001)
-			result2 = self.dxl.write(self.id, LED_COLOR_STATE, [color]) 	# send new color of LED numLed
+			result2 = self.dxl.write(self.id, LED_COLOR_STATE, [color_code]) 	# send new color_code of LED numLed
 			time.sleep(0.001)
 			result3 = self.dxl.write(self.id, LED_SELECT_STATE, [0xFD]) 	# confirm change in color
 			time.sleep(0.001)
@@ -127,15 +133,15 @@ class HeadHW(object):
 		#return result1 & result2
 		return result2
 
-	def changeLedColor(self, numLed, color):
-		self.updateLedColor(numLed, color)
+	def changeLedColor(self, numLed, rgb_color):
+		self.updateLedColor(numLed, rgb_color[0], rgb_color[1], rgb_color[2])
 		self.updateLedColor_ready()
 
-	def set_eye_colors(self, eye, colors):
+	def set_eye_colors(self, eye, rgb_colors):
 		if (eye!="left" and eye!="right"):
 			print "parameter eye must be <left> or <right>, <%s> given" %(eye)
 			return
-		if len(colors)!=16:
+		if len(rgb_colors)!=16:
 			print "bad number of colors: %d. Must be 16" %(len(colors))
 			return
 		if (eye=="left"):
@@ -146,49 +152,90 @@ class HeadHW(object):
 			#print "right"
 			first_led = 16
 			last_led = 32
-		#print "colors_size = %d" %(len(colors))
 		for i_led in range(first_led,last_led,1):
-			color = colors[i_led-16]
-			self.updateLedColor(i_led, color)
-			#print "led_updated %d" %(i_led)
+			r_color = rgb_colors[i_led-16][0]
+			g_color = rgb_colors[i_led-16][1]
+			b_color = rgb_colors[i_led-16][2]
+			self.updateLedColor(i_led, r_color, g_color, b_color)
 		self.updateLedColor_ready()
 
-	def set_this_leds_to(self, leds, colors):
-		if (len(leds)!=len(colors)):
+	def set_this_leds_to(self, leds, rgb_colors):
+		if (len(leds)!=len(rgb_colors)):
 			print "The number of LEDs must be the same as the number of colors. %d leds and %d colors given"
 			return
-		for i_led in range(len(leds)): self.updateLedColor(leds[i_led], colors[i_led])
+		for i_led in range(len(leds)): self.updateLedColor(leds[i_led], rgb_colors[i_led][0], rgb_colors[i_led][1], rgb_colors[i_led][2])
 		self.updateLedColor_ready()
 
 	def sendSurprised(self): #implement with 'set_eye_colors'
-		global black, red, green, blue
-		colors = [blue,blue,blue,red,red,red,black,black,black,blue,red,blue,green,green,green,green]
-		self.set_eye_colors("left", colors)
-		self.set_eye_colors("right", colors)
+		black = [0,0,0]
+		red = [3,0,0]
+		green = [0,3,0]
+		blue = [0,0,3]
+		rgb_colors = [blue,blue,blue,red,red,red,black,black,black,blue,red,blue,green,green,green,green]
+		self.set_eye_colors("left", rgb_colors)
+		self.set_eye_colors("right", rgb_colors)
 
 	def sendAngry(self): #implement with 'set_eye_colors'
-		global black, red, green, blue
-		colors = [green,green,green,blue,blue,blue,blue,blue,blue,blue,blue,blue,green,green,green,green]
-		self.set_eye_colors("left", colors)
-		self.set_eye_colors("right", colors)
+		black = [0,0,0]
+		red = [3,0,0]
+		green = [0,3,0]
+		blue = [0,0,3]
+		rgb_colors = [green,green,green,blue,blue,blue,blue,blue,blue,blue,blue,blue,green,green,green,green]
+		self.set_eye_colors("left", rgb_colors)
+		self.set_eye_colors("right", rgb_colors)
 
 	def sendResetColors(self): #implement with 'set_eye_colors'
-		global black, red, green, blue
-		colors = [black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black]
-		self.set_eye_colors("left", colors)
-		self.set_eye_colors("right", colors)
+		black = [0,0,0]
+		rgb_colors = [black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black]
+		self.set_eye_colors("left", rgb_colors)
+		self.set_eye_colors("right", rgb_colors)
+
+	def color_palette1(self):
+		led = 0
+		rgb_colors_l = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+		rgb_colors_r = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+		for g in range(4):
+			for b in range(4):
+				rgb_colors_l[led] = [0,g,b]
+				led+= 1
+		led=0
+		for g in range(4):
+			for b in range(4):
+				rgb_colors_r[led] = [1,g,b]
+				led+= 1
+		self.set_eye_colors("left", rgb_colors_l)
+		self.set_eye_colors("right", rgb_colors_r)
+
+	def color_palette2(self):
+		led = 0
+		rgb_colors_l = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+		rgb_colors_r = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+		for g in range(4):
+			for b in range(4):
+				rgb_colors_l[led] = [2,g,b]
+				led+= 1
+		led=0
+		for g in range(4):
+			for b in range(4):
+				rgb_colors_r[led] = [3,g,b]
+				led+= 1
+		self.set_eye_colors("left", rgb_colors_l)
+		self.set_eye_colors("right", rgb_colors_r)
 
 	def sendHappy(self): #implement with 'set_this_leds_to'
-		global black, red, green, blue
+		black = [0,0,0]
+		red = [3,0,0]
+		green = [0,3,0]
+		blue = [0,0,3]
 		leds_left_eye = [0,1,2,13,14,15]
 		leds_right_eye = [16,17,18,29,30,31]
-		colors = [green,green,blue,blue,green,green]
-		self.set_this_leds_to(leds_left_eye, colors)
-		self.set_this_leds_to(leds_right_eye, colors)
+		rgb_colors = [green,green,blue,blue,green,green]
+		self.set_this_leds_to(leds_left_eye, rgb_colors)
+		self.set_this_leds_to(leds_right_eye, rgb_colors)
 
 if __name__ == '__main__':
 	import time
-	DEV_ID = 0
+	DEV_ID = 1
 	dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
 	head = HeadHW(dxl, dev_id = DEV_ID)
 	while True:
