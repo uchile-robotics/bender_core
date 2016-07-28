@@ -10,8 +10,8 @@ from servos_hw import ServosHW
 from eye_emotions import EyeEmotion
 from facial_gestures import FacialGestures
 
-class FacialExpressions(object, eye_emotions, facial_gestures):
-	def __init__(self):
+class FacialExpressions(object):
+	def __init__(self, eye_emotions, facial_gestures):
 		self.eye_emotions = eye_emotions
 		self.facial_gestures = facial_gestures
 		self.actual_expresion = ""
@@ -31,6 +31,10 @@ class FacialExpressions(object, eye_emotions, facial_gestures):
 	def sad(self):
 		self.eye_emotions.sad()
 		self.facial_gestures.sad()
+		
+	def veryHappy(self):
+		self.eye_emotions.happy()
+		self.facial_gestures.veryHappy()
 
 	def default(self):
 		self.eye_emotions.color_palette1()

@@ -2,9 +2,10 @@
 
 __author__ = 'gdiaz'
 
+import sys
 import math
 import rospy
-
+sys.path.append('/home/hernan/fuerte_workspace/bender/bender_head_arduino/src')
 from threading import Thread
 
 from std_msgs.msg import Bool, Int16, String
@@ -55,15 +56,17 @@ class ROSFacialExpressions:
         self.state_pub.unregister()
 
     def process_command(self, msg):
-        if (msg.expressions == "surprised"):
+        if (msg.expression == "surprised"):
             self.facial_expressions.surprised()
-        elif (msg.expressions == "angry"):
+        elif (msg.expression == "angry"):
             self.facial_expressions.angry()
-        elif (msg.expressions == "happy"):
+        elif (msg.expression == "happy"):
             self.facial_expressions.happy()
-        elif (msg.expressions == "sad"):
-            self.facial_expressions.angry()
-        elif (msg.expressions == "default"):
+        elif (msg.expression == "sad"):
+            self.facial_expressions.sad()
+        elif (msg.expression == "veryHappy"):
+            self.facial_expressions.veryHappy()
+        elif (msg.expression == "default"):
             self.facial_expressions.default()
 
     def update_state(self):

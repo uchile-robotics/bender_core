@@ -7,8 +7,8 @@ import time
 # Use HW controller
 from head_hw_controller import HeadHWController
 
-class EyeEmotion(object, hw_controller):
-	def __init__(self):
+class EyeEmotion(object):
+	def __init__(self, hw_controller):
 		self.hw_controller = hw_controller
 
 	def surprised(self): #implemented with 'set_eye_colors'
@@ -25,7 +25,8 @@ class EyeEmotion(object, hw_controller):
 		red = [3,0,0]
 		green = [0,3,0]
 		blue = [0,0,3]
-		rgb_colors = [green,green,green,blue,blue,blue,blue,blue,blue,blue,blue,blue,green,green,green,green]
+		yellow = [3,3,0]
+		rgb_colors = [red,red,red,red,yellow,yellow,black,black,black,red,black,black,green,green,green,green]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
 		self.hw_controller.set_eye_colors("right", rgb_colors)
 		
@@ -41,11 +42,15 @@ class EyeEmotion(object, hw_controller):
 		red = [3,0,0]
 		green = [0,3,0]
 		blue = [0,0,3]
-		leds_left_eye = [0,1,2,13,14,15]
-		leds_right_eye = [16,17,18,29,30,31]
-		rgb_colors = [green,green,blue,blue,green,green]
-		self.hw_controller.set_this_leds_to(leds_left_eye, rgb_colors)
-		self.hw_controller.set_this_leds_to(leds_right_eye, rgb_colors)
+		yellow = [3,3,0]
+		#leds_left_eye = [0,1,2,13,14,15]
+		#leds_right_eye = [16,17,18,29,30,31]
+		#rgb_colors = [green,green,blue,blue,green,green]
+		#self.hw_controller.set_this_leds_to(leds_left_eye, rgb_colors)
+		#self.hw_controller.set_this_leds_to(leds_right_eye, rgb_colors)
+		rgb_colors = [black,black,black,black,yellow,yellow,black,black,black,black,yellow,yellow,yellow,yellow,black,black]
+		self.hw_controller.set_eye_colors("left", rgb_colors)
+		self.hw_controller.set_eye_colors("right", rgb_colors)
 
 	def reset(self): #implemented with 'set_eye_colors'
 		black = [0,0,0]

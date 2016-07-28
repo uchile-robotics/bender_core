@@ -8,15 +8,15 @@ import time
 from head_hw_controller import HeadHWController
 from servos_hw import ServosHW
 
-class FacialGestures(object, servos_hw):
-	def __init__(self):
+class FacialGestures(object):
+	def __init__(self, servos_hw):
 		self.servos_hw = servos_hw
 
 	def surprised(self):
 		self.servos_hw.left_ear(90)
 		self.servos_hw.right_ear(90)
-		self.servos_hw.left_eyebrow(60)
-		self.servos_hw.right_eyebrow(70)
+		self.servos_hw.left_eyebrow(82)
+		self.servos_hw.right_eyebrow(55)
 		self.servos_hw.mouth(90)
 
 	def angry(self):
@@ -30,7 +30,7 @@ class FacialGestures(object, servos_hw):
 		self.servos_hw.left_ear(70)
 		self.servos_hw.right_ear(70)
 		self.servos_hw.left_eyebrow(70)
-		self.servos_hw.right_eyebrow(70)
+		self.servos_hw.right_eyebrow(65)
 		self.servos_hw.mouth(20)
 
 	def sad(self):
@@ -39,6 +39,28 @@ class FacialGestures(object, servos_hw):
 		self.servos_hw.left_eyebrow(90)
 		self.servos_hw.right_eyebrow(90)
 		self.servos_hw.mouth(0)
+		
+	def veryHappy(self):		
+		self.servos_hw.left_eyebrow(70)
+		self.servos_hw.right_eyebrow(70)
+		self.servos_hw.mouth(20)
+		self.servos_hw.left_ear(40)
+		self.servos_hw.right_ear(40)
+		time.sleep(0.2)
+		self.servos_hw.left_ear(20)
+		self.servos_hw.right_ear(20)
+		time.sleep(0.2)
+		self.servos_hw.left_ear(60)
+		self.servos_hw.right_ear(60)
+		time.sleep(0.2)
+		self.servos_hw.left_ear(30)
+		self.servos_hw.right_ear(30)
+		time.sleep(0.2)
+		self.servos_hw.left_ear(50)
+		self.servos_hw.right_ear(50)
+		time.sleep(0.2)
+		self.servos_hw.left_ear(40)
+		self.servos_hw.right_ear(40)
 		
 	def default(self):
 		self.servos_hw.left_ear(100)
