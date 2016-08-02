@@ -5,8 +5,8 @@ import time
 #from dynamixel_driver.dynamixel_io import DynamixelIO
 from dynamixel_io import DynamixelIO
 
-sys.path.append('/home/hernan/fuerte_workspace/bender/bender_head_arduino/src/hardware_interface')
-#set PYTHONPATH=/home/hernan/fuerte_workspace/bender/bender_head_arduino/src/hardware_interface
+sys.path.append('/home/bender-chest/bender_ws/base_ws/src/bender_hardware/bender_head/src/bender_head_arduino/hardware_interface')
+#set PYTHONPATH=/home/bender-chest/bender_ws/base_ws/src/bender_hardware/bender_head/src/bender_head_arduino/hardware_interface
 
 # NON ROS HARDWARE INTERFACE
 

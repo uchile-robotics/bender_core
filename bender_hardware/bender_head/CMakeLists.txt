@@ -10,6 +10,12 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
 )
 
+add_message_files(FILES
+  ExpressionCommand.msg
+  )
+
+generate_messages(DEPENDENCIES bender_msgs)
+
 catkin_python_setup()
 
 ###################################

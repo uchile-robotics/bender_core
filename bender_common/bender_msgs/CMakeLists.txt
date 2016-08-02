@@ -47,6 +47,7 @@ add_message_files(
   Num.msg 
   ServoCommand.msg 
   ServoState.msg 
+  ExpressionCommand.msg
 )
 
 # Generate added messages and services with any dependencies listed here

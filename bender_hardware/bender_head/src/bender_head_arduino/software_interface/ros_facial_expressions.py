@@ -5,11 +5,11 @@ __author__ = 'gdiaz'
 import sys
 import math
 import rospy
-sys.path.append('/home/hernan/fuerte_workspace/bender/bender_head_arduino/src')
+sys.path.append('/home/bender-chest/bender_ws/base_ws/src/bender_hardware/bender_head/src/bender_head_arduino')
 from threading import Thread
 
 from std_msgs.msg import Bool, Int16, String
-from bender_head_arduino.msg import ExpressionCommand
+from bender_msgs.msg import ExpressionCommand
 
 # Use HW interface
 from head_hw_controller import HeadHWController
@@ -47,7 +47,7 @@ class ROSFacialExpressions:
 		#subscribers
         self.command_sub = rospy.Subscriber(self.controller_namespace + '/expression_command', ExpressionCommand, self.process_command)
        #publishers
-        self.state_pub = rospy.Publisher(self.controller_namespace + '/expression_state', ExpressionCommand)
+        self.state_pub = rospy.Publisher(self.controller_namespace + '/expression_state', ExpressionCommand, queue_size=10)
         Thread(target=self.update_state).start()
 
     def stop(self):

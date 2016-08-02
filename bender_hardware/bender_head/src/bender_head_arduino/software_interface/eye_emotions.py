@@ -18,7 +18,7 @@ class EyeEmotion(object):
 		blue = [0,0,3]
 		rgb_colors = [blue,blue,blue,red,red,red,black,black,black,blue,red,blue,green,green,green,green]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
-		self.hw_controller.set_eye_colors("right", rgb_colors)
+		self.hw_controller.set_eye_colors("right", list(reversed(rgb_colors)))
 
 	def angry(self): #implemented with 'set_eye_colors'
 		black = [0,0,0]
