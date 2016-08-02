@@ -1,0 +1,133 @@
+# Archivo de descripcion de limites de hardware
+# min_angle = cw_angle_limit
+# max_angle = ccw_angle_limit
+# flipped: True sentido de giro contrario, usar min > max en config Position Controller
+# flipped: False sentido de giro normal
+
+r_shoulder_pitch_joint:
+  id: 11
+  model: 'mx106'
+  init: 2055
+  max: 3330
+  min: 1050
+  flipped: False
+
+l_shoulder_pitch_joint:
+  id: 1
+  model: 'mx106'
+  init: 2055
+  max: 3060
+  min: 780
+  flipped: True
+# Motor no simetrico!
+r_shoulder_roll_joint:
+  id: 12
+  model: 'ex106'
+  init: 2090
+  max: 3510
+  min: 1861
+  flipped: False
+
+l_shoulder_roll_joint:
+  id: 2
+  model: 'mx106'
+  init: 2590
+  max: 2750
+  min: 1600
+  flipped: True
+
+r_shoulder_yaw_joint:
+  id: 13
+  model: 'rx64'
+  init: 310
+  max: 605
+  min: 35
+  flipped: True
+
+l_shoulder_yaw_joint:
+  id: 3
+  model: 'rx64'
+  init: 435
+  max: 730
+  min: 160
+  flipped: True
+
+r_elbow_pitch_joint:
+  id: 14
+  model: 'mx106'
+  init: 2080
+  max: 3250
+  min: 1400
+  flipped: False
+
+l_elbow_pitch_joint:
+  id: 4
+  model: 'mx106'
+  init: 2080
+  max: 3250
+  min: 1400
+  flipped: False
+
+r_elbow_yaw_joint:
+  id: 15
+  model: 'rx64'
+  init: 590
+  max: 830
+  min: 370
+  flipped: False
+
+l_elbow_yaw_joint:
+  id: 5
+  model: 'rx64'
+  init: 430
+  max: 650
+  min: 190
+  flipped: False
+
+l_wrist_pitch_joint:
+  id: 6
+  model: 'rx28'
+  init: 320
+  max: 565
+  min: 105
+  flipped: False
+
+r_wrist_pitch_joint:
+  id: 16
+  model: 'rx28'
+  init: 585
+  max: 800
+  min: 340
+  flipped: True
+
+l_int_finger_joint:
+  id: 8
+  model: 'rx28'
+  init: 455
+  max: 465
+  min: 315
+  flipped: True
+
+r_int_finger_joint:
+  id: 18
+  model: 'rx28'
+  init: 490
+  max: 500
+  min: 350
+  flipped: True
+
+l_ext_finger_joint:
+  id: 7
+  model: 'rx28'
+  init: 740
+  max: 880
+  min: 730
+  flipped: False
+
+r_ext_finger_joint:
+  id: 17
+  model: 'rx28'
+  init: 815
+  max: 955
+  min: 805
+  flipped: True

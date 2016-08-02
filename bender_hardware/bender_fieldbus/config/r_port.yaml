@@ -1,0 +1,9 @@
+# Config for r_arm, r_gripper and rgbd head
+namespace: r_port_manager
+serial_ports:
+  r_port:
+    port_name: "/dev/bender/r_port"
+    baud_rate: 200000
+    min_motor_id: 11
+    max_motor_id: 21
+    update_rate: 30
