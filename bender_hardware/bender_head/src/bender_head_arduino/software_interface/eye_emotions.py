@@ -11,7 +11,7 @@ class EyeEmotion(object):
 	def __init__(self, hw_controller):
 		self.hw_controller = hw_controller
 
-	def surprised(self): #implemented with 'set_eye_colors'
+	def surprised(self): #implemented with 'set_eye_colors
 		black = [0,0,0]
 		red = [3,0,0]
 		green = [0,3,0]
