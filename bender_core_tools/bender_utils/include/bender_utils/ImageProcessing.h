@@ -48,6 +48,7 @@ public:
 
 	std::string _imageRGB_topic;
 	std::string _imageDepth_topic;
+  std::vector < std::string > win_name;
 
 	sensor_msgs::ImageConstPtr image_in;
 	sensor_msgs::ImageConstPtr depth_in;
@@ -71,8 +72,8 @@ protected:
   void _process_image(const sensor_msgs::ImageConstPtr& img);
   void _process_depth(const sensor_msgs::ImageConstPtr& img);
 
-  void Display(std::string win_name, cv::Mat frame, std::vector<cv::Rect> faces, cv::Scalar s);
-  void Display(  std::string win_name, cv::Mat frame);
+  void Display(std::string win, cv::Mat frame, std::vector<cv::Rect> faces, cv::Scalar s);
+  void Display(  std::string win, cv::Mat frame);
 
 public:
 	bool _active_service_RGB(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res);
@@ -80,7 +81,7 @@ public:
   bool _active_service_D(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res);
   bool _active_service_RGB_D(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res); 
   void set_topics (std::string rgb, std::string depth);
-
+  bool set_display(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res);
 };
 
 
@@ -89,6 +90,22 @@ public:
     _imageDepth_topic = depth;
   }
 
+  bool ImageProcessing::set_display(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res) {   
+    if(req.select==display)return true;
+    display = req.select;
+
+    if(display){
+         cv::startWindowThread();
+         for (int i = 0; i < win_name.size(); ++i)
+            cv::namedWindow(win_name[i], cv::WINDOW_AUTOSIZE );
+    }
+    else{
+        cv::destroyAllWindows();
+        cv::waitKey(10);
+    }
+    
+    return true;
+  }
 
  ImageProcessing::ImageProcessing(std::string name) {
 
@@ -247,7 +264,7 @@ bool ImageProcessing::_active_service_RGB_D(bender_srvs::Onoff::Request  &req, b
 
 
 
-void ImageProcessing::Display(  std::string win_name, cv::Mat img_in, std::vector<cv::Rect> faces, cv::Scalar s = cv::Scalar(255, 0, 0)) {
+void ImageProcessing::Display(std::string win, cv::Mat img_in, std::vector<cv::Rect> faces, cv::Scalar s = cv::Scalar(255, 0, 0)) {
 
   cv::Mat frame = img_in.clone();
     for (unsigned int i = 0; i < faces.size(); i++) {
@@ -256,12 +273,12 @@ void ImageProcessing::Display(  std::string win_name, cv::Mat img_in, std::vecto
                         faces[i].y + faces[i].height), s ,5);
     }
 
-    imshow(win_name, frame);
+    imshow(win, frame);
     cv::waitKey(10);
 }
 
-void ImageProcessing::Display(  std::string win_name, cv::Mat frame) {
-    imshow(win_name, frame);
+void ImageProcessing::Display(  std::string win, cv::Mat frame) {
+    imshow(win, frame);
     cv::waitKey(10);
 }
 
