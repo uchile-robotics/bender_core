@@ -12,8 +12,8 @@ installer="${bold}[bender_fieldbus]:${reset}"
 
 #  - - - - - - - - - Install Rules - - - - - - - - - - - 
 echo "$installer Installing udev rules"
-sudo cp -f install/l_port.rules /etc/udev/rules.d/l_port.rules
-sudo cp -f install/r_port.rules /etc/udev/rules.d/r_port.rules
+sudo cp -f install/10-l_port.rules /etc/udev/rules.d/10-l_port.rules
+sudo cp -f install/10-r_port.rules /etc/udev/rules.d/10-r_port.rules
 sudo udevadm control --reload
 
 #  - - - - - - - - - Port Permissions  - - - - - - - - - 
