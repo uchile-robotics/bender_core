@@ -155,7 +155,7 @@ class CalibrationNode:
         self.q_stereo.append((lmsg, rmsg))
 
     def handle_monocular(self, msg):
-        if self.c is None:
+        if self.c == None:
             if self._camera_name:
                 self.c = MonoCalibrator(self._boards, self._calib_flags, self._pattern, name=self._camera_name,
                                         checkerboard_flags=self._checkerboard_flags)
@@ -169,7 +169,7 @@ class CalibrationNode:
         self.redraw_monocular(drawable)
 
     def handle_stereo(self, msg):
-        if self.c is None:
+        if self.c == None:
             if self._camera_name:
                 self.c = StereoCalibrator(self._boards, self._calib_flags, self._pattern, name=self._camera_name,
                                           checkerboard_flags=self._checkerboard_flags)
@@ -293,16 +293,16 @@ class OpenCVCalibrationNode(CalibrationNode):
         self.buttons(display)
         if not self.c.calibrated:
             if drawable.params:
-                for i, (label, lo, hi, progress) in enumerate(drawable.params):
-                    (w, ) = self.getTextSize(label)
+                 for i, (label, lo, hi, progress) in enumerate(drawable.params):
+                    (w,_) = self.getTextSize(label)
                     self.putText(display, label, (width + (100 - w) / 2, self.y(i)))
                     color = (0,255,0)
                     if progress < 1.0:
                         color = (0, int(progress*255.), 255)
                     cv2.line(display,
-                        (int(width + lo * 100), self.y(i) + 20),
-                        (int(width + hi * 100), self.y(i) + 20),
-                        color, 4)
+                            (int(width + lo * 100), self.y(i) + 20),
+                            (int(width + hi * 100), self.y(i) + 20),
+                            color, 4)
 
         else:
             self.putText(display, "lin.", (width, self.y(0)))
