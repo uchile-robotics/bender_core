@@ -1,0 +1,20 @@
+image_width: 640
+image_height: 480
+camera_name: asus_head
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [542.558548, 0.000000, 320.416033, 0.000000, 543.396774, 243.943490, 0.000000, 0.000000, 1.000000]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [0.042525, -0.089539, 0.005236, 0.000235, 0.000000]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [544.531555, 0.000000, 320.063037, 0.000000, 0.000000, 545.080200, 245.221186, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]
