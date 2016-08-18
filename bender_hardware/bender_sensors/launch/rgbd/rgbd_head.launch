@@ -6,6 +6,7 @@
 	 -->
 
 	<arg name="device" value="$(env BENDER_RGBD_DEVICE_HEAD)"/>
+	<arg name="calibrate" default="false"/>
 	<include file="$(find bender_sensors)/launch/rgbd/$(arg device)/$(arg device)_head.launch"/>
 
 </launch>
