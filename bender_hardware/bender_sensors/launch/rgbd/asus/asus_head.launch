@@ -4,13 +4,13 @@
 	  You can see the list with the available device id's on
 	'install/depth_devices.sh' (in this pkg).
 	 -->
-	<arg name="calibrate" 	default="false"/>
+	<arg name="calibrated" 	default="true"/>
 	<!-- Openni for head asus -->
 	<include file="$(find bender_sensors)/launch/rgbd/asus/asus.launch">
 		<arg name="asus_name"   value="rgbd_head"              />
 		<arg name="device_id"   value="$(env BENDER_RGBD_HEAD_ID)"/>
 		<arg name="publish_tf"  value="false"/>
-		<arg name="calibrate" 	value="$(arg calibrate)"/>
+		<arg name="calibrated" 	value="$(arg calibrated)"/>
 
 	</include>
 

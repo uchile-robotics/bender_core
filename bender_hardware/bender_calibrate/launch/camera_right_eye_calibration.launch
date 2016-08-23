@@ -1,0 +1,36 @@
+<launch>
+
+	<!-- Calibration for right eye camera calibration-->
+
+	<!-- ASUS head launch -->
+	<arg name="display" value="true"/>
+	<arg name="camera_name" default="camera_right_eye"/>
+	<arg name="video_device" default="/dev/video1"/>
+	<arg name="framerate" default="30"/>
+	<arg name="pixel_format" default="yuyv"/>
+	<arg name="calibrated" value="false"/>
+
+	<include file="$(find bender_sensors)/launch/camera/camera_right_eye.launch">
+		<arg name="calibrated" value="$(arg calibrated)"/>
+		<arg name="camera_name" value="$(arg camera_name)"/>
+		<arg name="video_device" value="$(arg video_device)"/>
+		<arg name="framerate" value="$(arg framerate)"/>
+		<arg name="pixel_format" value="$(arg pixel_format)"/>
+		<arg name="display" value="$(arg display)"/>
+	</include>
+
+	<node name="cameracalibrator" pkg="bender_calibrate" type="cameracalibrator.py">
+		<!-- rosrun needed args for calibration:
+		size is the number of inner corners in the chessboard,
+		square is the length of a single square in meters 
+		-->
+		<param name="--size" value="8x6"/>
+		<param name="--square" value="0.2"/>
+
+		<!-- image corresponds to the topic where the camera is publishing the raw image data,
+		camera is the name the program will have for the camera -->
+		<param name="image" value="bender/sensors/camera_right_eye/image_raw"/>
+		<param name="camera" value="bender/sensors/camera_right_eye"/>
+	</node>
+
+</launch>
