@@ -11,12 +11,14 @@
 
 	<arg name="image" default="bender/sensors/rgbd_head/rgb/image_raw"/>
 	<arg name="camera" default="bender/sensors/rgbd_head/rgb"/>
-	<arg name="data" default="--size 8x6 --square 0.2"/>
+	<arg name="square" default="0.2" />
+	<arg name="size" default="9x6" />
 
-	<include file="$(file bender_calibrate)/launch/calibrator.launch">
+	<include file="$(find bender_calibrate)/launch/calibrator.launch">
 		<arg name="image" default="$(arg image)"/>
 		<arg name="camera" default="$(arg camera)"/>
-		<arg name="data" default="$(arg data)"/>
+		<arg name="square" default="$(arg square)"/>
+		<arg name="size" default="$(arg size)"/>
 	</include>
 
 	

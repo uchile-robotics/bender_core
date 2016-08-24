@@ -19,18 +19,16 @@
 		<arg name="display" value="$(arg display)"/>
 	</include>
 
-	<node name="cameracalibrator" pkg="bender_calibrate" type="cameracalibrator.py">
-		<!-- rosrun needed args for calibration:
-		size is the number of inner corners in the chessboard,
-		square is the length of a single square in meters 
-		-->
-		<param name="--size" value="8x6"/>
-		<param name="--square" value="0.2"/>
+	<arg name="image" value="bender/sensors/camera_right_eye/image_raw"/>
+	<arg name="camera" value="bender/sensors/camera_right_eye"/>
+	<arg name="square" default="0.2" />
+	<arg name="size" default="9x6" />
 
-		<!-- image corresponds to the topic where the camera is publishing the raw image data,
-		camera is the name the program will have for the camera -->
-		<param name="image" value="bender/sensors/camera_right_eye/image_raw"/>
-		<param name="camera" value="bender/sensors/camera_right_eye"/>
-	</node>
+	<include file="$(find bender_calibrate)/launch/calibrator.launch">
+		<arg name="image" default="$(arg image)"/>
+		<arg name="camera" default="$(arg camera)"/>
+		<arg name="square" default="$(arg square)"/>
+		<arg name="size" default="$(arg size)"/>
+	</include>
 
 </launch>

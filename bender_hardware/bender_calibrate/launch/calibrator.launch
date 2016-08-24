@@ -1,15 +1,11 @@
 <launch>
 
+	
 	<arg name="image" default="bender/sensors/rgbd_head/rgb/image_raw"/>
 	<arg name="camera" default="bender/sensors/rgbd_head/rgb"/>
-	<arg name="data" default="--size 8x6 --square 0.2"/>
+	<arg name="square" default="0.2" />
+	<arg name="size" default="9x6" />
 
-	<node name="cameracalibrator" pkg="bender_calibrate" type="cameracalibrator.py" args="$(arg data)">
+	<node name="cameracalibrator" pkg="bender_calibrate" type="cameracalibrator.py" args="--size $(arg size) --square $(arg square) image:=$(arg image) camera:=$(arg camera)"/>
 
-		<!-- image corresponds to the topic where the camera is publishing the raw image data,
-		camera is the name the program will have for the camera -->
-		<param name="image" value="$(arg image)"/>
-		<param name="camera" value="$(arg camera)"/>
-
-	</node>
 </launch>
