@@ -3,7 +3,7 @@
 	<!-- Calibration for right eye camera calibration-->
 
 	<!-- ASUS head launch -->
-	<arg name="display" value="true"/>
+	<arg name="display" value="false"/>
 	<arg name="camera_name" default="camera_right_eye"/>
 	<arg name="video_device" default="/dev/video1"/>
 	<arg name="framerate" default="30"/>

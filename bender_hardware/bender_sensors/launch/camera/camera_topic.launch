@@ -39,17 +39,19 @@
 	</node>
 
 	<!-- Display -->
-	<node pkg="image_view" type="image_view" name="image_view"  if="$(arg display)" >
-
-		<group if="$(arg calibrated)">
-			<node ns="/bender/sensors/$(arg camera_name)" pkg="image_proc" type="image_proc" name="image_proc"/>
+	<group if="$(arg calibrated)">
+		<node ns="/bender/sensors/$(arg camera_name)" pkg="image_proc" type="image_proc" name="image_proc"/>
+		<node pkg="image_view" type="image_view" name="image_view"  if="$(arg display)" >
 			<remap from="image" to="/bender/sensors/$(arg camera_name)/image_rect"/>
-		</group>
-		<group unless="$(arg calibrated)">
+			<param name="autosize" value="false" />
+		</node>
+	</group>
+	<group unless="$(arg calibrated)">
+		<node pkg="image_view" type="image_view" name="image_view"  if="$(arg display)" >
 			<remap from="image" to="/bender/sensors/$(arg camera_name)/image_raw"/>
-		</group>
-		<param name="autosize" value="false" />
-	</node>
+			<param name="autosize" value="false" />
+		</node>
+	</group>
 
 </launch>
 
