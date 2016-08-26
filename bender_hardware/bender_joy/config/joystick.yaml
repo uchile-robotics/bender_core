@@ -21,8 +21,8 @@ a_idx_base_linear:  1 # LS up, down
 b_idx_pause: 7 # Start
 
 # Other
-factor_linear: 0.7
-factor_angular: 0.6
+nav_factor_linear: 0.4
+nav_factor_angular: 0.3
 
 # speech
 speech_phrases: [
