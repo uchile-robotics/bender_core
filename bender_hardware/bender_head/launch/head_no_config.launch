@@ -5,10 +5,10 @@
 
 	<!-- bender head -->
 	<node name="head" pkg="bender_head" type="ros_facial_expressions.py" ns="/bender/hw" output="screen">
-		<remap from="expressions_controller/expression_command" to="bender/hw/expressions/expression_command"/>
-		<remap from="expression_list" to="bender/hw/expressions/expression_list"/>
-		<remap from="expression_state" to="bender/hw/expressions/expression_state"/>
-		<remap from="expression_joystick_cmd" to="bender/hw/head/cmd"/>
+		<!--remap from="expressions/expression_command" to="bender/hw/expressions/expression_command"/>
+		<remap from="expressions/expression_list" to="bender/hw/expressions/expression_list"/>
+		<remap from="expressions/expression_state" to="bender/hw/expressions/expression_state"/>
+		<remap from="expressions/expression_joystick_cmd" to="bender/hw/head/cmd"/-->
 	</node>
 
 	<!-- Launch selected port -->

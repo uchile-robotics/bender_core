@@ -53,11 +53,16 @@ class ROSFacialExpressions:
         # Create subs, services, publishers, threads
         self.running = True
 		#subscribers
-        self.command_sub = rospy.Subscriber(self.controller_namespace + '/expression_command', ExpressionCommand, self.process_command)
-        self.expressionsList_sub = rospy.Subscriber(self.controller_namespace + '/expression_list', Empty, self.list_expressions)
-        self.joystick_sub = rospy.Subscriber(self.controller_namespace + '/expression_joystick_cmd', Emotion, self.joystick_cmd)
+        #self.command_sub = rospy.Subscriber(self.controller_namespace + '/expression_command', ExpressionCommand, self.process_command)
+        #self.expressionsList_sub = rospy.Subscriber(self.controller_namespace + '/expression_list', Empty, self.list_expressions)
+        self.command_sub = rospy.Subscriber('/bender/hw/bender/hw/expressions/expression_command', ExpressionCommand, self.process_command)
+        self.expressionsList_sub = rospy.Subscriber('/bender/hw/bender/hw/expressions/expression_list', Empty, self.list_expressions)
+        #self.joystick_sub = rospy.Subscriber(self.controller_namespace + '/expression_joystick_cmd', Emotion, self.joystick_cmd)
+        self.joystick_sub = rospy.Subscriber('/bender/hw/head/cmd', Emotion, self.joystick_cmd)
+
        #publishers
         self.state_pub = rospy.Publisher(self.controller_namespace + '/expression_state', ExpressionCommand, queue_size = 50)
+        self.joy_pub = rospy.Publisher('/bender/hw/bender/hw/expressions/expression_command', ExpressionCommand, queue_size = 50)
         Thread(target=self.update_state).start()
 
     def stop(self):
@@ -66,6 +71,7 @@ class ROSFacialExpressions:
         self.expressionsList_sub.unregister()
         self.joystick_sub.unregister()
         self.state_pub.unregister()
+        self.joy_pub.unregister()
 
     def process_command(self, msg):
         if (msg.expression == "surprise"):
@@ -89,7 +95,7 @@ class ROSFacialExpressions:
     def joystick_cmd(self, msg):
         if (msg.Order == "changeFace"):
             self.joystick_msg.expression = msg.Action
-            self.command_sub.publish(self.joystick_msg)
+            self.joy_pub.publish(self.joystick_msg)
 
     def list_expressions(self, msg):
         print("------------------------------------------------------------")
