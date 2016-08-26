@@ -1,8 +1,15 @@
 #!/usr/bin/python
 
+import roslib; roslib.load_manifest('bender_head')
 import time
+import rgb_colors_names as c
 
 # NON ROS HARDWARE INTERFACE
+
+"""In this class possible colors of the LEDs Bender's eyes representing their emotions are defined.
+This is done by "set_eye_colors (eye, rgb_colors)" method of the "HeadHWController" class. For more details see Documentation.
+Seven standard "emotion methods" for eyes's colors have been given.
+Modify to create new emotions based on LEDs colors."""
 
 # Use HW controller
 from head_hw_controller import HeadHWController
@@ -11,50 +18,28 @@ class EyeEmotion(object):
 	def __init__(self, hw_controller):
 		self.hw_controller = hw_controller
 
-	def surprised(self): #implemented with 'set_eye_colors
-		black = [0,0,0]
-		red = [3,0,0]
-		green = [0,3,0]
-		blue = [0,0,3]
-		rgb_colors = [blue,blue,blue,red,red,red,black,black,black,blue,red,blue,green,green,green,green]
+	def surprised(self):
+		rgb_colors = [c.blue,c.blue,c.blue,c.red,c.red,c.red,c.black,c.black,c.black,c.blue,c.red,c.blue,c.green,c.green,c.green,c.green]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
-		self.hw_controller.set_eye_colors("right", list(reversed(rgb_colors)))
+		self.hw_controller.set_eye_colors("right", rgb_colors)
 
-	def angry(self): #implemented with 'set_eye_colors'
-		black = [0,0,0]
-		red = [3,0,0]
-		green = [0,3,0]
-		blue = [0,0,3]
-		yellow = [3,3,0]
-		rgb_colors = [red,red,red,red,yellow,yellow,black,black,black,red,black,black,green,green,green,green]
+	def angry(self):
+		rgb_colors = [c.red,c.red,c.red,c.red,c.yellow2,c.yellow2,c.black,c.black,c.black,c.red,c.black,c.black,c.green,c.green,c.green,c.green]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
 		self.hw_controller.set_eye_colors("right", rgb_colors)
 		
-	def sad(self): #implemented with 'set_eye_colors'
-		black = [0,0,0]
-		blue = [0,0,3]
-		rgb_colors = [black,black,black,blue,black,blue,black,blue,black,blue,black,blue,black,black,black,black]
+	def sad(self):
+		rgb_colors = [c.black,c.black,c.black,c.blue,c.black,c.blue,c.black,c.blue,c.black,c.blue,c.black,c.blue,c.black,c.black,c.black,c.black]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
 		self.hw_controller.set_eye_colors("right", rgb_colors)
 
-	def happy(self): #implemented with 'set_this_leds_to'
-		black = [0,0,0]
-		red = [3,0,0]
-		green = [0,3,0]
-		blue = [0,0,3]
-		yellow = [3,3,0]
-		#leds_left_eye = [0,1,2,13,14,15]
-		#leds_right_eye = [16,17,18,29,30,31]
-		#rgb_colors = [green,green,blue,blue,green,green]
-		#self.hw_controller.set_this_leds_to(leds_left_eye, rgb_colors)
-		#self.hw_controller.set_this_leds_to(leds_right_eye, rgb_colors)
-		rgb_colors = [black,black,black,black,yellow,yellow,black,black,black,black,yellow,yellow,yellow,yellow,black,black]
+	def happy(self):
+		rgb_colors = [c.black,c.black,c.black,c.black,c.yellow3,c.yellow3,c.black,c.black,c.black,c.black,c.yellow3,c.yellow3,c.yellow3,c.yellow3,c.black,c.black]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
 		self.hw_controller.set_eye_colors("right", rgb_colors)
 
-	def reset(self): #implemented with 'set_eye_colors'
-		black = [0,0,0]
-		rgb_colors = [black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black]
+	def apagado(self):
+		rgb_colors = [c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
 		self.hw_controller.set_eye_colors("right", rgb_colors)
 
@@ -97,14 +82,14 @@ if __name__ == '__main__':
 	eyes = EyeEmotion(hw_controller)
 	while True:
 		eyes.surprised()
-		sleep(2)
+		time.sleep(2)
 		eyes.angry()
-		sleep(2)
+		time.sleep(2)
 		eyes.happy()
-		sleep(2)
+		time.sleep(2)
 		eyes.color_palette1()
-		sleep(2)
+		time.sleep(2)
 		eyes.color_palette2()
-		sleep(2)
+		time.sleep(2)
 		eyes.reset()
-		sleep(2)
+		time.sleep(2)

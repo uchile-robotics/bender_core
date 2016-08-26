@@ -1,14 +1,16 @@
 #!/usr/bin/python
 
+import roslib; roslib.load_manifest('bender_head')
 import sys
 import time
 #from dynamixel_driver.dynamixel_io import DynamixelIO
 from dynamixel_io import DynamixelIO
 
-sys.path.append('/home/bender-chest/bender_ws/base_ws/src/bender_hardware/bender_head/src/bender_head_arduino/hardware_interface')
-#set PYTHONPATH=/home/bender-chest/bender_ws/base_ws/src/bender_hardware/bender_head/src/bender_head_arduino/hardware_interface
-
 # NON ROS HARDWARE INTERFACE
+
+"""The HeadHWController class provides low-level methods to control the 'Servos & LEDs arduino device'
+using Dynamixel protocol, provided by DynamixelIO class.
+IMPORTANT: Modify only if you are sure of hardware specifications. See Documentation"""
 
 SERVO_SELECT_STATE = 6 # memory address of variable servo_selct in driver hardware
 SERVO_POS_STATE = 7 # memory address of variable servo_pos in driver hardware
@@ -19,13 +21,6 @@ SERVO3 = 3
 SERVO4 = 4
 LED_SELECT_STATE = 8
 LED_COLOR_STATE = 9
-
-#colores
-global black, red, green, blue
-black = 1
-red = 2
-green = 3
-blue = 4
 
 class HeadHWController(object):
 	#red = 
@@ -111,7 +106,6 @@ class HeadHWController(object):
 		except Exception as e:
 			print 'Exception thrown while writing addres %d' % (LED_SELECT_STATE)
 			raise e
-		#return result1 & result2 & result3
 		return result3
 
 	def updateLedColor_ready(self):
@@ -119,18 +113,15 @@ class HeadHWController(object):
 		try:
 			result1 = self.dxl.write(self.id, LED_SELECT_STATE, [0xFE])	# this command shows the color set by updateLedColor
 			time.sleep(0.01)
-			#result2 = self.dxl.write(self.id, LED_SELECT_STATE, [0xFC])	# this command ends the change in LEDs rings
 		except Exception as e:
 			print 'Exception thrown while writing addres %d, command 0xFE' % (LED_SELECT_STATE)
 			raise e
 		try:
-			#result1 = self.dxl.write(self.id, LED_SELECT_STATE, [0xFE])	# this command shows the color set by updateLedColor
 			result2 = self.dxl.write(self.id, LED_SELECT_STATE, [0xFC])	# this command ends the change in LEDs rings
 			time.sleep(0.01)
 		except Exception as e:
 			print 'Exception thrown while writing addres %d, command 0xFC' % (LED_SELECT_STATE)
 			raise e
-		#return result1 & result2
 		return result2
 
 	def changeLedColor(self, numLed, rgb_color):
@@ -166,83 +157,19 @@ class HeadHWController(object):
 		for i_led in range(len(leds)): self.updateLedColor(leds[i_led], rgb_colors[i_led][0], rgb_colors[i_led][1], rgb_colors[i_led][2])
 		self.updateLedColor_ready()
 
-	def sendSurprised(self): #implement with 'set_eye_colors'
-		black = [0,0,0]
-		red = [3,0,0]
-		green = [0,3,0]
-		blue = [0,0,3]
-		rgb_colors = [blue,blue,blue,red,red,red,black,black,black,blue,red,blue,green,green,green,green]
-		self.set_eye_colors("left", rgb_colors)
-		self.set_eye_colors("right", rgb_colors)
-
-	def sendAngry(self): #implement with 'set_eye_colors'
-		black = [0,0,0]
-		red = [3,0,0]
-		green = [0,3,0]
-		blue = [0,0,3]
-		rgb_colors = [green,green,green,blue,blue,blue,blue,blue,blue,blue,blue,blue,green,green,green,green]
-		self.set_eye_colors("left", rgb_colors)
-		self.set_eye_colors("right", rgb_colors)
-
-	def sendResetColors(self): #implement with 'set_eye_colors'
-		black = [0,0,0]
-		rgb_colors = [black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black]
-		self.set_eye_colors("left", rgb_colors)
-		self.set_eye_colors("right", rgb_colors)
-
-	def color_palette1(self):
-		led = 0
-		rgb_colors_l = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-		rgb_colors_r = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-		for g in range(4):
-			for b in range(4):
-				rgb_colors_l[led] = [0,g,b]
-				led+= 1
-		led=0
-		for g in range(4):
-			for b in range(4):
-				rgb_colors_r[led] = [1,g,b]
-				led+= 1
-		self.set_eye_colors("left", rgb_colors_l)
-		self.set_eye_colors("right", rgb_colors_r)
-
-	def color_palette2(self):
-		led = 0
-		rgb_colors_l = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-		rgb_colors_r = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-		for g in range(4):
-			for b in range(4):
-				rgb_colors_l[led] = [2,g,b]
-				led+= 1
-		led=0
-		for g in range(4):
-			for b in range(4):
-				rgb_colors_r[led] = [3,g,b]
-				led+= 1
-		self.set_eye_colors("left", rgb_colors_l)
-		self.set_eye_colors("right", rgb_colors_r)
-
-	def sendHappy(self): #implement with 'set_this_leds_to'
-		black = [0,0,0]
-		red = [3,0,0]
-		green = [0,3,0]
-		blue = [0,0,3]
-		leds_left_eye = [0,1,2,13,14,15]
-		leds_right_eye = [16,17,18,29,30,31]
-		rgb_colors = [green,green,blue,blue,green,green]
-		self.set_this_leds_to(leds_left_eye, rgb_colors)
-		self.set_this_leds_to(leds_right_eye, rgb_colors)
-
 if __name__ == '__main__':
 	import time
 	DEV_ID = 1
 	dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
 	head = HeadHWController(dxl, dev_id = DEV_ID)
+	red = [1,0,0]
+	green = [0,1,0]
+	blue = [0,0,1]
 	while True:
-		#for pos in range(180):
-		#head.moveServoTo(SERVO2, pos)
+		head.changeLedColor(0, green)
+		head.moveServoTo(SERVO2, 0)
+		head.changeLedColor(0, blue)
+		for pos in range(180):
+			head.moveServoTo(SERVO2, pos)
+		head.changeLedColor(0, red)
 		head.parallelSwapServos()
-		head.sendSurprised()
-		head.sendAngry()
-		#head.sendHappy()
-		#head.changeLedColor(0, red)

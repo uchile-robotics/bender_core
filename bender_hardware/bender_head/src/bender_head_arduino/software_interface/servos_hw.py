@@ -1,9 +1,14 @@
 #!/usr/bin/python
 
+import roslib; roslib.load_manifest('bender_head')
 import time
 from dynamixel_io import DynamixelIO
 
 # NON ROS HARDWARE INTERFACE
+
+"""The ServosHW class allows to actuate the organs (servos) by a percentage, without the need to know the physical restrictions.
+It use the intermediate level methods defined in HeadHWController class.
+IMPORTAT: Modify only if you are sure of physical restrictions of the actuators"""
 
 # Use HW controller
 from head_hw_controller import HeadHWController, SERVO0, SERVO1, SERVO2, SERVO3, SERVO4

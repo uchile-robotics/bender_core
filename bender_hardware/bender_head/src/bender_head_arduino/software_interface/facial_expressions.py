@@ -1,8 +1,12 @@
 #!/usr/bin/python
 
+import roslib; roslib.load_manifest('bender_head')
 import time
 
 # NON ROS HARDWARE INTERFACE
+
+"""This is a simple interface to build complete expressions, considering eye's emotion, defined in EyeEmotion class,
+and facial gestures defined in FacialGestures class. This interface is used for ros interface."""
 
 # Use HW controllers
 from head_hw_controller import HeadHWController
@@ -19,26 +23,37 @@ class FacialExpressions(object):
 	def surprised(self):
 		self.eye_emotions.surprised()
 		self.facial_gestures.surprised()
+		self.actual_expresion = "surprised"
 
 	def angry(self):
 		self.eye_emotions.angry()
 		self.facial_gestures.angry()
+		self.actual_expresion = "angry"
 
 	def happy(self):
 		self.eye_emotions.happy()
 		self.facial_gestures.happy()
+		self.actual_expresion = "happy"
 
 	def sad(self):
 		self.eye_emotions.sad()
 		self.facial_gestures.sad()
+		self.actual_expresion = "sad"
 		
 	def veryHappy(self):
 		self.eye_emotions.happy()
 		self.facial_gestures.veryHappy()
+		self.actual_expresion = "veryHappy"
 
 	def default(self):
 		self.eye_emotions.color_palette1()
 		self.facial_gestures.default()
+		self.actual_expresion = "default"
+
+	def apagado(self):
+		self.eye_emotions.apagado()
+		self.facial_gestures.default()
+		self.actual_expresion = "apagado"
 		
 	def get_state(self):
 		return self.actual_expresion
@@ -53,12 +68,12 @@ if __name__ == '__main__':
 	facial_expressions = FacialExpressions(eyes, facial_gestures)
 	while True:
 		facial_expressions.surprised()
-		sleep(2)
+		time.sleep(2)
 		facial_expressions.angry()
-		sleep(2)
+		time.sleep(2)
 		facial_expressions.happy()
-		sleep(2)
+		time.sleep(2)
 		facial_expressions.sad()
-		sleep(2)
+		time.sleep(2)
 		facial_expressions.default()
-		sleep(2)
+		time.sleep(2)

@@ -1,8 +1,19 @@
 #!/usr/bin/python
 
+import roslib; roslib.load_manifest('bender_head')
 import time
 
 # NON ROS HARDWARE INTERFACE
+
+"""The FacialGestures class define the position of each servo for an specific emotion defined as a method of the class.
+It does so using the methods of ServosHW class, which receive percentages to move the actuators (servos).
+Modify to create new emotions based on actuators states."""
+
+"""
+Method Parameters:
+lifting_percentage: Valid for methods 'left_ear, right_ear, left_eyebrow, right_eyebrow'. A number between 0 and 100.
+opening_percentage: Valid for method 'mouth'
+"""
 
 # Use HW controllers
 from head_hw_controller import HeadHWController
@@ -78,12 +89,12 @@ if __name__ == '__main__':
 	facial_gestures = FacialGestures(servos_hw)
 	while True:
 		facial_gestures.surprised()
-		sleep(2)
+		time.sleep(2)
 		facial_gestures.angry()
-		sleep(2)
+		time.sleep(2)
 		facial_gestures.happy()
-		sleep(2)
+		time.sleep(2)
 		facial_gestures.sad()
-		sleep(2)
+		time.sleep(2)
 		facial_gestures.default()
-		sleep(2)
+		time.sleep(2)
