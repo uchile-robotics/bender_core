@@ -16,7 +16,7 @@ from threading import Thread
 
 from std_msgs.msg import Empty
 from bender_msgs.msg import ExpressionCommand
-#from bender_msgs.msg import Emotion
+from bender_msgs.msg import Emotion
 
 # Use HW interface
 from head_hw_controller import HeadHWController
@@ -42,7 +42,7 @@ class ROSFacialExpressions:
         self.facial_gestures = FacialGestures(self.servos_hw)
         self.facial_expressions = FacialExpressions(self.eyes, self.facial_gestures)
         self.expression_state = ExpressionCommand()
-        #self.joystick_msg = ExpressionCommand()
+        self.joystick_msg = ExpressionCommand()
         
     def initialize(self):
         # Get params and allocate msgs
@@ -55,26 +55,26 @@ class ROSFacialExpressions:
 		#subscribers
         self.command_sub = rospy.Subscriber(self.controller_namespace + '/expression_command', ExpressionCommand, self.process_command)
         self.expressionsList_sub = rospy.Subscriber(self.controller_namespace + '/expression_list', Empty, self.list_expressions)
-        #self.joystick_sub = rospy.Subscriber(self.controller_namespace + '/joystick_face_command', Emotion, self.joystick_cmd)
+        self.joystick_sub = rospy.Subscriber(self.controller_namespace + '/expression_joystick_cmd', Emotion, self.joystick_cmd)
        #publishers
-        self.state_pub = rospy.Publisher(self.controller_namespace + '/expression_state', ExpressionCommand)
+        self.state_pub = rospy.Publisher(self.controller_namespace + '/expression_state', ExpressionCommand, queue_size = 50)
         Thread(target=self.update_state).start()
 
     def stop(self):
         self.running = False
         self.command_sub.unregister()
         self.expressionsList_sub.unregister()
-        #self.joystick_sub.unregister()
+        self.joystick_sub.unregister()
         self.state_pub.unregister()
 
     def process_command(self, msg):
-        if (msg.expression == "surprised"):
+        if (msg.expression == "surprise"):
             self.facial_expressions.surprised()
-        elif (msg.expression == "angry"):
+        elif (msg.expression == "angry1"):
             self.facial_expressions.angry()
-        elif (msg.expression == "happy"):
+        elif (msg.expression == "happy1"):
             self.facial_expressions.happy()
-        elif (msg.expression == "sad"):
+        elif (msg.expression == "sad1"):
             self.facial_expressions.sad()
         elif (msg.expression == "veryHappy"):
             self.facial_expressions.veryHappy()
@@ -111,7 +111,7 @@ class ROSFacialExpressions:
 
 if __name__ == '__main__':
     rospy.init_node('expressions_controller')
-    dxl = DynamixelIO('/dev/ttyUSB1', baudrate = 115200)
+    dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
     expressions = ROSFacialExpressions(dxl, 'expressions', 'left')
     expressions.initialize()
     expressions.start()
