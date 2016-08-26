@@ -111,7 +111,7 @@ class ROSFacialExpressions:
 
 if __name__ == '__main__':
     rospy.init_node('expressions_controller')
-    dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
+    dxl = DynamixelIO('/dev/bender/head_port', baudrate = 115200)
     expressions = ROSFacialExpressions(dxl, 'expressions', 'left')
     expressions.initialize()
     expressions.start()
