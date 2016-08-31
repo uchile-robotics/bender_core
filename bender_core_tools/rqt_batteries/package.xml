@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>bender_batteries</name>
+  <name>rqt_batteries</name>
   <version>0.0.1</version>
   <description>rqt_batteries is a GUI that just shows batteries status
   </description>

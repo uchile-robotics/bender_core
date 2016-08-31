@@ -23,7 +23,7 @@
 
 import sys
 
-pkg = 'bender_batteries'
+pkg = 'rqt_batteries'
 
 from rqt_gui.main import Main
 
