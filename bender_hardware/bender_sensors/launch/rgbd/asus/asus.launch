@@ -9,7 +9,7 @@
 	<arg name="asus_name"   default="asus" />
 	<arg name="device_id"   default="#1"   />
 	<arg name="publish_tf"  default="false"/>
-	<arg name="model" 		default="PS1080_PrimeSense"/>
+	<arg name="model" 	default="PS1080_PrimeSense"/>
 	<arg name="calibrated" 	default="true"/>
 
 	<!-- Openni2 for ASUS device -->
