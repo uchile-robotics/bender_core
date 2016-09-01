@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # Color
 red=$(tput setaf 1)
@@ -23,6 +23,8 @@ echo "$installer Add user to dialout group"
 sudo usermod -a -G dialout "$USER"
 # Port permissions
 echo "$installer Add ports permissions"
+
+# l_port
 if [ -e /dev/bender/l_port ];
 then
    real_port=$(readlink -f '/dev/bender/l_port')
@@ -33,7 +35,7 @@ else
    echo "$installer ${red}Port /dev/bender/l_port NOT connected.${reset}"
    echo "$installer ${yellow}You must add permissions using \$ sudo chmod a+rw \$(readlink -f '/dev/bender/l_port')${reset}"
 fi
-
+# r_port
 if [ -e /dev/bender/r_port ];
 then
    real_port=$(readlink -f '/dev/bender/r_port')
@@ -44,8 +46,7 @@ else
    echo "$installer ${red}Port /dev/bender/r_port NOT connected.${reset}"
    echo "$installer ${yellow}You must add permissions using \$ sudo chmod a+rw \$(readlink -f '/dev/bender/r_port')${reset}"
 fi
-
-echo "$installer Add ports permissions"
+# head_port
 if [ -e /dev/bender/head_port ];
 then
    real_port=$(readlink -f '/dev/bender/head_port')
