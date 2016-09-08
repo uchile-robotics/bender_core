@@ -33,6 +33,9 @@ def main():
 
 	# Config dashboard
 	batteries_list = list()
+	if rospy.has_param('/batteries_dashboard/batteries'):
+		batteries_list = rospy.get_param('/batteries_dashboard/batteries')
+		print batteries_list
 	batteries_list.append({'battery1' : {'percentage_topic': percentage_topic, 'charging_topic': charging_topic, 'tooltip_name': 'notebook'}})
 	rospy.loginfo('Setting params.')
 	rospy.set_param('/batteries_dashboard/batteries', batteries_list)
