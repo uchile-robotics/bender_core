@@ -17,7 +17,7 @@
 #include <bender_msgs/Emotion.h>  // face
 
 // services
-#include <bender_srvs/synthesize.h>  // speech
+#include <bender_srvs/String.h>
 
 /*# # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Xbox Controller Button List:                        #
@@ -194,7 +194,7 @@ Joystick::Joystick():
 	//  - - - - - service clients - - - -
 
 	// speech
-	speech_serv_ = priv.serviceClient<bender_srvs::synthesize>("/bender/hw/tts/say");
+	speech_serv_ = priv.serviceClient<bender_srvs::String>("/bender/hw/tts/say");
 
 	// face
 	face_pub_ = priv.advertise<bender_msgs::Emotion>("/bender/hw/head/cmd", 1);
@@ -245,7 +245,7 @@ void Joystick::move_head(int angle) {
 
 
 void  Joystick::synthesize(std::string text){
-	bender_srvs::synthesize speech_text;
+	bender_srvs::String speech_text;
 	std::string talk = text;
 	std::string text_evaluate = text;
 
@@ -275,10 +275,8 @@ void  Joystick::synthesize(std::string text){
 			show_emotion(emo);
 		}
 		if (found_enter==std::string::npos && found_emotion==std::string::npos ) end=true;
-		speech_text.request.text = talk;
+		speech_text.request.data = talk;
 		speech_serv_.call(speech_text);
-		ros::Duration(talk.size()/9).sleep();
-
 	}
 
 }
