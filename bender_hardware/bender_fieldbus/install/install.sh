@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# bender_fieldbus package installer
+# run: $ bash bender_fieldbus/install/install.sh
+
+#  - - - - - - - - - Setup - - - - - - - - - - - 
 # Color
 red=$(tput setaf 1)
 green=$(tput setaf 2)
@@ -12,9 +16,9 @@ installer="${bold}[bender_fieldbus]:${reset}"
 
 #  - - - - - - - - - Install Rules - - - - - - - - - - - 
 echo "$installer Installing udev rules"
-sudo cp -f install/10-l_port.rules /etc/udev/rules.d/10-l_port.rules
-sudo cp -f install/10-r_port.rules /etc/udev/rules.d/10-r_port.rules
-sudo cp -f install/10-head_port.rules /etc/udev/rules.d/10-head_port.rules
+sudo cp -f "$BENDER_WS"/base_ws/src/bender_hardware/bender_fieldbus/install/10-l_port.rules /etc/udev/rules.d/10-l_port.rules
+sudo cp -f "$BENDER_WS"/base_ws/src/bender_hardware/bender_fieldbus/install/10-r_port.rules /etc/udev/rules.d/10-r_port.rules
+sudo cp -f "$BENDER_WS"/base_ws/src/bender_hardware/bender_fieldbus/install/10-head_port.rules /etc/udev/rules.d/10-head_port.rules
 sudo udevadm control --reload
 
 #  - - - - - - - - - Port Permissions  - - - - - - - - - 
