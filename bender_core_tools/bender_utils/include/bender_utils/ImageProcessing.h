@@ -48,6 +48,7 @@ public:
 
 	std::string _imageRGB_topic;
 	std::string _imageDepth_topic;
+  std::vector < std::string > win_name;
 
 	sensor_msgs::ImageConstPtr image_in;
 	sensor_msgs::ImageConstPtr depth_in;
@@ -71,14 +72,16 @@ protected:
   void _process_image(const sensor_msgs::ImageConstPtr& img);
   void _process_depth(const sensor_msgs::ImageConstPtr& img);
 
-  void Display(cv::Mat frame, std::vector<cv::Rect> faces);
+  void Display(std::string win, cv::Mat frame, std::vector<cv::Rect> faces, cv::Scalar s);
+  void Display(  std::string win, cv::Mat frame);
+
 public:
 	bool _active_service_RGB(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res);
 	bool _active_service_RGBD(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res);
   bool _active_service_D(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res);
   bool _active_service_RGB_D(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res); 
   void set_topics (std::string rgb, std::string depth);
-
+  bool set_display(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res);
 };
 
 
@@ -87,6 +90,22 @@ public:
     _imageDepth_topic = depth;
   }
 
+  bool ImageProcessing::set_display(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res) {   
+    if(req.select==display)return true;
+    display = req.select;
+
+    if(display){
+         cv::startWindowThread();
+         for (int i = 0; i < win_name.size(); ++i)
+            cv::namedWindow(win_name[i], cv::WINDOW_AUTOSIZE );
+    }
+    else{
+        cv::destroyAllWindows();
+        cv::waitKey(10);
+    }
+    
+    return true;
+  }
 
  ImageProcessing::ImageProcessing(std::string name) {
 
@@ -126,6 +145,7 @@ public:
 
     return cv_ptr->image;
 }
+
 
  bool ImageProcessing::_active_service_RGB(bender_srvs::Onoff::Request  &req, bender_srvs::Onoff::Response &res) {
 
@@ -206,8 +226,8 @@ bool ImageProcessing::_active_service_RGB_D(bender_srvs::Onoff::Request  &req, b
 
             if (_image_topic.find("rgbd") !=std::string::npos) {
                 _is_on_depth = true;
-                std::string _depth_topic = _image_topic, rgb = "rgb";
-                _depth_topic.replace(_depth_topic.find(rgb), rgb.length(),"depth");
+                std::string _depth_topic = _image_topic, rgb = "rgb/";
+                _depth_topic.replace(_depth_topic.find(rgb), rgb.length(),"depth/");
                 _imageDepth_topic = _depth_topic;
                 _subs_depth = priv.subscribe(_imageDepth_topic, 1, &ImageProcessing::_process_depth, this); 
                 ROS_INFO_STREAM("Turning on "+_imageDepth_topic+". . . OK");
@@ -244,15 +264,21 @@ bool ImageProcessing::_active_service_RGB_D(bender_srvs::Onoff::Request  &req, b
 
 
 
-void ImageProcessing::Display( cv::Mat frame, std::vector<cv::Rect> faces) {
+void ImageProcessing::Display(std::string win, cv::Mat img_in, std::vector<cv::Rect> faces, cv::Scalar s = cv::Scalar(255, 0, 0)) {
 
+  cv::Mat frame = img_in.clone();
     for (unsigned int i = 0; i < faces.size(); i++) {
         cv::rectangle(frame, cv::Point(faces[i].x, faces[i].y),
                 cv::Point(faces[i].x + faces[i].width,
-                        faces[i].y + faces[i].height), cv::Scalar(255, 0, 0),5);
+                        faces[i].y + faces[i].height), s ,5);
     }
 
-    imshow("Faces Detection", frame);
+    imshow(win, frame);
+    cv::waitKey(10);
+}
+
+void ImageProcessing::Display(  std::string win, cv::Mat frame) {
+    imshow(win, frame);
     cv::waitKey(10);
 }
 

@@ -1,4 +1,12 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Twist message publisher from keyboard
+"""
+
+__author__ = 'Rodrigo Muñoz'
+__email__ = 'rmunozriffo@ing.uchile.cl'
 
 import rospy
 from geometry_msgs.msg import Twist
@@ -6,110 +14,115 @@ import sys
 import select
 import termios
 import tty
+import time
+import numpy as np
+from threading import Thread
 
-msg = """
-Reading from the keyboard  and Publishing to Twist!
----------------------------
-Moving around:
-   u    i    o
-   j    k    l
-   m    ,    .
 
-q/z : increase/decrease max speeds by 10%
-w/x : increase/decrease only linear speed by 10%
-e/c : increase/decrease only angular speed by 10%
-anything else : stop
+class RingBuffer():
+    """A 1D ring buffer using numpy arrays"""
+    def __init__(self, length):
+        self.data = np.zeros(length, dtype='f')
+        self.index = 0
 
-CTRL-C to quit
-"""
+    def add(self, x):
+        """Adds x to ring buffer"""
+        self.data[self.index] = x
+        self.index = (self.index + 1) % self.data.size
 
-moveBindings = {
-        'i':(1,0),
-        'o':(1,-1),
-        'j':(0,1),
-        'l':(0,-1),
-        'u':(1,1),
-        ',':(-1,0),
-        '.':(-1,1),
-        'm':(-1,-1),
-}
+    def extend(self, x):
+        """Adds array x to ring buffer"""
+        x_index = (self.index + np.arange(x.size)) % self.data.size
+        self.data[x_index] = x
+        self.index = x_index[-1] + 1
 
-speedBindings={
-        'q':(1.1,1.1),
-        'z':(.9,.9),
-        'w':(1.1,1),
-        'x':(.9,1),
-        'e':(1,1.1),
-        'c':(1,.9),
-}
+    def get(self):
+        """Returns the first-in-first-out data in the ring buffer"""
+        idx = (self.index + np.arange(self.data.size)) % self.data.size
+        return self.data[idx]
 
-def getKey():
-    tty.setraw(sys.stdin.fileno())
-    select.select([sys.stdin], [], [], 0)
-    key = sys.stdin.read(1)
-    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key
+    def mean(self):
+        """Returns the mean of buffer"""
+        return np.mean(self.data)
+     
 
-speed = 0.3
-turn = 0.5
+class KeyboardTwist(object):
+    """Reading from the keyboard"""
+    def __init__(self, timeout=0.05, buffer_len=10, key_bindings=None):
+        if key_bindings:
+            self.bindings = key_bindings
+        else:
+            # Default value for key bindings usign W A S D
+            self.bindings = self.bindings = {
+                'w':(1,0),
+                'a':(0,1),
+                's':(-1,0),
+                'd':(0,-1)
+            }
+        self.tty_settings = termios.tcgetattr(sys.stdin)
+        self.timeout = timeout
+        self.linear_buf = RingBuffer(buffer_len)
+        self.angular_buf = RingBuffer(buffer_len)
+        self.running = True
+        Thread(target=self.update).start()
 
-def vels(speed,turn):
-    return "currently:\tspeed %s\tturn %s " % (speed,turn)
+    def get_key(self):
+        """Get pressed key"""
+        tty.setraw(sys.stdin.fileno())
+        key = None
+        readable, writable, exceptional = select.select([sys.stdin], [], [], self.timeout)
+        if readable and readable[0]==sys.stdin:
+            key = sys.stdin.read(1)
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.tty_settings)
+        return key
 
-if __name__=="__main__":
+    def update(self):
+        """Thread main loop"""
+        while self.running:
+            key = self.get_key()
+            linear = 0.0
+            angular = 0.0
+            # Capture Ctrl + C
+            if key == '\x03':
+                self.running = False
+                break
+            if key in self.bindings:
+                linear = self.bindings[key][0]
+                angular = self.bindings[key][1]
+            self.linear_buf.add(linear)
+            self.angular_buf.add(angular)
 
-    settings = termios.tcgetattr(sys.stdin)
-    
-    pub = rospy.Publisher('cmd_vel', Twist)
-    rospy.init_node('teleop_twist_keyboard')
 
-    x = 0
-    th = 0
-    status = 0
+    def get_twist(self, twist):
+        """Update Twist using data from buffers"""
+        if not self.running:
+            raise rospy.ROSInterruptException('key interrupt')
+        twist.linear.x = self.linear_buf.mean()
+        twist.angular.z = self.angular_buf.mean()
 
+    def close(self):
+        """Close main thread and restore stdin"""
+        self.running = False
+        time.sleep(self.timeout)
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.tty_settings)
+
+def main():
+    rospy.init_node('twist_keyboard_node')
+    pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+    twist = Twist()
+    rate = rospy.Rate(20.0)
+    key = KeyboardTwist()
     try:
-        print msg
-        print vels(speed,turn)
-        while(1):
-            key = getKey()
-            if key in moveBindings.keys():
-                x = moveBindings[key][0]
-                th = moveBindings[key][1]
-            elif key in speedBindings.keys():
-                speed = speed * speedBindings[key][0]
-                turn = turn * speedBindings[key][1]
-
-                print vels(speed,turn)
-                if (status == 14):
-                    print msg
-                status = (status + 1) % 15
-            else:
-                x = 0
-                th = 0
-                if (key == '\x03'):
-                    break
-
-            twist = Twist()
-            twist.linear.x = x*speed
-            twist.linear.y = 0
-            twist.linear.z = 0
-
-            twist.angular.x = 0
-            twist.angular.y = 0
-            twist.angular.z = th*turn
+        while not rospy.is_shutdown():
+            key.get_twist(twist)
             pub.publish(twist)
-
-    except Exception, e:
-        print e
-
+            rate.sleep()
+    except rospy.ROSInterruptException:
+        pass
     finally:
-        twist = Twist()
-        twist.linear.x = 0
-        twist.linear.y = 0
-        twist.linear.z = 0
-        twist.angular.x = 0
-        twist.angular.y = 0
-        twist.angular.z = 0
-        pub.publish(twist)
+        # Send empty message
+        pub.publish(Twist())
+        key.close()
 
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+if __name__ == '__main__':
+    main()
