@@ -33,7 +33,7 @@ $ cp -a . ~/.gazebo/models/
 
 ### Error "No namespace found" en Gazebo
 
-Usualmente sucede al no tener acceso a la descarga de modelos desde la [base de datos online](http://models.gazebosim.org/) o no existe la carpeta `~\.gazebo\models`.
+Usualmente sucede al no tener acceso a la descarga de modelos desde la [base de datos online](http://models.gazebosim.org/) o no existe la carpeta `~\.gazebo\models`. Una vez se han descargado los modelos básicos, el programa iniciará de forma normal.
 
 ### Añadir OSRF PPA (Ubuntu 14.04 Trusty, ROS Indigo)
 

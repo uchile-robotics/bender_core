@@ -1,0 +1,15 @@
+<launch>
+
+
+  <group ns="bender">
+    <!-- Head low lovel config file -->
+    <rosparam file="$(find bender_head)/config/head_controller.yaml" command="load"/>
+    <!-- Head low lovel controller spawner -->
+    <node name="head_controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
+        args="--manager=head_port_manager
+              --port=head_port
+              head_controller"
+        output="screen"/>
+  </group>
+
+</launch>

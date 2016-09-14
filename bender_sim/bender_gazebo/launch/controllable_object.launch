@@ -1,15 +1,17 @@
 <launch>
 
-  <arg name="object" default="ball" />
+  <!-- Object parameters -->
+  <arg name="object" default="ball" /> <!-- Available: ball, cylinder, person (URDF saved at urdf folder)-->
   <arg name="world" default="gazebo" />
-  <arg name="x" default="1.0" />
-  <arg name="y" default="0" />
-  <arg name="key_teleop" default="false" />
+  <arg name="x" default="1.0" /> <!-- x initial position -->
+  <arg name="y" default="0" /> <!-- y initial position -->
+  <arg name="key_teleop" default="false" /> <!-- Use keyboard teleop -->
   
-
+  <!-- Load object URDF -->
   <param name="$(arg object)_description" 
     command="$(find xacro)/xacro.py '$(find bender_gazebo)/urdf/$(arg object).urdf.xacro'" />
 
+  <!-- Spawn URDF in Gazebo -->
   <node name="spawn_object" pkg="gazebo_ros" type="spawn_model"
     args="-param $(arg object)_description
     -urdf
@@ -21,7 +23,8 @@
     respawn="false" output="screen">
   </node>
 
-  <node if="$(arg key_teleop)" name="object_teleop" pkg="bender_gazebo" type="teleop_twist_keyboard.py" >
+  <!-- Launch keyboard teleoperation node -->
+  <node if="$(arg key_teleop)" launch-prefix="xterm -T 'Controllable object' -e" name="object_teleop" pkg="bender_gazebo" type="teleop_twist_keyboard.py" >
     <remap from="cmd_vel" to="$(arg object)/cmd_vel"/>
   </node>
 
