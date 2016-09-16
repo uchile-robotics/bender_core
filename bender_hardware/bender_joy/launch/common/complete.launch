@@ -1,16 +1,16 @@
 <launch>
 
-	<!-- parameters -->
-	<arg name="joy_number" default="0"/>
-	
-	<!-- driver: joy node -->
-	<include file="$(find bender_joy)/launch/common/driver.launch">
-		<arg name="joy_number" value="$(arg joy_number)"/>
-	</include>
-	
-	<!-- controller: joystick -->
-	<include file="$(find bender_joy)/launch/common/joystick.launch">
-	 	<arg name="joy_number" value="$(arg joy_number)"/>
-	</include>
+    <!-- parameters -->
+    <arg name="ns" default="/bender/joy"/>
 
+    <!-- driver -->
+    <include file="$(find bender_joy)/launch/common/driver.launch">
+        <arg name="ns" value="$(arg ns)"/>
+    </include>
+
+    <!-- joy interfaces -->
+<!--     <include file="$(find bender_joy)/launch/common/joy_interface.launch">
+        <arg name="ns" value="$(arg ns)"/>
+    </include>
+ -->    
 </launch>

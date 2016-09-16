@@ -1,0 +1,43 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Xbox Controller Button List:                        #
+# - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Axis:                                               #
+# 0.- LS left, right   # 1.- LS up, down   # 2.- LT   #
+# 3.- RS left, right   # 4.- RS up, down   # 5.- RT   #
+#                                                     #
+# Buttons:                                            #
+# 0.- A   # 5.- RB     # 10.- RS                      #
+# 1.- B   # 6.- Back   # 11.- Left                    #
+# 2.- X   # 7.- Start  # 12.- Right                   #
+# 3.- Y   # 8.- Xbox   # 13.- Up                      #
+# 4.- LB  # 9.- LS     # 14.- Down                    #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# The proxy is a tool which remaps joy messages to desired
+# joystick tool topics.
+#
+# The proxy provides up to 4 remapping topics. You can only select one at a
+# time. Alternatively, you can disable the joystick remapping.
+#
+# Commands:
+# - disable: <proxy_button_id> + <disable_button_id>
+# - select channel n: <proxy_button_id> + <channel_n_button>
+#
+# Note: Any message in which the "proxy_button" is pressed, will not be
+# forwarded!.
+
+# button to enable proxy methods
+# (default: XBOX)
+proxy_button_id: 8
+
+# disable joystick
+# (default: Back)
+disable_button_id: 6
+
+# 4 channels
+# (default: [A, B, X, Y])
+# - By default, the proxy remaps to the first button
+# - this array must have a size of 4
+channel_button_ids: [0, 1, 2, 3]
+
+
