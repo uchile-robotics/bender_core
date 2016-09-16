@@ -6,21 +6,13 @@ __email__ = 'matias.pavez.b@gmail.com'
 import rospy
 import sys
 from sensor_msgs.msg import Joy
+from bender_joy import xbox
 
-# TODO: n channels
-# TODO: default
-#    force a default channel at start
-#    default_channel: 0
-# TODO: [WARN] [/joy/proxy0]: Inbound TCP/IP connection failed: connection
-# from sender terminated before handshake header received. 0 bytes were 
-# received. Please check sender for additional details.
-# TODO: decir el tópico, nombre de config y botón que quedó configurado.
 
 class JoystickProxy(object):
   
     def __init__(self):
         rospy.loginfo('Joystick proxy init ...')
-        rospy.Subscriber('joy', Joy, self.callback)
     
         # control
         # default: active on channel 0
@@ -28,15 +20,19 @@ class JoystickProxy(object):
         self.current_channel_id = 0
         
         # load configuration
-        self.channel_button_ids = rospy.get_param('~channel_button_ids', [0, 1, 2, 3])
-        self.proxy_button_id    = rospy.get_param('~proxy_button_id', 8)
-        self.disable_button_id  = rospy.get_param('~disable_button_id', 6)
+        channel_buttons = rospy.get_param('~b_channels', ['A', 'B', 'X', 'Y'])
+        proxy_button    = rospy.get_param('~b_proxy', 'XBOX')
+        disable_button  = rospy.get_param('~b_disable', 'BACK')
         self.publishers = [
             rospy.Publisher('topic_A', Joy, queue_size=10),
             rospy.Publisher('topic_B', Joy, queue_size=10),
             rospy.Publisher('topic_X', Joy, queue_size=10),
             rospy.Publisher('topic_Y', Joy, queue_size=10)
         ]
+        key_mapper = xbox.KeyMapper()
+        self.channel_button_ids = key_mapper.get_button_ids(channel_buttons)
+        self.proxy_button_id    = key_mapper.get_button_id(proxy_button)
+        self.disable_button_id  = key_mapper.get_button_id(disable_button)
 
         # check
         if not self.params_are_valid():
@@ -49,6 +45,8 @@ class JoystickProxy(object):
         self.max_id = max(self.channel_button_ids)
         self.max_id = max([self.max_id, self.proxy_button_id, self.disable_button_id])
 
+        # ready to work
+        rospy.Subscriber('joy', Joy, self.callback)
         rospy.loginfo('Joystick proxy is ready')
 
 
@@ -62,9 +60,10 @@ class JoystickProxy(object):
 
         are_valid = True
         for button_id in self.channel_button_ids:
-            if button_id < 0:
-                rospy.logerr("proxy: button index must be greater o equal to zero (passed: %d)" % button_id)
+            if button_id is None:
+                rospy.logerr("proxy: unknown button")
                 are_valid = False
+                return are_valid
 
         n_buttons = len(self.channel_button_ids)
         if n_buttons != 4:

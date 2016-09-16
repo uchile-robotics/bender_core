@@ -21,7 +21,7 @@ subscribers:
     priority: 1
     short_desc: "Navigation stack controller"
   - name: "Microsoft joystick"
-    topic: "/bender/joy/joystick_nav/cmd_vel"
+    topic: "/bender/joy/base/cmd_vel"
     timeout: 0.1
     priority: 9
   - name: "Safety controller TODO!!"
