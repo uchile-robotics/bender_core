@@ -9,8 +9,8 @@
     </include>
 
     <!-- joy interfaces -->
-<!--     <include file="$(find bender_joy)/launch/common/joy_interface.launch">
+    <include file="$(find bender_joy)/launch/common/joy_interface.launch">
         <arg name="ns" value="$(arg ns)"/>
     </include>
- -->    
+    
 </launch>

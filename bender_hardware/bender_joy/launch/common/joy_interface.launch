@@ -1,12 +1,11 @@
 <launch>
 
-  <!-- parameters -->
-  <arg name="joy_number" default="0"/>
+    <arg name="ns" default="joy"/>
 
-  <!-- Joystick complete -->
-  <node pkg="bender_joy" type="joystick" name="joystick$(arg joy_number)" output="screen" ns="/bender/joy/">
-    <rosparam file="$(find bender_joy)/config/joystick.yaml" command="load"/>
-    <remap from="joystick$(arg joy_number)/joy" to="/bender/joy/driver$(arg joy_number)"/>
-  </node>
+    <!-- navigation -->
+    <node pkg="bender_joy" type="joy_navigation.py" name="joy_navigation" output="screen" ns="$(arg ns)">
+        <rosparam file="$(find bender_joy)/config/joystick_navigation.yaml" command="load"/>
+        <remap from="joy" to="navigation"/>
+    </node>
 
 </launch>

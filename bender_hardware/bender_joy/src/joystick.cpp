@@ -11,7 +11,6 @@
 
 // messages
 #include <std_srvs/Empty.h>
-#include <geometry_msgs/Twist.h>  // navigation
 #include <sensor_msgs/Joy.h>      // joystick
 #include <bender_msgs/Command.h>  // arm
 #include <bender_msgs/Emotion.h>  // face
@@ -113,9 +112,6 @@ private:
 
 	// - - - - publishers - - - -
 
-	// navigation
-	ros::Publisher nav_pub_;
-
 	// speech
 	ros::Publisher speech_status;
 
@@ -129,9 +125,6 @@ private:
 	int axe_idx_neck_sides_;
 	int axe_idx_neck_front_;
 
-	// navigation
-	int axe_idx_nav_linear_;
-	int axe_idx_nav_angular_;
 
 	// arm
 	int axe_idx_arm_left_;
@@ -149,10 +142,6 @@ private:
 	// face
 	int face_intensity;
 
-	// axes level
-	double nav_factor_linear_;
-	double nav_factor_angular_;
-
 	// speech
 	int speech_level;
 	std::vector<std::string> phrases;
@@ -160,15 +149,11 @@ private:
 
 
 Joystick::Joystick():
-	axe_idx_nav_linear_(_LS_VERT_),
-	axe_idx_nav_angular_(_LS_HORZ_),
 	axe_idx_neck_sides_(_RS_HORZ_),
 	axe_idx_neck_front_(_RS_VERT_),
 	axe_idx_arm_left_(_LT_),
 	axe_idx_arm_right_(_RT_),
-	button_idx_pause_(_BACK_),
-	nav_factor_angular_(2),
-	nav_factor_linear_(2)
+	button_idx_pause_(_BACK_)
 	{
 
 	// ros stuff
@@ -176,10 +161,7 @@ Joystick::Joystick():
 
 	// - - - - params - - - -
 
-	// nav
-	priv.param("nav_factor_angular", nav_factor_angular_, nav_factor_angular_);
-	priv.param("nav_factor_linear", nav_factor_linear_, nav_factor_angular_);
-
+	
 	// speech
 	priv.param("speech_phrases", phrases, phrases);
 
@@ -199,11 +181,6 @@ Joystick::Joystick():
 	// face
 	face_pub_ = priv.advertise<bender_msgs::Emotion>("/bender/hw/head/cmd", 1);
 
-
-	// - - - - publishers - - -
-
-	// navigation
-	nav_pub_ = priv.advertise<geometry_msgs::Twist>("/bender/joy/joystick_nav/cmd_vel", 1);
 
 
 	// - - - - control variables - - - -
@@ -329,12 +306,6 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 	// check for pause
 	if (buttons == PAUSE) {
 
-		// Stop the robot before pause!
-		geometry_msgs::Twist vel;
-		vel.angular.z = 0;
-		vel.linear.x = 0;
-		nav_pub_.publish(vel);
-
 		is_paused_ = !is_paused_;
 		if (is_paused_) {
 		ROS_WARN("\nControlling PAUSED!, press start button to resume it\n");
@@ -350,11 +321,6 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 
 	// - - - - - - - - - - - - AXES - - - - - - - - - - - - -
 
-	// - - - - handle navigation - - - -
-	geometry_msgs::Twist vel;
-	vel.angular.z = nav_factor_angular_*joy->axes[axe_idx_nav_angular_];
-	vel.linear.x = nav_factor_linear_*joy->axes[axe_idx_nav_linear_];
-	nav_pub_.publish(vel);
 
 	// - - - - handle neck - - - -
 	float neck_side  = joy->axes[axe_idx_neck_sides_];

@@ -14,24 +14,12 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # Axes Index
-a_idx_base_angular: 0 # LS left, right
-a_idx_base_linear:  1 # LS up, down
+angular_axe_id: 0 # LS left, right
+linear_axe_id:  1 # LS up, down
 
 # Button Index
-b_idx_pause: 7 # Start
+pause_button_id: 7 # Start
 
-# Other
-factor_linear: 0.7
-factor_angular: 0.6
-
-# speech
-speech_phrases: [
-  "hola a todos",
-  "soy bender el robot de servicio de la universidad de chile",
-  "nac'i en 2007 en la facultad de ciencias f'isicas y matem'aticas",
-  "hola humanos, qu'e se siente observar mi grandeza",
-  "a mi no me construyeron, yo me dej'e armar por mis esclavos. perd'on. mi equipo",
-  "los voy a destruir a todos... perd'on. quise decir que les voy a sonreir a todos",
-  "c'omo est'an amigos?",
-  "cu'al es el colmo de un robot?... tener nervios de acero ja ja ja ja ",
-]
+# cmd velocities
+max_linear_vel: 0.7
+max_angular_vel: 0.6
