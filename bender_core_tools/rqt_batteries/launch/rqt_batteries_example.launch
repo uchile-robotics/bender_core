@@ -1,4 +1,6 @@
 <launch>
-	<rosparam file="$(find rqt_batteries)/config/batteries_dashboard.yaml" command="load" />
-	<node pkg="rqt_batteries" type="rqt_batteries" name="rqt_batteries" output="screen" />
+    <!-- RQT Battery perspective -->
+    <node name="bender_dashboard" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find rqt_batteries)/config/bender_dashboard.perspective">
+        <rosparam file="$(find rqt_batteries)/config/bender_batteries.yaml" command="load" />
+    </node>
 </launch>

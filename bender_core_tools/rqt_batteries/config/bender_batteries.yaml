@@ -1,0 +1,7 @@
+batteries:
+    - chest
+    - vision
+    - nav
+    - l_arm
+    - r_arm
+    - base
