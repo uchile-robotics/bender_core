@@ -22,6 +22,7 @@
 #   * Sammy Pfeiffer
 
 from rqt_robot_dashboard.widgets import BatteryDashWidget
+import rospy
 
 
 class WrappedBattery(BatteryDashWidget):
@@ -56,12 +57,17 @@ class WrappedBattery(BatteryDashWidget):
 
 
         self.update_perc(0)
+        # Last time updated
+        self.last_update = rospy.Time.now()
 
-    def set_power_state_perc(self, percentage, charging):
+    def set_power_state_perc(self, percentage, charging, refresh=True):
         """
         """
         self.update_perc(percentage)
         self.update_time(percentage) # + remaining
         self.set_charging(charging)
+        # Refresh
+        if refresh:
+            self.last_update = rospy.Time.now()
 
 

@@ -24,7 +24,7 @@ def main():
 	rospy.init_node('notebook_battery_publisher', anonymous=True)
 	r = rospy.Rate(1) # 1hz
 
-	serial_number = rospy.get_param('~serial_number', 'base')
+	serial_number = rospy.get_param('~serial_number', 'notebook')
 
 	msg = BatteryState()
 	msg.serial_number = serial_number
