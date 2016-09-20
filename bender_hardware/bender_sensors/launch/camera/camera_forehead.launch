@@ -1,23 +1,19 @@
 <launch>
 
 	<arg name="display" default="true"/>
-	<arg name="cam_name" default="camera_forehead"/>
-	<arg name="cam_number" default="5"/>
-	<arg name="cam_connect_at_start" default="true"/>
+	<arg name="camera_name" default="camera_forehead"/>
+	<arg name="video_device" default="/dev/video1"/>
+	<arg name="framerate" default="30"/>
 
-	<!-- Camera Service -->
-	<include file="$(find bender_sensors)/launch/camera/camera_service.launch">
-		<arg name="cam_name" value="$(arg cam_name)"/>
-		<arg name="cam_number" value="$(arg cam_number)"/>
-		<arg name="cam_width" value="640"/>
-		<arg name="cam_height" value="480"/>
-		<arg name="cam_fov_h" value="60.0"/>
-		<arg name="cam_connect_at_start" value="$(arg cam_connect_at_start)"/>
-	</include>
 
-	<!-- Display -->
-	<include file="$(find bender_sensors)/launch/camera/camera_display.launch" if="$(arg display)">
-		<arg name="cam_name" value="$(arg cam_name)"/>
+	<!-- Camera Topic -->
+	<include file="$(find bender_sensors)/launch/camera/camera_topic.launch">
+		<arg name="camera_name" value="$(arg camera_name)"/>
+		<arg name="video_device" value="$(arg video_device)"/>
+		<arg name="image_width" value="640"/>
+		<arg name="image_height" value="480"/>
+		<arg name="framerate" value="$(arg framerate)"/>
+		<arg name="display" value="$(arg display)"/>
 	</include>
 
 </launch>

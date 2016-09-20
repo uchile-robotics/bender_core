@@ -1,0 +1,11 @@
+<launch>
+    <!-- DISCLAIMER: Remember to add a ns when including this launchfile -->
+
+    <!-- text source topic (std_msgs/String) -->
+    <arg name="text_source" default="/text"/>
+
+    <node pkg="bender_gui_subtitles" type="gui_subtitles" name="subtitles" output="screen">
+        <remap from="subtitles/text" to="$(arg text_source)"/>
+    </node>
+
+</launch>

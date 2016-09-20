@@ -2,12 +2,12 @@
 
 
   <!-- available languages: { english , spanish } -->
-  <include file="$(find bender_speech)/launch/synthesizer.launch">
+  <include file="$(find bender_tts)/launch/tts.launch">
   	<arg name="language" value="spanish"/>
   </include>
 
   <!-- C A R I T A S -->
-  <include file="$(find bender_face)/launch/face.launch"/>
+  <include file="$(find bender_head)/launch/head.launch"/>
 
   <!-- Rosaria - - >
   < ! - - include file="$(find bender_base)/launch/base.launch"/>

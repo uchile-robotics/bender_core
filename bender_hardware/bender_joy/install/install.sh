@@ -12,7 +12,7 @@ if [ ! -c "/dev/input/js0" ]; then
   echo -e "Joystick isn't connected!!"
   echo -e ". . ."
   echo -e " 1.- Connect the Joy"
-  echo -e " 2.- Type in terminal:\n   $ sudo chmod a+rw /dev/input/js0"
+  echo -e " 2.- Type in terminal:\n   $ sudo chmod a+rw /dev/input/js*"
   echo -e "Thats it"
   echo -e "\n\n\n"
 else 

@@ -1,4 +1,4 @@
 bool play
-string sound
+string sound_file
 ---
 bool success

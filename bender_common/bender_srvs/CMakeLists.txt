@@ -42,7 +42,7 @@ add_service_files(
   DoorDetector.srv
   PlaneHeight.srv
   siftOnlineTrain.srv
-  FaceInfo.srv
+  ImageDetector.srv
   FaceRecognition.srv
   play_sound.srv
   ImageService.srv
