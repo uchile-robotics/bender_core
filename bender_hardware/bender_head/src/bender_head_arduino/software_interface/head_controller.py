@@ -21,15 +21,13 @@ from bender_msgs.msg import Emotion
 # Use HW interface
 from head_hw_controller import HeadHWController
 from servos_hw import ServosHW
-from eye_emotions import EyeEmotion
-from facial_gestures import FacialGestures
-from facial_expressions import FacialExpressions
+from emotion_controller import EmotionsController
 #from dynamixel_driver.dynamixel_io import DynamixelIO
 from dynamixel_io import DynamixelIO
 
 DEV_ID = 16
 
-class ROSFacialExpressions:
+class HeadController:
     def __init__(self, dxl_io, controller_namespace, port_namespace):
         # Only argument stuff
         self.running = False
@@ -38,11 +36,12 @@ class ROSFacialExpressions:
         self.port_namespace = port_namespace
         self.hw_controller = HeadHWController(dxl_io, dev_id = DEV_ID)
         self.servos_hw = ServosHW(self.hw_controller)
-        self.eyes = EyeEmotion(self.hw_controller)
-        self.facial_gestures = FacialGestures(self.servos_hw)
-        self.facial_expressions = FacialExpressions(self.eyes, self.facial_gestures)
+        self.emotions_controller = EmotionsController(self.hw_controller, self.servos_hw)
         self.expression_state = ExpressionCommand()
         self.joystick_msg = ExpressionCommand()
+        # valid emotions        
+        self.static_emotion_list = [ 'happy' , 'sad' , 'angry' , 'surprised' , 'apagado']
+        self.dynamic_emotion_list = [ '1313' , 'veryHappy']
         
     def initialize(self):
         # Get params and allocate msgs
@@ -53,15 +52,11 @@ class ROSFacialExpressions:
         # Create subs, services, publishers, threads
         self.running = True
 		#subscribers
-        #self.command_sub = rospy.Subscriber(self.controller_namespace + '/expression_command', ExpressionCommand, self.process_command)
-        #self.expressionsList_sub = rospy.Subscriber(self.controller_namespace + '/expression_list', Empty, self.list_expressions)
-        self.command_sub = rospy.Subscriber('/bender/hw/bender/hw/expressions/expression_command', ExpressionCommand, self.process_command)
-        self.expressionsList_sub = rospy.Subscriber('/bender/hw/bender/hw/expressions/expression_list', Empty, self.list_expressions)
-        #self.joystick_sub = rospy.Subscriber(self.controller_namespace + '/expression_joystick_cmd', Emotion, self.joystick_cmd)
+        self.command_sub = rospy.Subscriber('/bender/hw/bender/hw/emotion_command', ExpressionCommand, self.process_command)
+        self.expressionsList_sub = rospy.Subscriber('/bender/hw/bender/hw/emotion_list', Empty, self.list_expressions)
         self.joystick_sub = rospy.Subscriber('/bender/hw/head/cmd', Emotion, self.joystick_cmd)
-
        #publishers
-        self.state_pub = rospy.Publisher(self.controller_namespace + '/expression_state', ExpressionCommand, queue_size = 50)
+        self.state_pub = rospy.Publisher(self.controller_namespace + '/emotion_state', ExpressionCommand, queue_size = 50)
         self.joy_pub = rospy.Publisher('/bender/hw/bender/hw/expressions/expression_command', ExpressionCommand, queue_size = 50)
         Thread(target=self.update_state).start()
 
@@ -74,23 +69,14 @@ class ROSFacialExpressions:
         self.joy_pub.unregister()
 
     def process_command(self, msg):
-        if (msg.expression == "surprise"):
-            self.facial_expressions.surprised()
-        elif (msg.expression == "angry1"):
-            self.facial_expressions.angry()
-        elif (msg.expression == "happy1"):
-            self.facial_expressions.happy()
-        elif (msg.expression == "sad1"):
-            self.facial_expressions.sad()
-        elif (msg.expression == "veryHappy"):
-            self.facial_expressions.veryHappy()
-        elif (msg.expression == "default"):
-            self.facial_expressions.default()
-        elif (msg.expression == "apagado"):
-            self.facial_expressions.apagado()
+        if (msg.expression in self.static_emotion_list): self.emotions_controller.set_emotion(msg.expression)
+        elif (msg.expression in self.dynamic_emotion_list): self.emotions_controller.set_dynamic_emotion(msg.expression)
         elif (msg.expression == "id"):
             device_id = self.hw_controller.get_state(3)
             print("device_id = "+str(device_id))
+        else:
+            rospy.logwarn("For order 'changeFace', unknown action: '" + emotion 
+                + "' ... Please use one of the following:\n" + str(self.emotion_list))
 
     def joystick_cmd(self, msg):
         if (msg.Order == "changeFace"):
@@ -117,8 +103,8 @@ class ROSFacialExpressions:
 
 if __name__ == '__main__':
     rospy.init_node('expressions_controller')
-    dxl = DynamixelIO('/dev/bender/r_port', baudrate = 115200)
-    expressions = ROSFacialExpressions(dxl, 'expressions', 'left')
+    dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
+    expressions = HeadController(dxl, 'emotions', 'left')
     expressions.initialize()
     expressions.start()
     rospy.spin()

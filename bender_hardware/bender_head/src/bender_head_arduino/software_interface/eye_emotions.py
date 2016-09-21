@@ -21,27 +21,27 @@ class EyeEmotion(object):
 	def surprised(self):
 		rgb_colors = [c.blue,c.blue,c.blue,c.red,c.red,c.red,c.black,c.black,c.black,c.blue,c.red,c.blue,c.green,c.green,c.green,c.green]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
-		self.hw_controller.set_eye_colors("right", rgb_colors)
+		self.hw_controller.set_eye_colors("right", rgb_colors[::-1])
 
 	def angry(self):
-		rgb_colors = [c.red,c.red,c.red,c.red,c.yellow2,c.yellow2,c.black,c.black,c.black,c.red,c.black,c.black,c.green,c.green,c.green,c.green]
+		rgb_colors = [c.red,c.red,c.red,c.red,c.black,c.black,c.black,c.black,c.black,c.red,c.red,c.black,c.black,c.black,c.black,c.black]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
-		self.hw_controller.set_eye_colors("right", rgb_colors)
+		self.hw_controller.set_eye_colors("right", rgb_colors[::-1])
 		
 	def sad(self):
 		rgb_colors = [c.black,c.black,c.black,c.blue,c.black,c.blue,c.black,c.blue,c.black,c.blue,c.black,c.blue,c.black,c.black,c.black,c.black]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
-		self.hw_controller.set_eye_colors("right", rgb_colors)
+		self.hw_controller.set_eye_colors("right", rgb_colors[::-1])
 
 	def happy(self):
-		rgb_colors = [c.black,c.black,c.black,c.black,c.yellow3,c.yellow3,c.black,c.black,c.black,c.black,c.yellow3,c.yellow3,c.yellow3,c.yellow3,c.black,c.black]
+		rgb_colors = [c.black,c.black,c.black,c.black,c.green,c.green,c.black,c.black,c.black,c.black,c.green,c.green,c.green,c.green,c.black,c.black]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
-		self.hw_controller.set_eye_colors("right", rgb_colors)
+		self.hw_controller.set_eye_colors("right", rgb_colors[::-1])
 
 	def apagado(self):
 		rgb_colors = [c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black,c.black]
 		self.hw_controller.set_eye_colors("left", rgb_colors)
-		self.hw_controller.set_eye_colors("right", rgb_colors)
+		self.hw_controller.set_eye_colors("right", rgb_colors[::-1])
 
 	def color_palette1(self):
 		led = 0

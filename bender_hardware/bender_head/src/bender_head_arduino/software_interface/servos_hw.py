@@ -31,7 +31,7 @@ class ServosHW(object):
 		self.hw_controller.moveServoTo(SERVO0, angle)
 
 	def right_ear(self, lifting_percentage):
-		angle = self.remapRange(lifting_percentage, 0, 130)
+		angle = self.remapRange(lifting_percentage, 130, 0)
 		self.hw_controller.moveServoTo(SERVO3, angle)
 		
 	def left_eyebrow(self, lifting_percentage):

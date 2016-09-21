@@ -4,9 +4,11 @@
 	<arg name="interface" default="serial"/>
 
 	<!-- bender head -->
-	<node name="head" pkg="bender_head" type="ros_facial_expressions.py" ns="/bender/hw">
+	<node name="head" pkg="bender_head" type="head_controller.py" ns="/bender/hw">
 		<param name="interface" value="$(arg interface)"/>
 		<rosparam file="$(find bender_head)/config/eye_colors.yaml" command="load"/>
+		<rosparam file="$(find bender_head)/config/emotions.yaml" command="load"/>
+		<rosparam file="$(find bender_head)/config/dynamic_emotions.yaml" command="load"/>
 	</node>
 
 </launch>
