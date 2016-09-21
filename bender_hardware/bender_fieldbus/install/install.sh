@@ -1,5 +1,9 @@
-#!/usr/bin/bash
+#!/bin/bash
 
+# bender_fieldbus package installer
+# run: $ bash bender_fieldbus/install/install.sh
+
+#  - - - - - - - - - Setup - - - - - - - - - - - 
 # Color
 red=$(tput setaf 1)
 green=$(tput setaf 2)
@@ -22,6 +26,8 @@ echo "$installer Add user to dialout group"
 sudo usermod -a -G dialout "$USER"
 # Port permissions
 echo "$installer Add ports permissions"
+
+# l_port
 if [ -e /dev/bender/l_port ];
 then
    real_port=$(readlink -f '/dev/bender/l_port')
@@ -32,7 +38,7 @@ else
    echo "$installer ${red}Port /dev/bender/l_port NOT connected.${reset}"
    echo "$installer ${yellow}You must add permissions using \$ sudo chmod a+rw \$(readlink -f '/dev/bender/l_port')${reset}"
 fi
-
+# r_port
 if [ -e /dev/bender/r_port ];
 then
    real_port=$(readlink -f '/dev/bender/r_port')
