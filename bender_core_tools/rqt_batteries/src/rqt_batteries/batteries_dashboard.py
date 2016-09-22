@@ -22,14 +22,13 @@
 #   * Sammy Pfeiffer
 
 import rospy
-
 from rqt_robot_dashboard.dashboard import Dashboard
+from python_qt_binding.QtWidgets import QGroupBox, QHBoxLayout, QLabel
+from python_qt_binding.QtCore import Qt, QSize, Signal
+from sensor_msgs.msg import BatteryState
 
-from python_qt_binding.QtCore import QSize
-
-from std_msgs.msg import Float32, Bool
 from .wrap_battery import WrappedBattery
-
+from threading import Thread
 
 class BatteriesDashboard(Dashboard):
     """
@@ -38,6 +37,9 @@ class BatteriesDashboard(Dashboard):
     :param context: the plugin context
     :type context: qt_gui.plugin.Plugin
     """
+    _sig_add_battery = Signal(str)
+    _sig_remove_battery = Signal(str)
+
     def setup(self, context):
         self.name = 'Batteries Dashboard'
         self.max_icon_size = QSize(50, 30)
@@ -45,109 +47,128 @@ class BatteriesDashboard(Dashboard):
         self._last_dashboard_message_time = rospy.Time.now()
         self._widget_initialized = False
 
-        NAMESPACE = '/batteries_dashboard'
-        if rospy.has_param(NAMESPACE):
-            # rosparam set /batteries_dashboard/batteries "{'battery1': {'percentage_topic': '/percentage1', 'charging_topic': '/charging1', 'tooltip_name': 'BATT1'}}"
-            # rosparam set /batteries_dashboard/batteries "{'battery2': {'percentage_topic': '/percentage2', 'charging_topic': '/charging2', 'tooltip_name': 'BATT2'}}"
-            if rospy.has_param(NAMESPACE + '/batteries'):
-                self._batteries_list = rospy.get_param(NAMESPACE + '/batteries')
-            else:
-                rospy.logwarn("No batteries to monitor found in param server under " + NAMESPACE + "/batteries")
-            # Looks like:
-            # {'battery1': {'battery_name': 'BATT1',
-            #  'charging_topic': '/charging1',
-            #  'percentage_topic': '/percentage1'},
-            # 'battery2': {'battery_name': 'BATT2',
-            #  'charging_topic': '/charging2',
-            #  'percentage_topic': '/percentage2'}}
+        self.rate = rospy.get_param('~rate',1.0) 
+        
+        self._batteries = dict()
 
-        else:
-            rospy.logerr("You must set /batteries_dashboard parameters to use this plugin. e.g.:\n" +
-                         "rosparam set /batteries_dashboard/batteries \"{'battery1': {'percentage_topic': '/percentage1', 'charging_topic': '/charging1', 'battery_name': 'BATT1'}}\"")
-            exit(-1)
+        rospy.loginfo('Subscribed to \'{}battery_states\' for battery status'.format(rospy.get_namespace()))
+        self._sub = rospy.Subscriber('battery_states', BatteryState, self.dashboard_callback, queue_size=5)
 
-        for battery_elem in self._batteries_list: # list of all batteries to monitor
-            for battery_name in battery_elem.keys(): # there is only one key which is the name
-                percentage_topic = battery_elem[battery_name].get('percentage_topic', None)
-                charging_topic = battery_elem[battery_name].get('charging_topic', None)
-                tooltip_name = battery_elem[battery_name].get('tooltip_name', None)
-                rospy.loginfo("Battery: " + str(battery_name) + " has percentage topic: " +
-                    str(percentage_topic)  +  " and charging topic: " + str(charging_topic) +
-                                " and has tooltip name: " + str(tooltip_name))
+        self._sig_add_battery.connect(self._add_batteries)
+        self._sig_remove_battery.connect(self._remove_batteries)
 
-                battery_elem[battery_name].update({'current_percentage': 0.0})
-                battery_elem[battery_name].update({'percentage_sub': rospy.Subscriber(percentage_topic,
-                                                                                Float32,
-                                                                                self.dashboard_callback,
-                                                                                callback_args={'battery': battery_name},
-                                                                                queue_size=1)})
-
-                battery_elem[battery_name].update({'charging_status': False})
-                if charging_topic:
-                    battery_elem[battery_name].update({'charging_sub': rospy.Subscriber(charging_topic,
-                                                                                    Bool,
-                                                                                    self.dashboard_callback,
-                                                                                    callback_args={'battery': battery_name},
-                                                                                    queue_size=1)})
-
-                # Setup the widget
-                battery_elem[battery_name].update({'battery_widget': WrappedBattery(self.context, name=tooltip_name)})
+        self._running = True
+        Thread(target=self.check_outdated).start()
 
         self._widget_initialized = True
 
+    def _add_batteries(self, battery_name):
+        """
+        Slot for signals that update batteries widgets
+        """
+        rospy.loginfo('New battery \'{}\''.format(battery_name))
+        self._batteries[battery_name] = WrappedBattery(self.context, name=battery_name)
+        self.add_widgets()
+
+    def _remove_batteries(self, battery_name):
+        """
+        Slot for signals that remove batteries widgets
+        """
+        rospy.loginfo('Deleting battery \'{}\''.format(battery_name))
+        del self._batteries[battery_name]
+        self.add_widgets()
+
+    def add_widgets(self):
+        """
+        Add groups of widgets to _main_widget. Supports group labels.
+        """
+        self._main_widget.clear()
+        widgets = self.get_widgets()
+        self._widgets = [] # stores widgets which may need to be shut down when done
+        for group in widgets:
+            # Check for group label
+            if isinstance(group[0], str):
+                grouplabel, v = group
+                box = QGroupBox(grouplabel)
+                box.setContentsMargins(0, 18, 0, 0) # LTRB
+                # Apply the center-label directive only for single-icon groups
+                if len(group[1]) == 1:
+                    box.setAlignment(Qt.AlignHCenter)
+            else:
+                box = QGroupBox()
+                box.setContentsMargins(0, 0, 0, 0) # LTRB
+                v = group
+            # Add widgets to QGroupBox
+            layout = QHBoxLayout()
+            layout.setSpacing(0)
+            layout.setContentsMargins(0, 0, 0, 0) # LTRB
+            for i in v:
+                try:
+                    try:
+                        i.setIconSize(self.max_icon_size) # without this, icons are tiny
+                    except AttributeError as e:
+                        # triggers with battery which uses a QLabel instead of a QToolButton-based widget
+                        pass
+                    layout.addWidget(i)
+                    self._widgets.append(i)
+                except:
+                    raise Exception("All widgets must be a subclass of QWidget!")
+
+            layout.activate()
+            box.setLayout(layout)
+            self._main_widget.addWidget(box)
+            self._main_widget.addSeparator()
 
     def get_widgets(self):
-        widgets_list = []
-        for battery_elem in self._batteries_list:
-            for battery_name in battery_elem.keys():
-                widgets_list.append([battery_elem[battery_name]['battery_widget']])
-        return widgets_list
+        widget_groups = []
+        for battery_name in self._batteries.keys():
+            widget_groups.append([str(self._batteries[battery_name]._name),[self._batteries[battery_name]]])
+        return widget_groups
 
-    def dashboard_callback(self, msg, cb_args):
+    def dashboard_callback(self, msg):
         """
         callback to process messages
 
         :param msg:
-        :type msg: Float32 or Bool
-        :param cb_args:
-        :type cb_args: dictionary
+        :type msg: BatteryState
         """
         if not self._widget_initialized:
             return
-
-        if  'battery' in cb_args:
-            battery_name = cb_args['battery']
-            if type(msg) == Bool:
-                for battery_elem in self._batteries_list:
-                    if battery_name in battery_elem:
-                        battery_elem[battery_name].update({'charging_status': msg.data})
-
-            if type(msg) == Float32:
-                for battery_elem in self._batteries_list:
-                    if battery_name in battery_elem:
-                        battery_elem[battery_name].update({'current_percentage': msg.data})
-
-
-        # Throttling to 1Hz the update of the widget whatever the rate of the topics is, maybe make it configurable?
-        if (rospy.Time.now() - self._last_dashboard_message_time) < rospy.Duration(1.0):
+        # Battery name
+        battery_name = msg.serial_number
+        # Add battery
+        if not battery_name in self._batteries:
+            # Call Qt UI thread for add new widget
+            self._sig_add_battery.emit(battery_name)
             return
-        self._last_dashboard_message_time = rospy.Time.now()
 
-        # Update all widgets
-        for battery_elem in self._batteries_list:
-            for battery_name in battery_elem.keys():
-                battery_elem[battery_name]['battery_widget'].set_power_state_perc(
-                    battery_elem[battery_name]['current_percentage'], battery_elem[battery_name]['charging_status'])
-                rospy.logdebug("Updated " + str(battery_name) + " with "
-                              + str(round(battery_elem[battery_name]['current_percentage']))
-                              + "% battery and is "
-                              + ("charging." if battery_elem[battery_name].get('charging_status') else "not charging."))
+        # Update widget
+        charging_status = False
+        if msg.power_supply_status == BatteryState.POWER_SUPPLY_STATUS_CHARGING:
+            charging_status = True
+        self._batteries[battery_name].set_power_state_perc(msg.percentage, charging_status)
 
+
+    def check_outdated(self):
+        while self._running:  
+            try:
+                # Check outdated batteries
+                for battery in self._batteries.values():
+                    if (rospy.Time.now() - battery.last_update) > rospy.Duration(5.0):
+                        rospy.logdebug('Battery \'{}\' information is outdated'.format(battery._name))
+                        battery.set_power_state_perc(0.0, False, refresh=False)
+
+                    if (rospy.Time.now() - battery.last_update) > rospy.Duration(10.0):
+                        rospy.logwarn('Battery \'{}\' will be deleted from dashboard'.format(battery._name))
+                        self._sig_remove_battery.emit(battery._name)
+                rospy.sleep(1.0)
+
+            except rospy.ROSInterruptException: 
+                self._running = False
 
     def shutdown_dashboard(self):
-        for battery_elem in self._batteries_list:
-            for battery_name in battery_elem.keys():
-                if battery_elem[battery_name]['percentage_sub']:
-                    battery_elem[battery_name]['percentage_sub'].unregister()
-                if battery_elem[battery_name]['charging_sub']:
-                    battery_elem[battery_name]['charging_sub'].unregister()
+        # Close thread
+        self._running = False
+        # Unregister subscriber
+        self._sub.unregister()
+

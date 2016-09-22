@@ -22,7 +22,7 @@ else
   sudo chmod a+rw /dev/input/js1
   sudo chmod a+rw /dev/input/js2
   sudo chmod a+rw /dev/input/js3
-  sudo chmod a+rw /dev/input/js4
+  # sudo chmod a+rw /dev/input/js4
 fi
 
 # Permisos para lectura de puertos
