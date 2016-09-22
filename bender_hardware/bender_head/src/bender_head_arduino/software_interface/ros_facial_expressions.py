@@ -74,13 +74,14 @@ class ROSFacialExpressions:
         self.joy_pub.unregister()
 
     def process_command(self, msg):
+    	rospy.loginfo('Expression received: {}'.format(msg.expression))
         if (msg.expression == "surprise"):
             self.facial_expressions.surprised()
-        elif (msg.expression == "angry1"):
+        elif (msg.expression == "angry1" or msg.expression == "angry2" or msg.expression == "angry3"):
             self.facial_expressions.angry()
-        elif (msg.expression == "happy1"):
+        elif (msg.expression == "happy1" or msg.expression == "happy2" or msg.expression == "happy3"):
             self.facial_expressions.happy()
-        elif (msg.expression == "sad1"):
+        elif (msg.expression == "sad1" or msg.expression == "sad2" or msg.expression == "sad3"):
             self.facial_expressions.sad()
         elif (msg.expression == "veryHappy"):
             self.facial_expressions.veryHappy()
@@ -117,7 +118,7 @@ class ROSFacialExpressions:
 
 if __name__ == '__main__':
     rospy.init_node('expressions_controller')
-    dxl = DynamixelIO('/dev/bender/r_port', baudrate = 115200)
+    dxl = DynamixelIO('/dev/bender/l_port', baudrate = 115200)
     expressions = ROSFacialExpressions(dxl, 'expressions', 'left')
     expressions.initialize()
     expressions.start()

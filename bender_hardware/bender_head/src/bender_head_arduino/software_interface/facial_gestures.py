@@ -24,8 +24,8 @@ class FacialGestures(object):
 		self.servos_hw = servos_hw
 
 	def surprised(self):
-		self.servos_hw.left_ear(90)
-		self.servos_hw.right_ear(90)
+		self.servos_hw.left_ear(100)
+		self.servos_hw.right_ear(100)
 		self.servos_hw.left_eyebrow(82)
 		self.servos_hw.right_eyebrow(55)
 		self.servos_hw.mouth(90)
@@ -42,7 +42,7 @@ class FacialGestures(object):
 		self.servos_hw.right_ear(70)
 		self.servos_hw.left_eyebrow(70)
 		self.servos_hw.right_eyebrow(65)
-		self.servos_hw.mouth(20)
+		self.servos_hw.mouth(50)
 
 	def sad(self):
 		self.servos_hw.left_ear(10)
