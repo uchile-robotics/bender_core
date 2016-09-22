@@ -373,94 +373,94 @@ vel_l = nav_factor_linear_2;
 	float neck_side  = joy->axes[axe_idx_neck_sides_];
 	float neck_front = joy->axes[axe_idx_neck_front_];
 	
-	if (buttons == NECK_ACTUATE) {
+	// if (buttons == NECK_ACTUATE) {
 
-		// command is valid only for axe limits
-		if ( neck_side*neck_side + neck_front*neck_front > 0.5 ) {
+	// 	// command is valid only for axe limits
+	// 	if ( neck_side*neck_side + neck_front*neck_front > 0.5 ) {
 
-			int angle = (int)(180*atan2f(neck_side,neck_front)/M_PI);
-			angle = std::min(std::max(-NECK_ANGLE_LIMIT,angle),NECK_ANGLE_LIMIT);
-			move_head(angle);
-			ROS_INFO_STREAM_THROTTLE(0.5, "Setting neck angle: " << angle << "[deg]");
-		}
-	}
+	// 		int angle = (int)(180*atan2f(neck_side,neck_front)/M_PI);
+	// 		angle = std::min(std::max(-NECK_ANGLE_LIMIT,angle),NECK_ANGLE_LIMIT);
+	// 		move_head(angle);
+	// 		ROS_INFO_STREAM_THROTTLE(0.5, "Setting neck angle: " << angle << "[deg]");
+	// 	}
+	// }
 
 
-	//  - - - - both arms - - - -
-	if ( joy->axes[axe_idx_arm_left_] == ARM_IS_SELECTED && joy->axes[axe_idx_arm_right_] == ARM_IS_SELECTED ) {
-		switch (buttons) {
-			case ARM_TORQUE_OFF: {
+	// //  - - - - both arms - - - -
+	// if ( joy->axes[axe_idx_arm_left_] == ARM_IS_SELECTED && joy->axes[axe_idx_arm_right_] == ARM_IS_SELECTED ) {
+	// 	switch (buttons) {
+	// 		case ARM_TORQUE_OFF: {
 
-				// TODO
-				ROS_WARN("TORQUE OFF for both arms: NOT IMPLEMENTED");
-				break;
-			}
-			default:
-				break;
-		}
+	// 			// TODO
+	// 			ROS_WARN("TORQUE OFF for both arms: NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		default:
+	// 			break;
+	// 	}
 
-		return;
-	}
+	// 	return;
+	// }
 
-	// - - - - left arm - - - -
-	if ( joy->axes[axe_idx_arm_left_] == ARM_IS_SELECTED && joy->axes[axe_idx_arm_right_] == ARM_IS_NOT_SELECTED ) {
-		switch (buttons) {
-			case ARM_TORQUE_OFF: {
-				ROS_WARN("TORQUE OFF for left arm: NOT IMPLEMENTED");
-				break;
-			}
-			case ARM_INITIAL_POSE:{
-				ROS_WARN("ARM_INITIAL_POSE for left arm is NOT IMPLEMENTED");
-				break;
-			}
-			case ARM_PREPARE: {
-				ROS_WARN("ARM_PREPARE for left arm is NOT IMPLEMENTED");
-				break;
-			}
-			case ARM_GRAB: {
+	// // - - - - left arm - - - -
+	// if ( joy->axes[axe_idx_arm_left_] == ARM_IS_SELECTED && joy->axes[axe_idx_arm_right_] == ARM_IS_NOT_SELECTED ) {
+	// 	switch (buttons) {
+	// 		case ARM_TORQUE_OFF: {
+	// 			ROS_WARN("TORQUE OFF for left arm: NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		case ARM_INITIAL_POSE:{
+	// 			ROS_WARN("ARM_INITIAL_POSE for left arm is NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		case ARM_PREPARE: {
+	// 			ROS_WARN("ARM_PREPARE for left arm is NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		case ARM_GRAB: {
 
-				ROS_WARN("ARM_GRAB for left arm is NOT IMPLEMENTED");
-				break;
-			}
-			case ARM_GRIP: {
+	// 			ROS_WARN("ARM_GRAB for left arm is NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		case ARM_GRIP: {
 
-				ROS_WARN("ARM_GRIP usage for left arm is NOT IMPLEMENTED");
-				break;
-			}
-			default:
-				break;
-		}
-		return;
-	}
+	// 			ROS_WARN("ARM_GRIP usage for left arm is NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		default:
+	// 			break;
+	// 	}
+	// 	return;
+	// }
 
 	// right arm axis(5) + command
-	if ( joy->axes[axe_idx_arm_left_] == ARM_IS_NOT_SELECTED && joy->axes[axe_idx_arm_right_] == ARM_IS_SELECTED ) {
-		switch (buttons) {
-			case ARM_TORQUE_OFF: {
-				ROS_WARN("ARM_TORQUE_OFF for right arm is NOT IMPLEMENTED");
-				break;
-			}
-			case ARM_INITIAL_POSE:{
-				ROS_WARN("ARM_INITIAL_POSE for right arm is NOT IMPLEMENTED");
-				break;
-			}
-			case ARM_PREPARE: {
-				ROS_WARN("ARM_PREPARE for right arm is NOT IMPLEMENTED");
-				break;
-			}
-			case ARM_GRAB: {
-				ROS_WARN("ARM_GRAB for right arm is NOT IMPLEMENTED");
-				break;
-			}
-			case ARM_GRIP: {
-				ROS_WARN("ARM_GRIP usage for right arm is NOT IMPLEMENTED");
-				break;
-			}
-			default:
-				break;
-		}
-		return;
-	}
+	// if ( joy->axes[axe_idx_arm_left_] == ARM_IS_NOT_SELECTED && joy->axes[axe_idx_arm_right_] == ARM_IS_SELECTED ) {
+	// 	switch (buttons) {
+	// 		case ARM_TORQUE_OFF: {
+	// 			ROS_WARN("ARM_TORQUE_OFF for right arm is NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		case ARM_INITIAL_POSE:{
+	// 			ROS_WARN("ARM_INITIAL_POSE for right arm is NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		case ARM_PREPARE: {
+	// 			ROS_WARN("ARM_PREPARE for right arm is NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		case ARM_GRAB: {
+	// 			ROS_WARN("ARM_GRAB for right arm is NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		case ARM_GRIP: {
+	// 			ROS_WARN("ARM_GRIP usage for right arm is NOT IMPLEMENTED");
+	// 			break;
+	// 		}
+	// 		default:
+	// 			break;
+	// 	}
+	// 	return;
+	// }
 
 	// - - - - - - - - - - - BUTTONS - - - - - - - - - - - - -
 	switch (buttons) {

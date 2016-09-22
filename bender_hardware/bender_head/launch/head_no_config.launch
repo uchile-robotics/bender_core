@@ -1,0 +1,17 @@
+<launch>
+
+	<!-- hardware interface to the head: "serial", "ethernet" or "mock" -->
+	<arg name="interface" default="serial"/>
+
+	<!-- bender head -->
+	<node name="head" pkg="bender_head" type="ros_facial_expressions.py" ns="/bender/hw" output="screen">
+		<!--remap from="expressions/expression_command" to="bender/hw/expressions/expression_command"/>
+		<remap from="expressions/expression_list" to="bender/hw/expressions/expression_list"/>
+		<remap from="expressions/expression_state" to="bender/hw/expressions/expression_state"/>
+		<remap from="expressions/expression_joystick_cmd" to="bender/hw/head/cmd"/-->
+	</node>
+
+	<!-- Launch selected port -->
+	<!--include file="$(find bender_fieldbus)/launch/l_port.launch"/-->
+
+</launch>
