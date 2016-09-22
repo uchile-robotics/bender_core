@@ -67,6 +67,10 @@ const uint16_t HAPPY    = _A_;
 const uint16_t ANGRY    = _B_;
 const uint16_t SAD      = _X_;
 const uint16_t SURPRISE = _Y_;
+const uint16_t GREEN    = _A_;
+const uint16_t RED 		= _B_;
+const uint16_t BLUE 	= _X_;
+const uint16_t YELLOW	= _Y_;
 const uint16_t FACE_DECREMENT = _LB_;
 const uint16_t FACE_INCREMENT = _RB_;
 const uint16_t NECK_ACTUATE = _RS_;
@@ -80,8 +84,8 @@ const uint16_t ARM_PREPARE      = _B_;
 const uint16_t ARM_GRAB         = _X_;
 const uint16_t ARM_GRIP         = _Y_;
 const uint16_t ARM_TORQUE_OFF   = _BACK_;
-const int ARM_IS_SELECTED       = -1;
-const int ARM_IS_NOT_SELECTED   = +1;
+const int IS_SELECTED       = -1;
+const int IS_NOT_SELECTED   = +1;
 
 // speech
 const uint16_t SPEECH_INCREMENT = _UP_;
@@ -140,6 +144,9 @@ private:
 	// system
 	int button_idx_pause_;
 
+	// face
+	int axe_select_face_layer;
+
 
 	// - - - - control variables - - - -
 
@@ -166,6 +173,7 @@ Joystick::Joystick():
 	axe_idx_neck_front_(_RS_VERT_),
 	axe_idx_arm_left_(_LT_),
 	axe_idx_arm_right_(_RT_),
+	axe_select_face_layer(_RT_),
 	button_idx_pause_(_BACK_),
 	nav_factor_angular_(2),
 	nav_factor_linear_(2)
@@ -197,7 +205,7 @@ Joystick::Joystick():
 	speech_serv_ = priv.serviceClient<bender_srvs::String>("/bender/hw/tts/say");
 
 	// face
-	face_pub_ = priv.advertise<bender_msgs::Emotion>("/bender/hw/head/cmd", 1);
+	face_pub_ = priv.advertise<bender_msgs::Emotion>("/bender/head/cmd", 1);
 
 
 	// - - - - publishers - - -
@@ -450,99 +458,119 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 	// }
 
 	// - - - - - - - - - - - BUTTONS - - - - - - - - - - - - -
-	switch (buttons) {
 
-		// - - - - face emotions - - - -
-		case HAPPY: {
-			std::stringstream sstm;
-			sstm << "happy" << face_intensity;
-			ROS_INFO_STREAM("happy" << face_intensity);
-			show_emotion(sstm.str());
+	if ( joy->axes[axe_select_face_layer] == IS_SELECTED ) {
 
-			break;
-		}
-		case ANGRY: {
-			std::stringstream sstm;
-			sstm << "angry" << face_intensity;
-			ROS_INFO_STREAM("angry" << face_intensity);
-			show_emotion(sstm.str());
+		switch (buttons) {
 
-			break;
-		}
-		case SAD: {
-			std::stringstream sstm;
-			sstm << "sad" << face_intensity;
-			ROS_INFO_STREAM("sad" << face_intensity);
-			show_emotion(sstm.str());
+			case GREEN: {
+				std::stringstream sstm;
+				sstm << "led_off";
+				ROS_INFO_STREAM("led_off");
+				show_emotion(sstm.str());
 
-			break;
-		}
-		case SURPRISE: {
-			ROS_INFO_STREAM("surprise");
-			show_emotion("surprise");
-
-			break;
-		}
-		case FACE_DECREMENT: {
-			face_intensity = std::max(MIN_FACE_INTENSITY,face_intensity-1);
-			ROS_INFO_STREAM("Emotion intensity decrement: " << face_intensity);
-
-			break;
-		}
-		case FACE_INCREMENT: {
-			face_intensity = std::min(MAX_FACE_INTENSITY,face_intensity+1);
-			ROS_INFO_STREAM("Emotion intensity increment: " << face_intensity);
-
-			break;
-		}
-		case SPEECH_INCREMENT: {
-
-			if (!phrases.empty()) {
-				int levels = ceil(phrases.size()/2.0);
-				speech_level = (speech_level+1)%levels;
-				ROS_INFO_STREAM("Speech level: " << speech_level + 1 << "/" << levels);
+				break;
 			}
-			break;
 		}
-		case SPEECH_DECREMENT: {
+	}
 
-			if (!phrases.empty()) {
-				int levels = ceil(phrases.size()/2.0);
-				speech_level--;
-				if (speech_level < 0) {
-					speech_level = levels-1;
+	else if ( joy->axes[axe_select_face_layer] == IS_NOT_SELECTED ) {
+
+		switch (buttons) {
+
+			// - - - - face emotions - - - -
+			case HAPPY: {
+				std::stringstream sstm;
+				sstm << "happy" << face_intensity;
+				ROS_INFO_STREAM("happy" << face_intensity);
+				show_emotion(sstm.str());
+
+				break;
+			}
+			case ANGRY: {
+				std::stringstream sstm;
+				sstm << "angry" << face_intensity;
+				ROS_INFO_STREAM("angry" << face_intensity);
+				show_emotion(sstm.str());
+
+				break;
+			}
+			case SAD: {
+				std::stringstream sstm;
+				sstm << "sad" << face_intensity;
+				ROS_INFO_STREAM("sad" << face_intensity);
+				show_emotion(sstm.str());
+
+				break;
+			}
+			case SURPRISE: {
+				ROS_INFO_STREAM("surprise");
+				show_emotion("surprise");
+
+				break;
+			}
+			case FACE_DECREMENT: {
+				face_intensity = std::max(MIN_FACE_INTENSITY,face_intensity-1);
+				ROS_INFO_STREAM("Emotion intensity decrement: " << face_intensity);
+
+				break;
+			}
+			case FACE_INCREMENT: {
+				face_intensity = std::min(MAX_FACE_INTENSITY,face_intensity+1);
+				ROS_INFO_STREAM("Emotion intensity increment: " << face_intensity);
+
+				break;
+			}
+			case SPEECH_INCREMENT: {
+
+				if (!phrases.empty()) {
+					int levels = ceil(phrases.size()/2.0);
+					speech_level = (speech_level+1)%levels;
+					ROS_INFO_STREAM("Speech level: " << speech_level + 1 << "/" << levels);
 				}
-				ROS_INFO_STREAM("Speech level: " << speech_level + 1 << "/" << levels);
+				break;
 			}
+			case SPEECH_DECREMENT: {
 
-			break;
+				if (!phrases.empty()) {
+					int levels = ceil(phrases.size()/2.0);
+					speech_level--;
+					if (speech_level < 0) {
+						speech_level = levels-1;
+					}
+					ROS_INFO_STREAM("Speech level: " << speech_level + 1 << "/" << levels);
+				}
 
-		}
-		case SPEECH_PHRASE_A_: {
+				break;
 
-			if (!phrases.empty()) {
-				int phrase_no = speech_level*2;
-				std::string text = phrases[phrase_no];
-				synthesize(text);
-				ROS_INFO_STREAM("Synthesizing text: " << text);
 			}
+			case SPEECH_PHRASE_A_: {
+
+				if (!phrases.empty()) {
+					int phrase_no = speech_level*2;
+					std::string text = phrases[phrase_no];
+					synthesize(text);
+					ROS_INFO_STREAM("Synthesizing text: " << text);
+				}
 
 
-			break;
-		}
-		case SPEECH_PHRASE_B_: {
-
-			if (!phrases.empty()) {
-				int phrase_no = (speech_level*2 + 1)%phrases.size();
-				std::string text = phrases[phrase_no];
-				synthesize(text);
-				ROS_INFO_STREAM("Synthesizing text: " << text);
+				break;
 			}
+			case SPEECH_PHRASE_B_: {
 
-			break;
+				if (!phrases.empty()) {
+					int phrase_no = (speech_level*2 + 1)%phrases.size();
+					std::string text = phrases[phrase_no];
+					synthesize(text);
+					ROS_INFO_STREAM("Synthesizing text: " << text);
+				}
+
+				break;
+			}
+			default:
+				break;
 		}
-		default:
-			break;
+	
 	}
 
 }

@@ -19,9 +19,9 @@ class EmotionsController(object):
 		self.servos_hw = servos_hw
 		self.actual_expresion = ""
 		# Check param
-		self.emotions = rospy.get_param('bender_head/emotions')
-		self.dynamic_emotions = rospy.get_param('bender_head/dynamic_emotions')
-		self.colors = rospy.get_param('bender_head/eye_colors')
+		self.emotions = rospy.get_param('~emotions')
+		self.dynamic_emotions = rospy.get_param('~dynamic_emotions')
+		self.colors = rospy.get_param('~eye_colors')
 
 	def get_rgb_colors(self, str_colors):
 		rgb_colors = []
@@ -33,15 +33,18 @@ class EmotionsController(object):
 
 	def set_emotion(self, emotion):
 		emo = self.emotions[emotion]
-		left_eye_colors = self.get_rgb_colors(emo['left_eye'])
-		right_eye_colors = self.get_rgb_colors(emo['left_eye'])
+		left_eye_colors = self.get_rgb_colors(emo['eyes']['left_eye'])
+		right_eye_colors = self.get_rgb_colors(emo.['eyes']['right_eye'])
 		self.hw_controller.set_eye_colors("left", left_eye_colors)
-		self.hw_controller.set_eye_colors("right", right_eye_colors)
-		self.servos_hw.left_ear(emo['left_ear'])
-		self.servos_hw.right_ear(emo['right_ear'])
-		self.servos_hw.left_eyebrow(emo['left_eyebrow'])
-		self.servos_hw.right_eyebrow(emo['right_eyebrow'])
-		self.servos_hw.mouth(emo['mouth'])
+		self.hw_controller.set_eye_colors("right", left_eye_colors[::-1])
+		
+		if (emo['servos']):
+			self.servos_hw.left_ear(emo['left_ear'])
+			self.servos_hw.right_ear(emo['right_ear'])
+			self.servos_hw.left_eyebrow(emo['left_eyebrow'])
+			self.servos_hw.right_eyebrow(emo['right_eyebrow'])
+			self.servos_hw.mouth(emo['mouth'])
+			
 		self.actual_expresion = emotion
 
 	def set_dynamic_emotion(self, emotion):

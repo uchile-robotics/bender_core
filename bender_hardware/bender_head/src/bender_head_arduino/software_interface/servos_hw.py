@@ -27,24 +27,29 @@ class ServosHW(object):
 		return int(new_value)
 
 	def left_ear(self, lifting_percentage):
-		angle = self.remapRange(lifting_percentage, 160, 50)
-		self.hw_controller.moveServoTo(SERVO0, angle)
+		if (lifting_percentage != -1):
+			angle = self.remapRange(lifting_percentage, 160, 50)
+			self.hw_controller.moveServoTo(SERVO0, angle)
 
 	def right_ear(self, lifting_percentage):
-		angle = self.remapRange(lifting_percentage, 110, 40)
-		self.hw_controller.moveServoTo(SERVO3, angle)
+		if (lifting_percentage != -1):
+			angle = self.remapRange(lifting_percentage, 110, 40)
+			self.hw_controller.moveServoTo(SERVO3, angle)
 		
 	def left_eyebrow(self, lifting_percentage):
-		angle = self.remapRange(lifting_percentage, 40, 140)
-		self.hw_controller.moveServoTo(SERVO2, angle)
+		if (lifting_percentage != -1):
+			angle = self.remapRange(lifting_percentage, 40, 140)
+			self.hw_controller.moveServoTo(SERVO2, angle)
 		
 	def right_eyebrow(self, lifting_percentage):
-		angle = self.remapRange(lifting_percentage, 140, 40)
-		self.hw_controller.moveServoTo(SERVO4, angle)
+		if (lifting_percentage != -1):
+			angle = self.remapRange(lifting_percentage, 140, 40)
+			self.hw_controller.moveServoTo(SERVO4, angle)
 		
 	def mouth(self, opening_percentage):
-		angle = self.remapRange(opening_percentage, 80, 140)
-		self.hw_controller.moveServoTo(SERVO1, angle)
+		if (lifting_percentage != -1):
+			angle = self.remapRange(opening_percentage, 80, 140)
+			self.hw_controller.moveServoTo(SERVO1, angle)
 
 if __name__ == '__main__':
 	DEV_ID = 1
