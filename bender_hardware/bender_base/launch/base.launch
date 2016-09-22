@@ -1,7 +1,7 @@
 <launch> 
 
 	<!-- pioneer 3AT node -->
-	<node pkg="rosaria" type="RosAria" name="base" respawn="true" ns="/bender/nav/">
+	<node pkg="rosaria" type="RosAria" name="base" output="screen" respawn="true" ns="/bender/nav/">
 		<rosparam command="load" file="$(find bender_base)/config/base.yaml"/>
 	</node>
 

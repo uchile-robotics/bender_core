@@ -24,6 +24,9 @@ b_idx_pause: 7 # Start
 nav_factor_linear: 0.4
 nav_factor_angular: 0.3
 
+nav_factor_linear2: 0.6
+nav_factor_angular2: 0.4
+
 # speech
 speech_phrases: [
   "hola a todos",

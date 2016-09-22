@@ -152,6 +152,8 @@ private:
 	// axes level
 	double nav_factor_linear_;
 	double nav_factor_angular_;
+	double nav_factor_linear_2;
+	double nav_factor_angular_2;
 
 	// speech
 	int speech_level;
@@ -168,7 +170,9 @@ Joystick::Joystick():
 	axe_idx_arm_right_(_RT_),
 	button_idx_pause_(_BACK_),
 	nav_factor_angular_(2),
-	nav_factor_linear_(2)
+	nav_factor_linear_(2),
+	nav_factor_angular_2(2),
+	nav_factor_linear_2(2)
 	{
 
 	// ros stuff
@@ -178,7 +182,9 @@ Joystick::Joystick():
 
 	// nav
 	priv.param("nav_factor_angular", nav_factor_angular_, nav_factor_angular_);
-	priv.param("nav_factor_linear", nav_factor_linear_, nav_factor_angular_);
+	priv.param("nav_factor_linear", nav_factor_linear_, nav_factor_linear_);
+	priv.param("nav_factor_angular2", nav_factor_angular_2, nav_factor_angular_2);
+	priv.param("nav_factor_linear2", nav_factor_linear_2, nav_factor_linear_2);
 
 	// speech
 	priv.param("speech_phrases", phrases, phrases);
@@ -351,9 +357,16 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 	// - - - - - - - - - - - - AXES - - - - - - - - - - - - -
 
 	// - - - - handle navigation - - - -
+	float vel_a = nav_factor_angular_;
+	float vel_l = nav_factor_linear_;
+if ( joy->axes[axe_idx_arm_left_] == ARM_IS_SELECTED ){
+vel_a = nav_factor_angular_2;
+vel_l = nav_factor_linear_2;
+}
+
 	geometry_msgs::Twist vel;
-	vel.angular.z = nav_factor_angular_*joy->axes[axe_idx_nav_angular_];
-	vel.linear.x = nav_factor_linear_*joy->axes[axe_idx_nav_linear_];
+	vel.angular.z = vel_a*joy->axes[axe_idx_nav_angular_];
+	vel.linear.x = vel_l*joy->axes[axe_idx_nav_linear_];
 	nav_pub_.publish(vel);
 
 	// - - - - handle neck - - - -
