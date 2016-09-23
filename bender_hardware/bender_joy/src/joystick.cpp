@@ -84,6 +84,8 @@ const uint16_t ARM_PREPARE      = _B_;
 const uint16_t ARM_GRAB         = _X_;
 const uint16_t ARM_GRIP         = _Y_;
 const uint16_t ARM_TORQUE_OFF   = _BACK_;
+const int ARM_IS_SELECTED       = -1;
+const int ARM_IS_NOT_SELECTED   = +1;
 const int IS_SELECTED       = -1;
 const int IS_NOT_SELECTED   = +1;
 
@@ -488,7 +490,6 @@ vel_l = nav_factor_linear_2;
 	}
 
 	else if ( joy->axes[axe_select_face_layer] == IS_NOT_SELECTED ) {
-
 		switch (buttons) {
 
 			// - - - - face emotions - - - -

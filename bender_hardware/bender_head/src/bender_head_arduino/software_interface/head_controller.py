@@ -103,7 +103,7 @@ class HeadController:
 
 if __name__ == '__main__':
     rospy.init_node('expressions_controller')
-    dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
+    dxl = DynamixelIO('/dev/bender/l_port', baudrate = 115200)
     expressions = HeadController(dxl, 'emotions', 'left')
     expressions.initialize()
     expressions.start()
