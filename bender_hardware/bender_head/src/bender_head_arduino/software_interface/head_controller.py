@@ -40,8 +40,9 @@ class HeadController:
         self.expression_state = ExpressionCommand()
         self.joystick_msg = ExpressionCommand()
         # valid emotions        
-        self.static_emotion_list = [ 'happy' , 'sad' , 'angry' , 'surprised' , 'apagado']
-        self.dynamic_emotion_list = [ '1313' , 'veryHappy']
+        #self.static_emotion_list = [ 'happy' , 'sad' , 'angry' , 'surprised' , 'apagado']
+        self.static_emotion_list = self.emotions_controller.emotions
+        self.dynamic_emotion_list = self.emotions_controller.dynamic_emotions
         
     def initialize(self):
         # Get params and allocate msgs
@@ -52,12 +53,12 @@ class HeadController:
         # Create subs, services, publishers, threads
         self.running = True
 		#subscribers
-        self.command_sub = rospy.Subscriber('/bender/hw/bender/hw/emotion_command', ExpressionCommand, self.process_command)
-        self.expressionsList_sub = rospy.Subscriber('/bender/hw/bender/hw/emotion_list', Empty, self.list_expressions)
-        self.joystick_sub = rospy.Subscriber('/bender/hw/head/cmd', Emotion, self.joystick_cmd)
+        self.command_sub = rospy.Subscriber('~emotion_command', ExpressionCommand, self.process_command)
+        self.expressionsList_sub = rospy.Subscriber('~emotion_list', Empty, self.list_expressions)
+        self.joystick_sub = rospy.Subscriber('~cmd', Emotion, self.joystick_cmd)
        #publishers
-        self.state_pub = rospy.Publisher(self.controller_namespace + '/emotion_state', ExpressionCommand, queue_size = 50)
-        self.joy_pub = rospy.Publisher('/bender/hw/bender/hw/expressions/expression_command', ExpressionCommand, queue_size = 50)
+        self.state_pub = rospy.Publisher('~emotion_state', ExpressionCommand, queue_size = 50)
+        self.joy_pub = rospy.Publisher('~emotion_command', ExpressionCommand, queue_size = 50)
         Thread(target=self.update_state).start()
 
     def stop(self):
@@ -74,14 +75,20 @@ class HeadController:
         elif (msg.expression == "id"):
             device_id = self.hw_controller.get_state(3)
             print("device_id = "+str(device_id))
+        elif (msg.expression[0] == "-"):
+            self.emotions_controller.moveNeck(int(msg.expression[1:]))
         else:
-            rospy.logwarn("For order 'changeFace', unknown action: '" + emotion 
-                + "' ... Please use one of the following:\n" + str(self.emotion_list))
+            rospy.logwarn("For order 'changeFace', unknown action: '" + msg.expression + "' ... Please use one of the following:\n" + str(self.static_emotion_list))
 
     def joystick_cmd(self, msg):
         if (msg.Order == "changeFace"):
             self.joystick_msg.expression = msg.Action
             self.joy_pub.publish(self.joystick_msg)
+        elif (msg.Order == "MoveX"):
+            print('STDMSG: Mover servo a:'+str(msg.X))
+            self.joystick_msg.expression = '-'+str(msg.X)
+            self.joy_pub.publish(self.joystick_msg)
+
 
     def list_expressions(self, msg):
         print("------------------------------------------------------------")
@@ -92,7 +99,7 @@ class HeadController:
     def update_state(self):
         rate = rospy.Rate(self.state_update_rate)
         while self.running and not rospy.is_shutdown():
-            current_expression = self.facial_expressions.get_state()
+            current_expression = self.emotions_controller.get_state()
 
             #update the data state
             self.expression_state.expression = current_expression
@@ -103,7 +110,7 @@ class HeadController:
 
 if __name__ == '__main__':
     rospy.init_node('expressions_controller')
-    dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
+    dxl = DynamixelIO('/dev/bender/l_port', baudrate = 115200)
     expressions = HeadController(dxl, 'emotions', 'left')
     expressions.initialize()
     expressions.start()
