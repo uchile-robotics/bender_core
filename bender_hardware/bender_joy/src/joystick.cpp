@@ -367,10 +367,10 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 	// - - - - handle navigation - - - -
 	float vel_a = nav_factor_angular_;
 	float vel_l = nav_factor_linear_;
-if ( joy->axes[axe_idx_arm_left_] == ARM_IS_SELECTED ){
-vel_a = nav_factor_angular_2;
-vel_l = nav_factor_linear_2;
-}
+	if ( joy->axes[axe_idx_arm_left_] == ARM_IS_SELECTED ){
+		vel_a = nav_factor_angular_;
+		vel_l = nav_factor_linear_2;
+	}
 
 	geometry_msgs::Twist vel;
 	vel.angular.z = vel_a*joy->axes[axe_idx_nav_angular_];
