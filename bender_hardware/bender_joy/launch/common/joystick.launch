@@ -7,6 +7,7 @@
   <node pkg="bender_joy" type="joystick" name="joystick$(arg joy_number)" output="screen" ns="/bender/joy/">
     <rosparam file="$(find bender_joy)/config/joystick.yaml" command="load"/>
     <remap from="joystick$(arg joy_number)/joy" to="/bender/joy/driver$(arg joy_number)"/>
+    <remap from="/bender/joy/joystick_nav/cmd_vel" to="/cmd_vel_safety_input"/>
   </node>
 
 </launch>
