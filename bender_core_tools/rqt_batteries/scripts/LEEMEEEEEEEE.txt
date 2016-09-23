@@ -1,0 +1,12 @@
+Rodrigo: 
+
+Trate de hacer un launch pero no me encontraba los nodos, lo mas seguro es que debo registrarlos en algun lado( que no se).
+
+Por otra lado el tema de remapear no se bien como es... investigaré un poco más mañana, me tinca que debo dejar una variable que se pueda modificar por el remapeado en donde señalo a que se suscribe el nodo :O no se si es así
+
+Por ahora subí todo lo que tenía. Seguiré mañana que ahora no estoy rindiendo bien xD 
+
+
+( no puedo hacer catkin_make por errores en otras partes... será por eso que no puedo encontrar los nodos? como que no estan en los archivos que genera el catkin ? ) 
+
+Ojala haya servido lo que hice :P

@@ -11,7 +11,9 @@ install(FILES plugin.xml
 install(PROGRAMS
   scripts/rqt_batteries
   scripts/test_plugin.py
-  scripts/batt_pub.py
+  scripts/batt_arms_pub.py
+  scripts/Motor_state_test.py
+  notebook_battery_pub.py
 
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
