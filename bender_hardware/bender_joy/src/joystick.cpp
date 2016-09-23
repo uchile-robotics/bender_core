@@ -383,17 +383,17 @@ vel_l = nav_factor_linear_2;
 	float neck_side  = joy->axes[axe_idx_neck_sides_];
 	float neck_front = joy->axes[axe_idx_neck_front_];
 	
-	// if (buttons == NECK_ACTUATE) {
+	if (buttons == NECK_ACTUATE) {
 
-	// 	// command is valid only for axe limits
-	// 	if ( neck_side*neck_side + neck_front*neck_front > 0.5 ) {
+		// command is valid only for axe limits
+		if ( neck_side*neck_side + neck_front*neck_front > 0.5 ) {
 
-	// 		int angle = (int)(180*atan2f(neck_side,neck_front)/M_PI);
-	// 		angle = std::min(std::max(-NECK_ANGLE_LIMIT,angle),NECK_ANGLE_LIMIT);
-	// 		move_head(angle);
-	// 		ROS_INFO_STREAM_THROTTLE(0.5, "Setting neck angle: " << angle << "[deg]");
-	// 	}
-	// }
+			int angle = (int)(180*atan2f(neck_side,neck_front)/M_PI);
+			angle = std::min(std::max(-NECK_ANGLE_LIMIT,angle),NECK_ANGLE_LIMIT);
+			move_head(angle);
+			ROS_INFO_STREAM_THROTTLE(0.5, "Setting neck angle: " << angle << "[deg]");
+		}
+	}
 
 
 	// //  - - - - both arms - - - -

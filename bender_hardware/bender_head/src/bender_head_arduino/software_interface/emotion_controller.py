@@ -30,6 +30,8 @@ class EmotionsController(object):
 			rgb_colors.append(rgb_color)
 		return rgb_colors
 
+	def moveNeck(self, angle):		
+		self.servos_hw.neck(angle)
 
 	def set_emotion(self, emotion):
 		emo = self.emotions[emotion]
