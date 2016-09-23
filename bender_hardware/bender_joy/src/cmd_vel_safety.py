@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
 from threading import Thread, Lock
-from geometry_msgs import Twist
+from geometry_msgs.msg import Twist
 import rospy
 
 class CmdVelSafety(object):
     """Basic Bender safety"""
     def __init__(self, rate=1):
         # Publisher and Subscriber for cheking safety
-        self.safe_pub = rospy.Publisher('~cmd_vel_safety_output', Twist, queue_size=5)
-        self.safe_sub = rospy.Subscriber('~cmd_vel_safety_input', Twist, self.check_safety)
+        self.safe_pub = rospy.Publisher('/cmd_vel_safety_output', Twist, queue_size=5)
+        self.safe_sub = rospy.Subscriber('/cmd_vel_safety_input', Twist, self.check_safety)
 
         # Rate, 1 Hz defaut
         self.rate_freq = rate
@@ -26,7 +26,7 @@ class CmdVelSafety(object):
         self.thread = Thread(target=self.publish_state)
         self.thread.start()
     
-    def.check_safety(self, msg):
+    def check_safety(self, msg):
         self.joy_ts = rospy.Time.now()
         with self.msg_lock:
             self.msg = msg
@@ -40,7 +40,7 @@ class CmdVelSafety(object):
 
             with self.msg_lock:
                 self.safe_pub.publish(self.msg)
-            self.rate_pub.sleep()
+            #self.rate_pub.sleep()
 
     def stop(self):
         self.running = False
