@@ -30,20 +30,22 @@ class EmotionsController(object):
 			rgb_colors.append(rgb_color)
 		return rgb_colors
 
+	def moveNeck(self, angle):		
+		self.servos_hw.neck(angle)
 
 	def set_emotion(self, emotion):
 		emo = self.emotions[emotion]
 		left_eye_colors = self.get_rgb_colors(emo['eyes']['left_eye'])
-		right_eye_colors = self.get_rgb_colors(emo.['eyes']['right_eye'])
+		right_eye_colors = self.get_rgb_colors(emo['eyes']['right_eye'])
 		self.hw_controller.set_eye_colors("left", left_eye_colors)
 		self.hw_controller.set_eye_colors("right", left_eye_colors[::-1])
-		
-		if (emo['servos']):
-			self.servos_hw.left_ear(emo['left_ear'])
-			self.servos_hw.right_ear(emo['right_ear'])
-			self.servos_hw.left_eyebrow(emo['left_eyebrow'])
-			self.servos_hw.right_eyebrow(emo['right_eyebrow'])
-			self.servos_hw.mouth(emo['mouth'])
+
+		if (emo['servos']!='NonUsed'):
+			self.servos_hw.left_ear(emo['servos']['left_ear'])
+			self.servos_hw.right_ear(emo['servos']['right_ear'])
+			self.servos_hw.left_eyebrow(emo['servos']['left_eyebrow'])
+			self.servos_hw.right_eyebrow(emo['servos']['right_eyebrow'])
+			self.servos_hw.mouth(emo['servos']['mouth'])
 			
 		self.actual_expresion = emotion
 

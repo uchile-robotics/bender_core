@@ -84,6 +84,8 @@ const uint16_t ARM_PREPARE      = _B_;
 const uint16_t ARM_GRAB         = _X_;
 const uint16_t ARM_GRIP         = _Y_;
 const uint16_t ARM_TORQUE_OFF   = _BACK_;
+const int ARM_IS_SELECTED       = -1;
+const int ARM_IS_NOT_SELECTED   = +1;
 const int IS_SELECTED       = -1;
 const int IS_NOT_SELECTED   = +1;
 
@@ -381,17 +383,17 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 	float neck_side  = joy->axes[axe_idx_neck_sides_];
 	float neck_front = joy->axes[axe_idx_neck_front_];
 	
-	// if (buttons == NECK_ACTUATE) {
+	if (buttons == NECK_ACTUATE) {
 
-	// 	// command is valid only for axe limits
-	// 	if ( neck_side*neck_side + neck_front*neck_front > 0.5 ) {
+		// command is valid only for axe limits
+		if ( neck_side*neck_side + neck_front*neck_front > 0.5 ) {
 
-	// 		int angle = (int)(180*atan2f(neck_side,neck_front)/M_PI);
-	// 		angle = std::min(std::max(-NECK_ANGLE_LIMIT,angle),NECK_ANGLE_LIMIT);
-	// 		move_head(angle);
-	// 		ROS_INFO_STREAM_THROTTLE(0.5, "Setting neck angle: " << angle << "[deg]");
-	// 	}
-	// }
+			int angle = (int)(180*atan2f(neck_side,neck_front)/M_PI);
+			angle = std::min(std::max(-NECK_ANGLE_LIMIT,angle),NECK_ANGLE_LIMIT);
+			move_head(angle);
+			ROS_INFO_STREAM_THROTTLE(0.5, "Setting neck angle: " << angle << "[deg]");
+		}
+	}
 
 
 	// //  - - - - both arms - - - -
@@ -488,7 +490,6 @@ void Joystick::joyCallback(const sensor_msgs::Joy::ConstPtr& joy) {
 	}
 
 	else if ( joy->axes[axe_select_face_layer] == IS_NOT_SELECTED ) {
-
 		switch (buttons) {
 
 			// - - - - face emotions - - - -

@@ -2,46 +2,44 @@
 import subprocess
 import rospy
 from sensor_msgs.msg import BatteryState
+from rqt_batteries.battery_publisher import BatteryStatePublisher
 
-def get_battery_state():
-	cmd = "upower -i $(upower -e | grep 'BAT') | grep -E 'state|to\ full|percentage'"
-	ps = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-	output = ps.communicate()[0]
-	# Get status
-	charging=True
-	if 'discharging' in output:
-		charging=False
-	# Get percentage
-	percentage = 0.0
-	try:
-		percentage_pos=output.index('%')
-		percentage=float(output[percentage_pos-3:percentage_pos].strip())
-	except ValueError:
-		pass
-	return (charging, percentage)
+class NotebookBatteryPublisher(BatteryStatePublisher):
+	"""Publish notebook battery state"""
+	def __init__(self, topic='battery_states', serial_number='battery', rate=1):
+		super(NotebookBatteryPublisher, self).__init__(topic, serial_number, rate)	
+
+	def get_battery_state(self):
+		cmd = "upower -i $(upower -e | grep 'BAT') | grep -E 'state|to\ full|percentage'"
+		ps = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+		output = ps.communicate()[0]
+		# Get status
+		charging=True
+		if 'discharging' in output:
+			charging=False
+		# Get percentage
+		percentage = 0.0
+		try:
+			percentage_pos=output.index('%')
+			percentage=float(output[percentage_pos-3:percentage_pos].strip())
+		except ValueError:
+			pass
+		return (charging, percentage)
+
+	def spin(self):
+		while not rospy.is_shutdown():
+			charging, percentage = self.get_battery_state()
+			self.set_charging(charging)
+			self.set_percentage(percentage)
+			rospy.sleep(1.0)
 
 def main():
 	rospy.init_node('notebook_battery_publisher', anonymous=True)
-	r = rospy.Rate(1) # 1hz
-
+	# Get serial number
 	serial_number = rospy.get_param('~serial_number', 'notebook')
-
-	msg = BatteryState()
-	msg.serial_number = serial_number
-	msg.present = True
-
-	pub = rospy.Publisher('battery_states', BatteryState, queue_size=5)
-
-	while not rospy.is_shutdown():
-		charging, percentage = get_battery_state()
-		if charging:
-			msg.power_supply_status = BatteryState.POWER_SUPPLY_STATUS_CHARGING
-		else:
-			msg.power_supply_status = BatteryState.POWER_SUPPLY_STATUS_DISCHARGING
-		msg.percentage = percentage
-		rospy.logdebug("Current battery state, Charging: {}, Percentage: {}%".format(charging, percentage))
-		pub.publish(msg)
-		r.sleep()
+	# Battery publisher
+	bat_pub = NotebookBatteryPublisher(serial_number=serial_number)
+	bat_pub.spin()
 
 if __name__ == '__main__':
 	try:

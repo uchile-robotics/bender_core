@@ -75,6 +75,8 @@ class HeadController:
         elif (msg.expression == "id"):
             device_id = self.hw_controller.get_state(3)
             print("device_id = "+str(device_id))
+        elif (msg.expression[0] == "-"):
+            self.emotions_controller.moveNeck(int(msg.expression[1:]))
         else:
             rospy.logwarn("For order 'changeFace', unknown action: '" + msg.expression + "' ... Please use one of the following:\n" + str(self.static_emotion_list))
 
@@ -82,6 +84,11 @@ class HeadController:
         if (msg.Order == "changeFace"):
             self.joystick_msg.expression = msg.Action
             self.joy_pub.publish(self.joystick_msg)
+        elif (msg.Order == "MoveX"):
+            print('STDMSG: Mover servo a:'+str(msg.X))
+            self.joystick_msg.expression = '-'+str(msg.X)
+            self.joy_pub.publish(self.joystick_msg)
+
 
     def list_expressions(self, msg):
         print("------------------------------------------------------------")
@@ -103,7 +110,7 @@ class HeadController:
 
 if __name__ == '__main__':
     rospy.init_node('expressions_controller')
-    dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
+    dxl = DynamixelIO('/dev/bender/l_port', baudrate = 115200)
     expressions = HeadController(dxl, 'emotions', 'left')
     expressions.initialize()
     expressions.start()

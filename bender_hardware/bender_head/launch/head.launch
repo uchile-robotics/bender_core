@@ -4,7 +4,7 @@
 	<arg name="interface" default="serial"/>
 
 	<!-- bender head -->
-	<node name="head" pkg="bender_head" type="head_controller.py" ns="/bender">
+	<node name="head" pkg="bender_head" type="head_controller.py" ns="/bender" output="screen">
 		<param name="interface" value="$(arg interface)"/>
 		<rosparam file="$(find bender_head)/config/eye_colors.yaml" command="load"/>
 		<rosparam file="$(find bender_head)/config/emotions.yaml" command="load"/>

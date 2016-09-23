@@ -11,7 +11,7 @@ It use the intermediate level methods defined in HeadHWController class.
 IMPORTAT: Modify only if you are sure of physical restrictions of the actuators"""
 
 # Use HW controller
-from head_hw_controller import HeadHWController, SERVO0, SERVO1, SERVO2, SERVO3, SERVO4
+from head_hw_controller import HeadHWController, SERVO0, SERVO1, SERVO2, SERVO3, SERVO4, SERVO5
 
 class ServosHW(object):
 	def __init__(self, hw_controller):
@@ -47,9 +47,15 @@ class ServosHW(object):
 			self.hw_controller.moveServoTo(SERVO4, angle)
 		
 	def mouth(self, opening_percentage):
-		if (lifting_percentage != -1):
+		if (opening_percentage != -1):
 			angle = self.remapRange(opening_percentage, 80, 140)
 			self.hw_controller.moveServoTo(SERVO1, angle)
+
+	def neck(self, angle):
+		#if (opening_percentage != -1):
+			#angle = self.remapRange(opening_percentage, 60, 120)
+		angle2 = 90-angle
+		self.hw_controller.moveServoTo(SERVO5, int(angle2*0.8))
 
 if __name__ == '__main__':
 	DEV_ID = 1

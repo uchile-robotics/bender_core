@@ -19,6 +19,7 @@ SERVO1 = 1
 SERVO2 = 2
 SERVO3 = 3
 SERVO4 = 4
+SERVO5 = 5
 LED_SELECT_STATE = 8
 LED_COLOR_STATE = 9
 
@@ -50,7 +51,7 @@ class HeadHWController(object):
 		return self.state
 
 	def select_command(self, com = 1):
-		if (com != SERVO0) and (com != SERVO1) and (com != SERVO2) and (com != SERVO3) and (com != SERVO4) and (com != 5):
+		if (com != SERVO0) and (com != SERVO1) and (com != SERVO2) and (com != SERVO3) and (com != SERVO4) and (com != SERVO5) and (com != 6):
 			print 'Unknown command %d' % (com)
 		
 		result = []
@@ -76,7 +77,7 @@ class HeadHWController(object):
 	def moveServoTo(self, servo_i, pos):
 		self.select_command(servo_i)	#update servo select value
 		self.pos_command(pos)			#update servo position value
-		self.select_command(0x05)		#when both states updated, confirm the change by sending the code '0x05'
+		self.select_command(0x06)		#when both states updated, confirm the change by sending the code '0x05'
 		return
 
 	def swapServo(self, servo_i):
