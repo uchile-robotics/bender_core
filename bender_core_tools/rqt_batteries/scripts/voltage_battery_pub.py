@@ -17,7 +17,7 @@ class VoltageFloatBatteryStatePublisher(VoltageBatteryStatePublisher):
 def main():
     rospy.init_node('voltage_battery_publisher', anonymous=True)
     # Get serial number
-    serial_number = rospy.get_param('~serial_number', 'asdasd')
+    serial_number = rospy.get_param('~serial_number', 'battery')
     # Get battery params
     min_voltage = rospy.get_param('~min_voltage', 11.0)
     max_voltage = rospy.get_param('~max_voltage', 13.0)
