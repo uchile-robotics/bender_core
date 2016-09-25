@@ -26,6 +26,13 @@ class BatteryStatePublisher(object):
     
     def set_percentage(self, percentage):
         with self.msg_lock:
+            # Check overvoltage
+            if percentage > 100.0:
+                percentage = 100.0
+                self.msg.power_supply_health = BatteryState.POWER_SUPPLY_HEALTH_OVERVOLTAGE
+            else:
+                self.msg.power_supply_health = BatteryState.POWER_SUPPLY_HEALTH_GOOD
+            # Set percentage
             self.msg.percentage = percentage
 
     def set_charging(self, charging):
