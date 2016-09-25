@@ -34,6 +34,8 @@ class BatteryStatePublisher(object):
                 self.msg.power_supply_health = BatteryState.POWER_SUPPLY_HEALTH_GOOD
             # Set percentage
             self.msg.percentage = percentage
+            # Update time stamp
+            self.msg.header.stamp = rospy.Time.now()
 
     def set_charging(self, charging):
         with self.msg_lock:
@@ -41,11 +43,15 @@ class BatteryStatePublisher(object):
                 self.msg.power_supply_status = BatteryState.POWER_SUPPLY_STATUS_CHARGING
             else:
                 self.msg.power_supply_status = BatteryState.POWER_SUPPLY_STATUS_DISCHARGING
+            # Update time stamp
+            self.msg.header.stamp = rospy.Time.now()
 
     def publish_state(self):
         while self.running and not rospy.is_shutdown():
             with self.msg_lock:
-                self.batt_pub.publish(self.msg)
+                # Check timeout
+                if (rospy.Time.now() - self.msg.header.stamp) < rospy.Duration(5.0):
+                    self.batt_pub.publish(self.msg)
             self.rate_pub.sleep()
 
     def stop(self):
