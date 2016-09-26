@@ -8,12 +8,12 @@
     
     <node name="left_arm_batt" pkg="rqt_batteries" type="dxl_battery_pub.py">
         <param name="serial_number" value="l_arm" />
-        <remap from="motor_states" to="l_arm/motor_states"/>
+        <remap from="motor_states" to="/bender/motor_states/l_port"/>
     </node>
 
     <node name="right_arm_batt" pkg="rqt_batteries" type="dxl_battery_pub.py">
         <param name="serial_number" value="r_arm" />
-        <remap from="motor_states" to="r_arm/motor_states"/>
+        <remap from="motor_states" to="/bender/motor_states/r_port"/>
     </node>
 
     <node name="base_batt" pkg="rqt_batteries" type="voltage_battery_pub.py">
