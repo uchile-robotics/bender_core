@@ -8,5 +8,8 @@
 
 	<!-- cmd_vel_mux -->
 	<include file="$(find bender_cmd_vel_mux)/launch/mux.launch"/>
+
+	<!-- cmd_vel_safe -->
+	<include file="$(find bender_joy)/launch/safety_check.launch"/>
 	
 </launch>
