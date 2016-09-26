@@ -6,12 +6,12 @@ import rospy
 
 class CmdVelSafety(object):
     """Basic Bender safety"""
-    def __init__(self, rate=1):
+    def __init__(self, rate=60):
         # Publisher and Subscriber for cheking safety
         self.safe_pub = rospy.Publisher('/cmd_vel_safety_output', Twist, queue_size=5)
         self.safe_sub = rospy.Subscriber('/cmd_vel_safety_input', Twist, self.check_safety)
 
-        # Rate, 1 Hz defaut
+        # Rate, 60 Hz defaut
         self.rate_freq = rate
         self.rate_pub = rospy.Rate(self.rate_freq)
         # Fill message
@@ -40,7 +40,7 @@ class CmdVelSafety(object):
 
             with self.msg_lock:
                 self.safe_pub.publish(self.msg)
-            #self.rate_pub.sleep()
+            self.rate_pub.sleep()
 
     def stop(self):
         self.running = False
