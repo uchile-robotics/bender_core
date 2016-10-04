@@ -478,8 +478,8 @@
       "keys": {
         "geometry": {
           "type": "repr(QByteArray.hex)", 
-          "repr(QByteArray.hex)": "QtCore.QByteArray('01d9d0cb00010000000003c8000000d30000074100000340000003d2000000f90000073700000336000000000000')", 
-          "pretty-print": "         A @     7 6   "
+          "repr(QByteArray.hex)": "QtCore.QByteArray('01d9d0cb00010000000001250000004d000003330000013b0000012f000000730000032900000131000000000000')", 
+          "pretty-print": "     % M 3 ; / s ) 1   "
         }, 
         "state": {
           "type": "repr(QByteArray.hex)", 
