@@ -32,6 +32,12 @@ class BatteryStatePublisher(object):
                 self.msg.power_supply_health = BatteryState.POWER_SUPPLY_HEALTH_OVERVOLTAGE
             else:
                 self.msg.power_supply_health = BatteryState.POWER_SUPPLY_HEALTH_GOOD
+            # Check downvoltage
+            if percentage < 0.0:
+                percentage = 0.0
+                self.msg.power_supply_health = BatteryState.POWER_SUPPLY_HEALTH_DEAD
+            else:
+                self.msg.power_supply_health = BatteryState.POWER_SUPPLY_HEALTH_GOOD
             # Set percentage
             self.msg.percentage = percentage
             # Update time stamp
