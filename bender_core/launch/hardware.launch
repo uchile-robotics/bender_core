@@ -22,7 +22,7 @@
 
 
 	<!-- Joystick -->
-	<include file="$(find bender_joy)/launch/joystick_nav.launch">
+	<include file="$(find bender_joy)/launch/common/complete.launch">
 		<arg name="joy_number" value="$(arg joy_number)"/>
 	</include>
 
