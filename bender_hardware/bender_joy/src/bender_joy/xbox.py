@@ -46,6 +46,14 @@ class KeyMapper(object):
 			'RT'      : 5
 		}
 
+
+	def has_button(self, name):
+		return name in self.b
+
+	def has_axis(self, name):
+		return name in self.a
+
+
 	def get_button_id(self, name):
 		if not name in self.b:
 			print "unknown button named: %s" % name

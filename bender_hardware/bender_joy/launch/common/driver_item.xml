@@ -14,10 +14,6 @@
 	<node respawn="false" pkg="bender_joy" type="joy_proxy.py" name="proxy$(arg joy_number)" ns="$(arg ns)">
 		<rosparam file="$(find bender_joy)/config/proxy.yaml" command="load"/>
 		<remap from="joy" to="joy$(arg joy_number)"/>
-		<remap from="topic_A" to="base"/>
-		<remap from="topic_B" to="tts" />
-		<remap from="topic_X" to="head"/>
-		<remap from="topic_Y" to="arms"/>
 	</node>
 
 </launch>
