@@ -34,7 +34,7 @@ class CmdVelSafety(object):
     def publish_state(self):
         while self.running and not rospy.is_shutdown():
             if rospy.Time.now() - self.joy_ts > rospy.Duration(2):
-                rospy.logwarn("JOYSTICK TIMEOUT, SENDING ZERO VELOCITY")
+                #rospy.loginfo("JOYSTICK TIMEOUT, SENDING ZERO VELOCITY")
                 self.msg.linear.x = 0.0
                 self.msg.angular.z = 0.0
 

@@ -10,4 +10,7 @@
     <remap from="/bender/joy/joystick_nav/cmd_vel" to="/cmd_vel_safety_input"/>
   </node>
 
+  <!-- cmd_vel_safe -->
+  <include file="$(find bender_joy)/launch/safety_check.launch"/>
+
 </launch>
