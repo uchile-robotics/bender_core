@@ -23,8 +23,8 @@ class JoystickBase(object):
         self.b_pause    = rospy.get_param('~b_pause', 'START')
         a_linear   = rospy.get_param('~a_linear', 'LS_VERT')
         a_angular  = rospy.get_param('~a_angular', 'LS_HORZ')
-        max_linear_vel  = rospy.get_param('~max_linear_vel', 0.5)
-        max_angular_vel = rospy.get_param('~max_angular_vel', 0.5)
+        self.max_linear_vel  = rospy.get_param('~max_linear_vel', 0.5)
+        self.max_angular_vel = rospy.get_param('~max_angular_vel', 0.5)
         
         key_mapper = xbox.KeyMapper()
         self.b_idx_pause   = key_mapper.get_button_id(self.b_pause)

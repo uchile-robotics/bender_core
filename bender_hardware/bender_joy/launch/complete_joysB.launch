@@ -1,6 +1,0 @@
-<launch>
-
-	<!-- joy -->
-	<include file="$(find bender_joy)/launch/common/complete.launch"/>
-	
-</launch>

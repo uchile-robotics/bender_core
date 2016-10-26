@@ -21,8 +21,8 @@
 
 
 	<!-- Joystick -->
-	<include file="$(find bender_joy)/launch/joystick_nav.launch"/>
-
+	<include file="$(find bender_joy)/launch/joysticks.launch"/>
+	
 
 	<!-- Real hardware -->
 	<group unless="$(arg simulation)">
