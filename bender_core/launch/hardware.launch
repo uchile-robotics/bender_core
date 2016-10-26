@@ -1,7 +1,6 @@
 <launch>
 
 	<arg name="simulation" default="false"/>
-	<arg name="joy_number" default="0"/>
 	<arg name="tf_gui"     default="false"/>
 	<arg name="model_type" default="asus"/>
 	<arg name="sim_world"  default="amtc"/>
@@ -22,9 +21,7 @@
 
 
 	<!-- Joystick -->
-	<include file="$(find bender_joy)/launch/common/complete.launch">
-		<arg name="joy_number" value="$(arg joy_number)"/>
-	</include>
+	<include file="$(find bender_joy)/launch/joysticks.launch"/>
 
 
 	<!-- Real hardware -->

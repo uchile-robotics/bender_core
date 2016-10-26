@@ -1,0 +1,20 @@
+<launch>
+
+    <!-- parameters -->
+    <arg name="ns" default="/bender/joy"/>
+
+    <!-- drivers -->
+    <include file="$(find bender_joy)/launch/common/driver.xml">
+        <arg name="ns" value="$(arg ns)"/>
+    </include>
+
+    <!-- joy interfaces -->
+    <include file="$(find bender_joy)/launch/common/joy_interface.xml">
+        <arg name="ns" value="$(arg ns)"/>
+    </include>
+
+<!-- <remap from="/bender/joy/joystick_nav/cmd_vel" to="/cmd_vel_safety_input"/> -->
+  <!-- cmd_vel_safe -->
+<!--   <include file="$(find bender_joy)/launch/safety_check.launch"/> -->
+    
+</launch>
