@@ -1,0 +1,8 @@
+<launch>
+
+  <node name="cmd_vel_safety" pkg="bender_cmd_vel_mux" type="cmd_vel_safety.py">
+  	<remap from="input"  to="/bender/nav/mux/cmd_vel"/>
+    <remap from="output" to="/bender/nav/base/cmd_vel"/>
+  </node>	
+
+</launch>
