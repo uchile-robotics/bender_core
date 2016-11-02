@@ -154,7 +154,7 @@ class GripperSkill(RobotSkill):
             control_msgs.msg.GripperCommandResult: If the goal finished.
             None: If the goal didn't finish.
         """
-        self._gca_client.get_result()
+        return self._gca_client.get_result()
 
 class LeftGripperSkill(GripperSkill):
     """Left gripper control using gripper command action"""
