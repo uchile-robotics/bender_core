@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = "Gonzalo Olave"
-
 import rospy
 
 from bender_skills.robot_skill import RobotSkill
@@ -25,9 +23,12 @@ class TTSSkill(RobotSkill):
         self._set_language_topic = "/bender/hw/tts/set_language"
         self._stop_tts_topic = "/bender/hw/tts/stop_speech"
 
+
         self._tts_client = None
         self._set_language_client = None
         self._stop_tts_client = None
+
+
         
     def check(self, timeout = 1.0):
         # rospy.loginfo("{skill: %s}: check()." % self._type)
