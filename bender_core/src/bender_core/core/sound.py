@@ -5,7 +5,7 @@ __author__ = "Cristopher Gomez, Rodrigo Muñoz"
 
 import rospy
 
-from bender_skills.robot_skill import RobotSkill
+from bender_core.robot_skill import RobotSkill
 from bender_srvs.srv import play_sound, play_soundRequest
 
 class SoundSkill(RobotSkill):

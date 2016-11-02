@@ -3,7 +3,7 @@
 
 import rospy
 
-from bender_skills.robot_skill import RobotSkill
+from bender_core.robot_skill import RobotSkill
 from bender_srvs.srv import String
 from std_srvs.srv import Empty
 from std_msgs.msg import Bool
