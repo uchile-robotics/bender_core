@@ -6,6 +6,7 @@ import rospy
 from bender_skills.robot_skill import RobotSkill
 from bender_srvs.srv import String
 from std_srvs.srv import Empty
+from std_msgs.msg import Bool
 
 class TTSSkill(RobotSkill):
     """
@@ -22,11 +23,13 @@ class TTSSkill(RobotSkill):
         self._tts_topic = "/bender/hw/tts/say"
         self._set_language_topic = "/bender/hw/tts/set_language"
         self._stop_tts_topic = "/bender/hw/tts/stop_speech"
-
+        self._is_talking_topic = "/bender/hw/head/move_mouth"
 
         self._tts_client = None
         self._set_language_client = None
         self._stop_tts_client = None
+
+        self.is_talking = False
 
 
         
@@ -129,3 +132,19 @@ class TTSSkill(RobotSkill):
             return False
 
         return True
+
+    def wait_until_done(self,timeout=10.0):
+        begin = rospy.get_time()
+        
+        self.is_talking = True
+        rospy.sleep(1)
+        rospy.Subscriber(self._is_talking_topic, Bool, self.is_talking_callback)
+        while(not rospy.is_shutdown() and self.is_talking  and (rospy.get_time()-begin) < timeout):
+            pass
+        return
+
+
+    def is_talking_callback(self,data):
+        
+        self.is_talking = data.data
+        
