@@ -73,6 +73,11 @@ class Robot(object):
         self._skills = dict()
         self.context = Context(robot_name=name)
 
+    def __del__(self):
+        pass
+        # TODO(mpavez) Good idea? call all shutdown methods when robot object get deleted
+        #rospy.logerr("robot shutdown")
+        #self.shutdown()
 
     def has(self, skill_name):
         """

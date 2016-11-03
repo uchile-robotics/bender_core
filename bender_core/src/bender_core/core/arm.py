@@ -222,6 +222,16 @@ class ArmSkill(RobotSkill):
         self.log.info('Waiting for \"{0}\" motion'.format(self.name))
         return self._jta_client.wait_for_result(rospy.Duration(timeout))
 
+    def get_result(self):
+        """
+        Get movement result
+
+        Returns:
+            control_msgs.msg.FollowJointTrajectoryResult: If the goal finished.
+            None: If the goal didn't finish.
+        """
+        return self._jta_client.get_result()
+
 class LeftArmSkill(ArmSkill):
     """Left arm control using using joint trajectory action"""
     _type = "l_arm"

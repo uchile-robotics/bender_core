@@ -25,31 +25,43 @@ from core.tts import TTSSkill
 from core.arm     import LeftArmSkill, RightArmSkill
 from core.gripper import LeftGripperSkill, RightGripperSkill
 
+# str to Skill class dict
+_str_to_skill = {
+    RGBDSkill._type : RGBDSkill,
+    LaserSkill._type : LaserSkill,
+    JoySkill._type : JoySkill,
+    HeadSkill._type : HeadSkill,
+    BaseSkill._type : BaseSkill,
+    SoundSkill._type : SoundSkill,
+    TTSSkill._type : TTSSkill,
+    LeftArmSkill._type : LeftArmSkill,
+    RightArmSkill._type : RightArmSkill,
+    LeftGripperSkill._type : LeftGripperSkill,
+    RightGripperSkill._type : RightGripperSkill
+}
 
-def build():
+def build(skills=_str_to_skill.keys()):
+    """
+    Build a robot object based on a skill list. By default build
+    a robot using all core skills.
 
+    Args:
+        skills (list of str): Skill list.
+
+    Raises:
+        TypeError: If `skills` is not a list.
+    """
     rospy.loginfo(" building robot ... ")
     robot = Robot("bender")
-
-    # knowledge base
-    robot.set(KnowledgeSkill.get_instance())
-
-    # hardware
-    robot.set(LeftArmSkill.get_instance())
-    robot.set(RightArmSkill.get_instance())
-    robot.set(LeftGripperSkill.get_instance())
-    robot.set(RightGripperSkill.get_instance())
-
-    robot.set(BaseSkill.get_instance())
-    robot.set(HeadSkill.get_instance())
-    robot.set(SoundSkill.get_instance())
-    robot.set(TTSSkill.get_instance())
-    robot.set(JoySkill.get_instance())
-
-    # sensors
-    robot.set(RGBDSkill.get_instance())
-    robot.set(LaserSkill.get_instance())
-
+    # Check arg
+    if not isinstance(skills, list):
+        raise TypeError("skills must be a string list")
+    # Add skill instance to robot    
+    for skill_name in skills:
+        if skill_name in _str_to_skill:
+            robot.set(_str_to_skill[skill_name].get_instance())
+        else:
+            rospy.logerr("Skill '{0}' is not registered".format(skill_name))
     rospy.loginfo(" ... ready")
     return robot
 
