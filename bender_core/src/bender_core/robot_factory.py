@@ -60,6 +60,8 @@ def build(skills=_str_to_skill.keys()):
     for skill_name in skills:
         if skill_name in _str_to_skill:
             robot.set(_str_to_skill[skill_name].get_instance())
+            if skill_name == 'tts':
+                robot.say = robot.tts.say
         else:
             rospy.logerr("Skill '{0}' is not registered".format(skill_name))
     rospy.loginfo(" ... ready")
