@@ -134,12 +134,13 @@ class Robot(object):
 
         # perform checks
         rospy.loginfo("robot check: checking skills...")
+
         # Usually timeout methods use ros.get_rostime that use subscriber to /clock
         # To avoid errors sleep a little time
         rospy.sleep(0.2)
         for skill in self._skills.itervalues():
             name = skill.get_type()
-            rospy.loginfo("... checking skill: %s" % name)
+            # rospy.loginfo("... checking skill: %s" % name)
             if not skill.check():
                 status[name] = False
 
