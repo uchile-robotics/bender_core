@@ -27,6 +27,7 @@ from core.gripper import LeftGripperSkill, RightGripperSkill
 
 # str to Skill class dict
 _str_to_skill = {
+    KnowledgeSkill._type : KnowledgeSkill,
     RGBDSkill._type : RGBDSkill,
     LaserSkill._type : LaserSkill,
     JoySkill._type : JoySkill,

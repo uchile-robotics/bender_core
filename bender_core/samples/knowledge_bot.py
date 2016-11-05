@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 
+import sys
 import rospy
 from bender_core import robot_factory
 
@@ -20,7 +21,10 @@ if __name__ == "__main__":
     robot = robot_factory.build()
     print "--------------------------------------------------------------------"
 
-    #robot.check()
+    # check
+    if not robot.knowledge.check():
+        print "knowledge skill is not ready to start. BYE"
+        sys.exit(1)
 
     # get all keys
     print "\nWhich poses do the robot know?: " 

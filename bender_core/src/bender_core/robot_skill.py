@@ -133,8 +133,11 @@ class RobotSkill(object):
         self._description = "[description should be placed here]"
         self._dependencies = set()
         self._current_state = self._state_paused
+        
         # Robot context
+        self.robot = None
         self.context =  Context.get_context()
+        
         # Config custom logger
         self._log_name = "rosout.{0}.{1}".format(self.context.get_robot_name(),self._type)
         self.log = logging.getLogger(self._log_name)
@@ -260,6 +263,13 @@ class RobotSkill(object):
 
     def get_context(self):
         return self.context
+
+
+    def _set_robot(self, robot):
+        if self.robot is None:
+            self.robot = robot
+        else:
+            raise AttributeError("Attempted to set a second robot to this skill!")
 
 
     ## ========================================================================

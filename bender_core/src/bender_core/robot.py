@@ -126,6 +126,9 @@ class Robot(object):
         rospy.loginfo("robot.set(): setting skill type '%s'." % skill.get_type())
         if skill.get_type() in self._skills:
             rospy.logwarn("robot.set(): '%s' already exists ...replacing." % skill.get_type())
+
+        if skill.robot is None:
+            skill._set_robot(self)
         self._skills[skill.get_type()] = skill
 
 

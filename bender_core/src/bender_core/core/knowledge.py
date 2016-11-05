@@ -30,24 +30,20 @@ class KnowledgeSkill(RobotSkill):
         self.pose = PoseServerWrapper()
     
     def setup(self):
-        self.pose.setup()
-        return True
+        return self.pose.setup()
 
     def check(self):
-        self.pose.check()
-        return True
+        rospy.loginfo("{skill: %s}: check()." % self._type)
+        return self.pose.check()
 
     def start(self):
-        self.pose.start()
-        return True
+        return self.pose.start()
 
     def pause(self):
-        self.pose.pause()
-        return True
+        return self.pose.pause()
 
     def shutdown(self):
-        self.pose.shutdown()
-        return True
+        return self.pose.shutdown()
 
 
 class PoseServerWrapper(object):
@@ -97,7 +93,7 @@ class PoseServerWrapper(object):
             self.save_client.wait_for_service(timeout=2)
             self.set_client.wait_for_service(timeout=2)
         except rospy.ROSException:
-            rospy.logwarn('[knowledge.pose]: Setup failed. PoseServer services not found. e.g. /bender/knowledge/pose_server/which')
+            rospy.logwarn('[knowledge.pose]: Check failed. PoseServer services not found. e.g. /bender/knowledge/pose_server/which')
             return False
         return True
 
