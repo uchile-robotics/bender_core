@@ -32,7 +32,7 @@ add_message_files(
   Rect.msg
   ROIArray.msg
   SemanticObject.msg
-  SiftDetection.msg
+  ObjectDetection.msg
   SiftDetectionDepth.msg
   SiftDetectionFloor.msg
   StateInfo.msg
