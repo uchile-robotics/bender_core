@@ -1,0 +1,12 @@
+# see available mappings on src/bender_joy/xbox.py
+
+# pause button
+b_pause: 'START'
+
+# movement axes
+a_angular: 'LS_HORZ'
+a_linear:  'LS_VERT'
+
+# cmd velocities
+max_linear_vel: 0.7
+max_angular_vel: 0.6

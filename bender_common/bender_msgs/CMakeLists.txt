@@ -42,6 +42,12 @@ add_message_files(
   CylindricalObject.msg
   Marker.msg 
   MarkerArray.msg 
+  LedCommand.msg 
+  LedCommand2.msg 
+  Num.msg 
+  ServoCommand.msg 
+  ServoState.msg 
+  ExpressionCommand.msg
 )
 
 # Generate added messages and services with any dependencies listed here
