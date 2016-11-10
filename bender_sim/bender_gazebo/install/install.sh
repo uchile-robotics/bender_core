@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# bender_description package installer
-# run: $ bash bender_description/install/install.sh
+# bender_gazebo package installer
+# run: $ bash bender_gazebo/install/install.sh
 
 #  - - - - - - - - - Setup - - - - - - - - - - - 
 # Color
@@ -12,7 +12,7 @@ reset=$(tput sgr0)
 bold=$(tput bold)
 
 # Line tittle
-installer="${bold}[bender_description]:${reset}"
+installer="${bold}[bender_gazebo]:${reset}"
 
 # The directory of the script
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -28,9 +28,9 @@ trap cleanup EXIT
 cd $WORK_DIR
 
 #  - - - - - - - - - Download files - - - - - - - - - - - 
-# Download bender_description meshes
-echo "$installer Downloading mesh files"
-"$BENDER_SYSTEM"/bash/megadown/megadown 'https://mega.nz/#!a0930ZYB!sciM89vyDLtrpDpC5_CB-6BCXA6OE1p2Bzq8R6rWeRU'
+# Download bender_gazebo meshes
+echo "$installer Downloading models"
+"$BENDER_SYSTEM"/bash/megadown/megadown 'https://mega.nz/#!S5lySTha!9WwfRJ0yn-GUSw9KEbnVDsCPoYH8O6kNy8rjUwr9Bq4'
 if [ $? -ne 0 ]; then
     echo "$installer ${red}Error downloading mesh files.${reset}"
     exit 1 # Terminate and indicate error
@@ -41,7 +41,7 @@ fi
 #  - - - - - - - - - Extract files - - - - - - - - - - -
 # Extract files
 echo "$installer Extracting mesh files"
-unzip -q -o bender_description.zip -d "$BENDER_WS"/base_ws/src/bender_common/
+unzip -q -o gazebo_models.zip -d ~
 OUT=$?
 if [ $OUT -ne 0 ]; then
     echo "$installer ${red}Error extracting mesh files.${reset}"

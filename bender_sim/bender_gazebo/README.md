@@ -24,11 +24,10 @@ $ rosdep install --from-paths src --ignore-src --rosdistro=indigo -y
 
 ### Instalar modelos propios
 
-Copiar carpetas `bender_gazebo/gazebo_models` a `~/.gazebo/models`
+Se deben instalar modelos básicos en `~/.gazebo/models`.
 
 ~~~
-$ roscd bender_gazebo/gazebo_models/
-$ cp -a . ~/.gazebo/models/
+$ bash bender_sim/bender_gazebo/install/install.sh 
 ~~~
 
 ### Error "No namespace found" en Gazebo
