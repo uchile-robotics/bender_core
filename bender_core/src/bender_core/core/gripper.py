@@ -111,9 +111,10 @@ class GripperSkill(RobotSkill):
 
         Args:
             effort (float): Max effort used in close movement. Must be between 0.0 and 1.0. Value zero may cause null movement.
+            timeout (float): Max time to block before returning. A zero timeout is interpreted as an infinite timeout.
 
         Returns:
-            bool: True if the goal finished, False otherwise.
+            bool: True if the goal finished. False if the goal didn't finish within the allocated timeout.
         """
         self.loginfo('Closing {0}.'.format(self.name))
         self.send_goal(GripperSkill.CLOSE_POSITION, effort)
@@ -125,9 +126,10 @@ class GripperSkill(RobotSkill):
 
         Args:
             effort (float): Max effort used in close movement. Must be between 0.0 and 1.0. Value zero may cause null movement.
+            timeout (float): Max time to block before returning. A zero timeout is interpreted as an infinite timeout.
 
         Returns:
-            bool: True if the goal finished, False otherwise.
+            bool: True if the goal finished. False if the goal didn't finish within the allocated timeout.
         """
         self.loginfo('Opening {0}.'.format(self.name))
         self.send_goal(GripperSkill.OPEN_POSITION, effort)
