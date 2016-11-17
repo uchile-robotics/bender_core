@@ -1,0 +1,60 @@
+<launch>
+
+	<!-- ================================================== -->
+	<!-- ==================== HARDWARE ==================== -->
+	<!-- ================================================== -->
+	
+	<!-- visualization -->
+	<arg name="rviz"       default="true"/>
+
+	<!-- robot configuration -->
+	<arg name="model_type" default="asus"/>
+	<arg name="tf_gui"     default="false"/>
+
+	<!-- robot simulation -->
+	<arg name="simulation" default="false"/>
+	<arg name="sim_world"  default="amtc"/>
+	<!-- TODO: <arg name="simulator"  default="gazebo"/> -->
+
+
+	<!-- ================================================== -->
+	<!-- ==================== HARDWARE ==================== -->
+	<!-- ================================================== -->
+	<include file="$(find bender_core)/launch/hardware.launch">
+		<arg name="simulation" value="$(arg simulation)"/>
+		<arg name="tf_gui"     value="$(arg tf_gui)"/>
+		<arg name="model_type" value="$(arg model_type)"/>
+		<arg name="sim_world"  value="$(arg sim_world)"/>
+	</include>
+
+
+	<!-- Sound Player -->
+	<include file="$(find bender_sound)/launch/sound.launch"/>
+
+	<!-- TTS -->
+	<include file="$(find bender_tts)/launch/tts.launch">
+		<!-- available languages: { english , spanish } -->
+    	<arg name="language"       default="english"/>
+    	<arg name="show_subtitles" default="true"/>
+	</include>
+
+	
+	<!-- =================================================== -->
+	<!-- ==================== KNOWLEDGE ==================== -->
+	<!-- =================================================== -->
+
+	<!-- Pose Server -->
+	<include file="$(find bender_pose_server)/launch/pose_server.launch"/>
+
+	<!-- Mapper -->
+	<include file="$(find bender_utils)/launch/mapper.launch"/>
+
+
+	<!-- =================================================== -->
+	<!-- =================  VISUALIZATION  ================= -->
+	<!-- =================================================== -->
+
+	<!-- RVIZ -->
+	<include file="$(find bender_utils)/launch/rviz.launch" if="$(arg rviz)"/>
+
+</launch>
