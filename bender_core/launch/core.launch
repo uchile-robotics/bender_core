@@ -5,11 +5,16 @@
 	<!-- ================================================== -->
 	
 	<!-- visualization -->
-	<arg name="rviz"       default="true"/>
+	<arg name="rviz"       default="false"/>
 
 	<!-- robot configuration -->
-	<arg name="model_type" default="asus"/>
-	<arg name="tf_gui"     default="false"/>
+	<arg name="model_type"     default="asus"/>
+	<arg name="tf_gui"         default="false"/>
+	<arg name="language"       default="spanish"/>
+	
+	<!-- available languages: { english , spanish } -->
+	<arg name="show_subtitles" default="true"/>
+
 
 	<!-- robot simulation -->
 	<arg name="simulation" default="false"/>
@@ -33,9 +38,8 @@
 
 	<!-- TTS -->
 	<include file="$(find bender_tts)/launch/tts.launch">
-		<!-- available languages: { english , spanish } -->
-    	<arg name="language"       default="english"/>
-    	<arg name="show_subtitles" default="true"/>
+    	<arg name="language"       value="$(arg language)"/>
+    	<arg name="show_subtitles" value="$(arg show_subtitles)"/>
 	</include>
 
 	
