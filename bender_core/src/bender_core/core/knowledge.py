@@ -133,6 +133,25 @@ class PoseServerWrapper(object):
         except rospy.ServiceException:
             return None
 
+    def new_map(self, map_name='new_map.sem_map'):
+        """
+        Creates an empty map
+    
+        returns True on success, False otherwise
+        """
+        keys = self.keys() 
+        old_map = []
+        for key in keys:
+            old_map.append(self.get(key))
+        if not self.delete_all():
+            for pose in old_map:
+                self.set(pose)
+            return False
+        self.save_to_map(map_name)
+        self.load_from_map(map_name)
+        return True
+
+
     def save_to_map(self, map_name=None):
         """
         Saves all current data on memory to a map file.
@@ -224,6 +243,18 @@ class PoseServerWrapper(object):
             return False
         return True
 
+    def delete_all(self):
+        """
+        Deletes all objects from map.
+
+        returns True on success, False otherwise
+        """
+        keys = self._keys()
+        for key in keys:
+            rospy.sleep(5)
+            if not self.delete(key):
+                return False
+        return True
 
     def keys(self):
         """
