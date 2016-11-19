@@ -29,4 +29,4 @@ subscribers:
     timeout: 0.3
     priority: 10
     short_desc: "TODO!!: Used with the reactive velocity control provided by the bumper/cliff sensor safety controller"
-publisher: "/bender/nav/base/cmd_vel"
+publisher: "/bender/nav/mux/cmd_vel"

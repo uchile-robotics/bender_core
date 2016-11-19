@@ -19,7 +19,7 @@
     <node pkg="bender_joy" type="joy_head.py" name="joy_head" output="screen" ns="$(arg ns)">
         <rosparam file="$(find bender_joy)/config/joystick_head.yaml" command="load"/>
         <remap from="joy" to="head"/>
-        <remap from="head/cmd" to="/bender/hw/head/cmd"/>
+        <remap from="head/cmd" to="/bender/head/cmd"/>
     </node>
 
 </launch>
