@@ -6,8 +6,6 @@
 #  - - - - - - - - - Setup - - - - - - - - - - - 
 # Color
 red=$(tput setaf 1)
-green=$(tput setaf 2)
-yellow=$(tput setaf 3)
 reset=$(tput sgr0)
 bold=$(tput bold)
 
@@ -17,7 +15,7 @@ installer="${bold}[bender_description]:${reset}"
 # The directory of the script
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # the temp directory used, within $DIR
-WORK_DIR=`mktemp -d -p "$DIR"`
+WORK_DIR=$(mktemp -d -p "$DIR")
 # deletes the temp directory
 function cleanup {
     rm -rf "$WORK_DIR"
@@ -25,7 +23,7 @@ function cleanup {
 }
 # Register the cleanup function to be called on the EXIT signal
 trap cleanup EXIT
-cd $WORK_DIR
+cd "$WORK_DIR"
 
 #  - - - - - - - - - Download files - - - - - - - - - - - 
 # Download bender_description meshes
