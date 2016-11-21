@@ -22,7 +22,7 @@ class LightHead(RobotSkill):
     """
     Joint space control using joint trajectory action for light head
     """
-    _type = "head"
+    _type = "light_head"
 
     # Class constants
     JOINT_NAMES = ["light_head_yaw_joint", "light_head_pitch_joint"]
@@ -30,6 +30,15 @@ class LightHead(RobotSkill):
 
     NUM_JOINTS = 2
     """int: Number of joints"""
+
+    ROLL_HOME_POSITION = 0.0
+    """float: Roll angle home postion"""
+
+    PITCH_HOME_POSITION = 0.0
+    """float: Pitch angle home postion"""
+
+    PITCH_MIN_POSITION = -0.77
+    """float: Minimum pitch angle"""
 
     def __init__(self):
         """
@@ -39,6 +48,8 @@ class LightHead(RobotSkill):
         self._description = "Joint space control for light head"
         # Head topic
         self._jta_topic = "/bender/light_head_controller/follow_joint_trajectory"
+        # Name
+        self.name = LightHead._type
         # Joint names
         self.joint_names = LightHead.JOINT_NAMES
         # Empty joint state message
@@ -49,12 +60,8 @@ class LightHead(RobotSkill):
         self._joint_state.effort = [0.0]*LightHead.NUM_JOINTS
         # ROS clients (avoid linter warnings)
         self._jta_client = None
-
-    def _update_joint_state(self, msg):
-        """
-        Update joint positions.
-        """
-        pass
+        # Only for check, joint states is obtained using robot context
+        self._joint_state_topic = self.context.get_joint_state_topic()
 
     def get_joint_state(self):
         """
@@ -63,9 +70,18 @@ class LightHead(RobotSkill):
         Returns:
             sensor_msgs.msg.JointState: Joint state.
         """
-        # Acquire lock and return a complete copy
-        with self._joint_state_lock:
-            return copy.deepcopy(self._joint_state)
+        robot_joint_state = self.context.get_joint_state()
+        self._joint_state.header = robot_joint_state.header
+        for i,joint in enumerate(self.joint_names):
+            try:
+                
+                joint_idx = robot_joint_state.name.index(joint)
+                self._joint_state.position[i] = robot_joint_state.position[joint_idx]
+                self._joint_state.velocity[i] = robot_joint_state.velocity[joint_idx]
+                self._joint_state.effort[i] = robot_joint_state.effort[joint_idx]
+            except ValueError:
+                continue
+        return copy.deepcopy(self._joint_state)
 
     def get_joint_names(self):
         """
@@ -76,7 +92,6 @@ class LightHead(RobotSkill):
         """
         return copy.deepcopy(self.joint_names)
 
-    # TODO(mpavez) Add timeout param?
     def check(self, timeout=1.0):
         # Check client for joint trajectory action (JTA)
         jta_client = actionlib.SimpleActionClient(self._jta_topic, FollowJointTrajectoryAction)
@@ -86,19 +101,19 @@ class LightHead(RobotSkill):
             return False
         self.log.debug("Joint trajectory action server for \"{0}\" [OK]".format(self.name))
         # Check joint_states topic
-        # try:
-        #     msg = rospy.wait_for_message(self._joint_state_topic, JointState, timeout=timeout)
-        # except rospy.ROSException:
-        #     self.logerr("Topic \"{0}\" not already published".format(self._joint_state_topic))
-        #     return False
-        # Check arm joints in message
-        # for joint in self.joint_names:
-        #     if not joint in msg.name:
-        #         self.logerr("Topic \"{0}\" does not contain \"{1}\" joints".format(
-        #             self._joint_state_topic, self.name))
-        #         return False
-        # self.logdebug("Topic \"{0}\" published [OK]".format(self._joint_state_topic))
-        # return True
+        try:
+            msg = rospy.wait_for_message(self._joint_state_topic, JointState, timeout=timeout)
+        except rospy.ROSException:
+            self.logerr("Topic \"{0}\" not already published".format(self._joint_state_topic))
+            return False
+        # Check head joints in message
+        for joint in self.joint_names:
+            if not joint in msg.name:
+                self.logerr("Topic \"{0}\" does not contain \"{1}\" joints".format(
+                    self._joint_state_topic, self.name))
+                return False
+        self.logdebug("Topic \"{0}\" published [OK]".format(self._joint_state_topic))
+        return True
 
     def setup(self):
         # Joint trajectory action (JTA)
@@ -128,22 +143,24 @@ class LightHead(RobotSkill):
         self.logwarn("Stop \"{0}\", calling cancel goals...".format(self.name))
         self._jta_client.cancel_all_goals()
 
-    def send_joint_goal(self, roll=0.0, pitch=0.0, interval=3.0, segments=10):
+    def send_joint_goal(self, yaw, pitch, interval=1.0, segments=5):
         """
         Send joint goal reference to the head.
 
         This function use linear interpolation between current position (obtained via joint_states topic)
         and joint goal.
 
-        Returns:
-            joint_goal (list of float): Joint target configuration, must follow arm.get_joint_names() order.
+        Args:
+            yaw (float): Roll angle target.
+            pitch (float): Pitch angle target.
             interval (float): Time interval between current position and joint goal.
 
         Examples:
-            >>> arm.send_joint_goal([0.0, 0.0, 0.0, 0.0, 0.0, 0.0]) # Send to home position
+            >>> arm.send_joint_goal(yaw=0.0, pitch=0.0) # Send to home position
         """
         # Check joint state time stamp
         rospy.sleep(0.05)
+        joint_goal = [yaw, pitch]
         current_state = self.get_joint_state()
         if (rospy.Time.now() - current_state.header.stamp) > rospy.Duration(1.0):
             self.logerr("Current position has not been updated, check \"{}\" topic.".format(self._joint_state_topic))
@@ -189,6 +206,15 @@ class LightHead(RobotSkill):
             None: If the goal didn't finish.
         """
         return self._jta_client.get_result()
-        
-    def look_at(self, pose):
-        pass
+
+    def home(self):
+        """
+        Move head to home position.
+        """
+        self.send_joint_goal(yaw=LightHead.ROLL_HOME_POSITION, pitch=LightHead.PITCH_HOME_POSITION)
+
+    def look_at_ground(self):
+        """
+        Look at the ground.
+        """
+        self.send_joint_goal(yaw=LightHead.ROLL_HOME_POSITION, pitch=0.8*LightHead.PITCH_MIN_POSITION)
