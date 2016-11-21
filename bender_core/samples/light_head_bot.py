@@ -10,6 +10,8 @@ from bender_core.robot import Robot
 # hardware
 from bender_core.core.light_head import LightHead
 
+from geometry_msgs.msg import PoseStamped
+
 
 def build_robot():
     # Base robot
@@ -28,7 +30,7 @@ if __name__ == "__main__":
     robot = build_robot()
     # Get arms
     head = robot.get("light_head")
-    # Dsiplay joint names in order
+    # Display joint names in order
     rospy.loginfo(head.get_joint_names())
     rospy.loginfo(head.get_joint_state())
     # Send head goal and wait
@@ -41,6 +43,14 @@ if __name__ == "__main__":
     head.send_joint_goal(yaw=-1.0, pitch=0.3)
     head.wait_for_motion_done()
     head.send_joint_goal(yaw=1.0, pitch=-0.3)
+    head.wait_for_motion_done()
+    # Look at pose, must be a geometry_msgs.msg.PoseStamped at any frame
+    pose = PoseStamped()
+    pose.header.frame_id = "/bender/base_link"
+    pose.pose.position.x = 2.0
+    pose.pose.position.z = 2.7
+    pose.pose.position.y = -0.3
+    head.look_at(pose)
     head.wait_for_motion_done()
     # Shutdown robot
     robot.shutdown()

@@ -8,9 +8,11 @@ __author__ = "Rodrigo Muñoz"
 import copy
 from threading import Lock
 import numpy as np
+import math
 # ROS Core
 import rospy
 import actionlib
+import tf
 # ROS Messages
 from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectoryPoint
@@ -39,6 +41,9 @@ class LightHead(RobotSkill):
 
     PITCH_MIN_POSITION = -0.77
     """float: Minimum pitch angle"""
+
+    REF_FRAME = "bender/light_head_base_link"
+    """str: Reference frame for transformations"""
 
     def __init__(self):
         """
@@ -218,3 +223,24 @@ class LightHead(RobotSkill):
         Look at the ground.
         """
         self.send_joint_goal(yaw=LightHead.ROLL_HOME_POSITION, pitch=0.8*LightHead.PITCH_MIN_POSITION)
+
+    def look_at(self, pose):
+        """
+        Look at pose.
+
+        Args:
+            pose (geometry_msgs.msg.PoseStamped): Target pose stamped to look, frame transform is managed internally,
+                so 'frame_id' can be any frame.
+        """
+        # Transform to reference frame
+        pose.header.stamp = rospy.Time() # Use last transform
+        try:
+            target_pose = self.context.get_tf_listener().transformPose(LightHead.REF_FRAME, pose)
+        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+            self.logerr("Error on transform from \"{}\" to \"{}\"".format(pose.header.frame_id, LightHead.REF_FRAME))
+            return
+        # Trasnform based on spherical coordinate
+        x,y,z = target_pose.pose.position.x, target_pose.pose.position.y, target_pose.pose.position.z
+        yaw = math.atan2(y,x)
+        pitch = -(math.pi/2 - math.acos(z/math.sqrt(x*x + y*y + z*z)))
+        self.send_joint_goal(yaw, pitch)
