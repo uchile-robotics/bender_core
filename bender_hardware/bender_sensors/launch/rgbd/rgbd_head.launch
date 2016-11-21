@@ -8,4 +8,6 @@
 	<arg name="device" value="$(env BENDER_RGBD_DEVICE_HEAD)"/>
 	<include file="$(find bender_sensors)/launch/rgbd/$(arg device)/$(arg device)_head.launch"/>
 
+	<node name="dynparam" pkg="dynamic_reconfigure" type="dynparam" args="set /bender/sensors/rgbd_head/driver color_mode 1 " />
+
 </launch>
