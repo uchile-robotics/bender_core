@@ -1,20 +1,13 @@
 #!/bin/bash
 #
-# prefer running: 
-# > cdb bender_speech
+# run: 
+# > cdb bender_tts
 # > bash install/install.sh
-#
 
 
-# - - - - - - S E T U P - - - - - - - -
-# # # # # # # # # # # # # # # # # # # #
-
-# Useful Variables
-install_space="$BENDER_WS"/install/soft/hri/speech
-mkdir -p "$install_space" && cd "$install_space"
-
-# - - - - - - I N S T A L L - - - - - -
-# # # # # # # # # # # # # # # # # # # #
+## ----------------------------------------------------------------------------
+## INSTALL
+## ----------------------------------------------------------------------------
 
 
 echo ""
@@ -79,33 +72,29 @@ festvox_path_en="$festvox_path"/english
 
 
 # Install the mbrola parser
-mbrola_folder="$install_space"/files/mbrola_voices
 if [ -d "$mbrola_folder" ]; then
-
-	install_token="$install_space"/INSTALLED_MBROLA_VOICES
-	if [ ! -e "$install_token" ]; then
 	
-		cd "$mbrola_folder"
-		sudo dpkg -i mbrola3.0.1h_i386.deb
+	cd "$mbrola_folder"
+	sudo dpkg -i mbrola3.0.1h_i386.deb
 
-		# Unzip/tar
-		rm -rf us2; unzip -x us2-980812.zip
-		tar xvf festvox_us2.tar.gz
+	# Unzip/tar
+	rm -rf us2
+	unzip -x us2-980812.zip
+	tar xvf festvox_us2.tar.gz
 
-		# Install voice and wrapper
-		sudo rm -rf $festvox_path_en/us2_mbrola/*; sudo mkdir -p $festvox_path_en/us2_mbrola/
-		sudo mv us2 $festvox_path_en/us2_mbrola/
-		sudo mv -f festival/lib/voices/english/us2_mbrola/* $festvox_path_en/us2_mbrola/
+	# Install voice and wrapper
+	sudo rm -rf "$festvox_path_en"/us2_mbrola/*
+	sudo mkdir -p "$festvox_path_en"/us2_mbrola/
+	sudo mv us2 "$festvox_path_en"/us2_mbrola/
+	sudo mv -f festival/lib/voices/english/us2_mbrola/* "$festvox_path_en"/us2_mbrola/
 
-		# clean
-		rm -rf us2/
-		rm -rf festival/
+	# clean
+	rm -rf us2/
+	rm -rf festival/
 
-		# mark as installed
-		touch "$install_token"
-	else
-		echo " - mbrola_voices is already installed"
-	fi
+	# mark as installed
+	touch "$install_token"
+
 else
 	echo " - mbrola folder not found!: $mbrola_folder"
 	echo "   please run install.sh"
@@ -126,10 +115,3 @@ fi
 # - better sound quality than CMU arctic voices
 # - each voice takes very little disk space :)
 # - demos: http://festvox.org/voicedemos.html
-
-
-echo ""
-echo "Speech Synthesizer install: Done."
-echo ""
-
-# :)
