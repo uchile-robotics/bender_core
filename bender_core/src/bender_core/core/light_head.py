@@ -39,7 +39,7 @@ class LightHead(RobotSkill):
     PITCH_HOME_POSITION = 0.0
     """float: Pitch angle home postion"""
 
-    PITCH_MIN_POSITION = -0.77
+    PITCH_MIN_POSITION = -0.95
     """float: Minimum pitch angle"""
 
     REF_FRAME = "bender/light_head_base_link"

@@ -169,7 +169,7 @@
       <axis
         xyz="0 1 0" />
       <!-- Limits based on Dynamixel motor encoder ticks -->
-      <limit effort="0.3" velocity="1.0" upper="1.02" lower="-0.77" />
+      <limit effort="0.3" velocity="1.0" upper="1.2476" lower="-0.951" />
     </joint>
 
     <!-- Camera RGB and depth frames -->

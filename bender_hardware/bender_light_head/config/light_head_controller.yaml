@@ -20,6 +20,6 @@ light_head_pitch_joint_controller:
   joint_speed: 0.8
   motor:
     id: 22
-    init: 300
-    max: 500
-    min: 50
+    init: 544
+    max: 730
+    min: 300

@@ -47,9 +47,9 @@ if __name__ == "__main__":
     # Look at pose, must be a geometry_msgs.msg.PoseStamped at any frame
     pose = PoseStamped()
     pose.header.frame_id = "/bender/base_link"
-    pose.pose.position.x = 2.0
-    pose.pose.position.z = 2.7
-    pose.pose.position.y = -0.3
+    pose.pose.position.x = 1.0
+    pose.pose.position.z = 1.6
+    pose.pose.position.y = 1.0
     head.look_at(pose)
     head.wait_for_motion_done()
     # Shutdown robot
