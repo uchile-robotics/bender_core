@@ -177,7 +177,7 @@ class ArmSkill(RobotSkill):
         This function use linear interpolation between current position (obtained via joint_states topic)
         and joint goal.
 
-        Returns:
+        Args:
             joint_goal (list of float): Joint target configuration, must follow arm.get_joint_names() order.
             interval (float): Time interval between current position and joint goal.
 
