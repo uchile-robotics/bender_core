@@ -27,3 +27,4 @@ objects_list:
     bowl: ["CYLINDER", 0.07 , 0.055]
     eggstars: ["CYLINDER", 0.22 , 0.06]
     fanta: ["CYLINDER", 0.11 , 0.055]
+    coffee: ["CYLINDER", 0.11 , 0.055]
