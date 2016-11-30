@@ -26,11 +26,13 @@ if __name__ == "__main__":
         print "knowledge skill is not ready to start. BYE"
         sys.exit(1)
 
+    print "load the default poses:"
+    print robot.knowledge.pose.load_default_map()
+    
     # get all keys
     print "\nWhich poses do the robot know?: " 
     print robot.knowledge.pose.keys()
-
-
+    
     # get only location/object keys
     print "\nWhich location poses do the robot know?: " 
     print robot.knowledge.pose.location_keys()
@@ -76,6 +78,10 @@ if __name__ == "__main__":
     robot.knowledge.pose.delete('somewhere-near-the-kitchen')
     print robot.knowledge.pose.keys()
 
+    # delete all
+    print "\nDelete all positions: " 
+    print robot.knowledge.pose.delete_all()
+    print robot.knowledge.pose.keys()
 
     # map name
     print "\nWhich map file are you using right now?: " 
