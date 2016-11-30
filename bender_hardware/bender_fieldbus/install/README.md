@@ -8,9 +8,12 @@ Permite que los disositivos de control (USB2Dynamixel FTDI FT232RL) sea asignado
 
 ~~~
 $ bender_cd bender_fieldbus
-$ sudo cp install/l_port.rules /etc/udev/rules.d/l_port.rules
-$ sudo cp install/r_port.rules /etc/udev/rules.d/r_port.rules
+$ sudo cp install/10-l_port.rules /etc/udev/rules.d/10-l_port.rules
+$ sudo cp install/10-r_port.rules /etc/udev/rules.d/10-r_port.rules
+$ sudo cp install/10-dxl_test.rules /etc/udev/rules.d/10-dxl_test.rules
 ~~~
+
+Se recomienda reconectar el dispositivo una vez instalada la regla.
 
 Permisos para puertos
 ---------------------
@@ -20,6 +23,7 @@ Permite que los usuarios puedan escribir y leer un puerto serial.
 ~~~
 $ sudo chmod a+rw /dev/bender/l_port
 $ sudo chmod a+rw /dev/bender/r_port
+$ sudo chmod a+rw /dev/bender/dxl_test
 $ sudo usermod -a -G dialout $USER
 ~~~
 

@@ -32,7 +32,8 @@
       'bender/r_gripper/joint_states',
       'bender/l_arm/joint_states',
       'bender/l_gripper/joint_states',
-      'bender/head/joint_states']</rosparam>
+      'bender/head/joint_states',
+      'bender/light_head/joint_states']</rosparam>
     <remap from="joint_states" to="bender/joint_states"/>
   </node>
 

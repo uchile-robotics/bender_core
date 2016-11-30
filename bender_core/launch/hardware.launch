@@ -1,11 +1,14 @@
 <launch>
 
 	<arg name="simulation" default="false"/>
-	<arg name="joy_number" default="0"/>
 	<arg name="tf_gui"     default="false"/>
 	<arg name="model_type" default="asus"/>
 	<arg name="sim_world"  default="amtc"/>
 
+
+	<!-- ================================= -->
+	<!-- == REAL HARDWARE VS. SIMULATOR == -->
+	<!-- ================================= -->
 	<group if="$(arg simulation)">
 		<param name="/use_sim_time" value="true"/>
 		<include file="$(find bender_stage)/launch/bender.launch">
@@ -13,21 +16,6 @@
 		</include>
 		<!--include file="$(find bender_gazebo)/launch/bender_gazebo.launch"/-->
 	</group>
-
-	<!-- transforms -->
-	<include file="$(find bender_tf)/launch/tf.launch">
-		<arg name="use_gui" value="$(arg tf_gui)"/>
-		<arg name="model_type" value="$(arg model_type)"/>
-	</include>
-
-
-	<!-- Joystick -->
-	<include file="$(find bender_joy)/launch/joystick_nav.launch">
-		<arg name="joy_number" value="$(arg joy_number)"/>
-	</include>
-
-
-	<!-- Real hardware -->
 	<group unless="$(arg simulation)">
 
 		<!-- Laser/Lasers -->
@@ -40,7 +28,26 @@
 	</group>
 
 
+	<!-- ================================== -->
+	<!-- ==         COMMON STUFF         == -->
+	<!-- ================================== -->
+
+	<!-- transforms -->
+	<include file="$(find bender_tf)/launch/tf.launch">
+		<arg name="use_gui" value="$(arg tf_gui)"/>
+		<arg name="model_type" value="$(arg model_type)"/>
+	</include>
+
+	<!-- Joystick -->
+	<include file="$(find bender_joy)/launch/joysticks.launch"/>
+
 	<!-- cmd_vel_mux -->
 	<include file="$(find bender_cmd_vel_mux)/launch/mux.launch"/>
+
+
+	<!-- rqt_batteries -->
+	<!--
+	<include file="$(find rqt_batteries)/launch/bender_batteries.launch"/>
+	-->
 
 </launch>

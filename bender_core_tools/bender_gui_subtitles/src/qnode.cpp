@@ -85,11 +85,9 @@ void QNode::text_callback(const std_msgs::String &msg) {
     ROS_INFO_STREAM("Received text message: " << msg.data);
     std::string text = msg.data;
 
-    int max_chars = 40;
-
     // cortar texto si tamaño es mayor a max_chars caracteres
+    int max_chars = 40;
     if (text.length() > max_chars) {
-        
         std::size_t found = text.find(" ");  
         std::string sentence="", complete="";
         int lineas=0;

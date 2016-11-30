@@ -2,7 +2,7 @@
 
     <!-- available languages: { english , spanish } -->
     <arg name="language" default="english"/>
-    <arg name="show_subtitles" default="true"/>
+    <arg name="show_subtitles" default="false"/>
 
     <!-- sound_play node for tts -->
     <!--
