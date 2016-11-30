@@ -11,16 +11,17 @@
     <arg name="model_type" value="$(arg model_type)" />
   </include>
 
-  <!-- Crear TF a partir de joint states -->
+  <!-- Crear TF a partir de joint states 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" ns="/bender/">
     <param name="publish_frequency" value="$(arg rate)" />
   </node>
+  -->
 
-  <!-- TF dinamica 
+  <!-- TF dinamica -->
   <node name="dyn_state_publisher" pkg="bender_tf" type="dyn_state_publisher" ns="/bender/" output="screen">
     <param name="publish_frequency" value="$(arg rate)" />
   </node>
-  -->
+  
   
   <!-- Unificar joint states -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
