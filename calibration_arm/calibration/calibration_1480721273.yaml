@@ -9,7 +9,8 @@ l_int_finger_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0
 laser_front_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
 laser_rear_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
 left_eye_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
-neck_base_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+neck_base_joint: {pitch: 0.691152, roll: -0.219912, x: 0.0, y: 0.0, yaw: -0.219912,
+  z: 0.0}
 r_arm_base_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
 r_ext_finger_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
 r_int_finger_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}

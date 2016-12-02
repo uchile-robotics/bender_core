@@ -9,11 +9,14 @@
   </include>
 
   <!--Cargar la calibracion anterior-->
-  <node name="load_calibration" pkg="calibration_arm" type="load_calibration.sh" output="screen" />
+  <node name="load_calibration" pkg="calibration_arm" type="load_calibration" output="screen" />
   <!--Cargar la calibracion anterior-->
-  <node name="save_calibration" pkg="calibration_arm" type="save_calibration.sh" output="screen" />
+  <node name="save_calibration" pkg="calibration_arm" type="save_calibration" output="screen" />
 
   <!-- Abrir RViz con modelo de robot -->
   <node if="$(arg use_gui)" name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find bender_description)/config/bender_display.rviz"/>
+
+  <!-- RQT for calibration -->
+  <node name="rqt_calibration" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find calibration_arm)/config/calibration.perspective"/>
   
 </launch>
