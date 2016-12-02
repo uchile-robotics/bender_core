@@ -16,7 +16,7 @@ bold=$(tput bold)
 installer="${bold}[bender_description]:${reset}"
 #----------Main--------------
 last_file=$(ls -1r $calibration_folder | head -n 1)
-echo "${green}$installer Loading calibration file: $calibration_folder/$last_file.{reset}"
+echo "${green}$installer Loading calibration file: $calibration_folder/$last_file.${reset}"
 
 # Se toma la calibracion ultima (pendiente) , falta revisar la fecha mas reciente.
 rosparam load "$calibration_folder"/"$last_file" /bender/dynamic_tf/

@@ -8,6 +8,10 @@
     <arg name="model_type" value="$(arg model_type)" />
   </include>
 
+  <!--Cargar la calibracion anterior-->
+  <node name="load_calibration" pkg="calibration_arm" type="load_calibration.sh" output="screen" />
+  <!--Cargar la calibracion anterior-->
+  <node name="save_calibration" pkg="calibration_arm" type="save_calibration.sh" output="screen" />
 
   <!-- Abrir RViz con modelo de robot -->
   <node if="$(arg use_gui)" name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find bender_description)/config/bender_display.rviz"/>

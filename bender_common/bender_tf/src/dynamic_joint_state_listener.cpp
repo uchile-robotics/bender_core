@@ -151,6 +151,9 @@ int main(int argc, char** argv) {
   // Init ROS
 	ros::init(argc, argv, "dynamic_robot_state_publisher");
   ros::NodeHandle node;
+
+  
+  ros::Duration(5).sleep();
   
   // Get the location of the robot description on the parameter server
   urdf::Model model;
