@@ -1,0 +1,149 @@
+digraph G {
+node [shape=box];
+"bender/base_link" [label="bender/base_link"];
+"bender/base_footprint" [label="bender/base_footprint"];
+"bender/body" [label="bender/body"];
+"bender/chest_base" [label="bender/chest_base"];
+"bender/front_left_wheel" [label="bender/front_left_wheel"];
+"bender/front_right_wheel" [label="bender/front_right_wheel"];
+"bender/l_arm_base" [label="bender/l_arm_base"];
+"bender/l_shoulder_pitch_link" [label="bender/l_shoulder_pitch_link"];
+"bender/l_shoulder_roll_link" [label="bender/l_shoulder_roll_link"];
+"bender/l_shoulder_yaw_link" [label="bender/l_shoulder_yaw_link"];
+"bender/l_elbow_pitch_link" [label="bender/l_elbow_pitch_link"];
+"bender/l_elbow_yaw_link" [label="bender/l_elbow_yaw_link"];
+"bender/l_wrist_pitch_link" [label="bender/l_wrist_pitch_link"];
+"bender/l_base_ext_finger_link" [label="bender/l_base_ext_finger_link"];
+"bender/l_ext_finger_link" [label="bender/l_ext_finger_link"];
+"bender/l_base_int_finger_link" [label="bender/l_base_int_finger_link"];
+"bender/l_int_finger_link" [label="bender/l_int_finger_link"];
+"bender/sensors/laser_front_link" [label="bender/sensors/laser_front_link"];
+"bender/sensors/laser_rear_link" [label="bender/sensors/laser_rear_link"];
+"bender/neck_base" [label="bender/neck_base"];
+"bender/neck_link" [label="bender/neck_link"];
+"bender/head_link" [label="bender/head_link"];
+"bender/head_up_link" [label="bender/head_up_link"];
+"bender/sensors/rgbd_head_link" [label="bender/sensors/rgbd_head_link"];
+"bender/sensors/rgbd_head_depth_frame" [label="bender/sensors/rgbd_head_depth_frame"];
+"bender/sensors/rgbd_head_depth_optical_frame" [label="bender/sensors/rgbd_head_depth_optical_frame"];
+"bender/sensors/rgbd_head_rgb_frame" [label="bender/sensors/rgbd_head_rgb_frame"];
+"bender/sensors/rgbd_head_rgb_optical_frame" [label="bender/sensors/rgbd_head_rgb_optical_frame"];
+"bender/sensors/camera_left_eye_link" [label="bender/sensors/camera_left_eye_link"];
+"bender/sensors/camera_right_eye_link" [label="bender/sensors/camera_right_eye_link"];
+"bender/r_arm_base" [label="bender/r_arm_base"];
+"bender/r_shoulder_pitch_link" [label="bender/r_shoulder_pitch_link"];
+"bender/r_shoulder_roll_link" [label="bender/r_shoulder_roll_link"];
+"bender/r_shoulder_yaw_link" [label="bender/r_shoulder_yaw_link"];
+"bender/r_elbow_pitch_link" [label="bender/r_elbow_pitch_link"];
+"bender/r_elbow_yaw_link" [label="bender/r_elbow_yaw_link"];
+"bender/r_wrist_pitch_link" [label="bender/r_wrist_pitch_link"];
+"bender/r_base_ext_finger_link" [label="bender/r_base_ext_finger_link"];
+"bender/r_ext_finger_link" [label="bender/r_ext_finger_link"];
+"bender/r_base_int_finger_link" [label="bender/r_base_int_finger_link"];
+"bender/r_int_finger_link" [label="bender/r_int_finger_link"];
+"bender/rear_left_wheel" [label="bender/rear_left_wheel"];
+"bender/rear_right_wheel" [label="bender/rear_right_wheel"];
+"bender/waist_base" [label="bender/waist_base"];
+"bender/sensors/rgbd_waist_link" [label="bender/sensors/rgbd_waist_link"];
+"bender/sensors/rgbd_waist_rgb_frame" [label="bender/sensors/rgbd_waist_rgb_frame"];
+"bender/sensors/rgbd_waist_depth_frame" [label="bender/sensors/rgbd_waist_depth_frame"];
+"bender/sensors/rgbd_waist_depth_optical_frame" [label="bender/sensors/rgbd_waist_depth_optical_frame"];
+"bender/sensors/rgbd_waist_rgb_optical_frame" [label="bender/sensors/rgbd_waist_rgb_optical_frame"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"bender/base_link" -> "base_fixed_jont" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"base_fixed_jont" -> "bender/base_footprint"
+"bender/base_link" -> "body_fixed_jont" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"body_fixed_jont" -> "bender/body"
+"bender/body" -> "chest_base_joint" [label="xyz: 0.08 0 0.92 \nrpy: 0 -0 0"]
+"chest_base_joint" -> "bender/chest_base"
+"bender/body" -> "front_left_wheel_joint" [label="xyz: 0.122037 0.156681 0.101 \nrpy: 0 -0 0"]
+"front_left_wheel_joint" -> "bender/front_left_wheel"
+"bender/body" -> "front_right_wheel_joint" [label="xyz: 0.122037 -0.156681 0.101 \nrpy: 0 -0 0"]
+"front_right_wheel_joint" -> "bender/front_right_wheel"
+"bender/body" -> "l_arm_base_joint" [label="xyz: -0.01941 0.238791 1.2466 \nrpy: 0 -0 0"]
+"l_arm_base_joint" -> "bender/l_arm_base"
+"bender/l_arm_base" -> "l_shoulder_pitch_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"l_shoulder_pitch_joint" -> "bender/l_shoulder_pitch_link"
+"bender/l_shoulder_pitch_link" -> "l_shoulder_roll_joint" [label="xyz: -0.02178 0.0339 -0.03 \nrpy: 0 -0 0"]
+"l_shoulder_roll_joint" -> "bender/l_shoulder_roll_link"
+"bender/l_shoulder_roll_link" -> "l_shoulder_yaw_joint" [label="xyz: 0.03218 0 -0.1366 \nrpy: 0 -0 0"]
+"l_shoulder_yaw_joint" -> "bender/l_shoulder_yaw_link"
+"bender/l_shoulder_yaw_link" -> "l_elbow_pitch_joint" [label="xyz: -0.015898 0.02178 -0.21 \nrpy: 0 -0 0"]
+"l_elbow_pitch_joint" -> "bender/l_elbow_pitch_link"
+"bender/l_elbow_pitch_link" -> "l_elbow_yaw_joint" [label="xyz: -0.0136 -0.02228 -0.09218 \nrpy: 0 -0 0"]
+"l_elbow_yaw_joint" -> "bender/l_elbow_yaw_link"
+"bender/l_elbow_yaw_link" -> "l_wrist_pitch_joint" [label="xyz: -0.018221 0.0171 -0.26272 \nrpy: 0 -0 0"]
+"l_wrist_pitch_joint" -> "bender/l_wrist_pitch_link"
+"bender/l_wrist_pitch_link" -> "l_ext_finger_joint" [label="xyz: 0.01775 0.00085 -0.0794 \nrpy: 0.523599 -0 0"]
+"l_ext_finger_joint" -> "bender/l_base_ext_finger_link"
+"bender/l_base_ext_finger_link" -> "l_ext_finger_fixed_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"l_ext_finger_fixed_joint" -> "bender/l_ext_finger_link"
+"bender/l_wrist_pitch_link" -> "l_int_finger_joint" [label="xyz: 0.01775 -0.03555 -0.0794 \nrpy: -0.523599 0 0"]
+"l_int_finger_joint" -> "bender/l_base_int_finger_link"
+"bender/l_base_int_finger_link" -> "l_int_finger_fixed_joint" [label="xyz: -0.035 0 0 \nrpy: 0 0 3.14159"]
+"l_int_finger_fixed_joint" -> "bender/l_int_finger_link"
+"bender/body" -> "laser_front_joint" [label="xyz: 0.22 0 0.33 \nrpy: 0 -0 0"]
+"laser_front_joint" -> "bender/sensors/laser_front_link"
+"bender/body" -> "laser_rear_joint" [label="xyz: -0.22 0 0.09 \nrpy: 3.14159 -2.06823e-13 3.14159"]
+"laser_rear_joint" -> "bender/sensors/laser_rear_link"
+"bender/body" -> "neck_base_joint" [label="xyz: -0.00974877 0 1.3411 \nrpy: 0 -0 0"]
+"neck_base_joint" -> "bender/neck_base"
+"bender/neck_base" -> "neck_yaw_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"neck_yaw_joint" -> "bender/neck_link"
+"bender/neck_link" -> "head_pitch_joint" [label="xyz: 0 -0.0585 0.067 \nrpy: 0 -0 0"]
+"head_pitch_joint" -> "bender/head_link"
+"bender/head_link" -> "head_up_joint" [label="xyz: 0.017 0.0585 0.17 \nrpy: 0 -0 0"]
+"head_up_joint" -> "bender/head_up_link"
+"bender/head_up_link" -> "rgbd_head_joint" [label="xyz: 0.06 0 0.03 \nrpy: 0 -0 0"]
+"rgbd_head_joint" -> "bender/sensors/rgbd_head_link"
+"bender/sensors/rgbd_head_link" -> "rgbd_head_camera_depth_joint" [label="xyz: 0.021124 0.047 0.044216 \nrpy: 0 -0 0"]
+"rgbd_head_camera_depth_joint" -> "bender/sensors/rgbd_head_depth_frame"
+"bender/sensors/rgbd_head_depth_frame" -> "rgbd_head_camera_depth_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"rgbd_head_camera_depth_optical_joint" -> "bender/sensors/rgbd_head_depth_optical_frame"
+"bender/sensors/rgbd_head_link" -> "rgbd_head_camera_rgb_joint" [label="xyz: 0.021124 0.021 0.044216 \nrpy: 0 -0 0"]
+"rgbd_head_camera_rgb_joint" -> "bender/sensors/rgbd_head_rgb_frame"
+"bender/sensors/rgbd_head_rgb_frame" -> "rgbd_head_camera_rgb_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"rgbd_head_camera_rgb_optical_joint" -> "bender/sensors/rgbd_head_rgb_optical_frame"
+"bender/neck_link" -> "left_eye_joint" [label="xyz: 0.1 -0.04 0.18 \nrpy: 0 -0 0"]
+"left_eye_joint" -> "bender/sensors/camera_left_eye_link"
+"bender/neck_link" -> "right_eye_joint" [label="xyz: 0.1 0.04 0.18 \nrpy: 0 -0 0"]
+"right_eye_joint" -> "bender/sensors/camera_right_eye_link"
+"bender/body" -> "r_arm_base_joint" [label="xyz: -0.01941 -0.238791 1.2466 \nrpy: 0 -0 0"]
+"r_arm_base_joint" -> "bender/r_arm_base"
+"bender/r_arm_base" -> "r_shoulder_pitch_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"r_shoulder_pitch_joint" -> "bender/r_shoulder_pitch_link"
+"bender/r_shoulder_pitch_link" -> "r_shoulder_roll_joint" [label="xyz: -0.02178 -0.0339 -0.03 \nrpy: 0 -0 0"]
+"r_shoulder_roll_joint" -> "bender/r_shoulder_roll_link"
+"bender/r_shoulder_roll_link" -> "r_shoulder_yaw_joint" [label="xyz: 0.03218 0 -0.1366 \nrpy: 0 -0 0"]
+"r_shoulder_yaw_joint" -> "bender/r_shoulder_yaw_link"
+"bender/r_shoulder_yaw_link" -> "r_elbow_pitch_joint" [label="xyz: -0.015898 0.02178 -0.21 \nrpy: 0 -0 0"]
+"r_elbow_pitch_joint" -> "bender/r_elbow_pitch_link"
+"bender/r_elbow_pitch_link" -> "r_elbow_yaw_joint" [label="xyz: -0.0136 -0.02228 -0.09218 \nrpy: 0 -0 0"]
+"r_elbow_yaw_joint" -> "bender/r_elbow_yaw_link"
+"bender/r_elbow_yaw_link" -> "r_wrist_pitch_joint" [label="xyz: -0.018221 0.0171 -0.26272 \nrpy: 0 -0 0"]
+"r_wrist_pitch_joint" -> "bender/r_wrist_pitch_link"
+"bender/r_wrist_pitch_link" -> "r_ext_finger_joint" [label="xyz: 0.01775 -0.03555 -0.0794 \nrpy: -0.523599 0 0"]
+"r_ext_finger_joint" -> "bender/r_base_ext_finger_link"
+"bender/r_base_ext_finger_link" -> "r_ext_finger_fixed_joint" [label="xyz: -0.035 0 0 \nrpy: 0 0 3.14159"]
+"r_ext_finger_fixed_joint" -> "bender/r_ext_finger_link"
+"bender/r_wrist_pitch_link" -> "r_int_finger_joint" [label="xyz: 0.01775 0.00085 -0.0794 \nrpy: 0.523599 -0 0"]
+"r_int_finger_joint" -> "bender/r_base_int_finger_link"
+"bender/r_base_int_finger_link" -> "r_int_finger_fixed_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"r_int_finger_fixed_joint" -> "bender/r_int_finger_link"
+"bender/body" -> "rear_left_wheel_joint" [label="xyz: -0.122037 0.156681 0.101 \nrpy: 0 -0 0"]
+"rear_left_wheel_joint" -> "bender/rear_left_wheel"
+"bender/body" -> "rear_right_wheel_joint" [label="xyz: -0.122037 -0.156681 0.101 \nrpy: 0 -0 0"]
+"rear_right_wheel_joint" -> "bender/rear_right_wheel"
+"bender/body" -> "waist_base_joint" [label="xyz: 0.04 0 0.93 \nrpy: 0 0.47 0"]
+"waist_base_joint" -> "bender/waist_base"
+"bender/waist_base" -> "rgbd_waist_camera_joint" [label="xyz: 0.1 0 0.04 \nrpy: 0 -0 0"]
+"rgbd_waist_camera_joint" -> "bender/sensors/rgbd_waist_link"
+"bender/sensors/rgbd_waist_link" -> "rgbd_waist_camera_rgb_joint" [label="xyz: 0 0.022 0 \nrpy: 0 -0 0"]
+"rgbd_waist_camera_rgb_joint" -> "bender/sensors/rgbd_waist_rgb_frame"
+"bender/sensors/rgbd_waist_rgb_frame" -> "rgbd_waist_camera_depth_joint" [label="xyz: 0 0.027 0 \nrpy: 0 -0 0"]
+"rgbd_waist_camera_depth_joint" -> "bender/sensors/rgbd_waist_depth_frame"
+"bender/sensors/rgbd_waist_depth_frame" -> "rgbd_waist_camera_depth_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"rgbd_waist_camera_depth_optical_joint" -> "bender/sensors/rgbd_waist_depth_optical_frame"
+"bender/sensors/rgbd_waist_rgb_frame" -> "rgbd_waist_camera_rgb_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"rgbd_waist_camera_rgb_optical_joint" -> "bender/sensors/rgbd_waist_rgb_optical_frame"
+}

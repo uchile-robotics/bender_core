@@ -1,0 +1,64 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="gui" default="true"/>
+  <!-- Publish TF frames of the robot -->
+  <arg name="publish_tf" default="true" />
+  <!-- RQT GUI for control base and arms -->
+  <arg name="rqt_gui" default="false" />
+  <!-- Open RViz -->
+  <arg name="rviz" default="false" />
+  <!-- Map -->
+  <arg name="worldname" default="empty" />
+  <!-- Prefix for link and Gazebo sensor topics -->
+  <!-- ros_control doesnt support! @TODO -->
+  <arg name="prefix" default="bender/" />
+  <!-- Publish /clock -->
+  <arg name="use_sim_time" value="true"/>
+  <!-- Bender model type -->
+  <arg name="model_type" default="asus" />
+
+  <!-- Load joint names and constants from YAML file to parameter server -->
+  <rosparam file="$(find bender_description)/config/constants.yaml" command="load"/>
+
+  <!-- Use simulation time -->
+  <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+  <!-- Launch Gazebo with empty world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find bender_gazebo)/worlds/$(arg worldname).world"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <!-- Load model -->
+  <include file="$(find bender_description)/launch/load_robot_description.launch">
+    <arg name="prefix" value="$(arg prefix)" />
+    <arg name="model_type" default="$(arg model_type)" />
+  </include>
+  <!-- Use generated model-->
+  <!-- 
+  <param name="robot_description" textfile="$(find bender_description)/robots/bender.urdf"/>
+  -->
+  
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model bender_model -param robot_description"/>
+
+  <!-- Effort Trajectory controllers, launch in another console -->
+  <include file="$(find bender_gazebo)/launch/bender_control.launch.xml" />
+
+  <!-- Publish TF frames -->
+  <node if="$(arg publish_tf)" name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+    <remap from="joint_states" to="/bender/joint_states"/>
+  </node>
+
+  <!-- RViz -->
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bender_gazebo)/config/rviz_gazebo.rviz"/>
+  
+  <!-- Load Calibration -->
+  <node name="save calibration" pkg="calibration_arm" type="load_calibration.sh" />
+
+  <!-- RQT Control perspective -->
+  <node if="$(arg rqt_gui)" name="rqt_command" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find bender_gazebo)/config/control.perspective"/>
+  
+</launch>
