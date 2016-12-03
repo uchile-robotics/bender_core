@@ -2,15 +2,15 @@
   <arg name="use_gui" default="true" />
   <arg name="model_type" default="asus" />
 
-  <!-- Cargar modelo con TF-->
+  <!-- Cargar modelo con TF -->
   <include file="$(find bender_tf)/launch/tf_model.launch">
     <arg name="use_gui" value="$(arg use_gui)" />
     <arg name="model_type" value="$(arg model_type)" />
   </include>
 
-  <!--Cargar la calibracion anterior-->
-  <node name="load_calibration" pkg="calibration_arm" type="load_calibration" output="screen" />
-  <!--Cargar la calibracion anterior-->
+  <!-- Cargar la calibracion anterior -->
+  <node name="load_calibration" pkg="calibration_arm" type="load_calibration" args="" output="screen" />
+  <!-- Cargar la calibracion anterior -->
   <node name="save_calibration" pkg="calibration_arm" type="save_calibration" output="screen" />
 
   <!-- Abrir RViz con modelo de robot -->
