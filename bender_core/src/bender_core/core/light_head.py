@@ -33,13 +33,13 @@ class LightHead(RobotSkill):
     NUM_JOINTS = 2
     """int: Number of joints"""
 
-    ROLL_HOME_POSITION = 0.0
+    YAW_HOME_POSITION = 0.0
     """float: Roll angle home postion"""
 
     PITCH_HOME_POSITION = 0.0
     """float: Pitch angle home postion"""
 
-    PITCH_MIN_POSITION = -0.95
+    PITCH_MIN_POSITION = 0.7
     """float: Minimum pitch angle"""
 
     REF_FRAME = "bender/light_head_base_link"
@@ -216,13 +216,13 @@ class LightHead(RobotSkill):
         """
         Move head to home position.
         """
-        self.send_joint_goal(yaw=LightHead.ROLL_HOME_POSITION, pitch=LightHead.PITCH_HOME_POSITION)
+        self.send_joint_goal(yaw=LightHead.YAW_HOME_POSITION, pitch=LightHead.PITCH_HOME_POSITION)
 
     def look_at_ground(self):
         """
         Look at the ground.
         """
-        self.send_joint_goal(yaw=LightHead.ROLL_HOME_POSITION, pitch=0.8*LightHead.PITCH_MIN_POSITION)
+        self.send_joint_goal(yaw=LightHead.YAW_HOME_POSITION, pitch=0.8*LightHead.PITCH_MIN_POSITION)
 
     def look_at(self, pose):
         """

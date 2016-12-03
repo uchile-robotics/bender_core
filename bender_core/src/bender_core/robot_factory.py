@@ -52,19 +52,25 @@ def build(skills=_str_to_skill.keys()):
     Raises:
         TypeError: If `skills` is not a list.
     """
-    rospy.loginfo(" building robot ... ")
+    rospy.loginfo("factory: building robot ... ")
     robot = Robot("bender")
+
     # Check arg
     if not isinstance(skills, list):
         raise TypeError("skills must be a string list")
+
     # Add skill instance to robot    
     for skill_name in skills:
         if skill_name in _str_to_skill:
             robot.set(_str_to_skill[skill_name].get_instance())
+
+            # shortcuts
             if skill_name == 'tts':
                 robot.say = robot.tts.say
+            
         else:
             rospy.logerr("Skill '{0}' is not registered".format(skill_name))
-    rospy.loginfo(" ... ready")
+
+    rospy.loginfo("factory: the robot is built")
     return robot
 
