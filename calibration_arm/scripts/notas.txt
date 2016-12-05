@@ -1,0 +1,2 @@
+Nota: tratar de crear un bash con este nuevo comando.
+rosparam set /bender/dynamic_tf/{arg}/{eje}
