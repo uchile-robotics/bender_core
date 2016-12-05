@@ -231,55 +231,6 @@ class ArmSkill(RobotSkill):
             None: If the goal didn't finish.
         """
         return self._jta_client.get_result()
-        
-    def get_grasp_capmap(self, obj):
-        """
-        Obtiene grasp precalculados usando Capability Map
-        @param obj: Objeto cilindrico, moveit_msg/CollisionObject
-
-        Retorna dict{'pregrasp':[...], 'grasp':[..]}
-        """
-        target = copy.deepcopy(obj)
-        # Parche para lado, por defecto cap_map es para l_arm
-        if self.side == 'r':
-            for i, pose in enumerate(target.primitive_poses):
-                pose.position.y *= -1
-                target.primitive_poses[i] = pose
-        try:
-            rospy.loginfo("Calling Capability Map")
-            resp = self.capamap_grasp_client(target, True, self.name)
-            if not resp.grasps:
-                rospy.logerr('No grasp generated!')
-                return None
-            result = dict()
-            result['pregrasp'] = list()
-            result['grasp'] = list()
-            for gp in resp.grasps:
-                # @TODO Revisar orden, capability map los retorna alreves
-                result['pregrasp'].extend([pg.positions for pg in gp.grasp])
-                result['grasp'].extend([g.positions for g in gp.pregrasp])
-            # Filtro de posicion elbow > 0
-            bad_grasp = list()
-            for i, pos in enumerate(result['pregrasp']):
-                if pos[3] < 0:
-                    rospy.logwarn('Filter elbow bad position')
-                    bad_grasp.append(i)
-            # Borrar elementos
-            if bad_grasp:
-                rospy.logwarn('Filter elbow bad position')
-                for j in reversed(bad_grasp):
-                    try:
-                        del result['pregrasp'][j]
-                        del result['grasp'][j]
-                    except:
-                        pass
-            # Check largo
-            if not result['pregrasp']:
-                return None
-            return result
-        except rospy.ServiceException as exc:
-            rospy.logerr("Service did not process request: " + str(exc))
-            return None
 
 class LeftArmSkill(ArmSkill):
     """Left arm control using using joint trajectory action"""
