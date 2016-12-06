@@ -7,7 +7,6 @@ __author__ = 'gdiaz'
 """Provides a high level interface over ROS to generate emotions on Bender Robot.
 It use methods provided by FacialExpressions class (non ROS hardware interface). See Documentation.
 """
-import roslib; roslib.load_manifest('bender_head')
 import sys
 import math
 import rospy
@@ -52,7 +51,7 @@ class HeadController:
     def start(self):
         # Create subs, services, publishers, threads
         self.running = True
-		#subscribers
+        #subscribers
         self.command_sub = rospy.Subscriber('~emotion_command', ExpressionCommand, self.process_command)
         self.expressionsList_sub = rospy.Subscriber('~emotion_list', Empty, self.list_expressions)
         self.joystick_sub = rospy.Subscriber('~cmd', Emotion, self.joystick_cmd)
@@ -70,8 +69,10 @@ class HeadController:
         self.joy_pub.unregister()
 
     def process_command(self, msg):
-        if (msg.expression in self.static_emotion_list): self.emotions_controller.set_emotion(msg.expression)
-        elif (msg.expression in self.dynamic_emotion_list): self.emotions_controller.set_dynamic_emotion(msg.expression)
+        if (msg.expression in self.static_emotion_list):
+            self.emotions_controller.set_emotion(msg.expression)
+        elif (msg.expression in self.dynamic_emotion_list):
+            self.emotions_controller.set_dynamic_emotion(msg.expression)
         elif (msg.expression == "id"):
             device_id = self.hw_controller.get_state(3)
             print("device_id = "+str(device_id))
@@ -110,7 +111,7 @@ class HeadController:
 
 if __name__ == '__main__':
     rospy.init_node('expressions_controller')
-    dxl = DynamixelIO('/dev/bender/l_port', baudrate = 115200)
+    dxl = DynamixelIO('/dev/bender/dxl_test', baudrate = 115200)
     expressions = HeadController(dxl, 'emotions', 'left')
     expressions.initialize()
     expressions.start()

@@ -9,11 +9,12 @@ dynamic_emotions:
         #left_ear, right_ear, left_eyebrow, right_eyebrow, mouth, and so on with the next element, if exist the element for the part
         #If no element exist for a part, the previous value is preserved for the next updates
         left_ear: [40, 20, 60, 30, 50, 40]
-        right_ear: [40, 20, 60, 30, 50, 40]
+        right_ear: [40] #[40, 20, 60, 30, 50, 40]
         left_eyebrow: [70]
         right_eyebrow: [70]
         mouth: [20]
-        sizes: [6, 6, 1, 1, 1]
+        sizes: [6, 1, 1, 1, 1]
+        time: 300
     eyebrow1313:
         #LEDs colors
         #This are always set first
@@ -27,5 +28,19 @@ dynamic_emotions:
         right_ear: [70]
         left_eyebrow: [80, 50, 80, 50]
         right_eyebrow: [80, 50, 80, 50]
-        mouth: [20]
-        sizes: [1, 1, 4, 4, 1]
+        mouth: [60]
+        sizes: [1,1,4,4,1]
+        time: 1000
+    fear:
+        #LEDs colors
+        left_eye: [magenta, blue, magenta, blue, magenta, black, black, black, black, magenta, blue, magenta, blue, black, black, black]
+        right_eye: [yellow3, yellow3, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black]
+        #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
+        left_ear: [0]
+        right_ear: [0]
+        left_eyebrow: [80, 85, 80, 85, 78, 83,80, 85, 80, 85, 78, 83, 80, 85, 80, 85, 78, 83, 80, 85, 80, 85, 78, 83]
+        right_eyebrow: [80 , 85, 80, 85, 78, 83, 80 , 85, 80, 85, 78, 83, 80 , 85, 80, 85, 78, 83, 80 , 85, 80, 85, 78, 83]
+        mouth: [20, 25, 20, 25, 21, 26 , 21, 26, 20, 25, 20, 25, 21, 26 , 21, 25, 20, 24, 20, 25, 21, 26,21,26]
+        sizes: [1, 1, 24, 24, 24]
+        time: 500 
+        #time in miliseconds

@@ -26,3 +26,6 @@ eye_colors:
   yellow3 : [3,3,0]
   cian3 : [0,3,3]
   magenta3 : [3,0,3]
+
+  #colores Pascal
+  color1 : [1,2,3]
