@@ -138,6 +138,7 @@ class LightHead(RobotSkill):
 
     def pause(self):
         self.logdebug("Pause \"{0}\" skill".format(self.name))
+        self.stop()
         return True
 
     # Head movement related methods

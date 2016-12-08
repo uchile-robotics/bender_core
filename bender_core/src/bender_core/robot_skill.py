@@ -54,11 +54,11 @@ class RobotSkill(object):
             >>> robot = ...
             >>> a_skill = robot.get(a_skill)
 
-            # (discouraged) will stop, but destroys the tracking system!
-            >>> a_skill.stop()
+            # (discouraged) will pause, but destroys the tracking system!
+            >>> a_skill.pause()
 
             # (correct)
-            >>> robot.stop(a_skill)
+            >>> robot.pause(a_skill)
     """
     
     ## ========================================================================

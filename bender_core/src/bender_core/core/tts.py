@@ -76,6 +76,7 @@ class TTSSkill(RobotSkill):
 
     def pause(self):
         rospy.loginfo("{skill: %s}: pause()." % self._type)
+        self.stop()
         return True
 
     def say(self, text="bender yes"):
