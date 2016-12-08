@@ -1,7 +1,4 @@
 base_fixed_jont: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
-bender:
-  light_head_base_joint: {pitch: 0.251328, roll: 0.062832, x: 0.0, y: 0.0, yaw: 0.0,
-    z: -0.05}
 body_fixed_jont: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
 chest_base_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
 head_pitch_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
