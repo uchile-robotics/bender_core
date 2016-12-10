@@ -55,7 +55,7 @@ class WrappedBattery(BatteryDashWidget):
                                                   icon_paths=icon_paths,
                                                   suppress_overlays=True)
 
-
+        self.unset_stale()
         self.update_perc(0)
         # Last time updated
         self.last_update = rospy.Time.now()
