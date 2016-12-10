@@ -1,0 +1,8 @@
+<launch>
+  <!-- Load head controller configurations -->
+  <rosparam file="$(find bender_gazebo)/config/neck_asus_control.yaml" command="load"/>
+  <!-- Load the controllers, launch in other console -->
+  <node name="neck_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/bender"
+    args="neck_controller
+        rgbd_head_controller"/>
+</launch>

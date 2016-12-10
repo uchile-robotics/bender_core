@@ -14,4 +14,8 @@
 	<node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load bender_cmd_vel_mux/CmdVelMuxNodelet cmd_vel_mux_nav_nodelet_manager" ns="/bender/nav/">
 		<param name="yaml_cfg_file" value="$(find bender_cmd_vel_mux)/param/mux.yaml"/>
 	</node>
+
+	<!-- cmd_vel safety -->
+	<include file="$(find bender_cmd_vel_mux)/launch/safety_check.launch"/>
+
 </launch>

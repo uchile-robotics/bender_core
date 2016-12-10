@@ -1,8 +1,0 @@
-<launch>
-
-  <!-- Joystick complete -->
-  <node name="cmd_vel_safety" pkg="bender_joy" type="cmd_vel_safety.py" output="screen">
-    <remap from="/cmd_vel_safety_output" to="/bender/joy/joystick_nav/cmd_vel"/>
-  </node>
-
-</launch>

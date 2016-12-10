@@ -1,0 +1,25 @@
+<launch>
+
+    <arg name="ns" default="joy"/>
+
+    <!-- base -->
+    <node pkg="bender_joy" type="joy_base.py" name="joy_base" output="screen" ns="$(arg ns)">
+        <rosparam file="$(find bender_joy)/config/joystick_base.yaml" command="load"/>
+        <remap from="joy" to="base"/>
+    </node>
+
+    <!-- tts -->
+    <node pkg="bender_joy" type="joy_tts.py" name="joy_tts" output="screen" ns="$(arg ns)">
+        <rosparam file="$(find bender_joy)/config/joystick_tts.yaml" command="load"/>
+        <remap from="joy" to="tts"/>
+        <remap from="tts/say" to="/bender/hw/tts/say"/>
+    </node>
+ 
+    <!-- head -->
+    <node pkg="bender_joy" type="joy_head.py" name="joy_head" output="screen" ns="$(arg ns)">
+        <rosparam file="$(find bender_joy)/config/joystick_head.yaml" command="load"/>
+        <remap from="joy" to="head"/>
+        <remap from="head/cmd" to="/bender/head/cmd"/>
+    </node>
+
+</launch>
