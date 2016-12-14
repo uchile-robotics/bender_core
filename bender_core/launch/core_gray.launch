@@ -1,0 +1,46 @@
+<launch>
+
+	<!-- ================================================== -->
+	<!-- ==================== HARDWARE ==================== -->
+	<!-- ================================================== -->
+	
+	<!-- visualization -->
+	<arg name="rviz"       default="true"/>
+
+	<!-- robot configuration -->
+	<arg name="model_type"     default="light_head"/>
+	<arg name="tf_gui"         default="false"/>
+	<arg name="language"       default="spanish"/>
+	
+	<!-- available languages: { english , spanish } -->
+	<arg name="show_subtitles" default="true"/>
+
+
+	<!-- robot simulation -->
+	<arg name="simulation" default="false"/>
+	<arg name="sim_world"  default="amtc"/>
+	<!-- TODO: <arg name="simulator"  default="gazebo"/> -->
+
+
+	<!-- ================================================== -->
+	<!-- ==================== HARDWARE ==================== -->
+	<!-- ================================================== -->
+
+	<!-- Sound Player -->
+	<include file="$(find bender_sound)/launch/sound.launch"/>
+
+	<!-- TTS -->
+	<include file="$(find bender_tts)/launch/tts.launch">
+    	<arg name="language"       value="$(arg language)"/>
+    	<arg name="show_subtitles" value="$(arg show_subtitles)"/>
+	</include>
+	
+
+	<!-- =================================================== -->
+	<!-- =================  VISUALIZATION  ================= -->
+	<!-- =================================================== -->
+
+	<!-- RVIZ -->
+	<include file="$(find bender_utils)/launch/rviz.launch" if="$(arg rviz)"/>
+
+</launch>
