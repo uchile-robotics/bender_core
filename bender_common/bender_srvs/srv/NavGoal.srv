@@ -5,7 +5,6 @@
 # a) pose en el espacio
 # b) angulos a rotar (grados)
 geometry_msgs/PoseStamped goal
-float64 rotation
 ---
 # Response
 int32 state    # Current goal state
