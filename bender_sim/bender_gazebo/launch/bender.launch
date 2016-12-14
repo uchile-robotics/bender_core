@@ -45,7 +45,9 @@
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model bender_model -param robot_description"/>
 
   <!-- Effort Trajectory controllers, launch in another console -->
-  <include file="$(find bender_gazebo)/launch/bender_control.launch.xml" />
+  <include file="$(find bender_gazebo)/launch/bender_control.launch.xml">
+    <arg name="model_type" value="$(arg model_type)" />
+  </include>
 
   <!-- Publish TF frames -->
   <node if="$(arg publish_tf)" name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">

@@ -174,8 +174,12 @@ int main(int argc, char** argv) {
       mimic.insert(make_pair(i->first, i->second->mimic));
     }
   }
+  
+  // Wait for param
+  ros::Duration(5.0).sleep();
 
   bender_tf::DynamicJointStateListener state_publisher(tree, mimic, node);
+
   ros::spin();
 
   return 0;

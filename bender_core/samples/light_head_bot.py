@@ -52,6 +52,8 @@ if __name__ == "__main__":
     pose.pose.position.y = 1.0
     head.look_at(pose)
     head.wait_for_motion_done()
+    head.look_at_ground()
+    head.wait_for_motion_done()
     # Shutdown robot
     robot.shutdown()
   

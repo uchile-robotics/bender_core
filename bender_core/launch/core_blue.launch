@@ -1,0 +1,24 @@
+<launch>
+
+	<!-- ================================================== -->
+	<!-- ==================== PARAMETERS ================== -->
+	<!-- ================================================== -->
+	
+	<!-- visualization -->
+	<arg name="rviz"       default="true"/>
+
+	<!-- robot configuration -->
+	<arg name="model_type"     default="light_head"/>
+	<arg name="tf_gui"         default="false"/>
+	<arg name="language"       default="spanish"/>
+	
+	<!-- available languages: { english , spanish } -->
+	<arg name="show_subtitles" default="true"/>
+
+
+	<!-- robot simulation -->
+	<arg name="simulation" default="false"/>
+	<arg name="sim_world"  default="amtc"/>
+	<!-- TODO: <arg name="simulator"  default="gazebo"/> -->
+
+</launch>
