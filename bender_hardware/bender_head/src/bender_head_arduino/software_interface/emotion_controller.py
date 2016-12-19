@@ -67,7 +67,8 @@ class EmotionsController(object):
 				self.servos_hw.right_eyebrow(emo['right_eyebrow'][i])
 			if(i<movements[4]):
 				self.servos_hw.mouth(emo['mouth'][i])
-			time.sleep(int(emo['time'])/1000)
+			time.sleep(int(emo['time'])/1000.0)
+	
 
 	def get_state(self):
 		return self.actual_expresion

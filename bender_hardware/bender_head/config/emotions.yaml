@@ -139,15 +139,15 @@ emotions:
     #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
     servos: NonUsed
 
-  test:
-    eyes:
+  confundido:
+    eyes: #colores giran
         #LEDs colors
-        left_eye: [red , yellow , red,yellow  , red, yellow, black, black, black, red, yellow, red, black, black, black, black]
+        left_eye: [color1 , yellow , blue ,yellow  , black, black , yellow, red, yellow, blue, black, red , blue, yellow, black , black]
         right_eye: [yellow3, yellow3, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black]
     servos:
         #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
         left_ear: 80
-        right_ear: 80
-        left_eyebrow: 90
-        right_eyebrow: 90
-        mouth: 20
+        right_ear: 10
+        left_eyebrow: 10
+        right_eyebrow: 70
+        mouth: 60

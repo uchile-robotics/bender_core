@@ -1,0 +1,69 @@
+#!/bin/bash
+
+
+# Setup
+
+# Color
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+reset=$(tput sgr0)
+bold=$(tput bold)
+# Line title
+title="${bold}[bender_description]:${reset}"
+
+# Rosparam set
+jointset()
+{
+    local joint_folder filename fullpath
+    joint_folder="$BENDER_WS/base_ws/src/calibration_arm/scripts"
+    name=$ head -$n $line parmset.txt | tail -1
+    echo "$name"
+}
+
+axisset(){
+    local joint_folder filename fullpath
+    joint_folder="$BENDER_WS/base_ws/src/calibration_arm/scripts"
+    axis=$ head -$a $line axisset.txt | tail -1
+    echo "$axis"
+}
+
+rosparam()
+{
+    echo "$rosparam get /bender/dynamic_tf/$name/$axis"
+}
+# Main function
+while [[ $# -gt 0 ]]
+do
+key="$1"
+case $key in
+    -h|--help)
+    cat <<EOF
+Synopsis:                
+    auto_calibration [joint] [axis] [offset]
+
+Description:
+    Change the offset of a specific joint and axis
+
+Options:
+    -s, --joint --{pitch,roll,x,...} --{valueoffset}  Specify the joint , axis and offset
+EOF
+    exit 0
+    ;;
+    -j|--joint)
+    #OJO debo ver como tomar el n con la linea de comandos
+    n=5
+    jointset
+    rosparam
+    exit 0
+    ;;
+    -a|--axis)
+    #OJO debo ver como tomar el a con la linea de comandos
+    a=2
+    axisset
+    exit 0
+    ;;
+esac
+shift # past argument or value
+done
+# Default

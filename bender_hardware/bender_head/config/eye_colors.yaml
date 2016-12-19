@@ -5,7 +5,7 @@ eye_colors:
   red : [1,0,0]
   green : [0,1,0]
   blue : [0,0,1]
-  yellow : [1,1,0]
+  yellow : [2,1,0]
   cian : [0,1,1]
   magenta : [1,0,1]
 
@@ -27,5 +27,4 @@ eye_colors:
   cian3 : [0,3,3]
   magenta3 : [3,0,3]
 
-  #colores Pascal
-  color1 : [1,2,3]
+ 
