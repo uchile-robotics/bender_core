@@ -31,6 +31,8 @@ class TTSSkill(RobotSkill):
 
         self.is_talking = False
 
+        self._last_sentence = ''
+
 
         
     def check(self, timeout = 1.0):
@@ -91,6 +93,7 @@ class TTSSkill(RobotSkill):
         """
         try:
             self._tts_client(text)
+            self._last_sentence = text
         except rospy.ROSException:
             self.logerr("could not call synthesizer server")
             return False
@@ -135,14 +138,14 @@ class TTSSkill(RobotSkill):
         return True
 
     def wait_until_done(self,timeout=10.0):
-        begin = rospy.get_time()
+        # begin = rospy.get_time()
         
-        self.is_talking = True
-        rospy.sleep(1)
-        rospy.Subscriber(self._is_talking_topic, Bool, self.is_talking_callback)
-        while(not rospy.is_shutdown() and self.is_talking  and (rospy.get_time()-begin) < timeout):
-            pass
-        return
+        # self.is_talking = True
+        rospy.sleep(len(self._last_sentence)/8.0)
+        # rospy.Subscriber(self._is_talking_topic, Bool, self.is_talking_callback)
+        # while(not rospy.is_shutdown() and self.is_talking  and (rospy.get_time()-begin) < timeout):
+        #     pass
+        # return
 
 
     def is_talking_callback(self,data):
