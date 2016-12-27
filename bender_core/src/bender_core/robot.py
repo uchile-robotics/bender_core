@@ -287,7 +287,7 @@ class Robot(object):
 
             childs_succeeded = True
             if whole_tree:
-                # stop childs recursively
+                # pause childs recursively
                 childs = self._skills[skill_name].get_dependencies()
                 for child_name in childs:
                     childs_succeeded &= self.pause(child_name, whole_tree=True)
@@ -355,7 +355,7 @@ class Robot(object):
 
             childs_succeeded = True
             if whole_tree:
-                # stop childs recursively
+                # pause childs recursively
                 childs = self._skills[skill_name].get_dependencies()
                 for child_name in childs:
                     childs_succeeded &= self.shutdown(child_name, whole_tree=True)
