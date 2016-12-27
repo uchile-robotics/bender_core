@@ -30,10 +30,10 @@
   <!-- Right Arm -->
   <xacro:bender_arm side="r" parent="${prefix}r_arm_base" reflect="1"  prefix="${prefix}"/>
   <!-- Grippers -->
-  <xacro:gripper_int side="r" reflect="1" type="0" prefix="${prefix}"/>
-  <xacro:gripper_ext side="r" reflect="1" type="0" prefix="${prefix}"/>
-  <xacro:gripper_int side="l" reflect="-1" type="1" prefix="${prefix}"/>
-  <xacro:gripper_ext side="l" reflect="-1" type="1" prefix="${prefix}"/>
+  <xacro:gripper_int side="r" reflect="1" type="1" prefix="${prefix}"/>
+  <xacro:gripper_ext side="r" reflect="1" type="1" prefix="${prefix}"/>
+  <xacro:gripper_int side="l" reflect="-1" type="0" prefix="${prefix}"/>
+  <xacro:gripper_ext side="l" reflect="-1" type="0" prefix="${prefix}"/>
   
   <!-- Sensors -->
   <!-- Asus depth camera waist -->

@@ -122,6 +122,10 @@ class PoseServerWrapper(object):
     # =========================================================================
     # MAP METHODS
     # =========================================================================
+    def get_default_map_name(self):
+        return "map.sem_map"
+
+
     def map_name(self):
         """
         returns the current map name (String) on success (e.g: map.sem_map)
@@ -133,7 +137,8 @@ class PoseServerWrapper(object):
         except rospy.ServiceException:
             return None
 
-    def new_map(self, map_name='new_map.sem_map'):
+
+    def new_map(self, map_name="new_map.sem_map"):
         """
         Creates an empty map
     
@@ -143,13 +148,19 @@ class PoseServerWrapper(object):
         old_map = []
         for key in keys:
             old_map.append(self.get(key))
+
+        # delete all
         if not self.delete_all():
+
+            # recovery attempt
             for pose in old_map:
                 self.set(pose)
+            
             return False
-        self.save_to_map(map_name)
-        self.load_from_map(map_name)
-        return True
+
+        self.save_to_map(map_name)   # create new file
+        self.load_from_map(map_name) # it is necessary to update the current map reference.
+        return False
 
 
     def save_to_map(self, map_name=None):
@@ -173,6 +184,7 @@ class PoseServerWrapper(object):
         except rospy.ServiceException:
             return False
 
+
     def load_from_map(self, map_name=None):
         """
         Loads map data from a file. All previous data in memory is forgotten.
@@ -191,6 +203,16 @@ class PoseServerWrapper(object):
         except rospy.ServiceException:
             return False
 
+
+    def load_default_map(self):
+        """
+        Loads the default map.
+
+        see also: load_from_map(), get_default_map_name()
+        """
+        return self.load_from_map(self.get_default_map_name())
+
+
     # =========================================================================
     # POSE METHODS
     # =========================================================================
@@ -205,6 +227,7 @@ class PoseServerWrapper(object):
             return True
         return False
 
+
     def get(self, name):
         """
         returns the SemanticObject from memory whose id is 'name'.
@@ -218,6 +241,7 @@ class PoseServerWrapper(object):
         except rospy.ServiceException:
             return None
 
+
     def set(self, semantic_object):
         """
         does not write to the file.. only to memory
@@ -228,6 +252,7 @@ class PoseServerWrapper(object):
         except rospy.ServiceException:
             return False
         return True
+
 
     def delete(self, name):
         """
@@ -243,6 +268,7 @@ class PoseServerWrapper(object):
             return False
         return True
 
+
     def delete_all(self):
         """
         Deletes all objects from map.
@@ -251,10 +277,10 @@ class PoseServerWrapper(object):
         """
         keys = self._keys()
         for key in keys:
-            rospy.sleep(5)
             if not self.delete(key):
                 return False
         return True
+
 
     def keys(self):
         """
@@ -265,12 +291,14 @@ class PoseServerWrapper(object):
         keys = self._keys()
         return keys if keys is not None else []
 
+
     def location_keys(self):
         """
         The same as keys(), but restricted to 2D poses (which refers to locations)
         """
         keys = self._keys("map_pose")
         return keys if keys is not None else []
+
 
     def object_keys(self):
         """

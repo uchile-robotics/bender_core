@@ -4,9 +4,11 @@
   <arg name="use_gui" default="false"  />
   <arg name="rate" default="40" />
   <arg name="model_type" default="asus" />
-  <!-- Cargar modelo -->
+  <arg name="use_dynamic_tf" default="true" />
+
+  <!-- Load robot model -->
   <include file="$(find bender_description)/launch/load_robot_description.launch">
-    <!-- prefix param para links -->
+    <!-- Prefix parameters for links -->
     <arg name="prefix" value="$(arg prefix)" />
     <arg name="model_type" value="$(arg model_type)" />
   </include>
@@ -21,9 +23,22 @@
   <node name="dyn_state_publisher" pkg="bender_tf" type="dyn_state_publisher" ns="/bender/" output="screen">
     <param name="publish_frequency" value="$(arg rate)" />
   </node>
+
+  <!-- Robot state publisher -->
+  <node unless="$(arg use_dynamic_tf)" name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" ns="/bender/">
+    <param name="publish_frequency" value="$(arg rate)" />
+  </node>
+
+  <group if="$(arg use_dynamic_tf)">
+    <!-- Dynamic robot state publisher allows to modify fixed frames of the robot at runtime -->
+    <node name="dyn_state_publisher" pkg="bender_tf" type="dyn_state_publisher" ns="/bender/" output="screen">
+      <param name="publish_frequency" value="$(arg rate)" />
+    </node>
+    <!-- Load calibration file -->
+    <node name="load_calibration" pkg="bender_tf" type="load_calibration" output="screen" />
+  </group>
   
-  
-  <!-- Unificar joint states -->
+  <!-- Group joint states -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="use_gui" value="$(arg use_gui)" />
     <param name="rate" value="$(arg rate)" />
