@@ -38,7 +38,7 @@
 		<arg name="sim_world" value="$(arg sim_world)"/>
 	</include>
 
-	<include file="$(find bender_core)/launch/core_green.launch">
+	<include file="$(find bender_core)/launch/core_gray.launch">
 		<arg name="rviz" value="$(arg rviz)"/>
 		<arg name="model_type" value="$(arg model_type)"/>
 		<arg name="tf_gui" value="$(arg tf_gui)"/>
@@ -47,7 +47,5 @@
 		<arg name="simulation" value="$(arg simulation)"/>
 		<arg name="sim_world" value="$(arg sim_world)"/>
 	</include>
-
-
-
+S
 </launch>

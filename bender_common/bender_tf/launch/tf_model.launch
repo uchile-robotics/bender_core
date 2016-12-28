@@ -19,11 +19,6 @@
   </node>
   -->
 
-  <!-- TF dinamica -->
-  <node name="dyn_state_publisher" pkg="bender_tf" type="dyn_state_publisher" ns="/bender/" output="screen">
-    <param name="publish_frequency" value="$(arg rate)" />
-  </node>
-
   <!-- Robot state publisher -->
   <node unless="$(arg use_dynamic_tf)" name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" ns="/bender/">
     <param name="publish_frequency" value="$(arg rate)" />
