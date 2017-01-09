@@ -31,7 +31,7 @@ if [ $? -ne 0 ]; then
     exit 1 # Terminate and indicate error
 fi
 echo "$installer Exporting SDF."
-gz sdf -p bender.urdf > bender.sdf
+gzsdf print bender.urdf > bender.sdf
 if [ $? -ne 0 ]; then
     echo "$installer ${red}Error exporting SDF.${reset}"
     exit 1 # Terminate and indicate error
