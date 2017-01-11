@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import rospy
+import math
 
 from bender_core.robot_skill import RobotSkill
 from bender_core.core.joy import JoySkill
+from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
 
 
 class BaseSkill(RobotSkill):
@@ -19,6 +22,23 @@ class BaseSkill(RobotSkill):
         super(BaseSkill, self).__init__()
         self._description = "the base skill"
         self.register_dependency(JoySkill.get_type())
+        self.pose_pub = rospy.Publisher("/bender/nav/cmd_vel", Twist, queue_size=1)
+        self.linear_vel = 0.3
+        self.angular_vel = 0.3
+        self.curr_pose = Odometry()
+
+    def _update_pos(self, data):
+        self.curr_pose = data
+
+    def _distance(self, pos1, pos2):
+        dist = math.sqrt((pos1.pose.pose.position.x - pos2.pose.pose.position.x) ** 2 + (pos1.pose.pose.position.y - pos2.pose.pose.position.y) ** 2 + (pos1.pose.pose.position.z - pos2.pose.pose.position.z) ** 2)
+        return dist
+
+    def _rotation(self, pos1, pos2):
+        ang1 = math.asin(pos1.pose.pose.orientation.z) * 2
+        ang2 = math.asin(pos2.pose.pose.orientation.z) * 2
+        return abs((ang1 - ang2)) * 180 / math.pi
+
         
     def check(self):
         rospy.loginfo("{skill: %s}: check()." % self._type)
@@ -49,8 +69,7 @@ class BaseSkill(RobotSkill):
         """
         This method moves the base forward by "distance" meters.
 
-        Extensive documentation of the move_forward method. This docstring
-        will not be displayed when showing an overview of the robot methods.
+        Primitive movement of a determined distance, a given distance of 0 will result in continuous movement
 
         Args:
             distance (float): Distance to move the base.
@@ -60,14 +79,49 @@ class BaseSkill(RobotSkill):
             bool: True on success, False otherwise 
         """
         rospy.loginfo("{skill: %s}: move_forward(). Moving forward by %f meters." % (self._type, distance))
-        return True
+
+        covered = 0
+        rate = rospy.Rate(10)
+        pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
+        ini_pose = self.curr_pose
+        try:
+            while not rospy.is_shutdown():
+                covered = self._distance(self.curr_pose, ini_pose)
+                rospy.loginfo("Distance covered: %f meters" % (covered))
+                if distance != 0:
+                    if covered >= distance:
+                        vel = Twist()
+                        vel.linear.x = 0
+                        vel.linear.y = 0
+                        vel.linear.z = 0
+
+                        vel.angular.x = 0
+                        vel.angular.y = 0
+                        vel.angular.z = 0
+
+                        self.pose_pub.publish(vel)
+                        rospy.loginfo("Goal reached!")
+                        return True
+                    else:
+                        vel = Twist()
+                        vel.linear.x = self.linear_vel
+                        vel.linear.y = 0
+                        vel.linear.z = 0
+
+                        vel.angular.x = 0
+                        vel.angular.y = 0
+                        vel.angular.z = 0
+                        self.pose_pub.publish(vel)
+                rate.sleep()
+        except rospy.ROSException:
+            rospy.loginfo("Couldn't reach goal :(")
+            return False
 
     def move_backwards(self, distance=0.0):
         """
         This method moves the base backwards by "distance" meters.
 
-        Extensive documentation of the move_backwards method. This docstring
-        will not be displayed when showing an overview of the robot methods.
+        Primitive movement of a determined distance, a given distance of 0 will result in continuous movement
 
         Args:
             distance (float): Distance to move the base.
@@ -77,7 +131,145 @@ class BaseSkill(RobotSkill):
             bool: True on success, False otherwise 
         """
         rospy.loginfo("{skill: %s}: move_backwards(). Moving backwards by %f meters." % (self._type, distance))
-        return True
+        covered = 0
+        rate = rospy.Rate(10)
+        pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
+        ini_pose = self.curr_pose
+        try:
+            while not rospy.is_shutdown():
+                covered = self._distance(self.curr_pose, ini_pose)
+                rospy.loginfo("Distance covered: %f meters" % (covered))
+                if distance != 0:
+                    if covered >= distance:
+                        vel = Twist()
+                        vel.linear.x = 0
+                        vel.linear.y = 0
+                        vel.linear.z = 0
+
+                        vel.angular.x = 0
+                        vel.angular.y = 0
+                        vel.angular.z = 0
+
+                        self.pose_pub.publish(vel)
+                        rospy.loginfo("Goal reached!")
+                        return True
+                    else:
+                        vel = Twist()
+                        vel.linear.x = -self.linear_vel
+                        vel.linear.y = 0
+                        vel.linear.z = 0
+
+                        vel.angular.x = 0
+                        vel.angular.y = 0
+                        vel.angular.z = 0
+                        self.pose_pub.publish(vel)
+                rate.sleep()
+        except rospy.ROSException:
+            rospy.loginfo("Couldn't reach goal :(")
+            return False
+
+
+    def rotate_right(self, angle = 0.0):
+        """
+        This method rotates the base clockwise by "angle" degrees.
+
+        Primitive rotation of a determined angle, a given angle of 0 will result in continuous movement.
+
+        Args:
+            angle (float): degrees to rotate the base.
+                Defaults to 0.0
+
+        Returns:
+            bool: True on success, False otherwise 
+        """
+        rospy.loginfo("{skill: %s}: rotate_right(). Rotating %f degrees clockwise." % (self._type, angle))
+        covered = 0.0
+        rate = rospy.Rate(10)
+        pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
+        ini_pose = self.curr_pose
+        try:
+            while not rospy.is_shutdown():
+                covered = self._rotation(self.curr_pose, ini_pose)
+                rospy.loginfo("Rotated angle: %f degrees" % (covered))
+                if angle != 0:
+                    if covered >= angle:
+                        vel = Twist()
+                        vel.linear.x = 0
+                        vel.linear.y = 0
+                        vel.linear.z = 0
+
+                        vel.angular.x = 0
+                        vel.angular.y = 0
+                        vel.angular.z = 0
+
+                        self.pose_pub.publish(vel)
+                        rospy.loginfo("Goal reached!")
+                        return True
+                    else:
+                        vel = Twist()
+                        vel.linear.x = 0
+                        vel.linear.y = 0
+                        vel.linear.z = 0
+
+                        vel.angular.x = 0
+                        vel.angular.y = 0
+                        vel.angular.z = -self.angular_vel
+                        self.pose_pub.publish(vel)
+                rate.sleep()
+        except rospy.ROSException:
+            rospy.loginfo("Couldn't reach goal :(")
+            return False
+
+    def rotate_left(self, angle = 0.0):
+        """
+        This method rotates the base counter-clockwise by "angle" degrees.
+
+        Primitive rotation of a determined angle, a given angle of 0 will result in continuous movement.
+
+        Args:
+            angle (float): degrees to rotate the base.
+                Defaults to 0.0
+
+        Returns:
+            bool: True on success, False otherwise 
+        """
+        rospy.loginfo("{skill: %s}: rotate_left(). Rotating %f degrees counter-clockwise." % (self._type, angle))
+        covered = 0.0
+        rate = rospy.Rate(10)
+        pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
+        ini_pose = self.curr_pose
+        try:
+            while not rospy.is_shutdown():
+                covered = self._rotation(self.curr_pose, ini_pose)
+                rospy.loginfo("Rotated angle: %f degrees" % (covered))
+                if angle != 0:
+                    if covered >= angle:
+                        vel = Twist()
+                        vel.linear.x = 0
+                        vel.linear.y = 0
+                        vel.linear.z = 0
+
+                        vel.angular.x = 0
+                        vel.angular.y = 0
+                        vel.angular.z = 0
+
+                        self.pose_pub.publish(vel)
+                        rospy.loginfo("Goal reached!")
+                        return True
+                    else:
+                        vel = Twist()
+                        vel.linear.x = 0
+                        vel.linear.y = 0
+                        vel.linear.z = 0
+
+                        vel.angular.x = 0
+                        vel.angular.y = 0
+                        vel.angular.z = self.angular_vel
+                        self.pose_pub.publish(vel)
+                rate.sleep()
+        except rospy.ROSException:
+            rospy.loginfo("Couldn't reach goal :(")
+            return False
 
     def _move_forward_private_version(self, distance=0.0):
         """

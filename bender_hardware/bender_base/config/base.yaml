@@ -2,3 +2,8 @@
 
 port: /dev/bender/base
 tf_prefix: bender
+
+trans_accel: 0.01
+trans_decel: 0.01
+rot_accel: 0.01
+rot_decel: 0.01
