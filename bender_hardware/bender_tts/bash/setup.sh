@@ -97,10 +97,9 @@ bender-say_random_eng() {
 #   BASH AUTOCOMPLETE FOR PREVIOUS COMMANDS
 ##############################################################################################
 
-if [  "$CATKIN_SHELL" != "bash" ]; then
-    return
+if [  "$CATKIN_SHELL" = "bash" ]; then
+    # from now: using bash
+    _THIS_DIR="$(rospack find bender_tts)/bash"
+    . "$_THIS_DIR"/setup.bash
 fi
-# from now: using bash
 
-_THIS_DIR="$(rospack find bender_tts)/bash"
-. "$_THIS_DIR"/setup.bash
