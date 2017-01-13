@@ -43,7 +43,7 @@ bender-say_random_esp() {
     local _THIS_DIR n_phrases rand_idx
 
     # load phrases
-    _THIS_DIR="$(rospack find bender_tts)/bash"
+    _THIS_DIR="$(rospack find bender_tts)/shell"
     . "$_THIS_DIR"/phrases.bash
 
     # compute random index
@@ -70,7 +70,7 @@ bender-say_random_eng() {
     local _THIS_DIR n_phrases rand_idx
     
     # load phrases
-    _THIS_DIR="$(rospack find bender_tts)/bash"
+    _THIS_DIR="$(rospack find bender_tts)/shell"
     . "$_THIS_DIR"/phrases.bash
 
     # compute random index
@@ -97,10 +97,9 @@ bender-say_random_eng() {
 #   BASH AUTOCOMPLETE FOR PREVIOUS COMMANDS
 ##############################################################################################
 
-if [  "$CATKIN_SHELL" != "bash" ]; then
-    return
+if [  "$CATKIN_SHELL" = "bash" ]; then
+    # from now: using bash
+    _THIS_DIR="$(rospack find bender_tts)/shell"
+    . "$_THIS_DIR"/setup.bash
 fi
-# from now: using bash
 
-_THIS_DIR="$(rospack find bender_tts)/bash"
-. "$_THIS_DIR"/setup.bash

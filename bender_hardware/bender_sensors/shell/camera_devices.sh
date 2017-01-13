@@ -11,9 +11,9 @@
 BENDER_CAMERA_DEVICE_ID_ANY='0'
 
 # logitech id's
-BENDER_CAMERA_IDS[0]='BA1BA220'
-BENDER_CAMERA_IDS[1]='444EC120'
-BENDER_CAMERA_IDS[2]='1F95B220' # matias's camera
+#BENDER_CAMERA_IDS[0]='BA1BA220'
+#BENDER_CAMERA_IDS[1]='444EC120'
+#BENDER_CAMERA_IDS[2]='1F95B220' # matias's camera
 
 
 # ______________________________________________________________________
