@@ -1,15 +1,17 @@
 #!/bin/bash
 
-# - - - - - - I N S T A L L - - - - - -
+# - - - - - - S E T U P - - - - - - - -
 # # # # # # # # # # # # # # # # # # # #
-
 UDEV_DIR="/opt/bender/udev"
 RULES_DIR="/etc/udev/rules.d"
+
+# - - - - - - I N S T A L L - - - - - -
+# # # # # # # # # # # # # # # # # # # #
 
 bender_cd bender_sensors
 
 # -- udev rules --
-echo -e "\n[INSTALLER]: Installing udev rules for Logitech cameras"
+echo -e "\n$installer Installing udev rules for Logitech cameras"
 
 # prepare script for udev rules
 sudo mkdir -p "$UDEV_DIR"

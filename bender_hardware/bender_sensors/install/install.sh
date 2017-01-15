@@ -11,15 +11,16 @@
 
 # - - - - - - S E T U P - - - - - - - -
 # # # # # # # # # # # # # # # # # # # #
-source "$BENDER_SYSTEM"/setup.bash
+source "$BENDER_SYSTEM"/install/pkg_install.bash
+installer="[INSTALLER]:"
 
 # - - - - - - I N S T A L L - - - - - -
 # # # # # # # # # # # # # # # # # # # #
 bender_cd bender_sensors
-bash install/cameras.sh
-bash install/lasers.sh
+source install/cameras.sh
+source install/lasers.sh
 
 # falta automatizar descarga de instaladores!
-#bash install/rgbd.sh
+#source install/rgbd.sh
 
 # :)
