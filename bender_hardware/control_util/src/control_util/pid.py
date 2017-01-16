@@ -39,7 +39,7 @@ class PID(object):
     the method compute_output will just return zero.
     """
 
-    def __init__(self, kp=0.0, ki=0.0, kd=0.0, i_clamp=None, error_order=10):
+    def __init__(self, kp=0.0, ki=0.0, kd=0.0, i_clamp=1, error_order=10):
         # initialize gains
         self._kp = kp
         self._ki = ki
@@ -56,7 +56,7 @@ class PID(object):
         self._prev_time = 0.0
 
         # error moving average for check convergence
-        self.error = CircularBuffer(10)
+        self.error = CircularBuffer(error_order)
 
         self.initialize()
 
