@@ -1,4 +1,17 @@
-#!/usr/bin/bash
+#!/bin/bash
+#
+# Run me like this
+# > bash install.sh
+#
+# DO NOT USE ONE OF THIS:
+# > source install.sh
+# > . install.sh
+# > ./install.sh
+#
+
+# - - - - - - S E T U P - - - - - - - -
+source "$BENDER_WS"/bender_system/install/pkg_install.bash
+
 
 # Color
 red=$(tput setaf 1)
@@ -12,6 +25,7 @@ installer="${bold}[bender_turning_base]:${reset}"
 
 #  - - - - - - - - - Install Rules - - - - - - - - - - - 
 echo "$installer Installing udev rules"
+bender_cd bender_turning_base
 sudo cp -f install/10-bender_turning_base.rules /etc/udev/rules.d/10-bender_turning_base.rules
 sudo udevadm control --reload
 
