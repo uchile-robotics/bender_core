@@ -50,22 +50,25 @@ class EmotionsController(object):
 
 	def set_dynamic_emotion(self, emotion):
 		emo = self.dynamic_emotions[emotion]
-		left_eye_colors = self.get_rgb_colors(emo['left_eye'])
-		right_eye_colors = self.get_rgb_colors(emo['right_eye'])
-		self.hw_controller.set_eye_colors('left', left_eye_colors)
-		self.hw_controller.set_eye_colors('right', left_eye_colors[::-1])
+		if emo['left_eye'] != 'NonUsed':
+			left_eye_colors = self.get_rgb_colors(emo['left_eye'])
+			self.hw_controller.set_eye_colors('left', left_eye_colors)
+		if emo['right_eye'] != 'NonUsed':
+			right_eye_colors = self.get_rgb_colors(emo['right_eye'])
+			self.hw_controller.set_eye_colors('right', left_eye_colors[::-1])
+		
 		movements = emo['sizes']
 		max_iter = max(movements)
 		for i in range(max_iter):
-			if(i<movements[0]):
+			if(i<movements[0] and emo['left_ear']!='NonUsed'):
 				self.servos_hw.left_ear(emo['left_ear'][i])
-			if(i<movements[1]):
+			if(i<movements[1] and emo['right_ear']!='NonUsed'):
 				self.servos_hw.right_ear(emo['right_ear'][i])
-			if(i<movements[2]):
+			if(i<movements[2] and emo['left_eyebrow']!='NonUsed'):
 				self.servos_hw.left_eyebrow(emo['left_eyebrow'][i])
-			if(i<movements[3]):
+			if(i<movements[3] and emo['right_eyebrow']!='NonUsed'):
 				self.servos_hw.right_eyebrow(emo['right_eyebrow'][i])
-			if(i<movements[4]):
+			if(i<movements[4] and emo['mouth']!='NonUsed'):
 				self.servos_hw.mouth(emo['mouth'][i])
 			time.sleep(int(emo['time'])/1000.0)
 	

@@ -44,6 +44,32 @@ dynamic_emotions:
         sizes: [1, 1, 24, 24, 24]
         time: 50.0
         #time in miliseconds
+    talk1:
+        #LEDs colors
+        left_eye: NonUsed
+        right_eye: NonUsed
+        #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
+        left_ear: NonUsed
+        right_ear: NonUsed
+        left_eyebrow: NonUsed
+        right_eyebrow: NonUsed
+        mouth: [10, 70, 10, 90, 50]
+        sizes: [1, 1, 1, 1, 5]
+        time: 110.0
+        #time in miliseconds
+    talk2:
+        #LEDs colors
+        left_eye: NonUsed
+        right_eye: NonUsed
+        #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
+        left_ear: NonUsed
+        right_ear: NonUsed
+        left_eyebrow: NonUsed
+        right_eyebrow: NonUsed
+        mouth: [30, 80, 20 ,60]
+        sizes: [1, 1, 1, 1, 4]
+        time: 110.0
+        #time in miliseconds
     test2:
         #LEDs colors
         left_eye: [yellow2, yellow2, yellow2, yellow2, black, black, black, black, yellow2, yellow2, yellow2, black, black, black, black, black]

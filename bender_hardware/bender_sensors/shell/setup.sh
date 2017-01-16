@@ -2,7 +2,7 @@
 
 
 # useful variables
-_THIS_DIR="$(rospack find bender_sensors)/bash"
+_THIS_DIR="$(rospack find bender_sensors)/shell"
 
 # source camera devices
 . "$_THIS_DIR"/camera_devices.sh

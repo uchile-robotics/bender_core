@@ -1,7 +1,6 @@
 #!/bin/bash
 #
 # run: 
-# > cdb bender_tts
 # > bash install/install.sh
 
 

@@ -32,6 +32,8 @@ if [ $? -ne 0 ]; then
 fi
 echo "$installer Exporting SDF."
 gz sdf -p bender.urdf > bender.sdf
+# In Gazebo 7 use
+# gzsdf print bender.urdf > bender.sdf
 if [ $? -ne 0 ]; then
     echo "$installer ${red}Error exporting SDF.${reset}"
     exit 1 # Terminate and indicate error

@@ -13,11 +13,17 @@
     <arg name="model_type" value="$(arg model_type)" />
   </include>
 
+  <!-- Crear TF a partir de joint states 
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" ns="/bender/">
+    <param name="publish_frequency" value="$(arg rate)" />
+  </node>
+  -->
+
   <!-- Robot state publisher -->
   <node unless="$(arg use_dynamic_tf)" name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" ns="/bender/">
     <param name="publish_frequency" value="$(arg rate)" />
   </node>
-  
+
   <group if="$(arg use_dynamic_tf)">
     <!-- Dynamic robot state publisher allows to modify fixed frames of the robot at runtime -->
     <node name="dyn_state_publisher" pkg="bender_tf" type="dyn_state_publisher" ns="/bender/" output="screen">
