@@ -1,0 +1,15 @@
+<package>
+  <name>bender_calibration</name>
+  <version>0.7.10</version>
+  <description>
+    Launch and configuration files for calibrating bender using the 'robot_calibration' package.
+  </description>
+  <author>Michael Ferguson</author>
+  <maintainer email="benderUchile@homeBreakers.com">homeBreakers</maintainer>
+  <license>Apache2</license>
+  <url>http://ros.org/wiki/bender_calibration</url>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend version_gte="0.5.1">robot_calibration</run_depend>
+</package>
