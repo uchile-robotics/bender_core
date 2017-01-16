@@ -18,5 +18,5 @@ sudo mkdir -p "$UDEV_DIR"
 sudo cp -f install/files/camera.sh "$UDEV_DIR"/camera.sh
 
 # add udev rules
-sudo cp -f install/files/bender_camera.rules "$RULES_DIR"/bender_camera.rules
+sudo cp -f install/files/10-bender_camera.rules "$RULES_DIR"/10-bender_camera.rules
 sudo udevadm control --reload

@@ -4,9 +4,9 @@
 # 
 
 # connection
-#serial_port: /dev/sensors/hokuyo_H1311689   # orange
-#serial_port: /dev/sensors/hokuyo_H0804550   # blue
-serial_port: /dev/sensors/hokuyo_H0903381   # black
+#serial_port: /dev/bender/sensors/hokuyo_H1311689   # orange
+#serial_port: /dev/bender/sensors/hokuyo_H0804550   # blue
+serial_port: /dev/bender/sensors/hokuyo_H0903381   # black
 
 # frame
 frame_id: /bender/sensors/laser_rear_link
