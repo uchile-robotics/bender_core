@@ -11,7 +11,7 @@ pkg_name="bender_tts"
 pkg_path=$(rospack find "$pkg_name")
 
 # downloader script from mega
-megadown_exe="$BENDER_SYSTEM"/bash/megadown/megadown
+megadown_exe="$BENDER_SYSTEM"/shell/megadown/megadown
 
 ## ----------------------------------------------------------------------------
 ## User Configuration 
