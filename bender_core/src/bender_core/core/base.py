@@ -177,7 +177,7 @@ class BaseSkill(RobotSkill):
         self.lin_pid.initialize()
 
         start = rospy.get_rostime()
-        timeout = rospy.Duration(1.0 * timeout) if timeout is not None else rospy.Duration(abs(1.0 * distance) / self.mean_lin_vel)
+        timeout = rospy.Duration(float(timeout)) if timeout is not None else rospy.Duration(abs(float(distance)) / self.mean_lin_vel)
         try:
             self.curr_lin_vel = 0
             while not rospy.is_shutdown():
@@ -268,14 +268,14 @@ class BaseSkill(RobotSkill):
         """
         rospy.loginfo("{skill: %s}: rotate_rad(). Rotating %f rads." % (self._type, angle))
         covered = 0.0
-        rate = rospy.Rate(10)
+        rate = rospy.Rate(self.pub_rate)
         pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
         ini_pose = self.curr_pose
         self.ang_pid.initialize()
         rospy.loginfo("Starting at: %f rads" % (math.acos(ini_pose.pose.pose.orientation.w) * 2))
 
         start = rospy.get_rostime()
-        timeout = rospy.Duration(1.0 * timeout) if timeout is not None else rospy.Duration(abs(1.0 * angle) / self.mean_ang_vel)
+        timeout = rospy.Duration(float(timeout)) if timeout is not None else rospy.Duration(abs(float(angle)) / self.mean_ang_vel)
         try:
             while not rospy.is_shutdown():
                 elapsed_time = rospy.get_rostime() - start
@@ -354,6 +354,106 @@ class BaseSkill(RobotSkill):
         Methods starting with '_' will not be displayed in the skill overview
         """
         return True
+
+    def testing(self):
+        pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
+        vel_pub = rospy.Publisher("/bender/nav/cmd_vel", Twist, queue_size=1)
+
+        vel_msg = Twist()
+        n_of_tests = 10
+
+        pid = PID(kp = 1, kd = .1)
+
+        n_of_vels = 5
+        vel_step = (self.max_linear_vel - self.min_linear_vel) / (n_of_vels - 1)
+
+        rate = rospy.Rate(self.pub_rate)
+
+        curr_vel = 0
+
+        test_res = []
+        for i in range(n_of_tests):
+            test_res.append([])
+
+        try:
+            for i in range(n_of_tests / 2):
+                for j in range(n_of_vels):
+                    #Forward movement
+                    target_vel = self.min_linear_vel + j * vel_step
+                    rospy.loginfo("Test %i: forward at %f m/s" % (i, target_vel))
+                    cnt = 0
+                    while not rospy.is_shutdown():
+                        if self.curr_pose.twist.twist.linear.x < target_vel:
+                            vel_msg = Twist()
+                            sp = pid.compute_output(target_vel - curr_vel)
+                            sp2 = sp if sp <= self.max_linear_vel else self.max_linear_vel
+                            curr_vel = sp2 if sp2 >= self.min_linear_vel else self.min_linear_vel
+
+                            vel_msg.linear.x = curr_vel
+
+                            vel_pub.publish(vel_msg)
+                            rate.sleep()
+                        else:
+                            vel_msg = Twist()
+                            vel_msg.linear.x = curr_vel
+
+                            vel_pub.publish(vel_msg)
+                            cnt +=1
+                            rate.sleep()
+                            if cnt > 1.0 / self.pub_rate:
+                                break
+                    ini_time = rospy.get_rostime()
+                    vel_pub.publish(Twist())
+                    while True:
+                        if self.curr_pose.twist.twist.linear.x == 0:
+                            elapsed_time = rospy.get_rostime() - ini_time
+                            test_res[i].append(elapsed_time.to_sec())
+                            break
+
+                    curr_vel = 0
+                    #Backwards movement
+                    target_vel *= -1
+                    rospy.loginfo("Test %i: backwards at %f m/s" % (i + n_of_tests / 2, target_vel))
+                    cnt = 0
+                    while self.curr_pose.twist.twist.linear.x > target_vel and not rospy.is_shutdown():
+                        if self.curr_pose.twist.twist.linear.x > target_vel:
+                            vel_msg = Twist()
+                            sp = pid.compute_output(target_vel - curr_vel)
+                            sp2 = sp if -sp <= self.max_linear_vel else -self.max_linear_vel
+                            curr_vel = sp2 if -sp2 >= self.min_linear_vel else -self.min_linear_vel
+
+                            vel_msg.linear.x = curr_vel
+
+                            vel_pub.publish(vel_msg)
+                            rate.sleep()
+                        else:
+                            vel_msg = Twist()
+                            vel_msg.linear.x = curr_vel
+
+                            vel_pub.publish(vel_msg)
+                            cnt +=1
+                            rate.sleep()
+                            if cnt > 1.0 / self.pub_rate:
+                                break
+                    ini_time = rospy.get_rostime()
+                    vel_pub.publish(Twist())
+                    while True:
+                        if self.curr_pose.twist.twist.linear.x == 0:
+                            elapsed_time = rospy.get_rostime() - ini_time
+                            test_res[i + n_of_tests / 2].append(elapsed_time.to_sec())
+                            break
+                    curr_vel = 0
+            rospy.loginfo(test_res)
+            prom = []
+            for i in range(n_of_vels):
+                suma = 0
+                for j in range(n_of_tests):
+                    suma += test_res[j][i]
+                prom.append(suma / n_of_tests)
+            rospy.loginfo(prom)
+            return True
+        except rospy.ROSException:
+            return False
 
 
 
