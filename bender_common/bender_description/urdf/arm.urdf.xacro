@@ -56,12 +56,12 @@
     <xacro:gazebo_link link="${prefix}${side}_wrist_pitch_link" color="Grey" />
 
     <!-- Transmissions -->
-    <xacro:joint_transmission joint="${side}_shoulder_pitch_joint"/>
-    <xacro:joint_transmission joint="${side}_shoulder_roll_joint"/>
-    <xacro:joint_transmission joint="${side}_shoulder_yaw_joint"/>
-    <xacro:joint_transmission joint="${side}_elbow_pitch_joint"/>
-    <xacro:joint_transmission joint="${side}_elbow_yaw_joint"/>
-    <xacro:joint_transmission joint="${side}_wrist_pitch_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_shoulder_pitch_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_shoulder_roll_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_shoulder_yaw_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_elbow_pitch_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_elbow_yaw_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_wrist_pitch_joint"/>
 
     <link
       name="${prefix}${side}_shoulder_pitch_link">
