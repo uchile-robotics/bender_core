@@ -1,0 +1,45 @@
+<launch>
+
+    <arg name="rosbag_file" default="$(find bender_laser_pipeline)/test/filtered_still_arms.bag"/>
+
+    <!--
+     ROSBAG FILTERING
+
+     rosbag filter still_arms.bag filtered_still_arms.bag "topic in [ '/bender/joint_states', '/bender/sensors/laser_front/scan', '/bender/sensors/laser_front/parameter_descriptions', '/bender/sensors/laser_front/parameter_updates']"
+     -->
+
+    <!-- simulation -->
+    <param name="use_sim_time" type="bool" value="true" />
+
+
+    <!-- tf generation -->
+    <include file="$(find bender_tf)/launch/tf_model.launch"/>
+
+
+    <!-- rosbag -->
+    <node 
+        pkg="rosbag"
+        type="play"
+        name="player"
+        output="screen"
+        args="--clock  --loop $(arg rosbag_file)"/>
+
+
+    <!-- joint state killer -->
+    <node
+        pkg="bender_laser_pipeline"
+        type="test_joint_state_killer.bash"
+        name="test_joint_state_killer"
+        output="screen"/>
+
+
+    <!-- RVIZ -->
+    <node 
+        pkg="rviz"
+        type="rviz"
+        name="$(anon rviz)"
+        respawn="false"
+        output="screen"
+        args="-d $(find bender_laser_pipeline)/test/test.rviz"/>
+
+</launch>
