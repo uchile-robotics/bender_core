@@ -1,0 +1,12 @@
+
+# robot footprint: required
+footprint: [[-0.235,-0.23],[-0.30,-0.04],[-0.30,0.04],[-0.235,0.23],[-0.14,0.34],[0.03,0.34],[0.235,0.23],[0.31,0.03],[0.31,-0.03],[0.235,-0.23],[0.03,-0.34],[-0.14,-0.34]]
+
+# footprint frame: required
+footprint_frame: "bender/base_link"
+
+# frame to aggregate: required
+target_frames:  [ "bender/l_int_finger_link", "bender/r_int_finger_link" ]
+
+# meters
+inflation_radius: 0.1
