@@ -10,24 +10,33 @@ tf_message_filter_target_frame: /bender/sensors/laser_front_link
 # A list of laser filters to load. 
 scan_filter_chain:
 
-# This filter removes laser readings that are most likely caused by the
-# veiling effect when the edge of an object is being scanned. For any two
-# points $$p_1$$ and $$p_2$$, we do this by computing the perpendicular 
-# angle. That is, assuming the origin of the laser is $$O$$, the angle 
-# formed $$\angle OP_1P_2$$. If the perpendicular angle is less than a
-# particular min or greater than a particular max, we remove all neighbors
-# further away than that point. 
-- name: shadows
-  type: laser_filters/ScanShadowsFilter
-  params:
-    # Minimum perpendicular angle 
-    min_angle: 10
-    # Maximum perpendicular angle 
-    max_angle: 170
-    # Number of further-away neighbors to remove
-    neighbors: 20
-    # Number of consecutive measurements to consider angles inside of 
-    window: 1
+# This is a filter which removes points inside a polygon, which is obtained as
+# a geometry_msgs::PolygonStamped from a ROS topic.
+# It was designed to filter points inside the robot silhouette, as it a dynamic
+# polygon which is modified when the robot moves its arms or carries something.
+- name: robot_dynamic_footprint_filter
+  type: bender_laser_pipeline/LaserScanDynamicPolygonFilter
+  # params:
+  # # todo
+
+# # This filter removes laser readings that are most likely caused by the
+# # veiling effect when the edge of an object is being scanned. For any two
+# # points $$p_1$$ and $$p_2$$, we do this by computing the perpendicular 
+# # angle. That is, assuming the origin of the laser is $$O$$, the angle 
+# # formed $$\angle OP_1P_2$$. If the perpendicular angle is less than a
+# # particular min or greater than a particular max, we remove all neighbors
+# # further away than that point. 
+# - name: shadows
+#   type: laser_filters/ScanShadowsFilter
+#   params:
+#     # Minimum perpendicular angle 
+#     min_angle: 10
+#     # Maximum perpendicular angle 
+#     max_angle: 170
+#     # Number of further-away neighbors to remove
+#     neighbors: 20
+#     # Number of consecutive measurements to consider angles inside of 
+#     window: 1
 
 
 # # For any measurement in the scan which is invalid, the interpolation comes

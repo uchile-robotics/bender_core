@@ -1,27 +1,31 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(bender_laser_pipeline)
-find_package(catkin REQUIRED COMPONENTS roscpp sensor_msgs)
 
+##############################################################################
+# Find dependencies
+##############################################################################
 
-###################################
-## catkin specific configuration ##
-###################################
+set(THIS_PACKAGE_ROS_DEPS sensor_msgs roscpp tf filters message_filters
+  laser_geometry pluginlib angles)
+
+find_package(catkin REQUIRED COMPONENTS ${THIS_PACKAGE_ROS_DEPS})
+find_package(Boost REQUIRED COMPONENTS system signals)
+include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
+
+##############################################################################
+# Define package
+##############################################################################
 
 catkin_package(
   INCLUDE_DIRS include
-  #LIBRARIES
-  CATKIN_DEPENDS roscpp sensor_msgs
-  #DEPENDS
+  LIBRARIES bender_laser_scan_filters
+  CATKIN_DEPENDS ${THIS_PACKAGE_ROS_DEPS}
+  DEPENDS
 )
 
-###########
-## Build ##
-###########
+##############################################################################
+# Build
+##############################################################################
 
-include_directories(include ${catkin_INCLUDE_DIRS})
-
-
-#############
-## Install ##
-#############
-
+add_library(bender_laser_scan_filters src/laser_scan_filters.cpp src/dyn_polygon_filter.cpp)
+target_link_libraries(bender_laser_scan_filters ${catkin_LIBRARIES} ${Boost_LIBRARIES})

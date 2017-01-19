@@ -38,13 +38,22 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <depend>bender_msgs</depend>
-  <depend>bender_srvs</depend>
-  <depend>rospy</depend>
   <depend>roscpp</depend>
-  <depend>std_msgs</depend>
-  <depend>std_srvs</depend>
   <depend>sensor_msgs</depend>
   <depend>laser_filters</depend>
+
+  <!-- ?? -->
+  <depend>tf</depend>
+  <depend>filters</depend>
+  <depend>message_filters</depend>
+  <depend>laser_geometry</depend>
+  <depend>pluginlib</depend>
+  <depend>angles</depend>
+  <depend>rostest</depend>
+
+  <export>
+    <cpp cflags="-I${prefix}/include `rosboost-cfg --cflags`" lflags=""/>
+    <filters plugin="${prefix}/bender_laser_pipeline_plugins.xml"/>
+  </export>
 
 </package>
