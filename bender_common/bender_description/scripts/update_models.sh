@@ -31,9 +31,17 @@ if [ $? -ne 0 ]; then
     exit 1 # Terminate and indicate error
 fi
 echo "$installer Exporting SDF."
-gz sdf -p bender.urdf > bender.sdf
-# In Gazebo 7 use
-# gzsdf print bender.urdf > bender.sdf
+
+# Check for gz command (Gazebo 3 or higher)
+if [ -x "$(command -v gz)" ]; then
+	gz sdf -p bender.urdf > bender.sdf
+elif [ -x "$(command -v gzsdf)" ]; then
+	# Check for gzsdf command (Gazebo 2)
+	gzsdf print bender.urdf > bender.sdf
+else
+	echo "$installer ${red}Gazebo is not installed.${reset}"
+fi
+# Check error code
 if [ $? -ne 0 ]; then
     echo "$installer ${red}Error exporting SDF.${reset}"
     exit 1 # Terminate and indicate error
