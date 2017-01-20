@@ -20,6 +20,11 @@ subscribers:
     timeout: 0.5
     priority: 1
     short_desc: "Navigation stack controller"
+  - name: "Low level safety control"
+    topic: "/bender/nav/safety/low_level/cmd_vel"
+    timeout: 1
+    priority: 5
+    short_desc: "Low level safety control, possible to override using "
   - name: "Microsoft joystick"
     topic: "/bender/joy/base/cmd_vel"
     timeout: 0.1

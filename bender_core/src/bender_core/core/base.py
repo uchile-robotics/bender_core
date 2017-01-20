@@ -24,6 +24,7 @@ class BaseSkill(RobotSkill):
         self._description = "the base skill"
         self.register_dependency(JoySkill.get_type())
         self.pose_pub = rospy.Publisher("/bender/nav/cmd_vel", Twist, queue_size=1)
+        self.pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
 
         self.linear_acc = 0.5
         self.max_linear_vel = 0.5
@@ -171,13 +172,12 @@ class BaseSkill(RobotSkill):
 
         covered = 0
         rate = rospy.Rate(self.pub_rate)
-        pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
         ini_pose = self.curr_pose
         signo = 1 if distance > 0 else -1
         self.lin_pid.initialize()
 
         start = rospy.get_rostime()
-        timeout = rospy.Duration(float(timeout)) if timeout is not None else rospy.Duration(abs(float(distance)) / self.mean_lin_vel)
+        timeout = rospy.Duration(float(timeout)) if timeout is not None else min(rospy.Duration(abs(float(distance)) / self.mean_lin_vel), rospy.Duration(10))
         try:
             self.curr_lin_vel = 0
             while not rospy.is_shutdown():
@@ -269,7 +269,6 @@ class BaseSkill(RobotSkill):
         rospy.loginfo("{skill: %s}: rotate_rad(). Rotating %f rads." % (self._type, angle))
         covered = 0.0
         rate = rospy.Rate(self.pub_rate)
-        pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
         ini_pose = self.curr_pose
         self.ang_pid.initialize()
         rospy.loginfo("Starting at: %f rads" % (math.acos(ini_pose.pose.pose.orientation.w) * 2))
@@ -356,7 +355,6 @@ class BaseSkill(RobotSkill):
         return True
 
     def testing(self):
-        pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
         vel_pub = rospy.Publisher("/bender/nav/cmd_vel", Twist, queue_size=1)
 
         vel_msg = Twist()
