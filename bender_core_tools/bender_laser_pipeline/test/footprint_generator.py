@@ -14,6 +14,19 @@ class FootprintGeneratorNode(object):
         self.pub = rospy.Publisher('footprint', PolygonStamped, queue_size=10)
         self.tf_listener = tf.TransformListener()
 
+        # if (!psw.getParameter("footprint", _footprint, _footprint)) {
+#         ROS_ERROR(
+#             "The 'footprint' parameter is not set. It corresponds to a polygon defined as a list of lists."
+#             " e.g.: [[x1, y1], [x2, y2], ...]");
+#         failes = true;
+#     }
+#
+#     if (!psw.getParameter("footprint_frame", _footprint_frame, "")) {
+#     ROS_ERROR("The 'footprint_frame' parameter is not set. It is the footprint frame used to transform"
+#               " the 'footprint' polygon into the laser scan frame. e.g.: base_link");
+#     failes = true;
+# }
+
         # params
         self.footprint = rospy.get_param("~footprint")
         self.footprint_frame = rospy.get_param("~footprint_frame")

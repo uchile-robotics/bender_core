@@ -12,11 +12,11 @@ The remaining filters are taken from the laser_filters package, and the pipeline
 
 The following plugins are compliant with the [laser_filter](http://wiki.ros.org/laser_filters) plugin architecture.
 
-### LaserScanDynamicPolygonFilter
+### LaserScanSelfFilter
 
 This is a filter which removes points inside a polygon, which is obtained as a geometry_msgs::PolygonStamped from a ROS topic. It was designed to filter points inside the robot silhouette, as it a dynamic polygon which is modified when the robot moves its arms or carries something.
 
-The filter is provided as a `laser_filter` plugin. The type is: `LaserScanDynamicPolygonFilter`.
+The filter is provided as a `laser_filter` plugin. The type is: `LaserScanSelfFilter`.
 
 #### Parameters
 

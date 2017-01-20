@@ -18,7 +18,7 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES bender_laser_scan_filters
+  LIBRARIES bender_laser_pipeline
   CATKIN_DEPENDS ${THIS_PACKAGE_ROS_DEPS}
   DEPENDS
 )
@@ -27,5 +27,5 @@ catkin_package(
 # Build
 ##############################################################################
 
-add_library(bender_laser_scan_filters src/laser_scan_filters.cpp src/dyn_polygon_filter.cpp)
-target_link_libraries(bender_laser_scan_filters ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+add_library(bender_laser_pipeline src/laser_scan_filters.cpp src/self_filter.cpp)
+target_link_libraries(bender_laser_pipeline ${catkin_LIBRARIES} ${Boost_LIBRARIES})

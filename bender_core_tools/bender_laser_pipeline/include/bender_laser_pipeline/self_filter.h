@@ -1,5 +1,5 @@
-#ifndef DYN_POLYGON_FILTER_H
-#define DYN_POLYGON_FILTER_H
+#ifndef BENDER_SELF_LASER_FILTER_H
+#define BENDER_SELF_LASER_FILTER_H
 
 #include <filters/filter_base.h>
 
@@ -14,13 +14,11 @@
 
 namespace bender_laser_pipeline
 {
-/**
- * @brief This is a filter that removes points in a laser scan inside of a cartesian box.
- */
-class LaserScanDynamicPolygonFilter : public filters::FilterBase<sensor_msgs::LaserScan>
+
+class LaserScanSelfFilter : public filters::FilterBase<sensor_msgs::LaserScan>
 {
   public:
-    LaserScanDynamicPolygonFilter();
+    LaserScanSelfFilter();
     bool configure();
 
     bool update(
@@ -28,19 +26,18 @@ class LaserScanDynamicPolygonFilter : public filters::FilterBase<sensor_msgs::La
       sensor_msgs::LaserScan& filtered_scan);
 
   private:
-    bool inBox(tf::Point &point);
-    std::string box_frame_;
+    std::vector<std::string> _target_frames;
+    std::vector<double> _inflation_radius_list;
+
     laser_geometry::LaserProjection projector_;
     
     // tf listener to transform scans into the box_frame
     tf::TransformListener tf_; 
-    
-    // defines two opposite corners of the box
-    tf::Point min_, max_; 
+
     bool up_and_running_;
 };
 
 }
 
 
-#endif /* dyn_polygon_filter.h */
+#endif /* self_filter.h */

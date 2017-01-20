@@ -7,17 +7,18 @@
 tf_message_filter_target_frame: /bender/sensors/laser_front_link
 
 # Filtering pipeline
-# A list of laser filters to load. 
+# A list of laser filters to load.
+
 scan_filter_chain:
 
 # This is a filter which removes points inside a polygon, which is obtained as
 # a geometry_msgs::PolygonStamped from a ROS topic.
-# It was designed to filter points inside the robot silhouette, as it a dynamic
-# polygon which is modified when the robot moves its arms or carries something.
-- name: robot_dynamic_footprint_filter
-  type: bender_laser_pipeline/LaserScanDynamicPolygonFilter
-  # params:
-  # # todo
+# It was designed to filter points colliding with the robot arms.
+- name: robot_self_arms_filter
+  type: bender_laser_pipeline/LaserScanSelfFilter
+  params:
+    target_frames: [ "bender/l_int_finger_link", "bender/r_int_finger_link" ]
+    inflation_radius_list: [ 0.3, 0.3 ]
 
 # # This filter removes laser readings that are most likely caused by the
 # # veiling effect when the edge of an object is being scanned. For any two
