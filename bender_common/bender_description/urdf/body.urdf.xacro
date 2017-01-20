@@ -75,7 +75,7 @@
        <xacro:dummy_inertial/>
     </link>
     <joint
-      name="base_fixed_jont"
+      name="base_fixed_joint"
       type="fixed">
       <origin
         xyz="0 0 0"
@@ -121,7 +121,7 @@
       </collision>
     </link>
     <joint
-      name="body_fixed_jont"
+      name="body_fixed_joint"
       type="fixed">
       <origin
         xyz="0 0 0"
