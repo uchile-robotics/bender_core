@@ -6,7 +6,7 @@ bender:
 
   # Left arm controller
   l_arm_controller:
-    type: effort_controllers/JointTrajectoryController
+    type: position_controllers/JointTrajectoryController
     joints:
       - l_shoulder_pitch_joint
       - l_shoulder_roll_joint
@@ -38,7 +38,7 @@ bender:
 
   # Right arm controller
   r_arm_controller:
-    type: effort_controllers/JointTrajectoryController
+    type: position_controllers/JointTrajectoryController
     joints:
       - r_shoulder_pitch_joint
       - r_shoulder_roll_joint

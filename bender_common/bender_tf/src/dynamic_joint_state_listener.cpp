@@ -172,8 +172,27 @@ int main(int argc, char** argv) {
     }
   }
   
-  // Wait for param
-  ros::Duration(5.0).sleep();
+  // Wait for calibration parameters
+  double param_timeout = 5.0;
+  bool param_founded = false;
+  node.param<double>("calibration_parameter_timeout", param_timeout, 5.0);
+  ROS_INFO("Waiting for calibration parameters");
+  ros::Time init_time = ros::Time::now();
+  while(ros::Time::now() - init_time < ros::Duration(param_timeout))
+  {
+    if (node.hasParam("/bender/dynamic_tf/"))
+    {
+      ROS_INFO("Calibration parameters found.");
+      param_founded = true;
+      break;
+    }
+    ros::Duration(0.1).sleep();
+  }
+  // Print warning if calibration parameters were not found
+  if (!param_founded)
+  {
+    ROS_WARN("Calibration parameters not found in parameter server, using default values.");
+  }
 
   bender_tf::DynamicJointStateListener state_publisher(tree, mimic, node);
 

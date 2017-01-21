@@ -13,6 +13,8 @@
   <xacro:include filename="$(find bender_description)/urdf/gazebo.urdf.xacro" />
   <!-- Calibration parameters, used for arms in body.urdf.xacro -->
   <xacro:include filename="$(find bender_description)/urdf/calibration.xacro" />
+  <!-- Dynamixel parameters -->
+  <xacro:include filename="$(find bender_description)/urdf/dynamixel.xacro" />
 
   <!-- ******** Bender Parts ******** -->
   

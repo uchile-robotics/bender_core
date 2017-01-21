@@ -6,7 +6,7 @@
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
   <!-- Dynamics -->
-  <xacro:property name="damping" value="0.8" />
+  <xacro:property name="damping" value="0.2" />
   <!-- Friccion --> 
   <xacro:property name="friccion" value="1.0" />
 
