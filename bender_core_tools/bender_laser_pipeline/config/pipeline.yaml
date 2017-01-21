@@ -18,7 +18,7 @@ scan_filter_chain:
   type: bender_laser_pipeline/LaserScanSelfFilter
   params:
     target_frames: [ "bender/l_int_finger_link", "bender/r_int_finger_link" ]
-    inflation_radius_list: [ 0.3, 0.3 ]
+    inflation_radius_list: [ 0.15, 0.15 ]
 
 # # This filter removes laser readings that are most likely caused by the
 # # veiling effect when the edge of an object is being scanned. For any two

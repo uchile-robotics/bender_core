@@ -7,8 +7,7 @@
 	<node pkg="stage_ros" type="stageros" name="stage" respawn="true" args="$(find bender_stage)/world/$(arg worldname)/world.world">
 
 		<!-- bender -->
-		<!-- <remap from="/base_scan" to="/bender/stage/laser_front_BAD/scan"/> -->
-		<remap from="/base_scan" to="/bender/sensors/laser_front/scan"/>
+		<remap from="/base_scan" to="/bender/stage/base_scan"/>
 		<remap from="/cmd_vel"   to="/bender/nav/base/cmd_vel"/>
 		<remap from="/odom"      to="/bender/nav/odom"/>
 
@@ -16,6 +15,12 @@
 		<remap from="/base_pose_ground_truth" to="/stage/base_pose_ground_truth"/>
 	</node>
 
+	<!-- - - - - Laser Proxy to chage LaserScan frame_id - - - - - - - -->
+	<node pkg="bender_stage" type="laser_scan_proxy.py" name="laser_scan_proxy" respawn="true">
+		<remap from="input_scan"  to="/bender/stage/base_scan"/>
+		<remap from="output_scan" to="/bender/sensors/laser_front/scan"/>
+		<param name="frame_id" value="/bender/sensors/laser_front_link"/>
+	</node>
 
 	<!-- hokuyo corrector -->
 	<!-- useful to mirror laser readings (ex: when using an inverted laser, which stage cant handle) -->
@@ -29,6 +34,7 @@
 		<param name="scan_out_frame"         value="/bender/sensors/laser_front_link"/>
 
 	</node-->
+
 
 
 	<!-- - - - - - - -  Create tf for a bender-stage tf merge - - - - - - - - -->

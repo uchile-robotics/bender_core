@@ -92,46 +92,23 @@ bool bender_laser_pipeline::LaserScanSelfFilter::update(
                     << "'. Transform Exception: " << ex.what());
         }
 
-//        ROS_WARN_STREAM("Point : (" << link_point_transformed.point.x << ", "
-//                                    << link_point_transformed.point.y << ", "
-//                                    << link_point_transformed.point.z << ")");
-
-        // sphere center
-        float x = (float)link_point_transformed.point.x;
-        float y = (float)link_point_transformed.point.y;
-        float z = (float)link_point_transformed.point.z;
-
         // link does not collides with the laser scan plane
-        if (fabsf(z) > radius) {
-            continue;
+        if (fabsf((float)link_point_transformed.point.z) > radius) {
+            return false;
         }
 
-        // sphere projection into the laser plane
-        float xm = x;
-        float ym = y;
-        float rm = sqrtf(radius*radius - z*z);
-
-        // angle from laser to projection center
-        float theta_m = atan2f(ym, xm);
-
-        // distance to the laser
-        float d = sqrtf(xm*xm + ym*ym);
-        // TODO: check whether d ~< rm, this means the link is colliding to the laser
-
-        // length of tangent segment to the laser
-        float td = sqrtf(d*d - rm*rm);
-        td = fmaxf(td, 0.01); // min 1 [cm].
-
-        // angle/2 between the 2 tangents
-        float delta_theta = atanf(rm/td);
-
         // angular limits
-        float theta_min = theta_m - delta_theta;
-        float theta_max = theta_m + delta_theta;
+        float theta_min;
+        float theta_max;
+        getAngularLimits(
+                (float) link_point_transformed.point.x,
+                (float) link_point_transformed.point.y,
+                (float) link_point_transformed.point.z,
+                radius, theta_min, theta_max);
 
         // remove ranges which collide with our projection
-        std::vector<float>::iterator range_it;
         float cur_angle;
+        std::vector<float>::iterator range_it;
         for (range_it = output_scan.ranges.begin(), cur_angle = output_scan.angle_min;
              range_it != output_scan.ranges.end();
              ++range_it, cur_angle += output_scan.angle_increment) {
@@ -142,6 +119,50 @@ bool bender_laser_pipeline::LaserScanSelfFilter::update(
         }
 
     }
-
     return true;
+}
+
+/**
+ * The algorithm works as follows:
+ * Each considered joint/frame on 'target_frames' is inflated and
+ * considered as a sphere centered at (0,0,0) with radius given by
+ * 'inflation_radius_list'.
+ *
+ * Then, the sphere center is transformed into the laser scan frame,
+ * centered at (x,y,z). If the sphere is too high or too low, then
+ * there can't be a collision.
+ *
+ * The goal is to remove/invalidate laser points which collides with
+ * our sphere, so we project it into the laser X-Y plane, resulting
+ * in a circle on (xm, ym), z=0 and radius rm.
+ *
+ * Then we compute the min/max angles of the scan sweep to be removed,
+ * by finding the tangent lines to the projection which intersects
+ * the laser center at (0,0)
+ */
+void bender_laser_pipeline::LaserScanSelfFilter::getAngularLimits(
+        float x, float y, float z, float r, float &theta_min, float &theta_max) {
+
+    // sphere projection into the laser plane
+    float xm = x;
+    float ym = y;
+    float rm = sqrtf(r*r - z*z);
+
+    // angle from laser to projection center
+    float theta_m = atan2f(ym, xm);
+
+    // distance to the laser
+    float d = sqrtf(xm*xm + ym*ym);
+    // TODO: check whether d ~< rm, this means the link is colliding to the laser
+
+    // length of tangent segment to the laser
+    float td = sqrtf(d*d - rm*rm);
+    td = fmaxf(td, 0.01); // min 1 [cm].
+
+    // angle/2 between the 2 tangents
+    float delta_theta = atanf(rm/td);
+
+    // angular limits
+    theta_min = theta_m - delta_theta;
+    theta_max = theta_m + delta_theta;
 }

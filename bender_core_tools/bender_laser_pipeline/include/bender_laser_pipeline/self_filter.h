@@ -26,6 +26,9 @@ class LaserScanSelfFilter : public filters::FilterBase<sensor_msgs::LaserScan>
       sensor_msgs::LaserScan& filtered_scan);
 
   private:
+
+    void getAngularLimits(float x, float y, float z, float r, float &theta_min, float &theta_max);
+
     std::vector<std::string> _target_frames;
     std::vector<double> _inflation_radius_list;
 
