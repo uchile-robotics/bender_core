@@ -32,9 +32,7 @@ class LaserScanSelfFilter : public filters::FilterBase<sensor_msgs::LaserScan>
     laser_geometry::LaserProjection projector_;
     
     // tf listener to transform scans into the box_frame
-    tf::TransformListener tf_; 
-
-    bool up_and_running_;
+    tf::TransformListener tf_listener;
 };
 
 }

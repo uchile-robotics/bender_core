@@ -5,7 +5,6 @@ bender_laser_pipeline::LaserScanSelfFilter::LaserScanSelfFilter() {
 }
 
 bool bender_laser_pipeline::LaserScanSelfFilter::configure() {
-    up_and_running_ = true;
 
     bender_utils::ParameterServerWrapper psw;
     bool succeeded = true;
@@ -26,9 +25,18 @@ bool bender_laser_pipeline::LaserScanSelfFilter::configure() {
         std::vector<double>::const_iterator it;
         for(it = _inflation_radius_list.begin(); it != _inflation_radius_list.end(); ++it) {
             if (*it < 0 || *it > 0.5) {
-                ROS_ERROR_STREAM("The 'inflation_radius' must be in range [0, 0.5] meters. Provided: " << *it);
+                ROS_ERROR_STREAM("The 'inflation_radius_list' values must be in range [0, 0.5] meters. Provided: " << *it);
                 succeeded = false;
             }
+        }
+
+        if (_inflation_radius_list.size() != _target_frames.size()) {
+            ROS_ERROR_STREAM("The 'inflation_radius_list' size ("
+                                     << _inflation_radius_list.size()
+                                     << ") does not match the 'target_frames' size ("
+                                     << _target_frames.size()
+                                     << ").");
+            succeeded = false;
         }
     }
     return succeeded;
@@ -37,10 +45,103 @@ bool bender_laser_pipeline::LaserScanSelfFilter::configure() {
 bool bender_laser_pipeline::LaserScanSelfFilter::update(
         const sensor_msgs::LaserScan &input_scan,
         sensor_msgs::LaserScan &output_scan) {
+
+    ros::Time target_time = input_scan.header.stamp + ros::Duration().fromSec(input_scan.ranges.size()*input_scan.time_increment);
+
+    // point centered at required frame
+    geometry_msgs::PointStamped link_point;
+    link_point.header.stamp = target_time;
+
+    // copy
     output_scan = input_scan;
 
+    std::string error_msg;
+    std::vector<std::string>::const_iterator it;
+    std::vector<double>::const_iterator r_it;
+    for(it = _target_frames.begin(), r_it = _inflation_radius_list.begin(); it != _target_frames.end(); ++it, ++r_it) {
 
+        std::string target_frame = *it;
+        float radius = (float)*r_it;
 
-    up_and_running_ = true;
+        link_point.header.frame_id = target_frame;
+
+        bool success = tf_listener.waitForTransform(
+                target_frame,
+                input_scan.header.frame_id,
+                target_time,
+                ros::Duration(1.0),
+                ros::Duration(0.01),
+                &error_msg
+        );
+        if(!success){
+            ROS_WARN_STREAM_THROTTLE(0.2 , "Could not get transform for frame '"
+                    << target_frame.c_str()
+                    << "'. Ignoring this frame. TF Error: "
+                    << error_msg.c_str()
+            );
+            continue;
+        }
+
+        geometry_msgs::PointStamped link_point_transformed;
+        try {
+            tf_listener.transformPoint(input_scan.header.frame_id, link_point, link_point_transformed);
+        }
+        catch(tf::TransformException& ex) {
+            ROS_WARN_STREAM_THROTTLE(1, "Ignoring frame: '"
+                    << target_frame.c_str()
+                    << "'. Transform Exception: " << ex.what());
+        }
+
+//        ROS_WARN_STREAM("Point : (" << link_point_transformed.point.x << ", "
+//                                    << link_point_transformed.point.y << ", "
+//                                    << link_point_transformed.point.z << ")");
+
+        // sphere center
+        float x = (float)link_point_transformed.point.x;
+        float y = (float)link_point_transformed.point.y;
+        float z = (float)link_point_transformed.point.z;
+
+        // link does not collides with the laser scan plane
+        if (fabsf(z) > radius) {
+            continue;
+        }
+
+        // sphere projection into the laser plane
+        float xm = x;
+        float ym = y;
+        float rm = sqrtf(radius*radius - z*z);
+
+        // angle from laser to projection center
+        float theta_m = atan2f(ym, xm);
+
+        // distance to the laser
+        float d = sqrtf(xm*xm + ym*ym);
+        // TODO: check whether d ~< rm, this means the link is colliding to the laser
+
+        // length of tangent segment to the laser
+        float td = sqrtf(d*d - rm*rm);
+        td = fmaxf(td, 0.01); // min 1 [cm].
+
+        // angle/2 between the 2 tangents
+        float delta_theta = atanf(rm/td);
+
+        // angular limits
+        float theta_min = theta_m - delta_theta;
+        float theta_max = theta_m + delta_theta;
+
+        // remove ranges which collide with our projection
+        std::vector<float>::iterator range_it;
+        float cur_angle;
+        for (range_it = output_scan.ranges.begin(), cur_angle = output_scan.angle_min;
+             range_it != output_scan.ranges.end();
+             ++range_it, cur_angle += output_scan.angle_increment) {
+
+            if (theta_min < cur_angle  && cur_angle < theta_max) {
+                *range_it = output_scan.range_max + 1;
+            }
+        }
+
+    }
+
     return true;
 }

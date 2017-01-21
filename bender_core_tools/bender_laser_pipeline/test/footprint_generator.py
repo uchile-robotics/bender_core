@@ -6,7 +6,6 @@ from geometry_msgs.msg import PolygonStamped
 
 
 class FootprintGeneratorNode(object):
-    
 
     def __init__(self):
         
