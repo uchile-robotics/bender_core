@@ -10,8 +10,7 @@ frame_id = None
 def callback(scan):
     global pub, frame_id
     scan.header.frame_id = frame_id
-    pub.publish(scan)
-    
+    pub.publish(scan)    
 
 def proxy():
     global pub, frame_id
@@ -23,8 +22,11 @@ def proxy():
         rospy.logerr("The frame_id parameter is not set!.")
         sys.exit(1)
 
-    rospy.Subscriber("input_scan", LaserScan, callback)
+    # define publisher
     pub = rospy.Publisher('output_scan', LaserScan, queue_size=10)
+
+    # use defined publisher on callback
+    rospy.Subscriber("input_scan", LaserScan, callback)
     rospy.spin()
 
 

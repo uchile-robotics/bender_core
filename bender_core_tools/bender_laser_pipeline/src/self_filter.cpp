@@ -4,6 +4,7 @@ bender_laser_pipeline::LaserScanSelfFilter::LaserScanSelfFilter() {
 
 }
 
+// TODO: wait for tfs a few seconds while configuring the pipeline
 bool bender_laser_pipeline::LaserScanSelfFilter::configure() {
 
     bender_utils::ParameterServerWrapper psw;

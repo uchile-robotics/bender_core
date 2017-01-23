@@ -16,7 +16,7 @@
 	</node>
 
 	<!-- - - - - Laser Proxy to chage LaserScan frame_id - - - - - - - -->
-	<node pkg="bender_stage" type="laser_scan_proxy.py" name="laser_scan_proxy" respawn="true">
+	<node pkg="bender_stage" type="laser_scan_proxy.py" name="laser_scan_proxy" respawn="true" ns="/bender/stage/">
 		<remap from="input_scan"  to="/bender/stage/base_scan"/>
 		<remap from="output_scan" to="/bender/sensors/laser_front/scan"/>
 		<param name="frame_id" value="/bender/sensors/laser_front_link"/>
