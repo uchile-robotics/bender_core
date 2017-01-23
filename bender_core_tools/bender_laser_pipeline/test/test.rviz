@@ -340,10 +340,10 @@ Visualization Manager:
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
-      Size (Pixels): 2
+      Size (Pixels): 5
       Size (m): 0.00999999978
       Style: Points
-      Topic: /filtered
+      Topic: /bender/sensors/laser_front/scan_filtered
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -351,7 +351,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: bender/body
+    Fixed Frame: bender/base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -386,10 +386,10 @@ Visualization Manager:
       Focal Shape Size: 0.0500000007
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.705398083
+      Pitch: 1.07039773
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.20539689
+      Yaw: 1.14039576
     Saved: ~
 Window Geometry:
   Displays:

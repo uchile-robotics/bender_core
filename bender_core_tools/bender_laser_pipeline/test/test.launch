@@ -15,6 +15,12 @@
     <!-- tf generation -->
     <include file="$(find bender_tf)/launch/tf_model.launch"/>
 
+    <!-- laser pipeline -->
+    <include file="$(find bender_laser_pipeline)/launch/laser_pipeline.launch">
+        <arg name="input_scan"  value="/bender/sensors/laser_front/scan"/>
+        <arg name="output_scan" value="/bender/sensors/laser_front/scan_filtered"/>
+    </include>
+
 
     <!-- rosbag -->
     <node 

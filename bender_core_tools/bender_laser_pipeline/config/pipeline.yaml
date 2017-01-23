@@ -11,6 +11,18 @@ tf_message_filter_target_frame: /bender/sensors/laser_front_link
 
 scan_filter_chain:
 
+# This filter removes all measurements from the sensor_msgs/LaserScan which
+# are greater than upper_threshold or less than lower_threshold. These points
+# are "removed" by setting the corresponding range value to max_range + 1,
+# which is assumed to be an error case. 
+- name: range
+  type: laser_filters/LaserScanRangeFilter
+  params:
+    # Lower range threshold 
+    lower_threshold: 0.3
+    # Upper range threshold
+    upper_threshold: .inf
+
 # This is a filter which removes points inside a polygon, which is obtained as
 # a geometry_msgs::PolygonStamped from a ROS topic.
 # It was designed to filter points colliding with the robot arms.
@@ -18,7 +30,7 @@ scan_filter_chain:
   type: bender_laser_pipeline/LaserScanSelfFilter
   params:
     target_frames: [ "bender/l_int_finger_link", "bender/r_int_finger_link" ]
-    inflation_radius_list: [ 0.15, 0.15 ]
+    inflation_radius_list: [ 0.20, 0.20 ]
 
 # # This filter removes laser readings that are most likely caused by the
 # # veiling effect when the edge of an object is being scanned. For any two
