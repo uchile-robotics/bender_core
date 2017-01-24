@@ -28,19 +28,20 @@
   <xacro:property name="shoulder_roll_joint_lower" value="-0.23776" />
 
   <!-- Links mass -->
-  <xacro:property name="link_mass" value="1.0" />
-  <xacro:property name="elbow_yaw_mass" value="${link_mass}" />
-  <xacro:property name="elbow_pitch_mass" value="${link_mass}" />
-  <xacro:property name="shoulder_yaw_mass" value="${link_mass}" />
-  <xacro:property name="shoulder_pitch_mass" value="${link_mass}" />
-  <xacro:property name="wrist_pitch_mass" value="${link_mass}" />
-  <xacro:property name="shoulder_roll_mass" value="${link_mass}" />
+  <xacro:property name="shoulder_pitch_mass" value="${0.216}" />
+  <xacro:property name="shoulder_roll_mass"  value="${0.282}" />
+  <xacro:property name="shoulder_yaw_mass"   value="${0.256}" />
+  <xacro:property name="elbow_pitch_mass"    value="${0.243}" />
+  <xacro:property name="elbow_yaw_mass"      value="${0.222}" />
+  <xacro:property name="wrist_pitch_mass"    value="${0.430}" />
 
-  <!-- Effort -->
-  <xacro:property name="effort_shoulder" value="80" />
-  <xacro:property name="effort_elbow" value="30" />
-  <xacro:property name="effort_wrisp" value="15" />
-
+  <!-- Torque -->
+  <xacro:property name="shoulder_pitch_torque" value="${mx106_torque}" />
+  <xacro:property name="shoulder_roll_torque"  value="${mx106_torque}" />
+  <xacro:property name="shoulder_yaw_torque"   value="${rx64_torque}" />
+  <xacro:property name="elbow_pitch_torque"    value="${mx106_torque}" />
+  <xacro:property name="elbow_yaw_torque"      value="${rx64_torque}" />
+  <xacro:property name="wrist_pitch_torque"    value="${rx28_torque}" />
   
   <xacro:macro name="bender_arm" params="side parent reflect prefix">
 
@@ -55,12 +56,12 @@
     <xacro:gazebo_link link="${prefix}${side}_wrist_pitch_link" color="Grey" />
 
     <!-- Transmissions -->
-    <xacro:joint_transmission joint="${side}_shoulder_pitch_joint"/>
-    <xacro:joint_transmission joint="${side}_shoulder_roll_joint"/>
-    <xacro:joint_transmission joint="${side}_shoulder_yaw_joint"/>
-    <xacro:joint_transmission joint="${side}_elbow_pitch_joint"/>
-    <xacro:joint_transmission joint="${side}_elbow_yaw_joint"/>
-    <xacro:joint_transmission joint="${side}_wrist_pitch_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_shoulder_pitch_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_shoulder_roll_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_shoulder_yaw_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_elbow_pitch_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_elbow_yaw_joint"/>
+    <xacro:joint_pos_transmission joint="${side}_wrist_pitch_joint"/>
 
     <link
       name="${prefix}${side}_shoulder_pitch_link">
@@ -103,11 +104,11 @@
       <axis
         xyz="0 -1 0" />
       <limit
-        effort="${effort_shoulder}"
+        effort="${shoulder_pitch_torque}"
         lower="${shoulder_pitch_joint_lower}"
         upper="${shoulder_pitch_joint_upper}"
         velocity="${vel_arm * M_PI / 180}"/>
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${shoulder_pitch_joint_lower-soft_margin}" soft_upper_limit="${shoulder_pitch_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
 
@@ -154,9 +155,9 @@
       <limit
         lower="${shoulder_roll_joint_lower}"
         upper="${shoulder_roll_joint_upper}"
-        effort="${effort_shoulder}"
+        effort="${shoulder_roll_torque}"
         velocity="${vel_arm * M_PI / 180}" />
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${shoulder_roll_joint_lower-soft_margin}" soft_upper_limit="${shoulder_roll_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
 
@@ -203,9 +204,9 @@
       <limit
         lower="${shoulder_yaw_joint_lower}"
         upper="${shoulder_yaw_joint_upper}"
-        effort="${effort_shoulder}"
+        effort="${shoulder_yaw_torque}"
         velocity="${vel_arm * M_PI / 180}" />
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${shoulder_yaw_joint_lower-soft_margin}" soft_upper_limit="${shoulder_yaw_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
     
@@ -252,9 +253,9 @@
       <limit
         lower="${elbow_pitch_joint_lower}"
         upper="${elbow_pitch_joint_upper}"
-        effort="${effort_elbow}"
+        effort="${elbow_pitch_torque}"
         velocity="${vel_arm * M_PI / 180}" />
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${elbow_pitch_joint_lower-soft_margin}" soft_upper_limit="${elbow_pitch_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
     
@@ -301,9 +302,9 @@
       <limit
         lower="${elbow_yaw_joint_lower}"
         upper="${elbow_yaw_joint_upper}"
-        effort="${effort_elbow}"
+        effort="${elbow_yaw_torque}"
         velocity="${vel_arm * M_PI / 180}" />
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${elbow_yaw_joint_lower-soft_margin}" soft_upper_limit="${elbow_yaw_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
 
@@ -350,9 +351,9 @@
       <limit
         lower="${wrist_pitch_joint_lower}"
         upper="${wrist_pitch_joint_upper}"
-        effort="${effort_wrisp}"
+        effort="${wrist_pitch_torque}"
         velocity="${vel_arm * M_PI / 180}" />
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${wrist_pitch_joint_lower-soft_margin}" soft_upper_limit="${wrist_pitch_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
     <!-- Gripper Joints -->

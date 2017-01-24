@@ -1,24 +1,12 @@
 bender:
-  # (Only!) Publish all joint states
+  # (Only one instance per robot) Publish all joint states
   joint_state_controller:
     type: joint_state_controller/JointStateController
     publish_rate: 50
 
-  # Neck controller
-  neck_controller:
-    type: effort_controllers/JointPositionController
-    joint: neck_yaw_joint
-    pid: {p: 10.0, i: 0.01, d: 0.0}
-
-  # Asus head controller
-  rgbd_head_controller:
-    type: effort_controllers/JointPositionController
-    joint: rgbd_head_joint
-    pid: {p: 5.0, i: 0.01, d: 0.0}
-
   # Left arm controller
   l_arm_controller:
-    type: effort_controllers/JointTrajectoryController
+    type: position_controllers/JointTrajectoryController
     joints:
       - l_shoulder_pitch_joint
       - l_shoulder_roll_joint
@@ -50,7 +38,7 @@ bender:
 
   # Right arm controller
   r_arm_controller:
-    type: effort_controllers/JointTrajectoryController
+    type: position_controllers/JointTrajectoryController
     joints:
       - r_shoulder_pitch_joint
       - r_shoulder_roll_joint

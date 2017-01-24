@@ -1,0 +1,90 @@
+<launch>
+
+	<!-- ================================================== -->
+	<!-- ==================== HARDWARE ==================== -->
+	<!-- ================================================== -->
+	
+	<!-- visualization -->
+	<arg name="rviz"       default="true"/>
+
+	<!-- robot configuration -->
+	<arg name="model_type"     default="light_head"/>
+	<arg name="tf_gui"         default="false"/>
+	<arg name="language"       default="spanish"/>
+	
+	<!-- available languages: { english , spanish } -->
+	<arg name="show_subtitles" default="true"/>
+
+
+	<!-- robot simulation -->
+	<arg name="simulation" default="false"/>
+	<arg name="sim_world"  default="amtc"/>
+	<!-- TODO: <arg name="simulator"  default="gazebo"/> -->
+
+
+	<!-- ================================================== -->
+	<!-- ==================== HARDWARE ==================== -->
+	<!-- ================================================== -->
+	
+	<!-- ================================= -->
+	<!-- == REAL HARDWARE VS. SIMULATOR == -->
+	<!-- ================================= -->
+	<group if="$(arg simulation)">
+		<param name="/use_sim_time" value="true"/>
+		<include file="$(find bender_stage)/launch/bender.launch">
+			<arg name="worldname" default="$(arg sim_world)"/>
+		</include>
+		<!--include file="$(find bender_gazebo)/launch/bender_gazebo.launch"/-->
+	</group>
+	<group unless="$(arg simulation)">
+
+		<!-- Laser/Lasers -->
+		<include file="$(find bender_sensors)/launch/hokuyo/hokuyo_front.launch"/>
+		<include file="$(find bender_sensors)/launch/hokuyo/hokuyo_rear.launch"/>
+
+		<!-- Rosaria -->
+		<include file="$(find bender_base)/launch/base.launch"/>
+
+	</group>
+
+
+	<!-- ================================== -->
+	<!-- ==         COMMON STUFF         == -->
+	<!-- ================================== -->
+
+	<!-- transforms -->
+	<include file="$(find bender_tf)/launch/tf.launch">
+		<arg name="use_gui" value="$(arg tf_gui)"/>
+		<arg name="model_type" value="$(arg model_type)"/>
+	</include>
+
+	<!-- Joystick -->
+	<include file="$(find bender_joy)/launch/joysticks.launch"/>
+
+	<!-- cmd_vel_mux -->
+	<include file="$(find bender_cmd_vel_mux)/launch/mux.launch"/>
+
+	<!-- robot laser self filter -->
+	<include file="$(find bender_laser_pipeline)/launch/laser_pipeline.launch">
+		<arg name="input_scan"  value="/bender/sensors/laser_front/scan"/>
+		<arg name="output_scan" value="/bender/sensors/laser_front/scan_filtered"/>
+	</include>
+
+	<!-- rqt_batteries -->
+	<!--
+	<include file="$(find rqt_batteries)/launch/bender_batteries.launch"/>
+	-->
+
+
+	
+	<!-- =================================================== -->
+	<!-- ==================== KNOWLEDGE ==================== -->
+	<!-- =================================================== -->
+
+	<!-- Pose Server -->
+	<include file="$(find bender_pose_server)/launch/pose_server.launch"/>
+
+	<!-- Mapper -->
+	<include file="$(find bender_utils)/launch/mapper.launch"/>
+
+</launch>

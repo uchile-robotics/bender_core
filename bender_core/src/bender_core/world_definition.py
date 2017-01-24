@@ -8,7 +8,7 @@ import math
 class Object():
     def __init__(self, _name, _pose, _bboxes):
         self.name = _name # object name
-        self.pose = _pose # center pose
+        self.posestamped = _pose # center pose
         self.bboxes = _bboxes # bboxes 2d
         self.color = "unknown" # dominant color, options: red, blue, yellow, green, black, white
         self.form = "unknown" # form, options : box, sphere, cylinder

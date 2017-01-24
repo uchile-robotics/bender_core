@@ -1,0 +1,25 @@
+<launch> 
+  <group ns="bender">
+    <!-- light_head low lovel config file -->
+    <rosparam file="$(find bender_light_head)/config/light_head_controller.yaml" command="load"/>
+    <!-- light_head low lovel controller spawner -->
+    <node name="light_head_controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
+        args="--manager=l_port_manager
+              --port=l_port
+              light_head_yaw_joint_controller
+              light_head_pitch_joint_controller"
+        output="screen"/>
+
+    <!-- Follow Joint Trajectory Action for light_head config file -->
+    <rosparam file="$(find bender_light_head)/config/light_head_trajectory.yaml" command="load"/>
+    <!-- Spawn Follow Joint Trajectory Action for light_head -->
+    <node name="light_head_controller_spawner_meta" pkg="dynamixel_controllers" type="controller_spawner.py"
+            args="--manager=l_port_manager
+                  --type=meta
+                  light_head_controller
+                  light_head_yaw_joint_controller
+                  light_head_pitch_joint_controller"
+            output="screen"/>
+  </group>
+
+</launch>

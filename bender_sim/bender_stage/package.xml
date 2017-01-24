@@ -60,6 +60,7 @@
 
 
     <!-- excution dependencies -->
+    <exec_depend>stage_ros</exec_depend>
 
 
     <!-- test dependencies -->

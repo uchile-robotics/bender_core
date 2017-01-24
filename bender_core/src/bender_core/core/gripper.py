@@ -105,33 +105,35 @@ class GripperSkill(RobotSkill):
         self.loginfo('Sending new goal for \"{0}\" with position={1:.2f} effort={2:.2f}'.format(self.name, position, effort))
         self._gca_client.send_goal(goal)
 
-    def close(self, effort=0.5):
+    def close(self, effort=0.5, timeout=0.0):
         """
         Close the gripper to default close position and wait for movement done.
 
         Args:
             effort (float): Max effort used in close movement. Must be between 0.0 and 1.0. Value zero may cause null movement.
+            timeout (float): Max time to block before returning. A zero timeout is interpreted as an infinite timeout.
 
         Returns:
-            bool: True if the goal finished, False otherwise.
+            bool: True if the goal finished. False if the goal didn't finish within the allocated timeout.
         """
         self.loginfo('Closing {0}.'.format(self.name))
         self.send_goal(GripperSkill.CLOSE_POSITION, effort)
-        return self.wait_for_motion_done()
+        return self.wait_for_motion_done(timeout)
 
-    def open(self, effort=0.8):
+    def open(self, effort=0.8, timeout=0.0):
         """
         Open the gripper to default open position and wait for movement done.
 
         Args:
             effort (float): Max effort used in close movement. Must be between 0.0 and 1.0. Value zero may cause null movement.
+            timeout (float): Max time to block before returning. A zero timeout is interpreted as an infinite timeout.
 
         Returns:
-            bool: True if the goal finished, False otherwise.
+            bool: True if the goal finished. False if the goal didn't finish within the allocated timeout.
         """
         self.loginfo('Opening {0}.'.format(self.name))
         self.send_goal(GripperSkill.OPEN_POSITION, effort)
-        return self.wait_for_motion_done()
+        return self.wait_for_motion_done(timeout)
 
     def wait_for_motion_done(self, timeout=0.0):
         """

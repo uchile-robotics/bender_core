@@ -94,3 +94,12 @@ class ContextImpl(object):
             str: Robot name.
         """
         return self.robot_name
+
+    def get_joint_state_topic(self):
+        """
+        Get joint state topic.
+
+        Returns:
+            str: Joint state topic.
+        """
+        return self._joint_state_topic

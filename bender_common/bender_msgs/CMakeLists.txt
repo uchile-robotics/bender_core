@@ -20,11 +20,21 @@ add_message_files(
   BlobList.msg
   CartesianInfo.msg
   Command.msg
+  CylindricalObject.msg
   data_follow.msg
+  detections.msg
   Emotion.msg
+  EmotionDetect.msg
+  ExpressionCommand.msg
   FKinfo.msg
   grip.msg
   KinectTrackerData.msg
+  LedCommand.msg 
+  LedCommand2.msg 
+  Marker.msg 
+  MarkerArray.msg 
+  Num.msg 
+  ObjectDetection.msg
   OclusionData.msg
   PathBlockingDetections.msg
   PlaneDetection.msg
@@ -32,22 +42,13 @@ add_message_files(
   Rect.msg
   ROIArray.msg
   SemanticObject.msg
-  ObjectDetection.msg
+  ServoCommand.msg 
+  ServoState.msg 
+  SiftDetection.msg
   SiftDetectionDepth.msg
   SiftDetectionFloor.msg
   StateInfo.msg
   WaveData.msg
-  EmotionDetect.msg
-  detections.msg
-  CylindricalObject.msg
-  Marker.msg 
-  MarkerArray.msg 
-  LedCommand.msg 
-  LedCommand2.msg 
-  Num.msg 
-  ServoCommand.msg 
-  ServoState.msg 
-  ExpressionCommand.msg
 )
 
 # Generate added messages and services with any dependencies listed here
