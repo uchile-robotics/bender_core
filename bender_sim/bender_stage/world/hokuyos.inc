@@ -33,7 +33,7 @@ define hokuyo_rear hokuyo_urg_04lx_ug01
     samples 516         # 360°/1,024 steps 
   )
 
-  pose [ 0.240 0.000 -0.200 180.000 ]
+  pose [ -0.220 0.000 0.900 180.000 ]
 )
 
 define hokuyo_front hokuyo_umt_30lx
@@ -42,9 +42,9 @@ define hokuyo_front hokuyo_umt_30lx
     range [ 0.0 30.0 ]  # [m]   
     #fov     180.0       # max fov 270° - 1080 samples
     #samples 720         # 360°/1,440 steps 
-    fov     360.0       # max fov 270° - 1080 samples
-    samples 1440         # 360°/1,440 steps 
+    fov     250.0       # max fov 270° - 1080 samples
+    samples 1080         # 360°/1,440 steps 
   )
 
-  pose [ 0.240 0.000 -0.200 0.000 ]
+  pose [ 0.220 0.000 .330 0.000 ]
 )
