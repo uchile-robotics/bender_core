@@ -1,7 +1,20 @@
 #!/bin/bash
-
+#
 # bender_fieldbus package installer
-# run: $ bash bender_fieldbus/install/install.sh
+#
+# Run me like this
+# > bash install.sh
+#
+# DO NOT USE ONE OF THIS:
+# > source install.sh
+# > . install.sh
+# > ./install.sh
+#
+
+# - - - - - - S E T U P - - - - - - - -
+# # # # # # # # # # # # # # # # # # # #
+source "$BENDER_WS"/bender_system/install/pkg_install.bash
+
 
 #  - - - - - - - - - Setup - - - - - - - - - - - 
 # Color
@@ -16,15 +29,18 @@ installer="${bold}[bender_fieldbus]:${reset}"
 
 #  - - - - - - - - - Install Rules - - - - - - - - - - - 
 echo "$installer Installing udev rules"
+bender_cd bender_fieldbus
 sudo cp -f install/10-l_port.rules /etc/udev/rules.d/10-l_port.rules
 sudo cp -f install/10-r_port.rules /etc/udev/rules.d/10-r_port.rules
 sudo cp -f install/10-dxl_test.rules /etc/udev/rules.d/10-dxl_test.rules
 sudo udevadm control --reload
 
+
 #  - - - - - - - - - Port Permissions  - - - - - - - - - 
 # Dialout group
 echo "$installer Add user to dialout group"
 sudo usermod -a -G dialout "$USER"
+
 # Port permissions
 echo "$installer Add ports permissions"
 

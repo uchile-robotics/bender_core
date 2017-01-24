@@ -10,6 +10,9 @@
 ** Includes
 *****************************************************************************/
 
+// Added this macro to support incompatible Boost 1.56.0 with QT 4.7.4
+#ifndef Q_MOC_RUN
+
 // NODE
 #include "../include/bender_gui_subtitles/qnode.hpp"
 
@@ -22,6 +25,7 @@
 #include <ros/ros.h>
 #include <ros/network.h>
 
+#endif
 
 /*****************************************************************************
 ** Namespaces
