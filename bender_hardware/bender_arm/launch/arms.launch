@@ -1,0 +1,16 @@
+<launch>
+
+  <include file="$(find bender_fieldbus)/launch/l_port.launch"/>
+  <include file="$(find bender_fieldbus)/launch/r_port.launch"/>
+
+  <!-- Launch both arms -->
+  <include file="$(find bender_arm)/launch/both.launch"/>
+
+  <!-- Launch light_head -->
+  <include file="$(find bender_light_head)/launch/light_head.launch"/>
+
+  <!-- Launch grippers -->
+  <include file="$(find bender_gripper)/launch/r_gripper.launch"/>
+  <include file="$(find bender_gripper)/launch/l_gripper.launch"/>
+
+</launch>

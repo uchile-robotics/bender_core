@@ -160,6 +160,7 @@ class ArmSkill(RobotSkill):
 
     def pause(self):
         self.logdebug("Pause \"{0}\" skill".format(self.name))
+        self.stop()
         return True
 
     # Arm movement related methods
@@ -177,7 +178,7 @@ class ArmSkill(RobotSkill):
         This function use linear interpolation between current position (obtained via joint_states topic)
         and joint goal.
 
-        Returns:
+        Args:
             joint_goal (list of float): Joint target configuration, must follow arm.get_joint_names() order.
             interval (float): Time interval between current position and joint goal.
 

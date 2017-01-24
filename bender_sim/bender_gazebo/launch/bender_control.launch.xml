@@ -1,12 +1,16 @@
 <launch>
+  <!-- Bender model type -->
+  <arg name="model_type" default="asus" />
+
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find bender_gazebo)/config/bender_effort_control.yaml" command="load"/>
+
+  <!-- Load head controller configurations -->
+  <include file="$(find bender_gazebo)/launch/$(arg model_type)_control.launch.xml"/>
 
   <!-- Load the controllers, launch in other console -->
   <node launch-prefix="xterm -T 'Gazebo controllers' -e" name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/bender"
     args="joint_state_controller
-    	  neck_controller
-    	  rgbd_head_controller
         l_arm_controller
         r_arm_controller
         r_gripper_controller

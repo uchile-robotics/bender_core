@@ -8,7 +8,7 @@ def main():
     base = TurningBase()
 
     while not rospy.is_shutdown():
-        base.turn(60)
+        base.turn(90,5000)
         rospy.sleep(2.0)
 
 if __name__ == '__main__':
