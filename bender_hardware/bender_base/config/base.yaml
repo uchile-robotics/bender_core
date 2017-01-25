@@ -1,4 +1,5 @@
 # rosaria configuration
 
 port: /dev/bender/base
-tf_prefix: bender
+odom_frame: bender/odom
+base_link_frame: bender/base_link
