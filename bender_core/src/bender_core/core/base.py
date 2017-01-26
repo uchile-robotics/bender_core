@@ -46,6 +46,30 @@ class BaseSkill(RobotSkill):
         self.lin_pid = PID(kp = 1, kd = .01)
         self.ang_pid = PID(kp = 1, kd = 0.01)
 
+    def check(self):
+        rospy.loginfo("{skill: %s}: check()." % self._type)
+        return True
+
+    
+    def setup(self):
+        rospy.loginfo("{skill: %s}: setup()." % self._type)
+        return True
+
+
+    def shutdown(self):
+        rospy.loginfo("{skill: %s}: shutdown()." % self._type)
+        return True
+        
+
+    def start(self):
+        rospy.loginfo("{skill: %s}: start()." % self._type)
+        return True
+
+
+    def pause(self):
+        rospy.loginfo("{skill: %s}: pause()." % self._type)
+        return True
+
     def _update_pos(self, data):
         self.curr_pose = data
 
@@ -65,7 +89,7 @@ class BaseSkill(RobotSkill):
         dist = math.sqrt((pos1.pose.pose.position.x - pos2.pose.pose.position.x) ** 2 + (pos1.pose.pose.position.y - pos2.pose.pose.position.y) ** 2 + (pos1.pose.pose.position.z - pos2.pose.pose.position.z) ** 2)
         return dist
 
-    def _rotation_rad(self, pos1, pos2, angle):
+    def _rotation_rad(self, pos1, pos2, prev):
         """
         This method calculates the distance between two Odometry type orientations.
 
@@ -78,10 +102,10 @@ class BaseSkill(RobotSkill):
         Returns:
             float: Radians between the two Odometry orientations
         """
-        ang1 = math.acos(pos1.pose.pose.orientation.z)
-        ang2 = math.acos(pos2.pose.pose.orientation.z)
-        diff = abs(ang1 - ang2) * 2
-        return diff if diff < angle else (2 * math.pi - diff)
+        ang1 = math.atan2(pos1.pose.pose.orientation.w, pos1.pose.pose.orientation.z) * 2
+        ang2 = math.atan2(pos2.pose.pose.orientation.w, pos2.pose.pose.orientation.z) * 2
+        diff = abs(shortest_angular_distance(ang2, ang1))
+        return prev + diff
 
     def _rotation(self, pos1, pos2):
         """
@@ -130,29 +154,6 @@ class BaseSkill(RobotSkill):
 
         return speed2 if abs(speed2) > self.min_angular_vel else abs(speed2) / speed2 * self.min_angular_vel
         
-    def check(self):
-        rospy.loginfo("{skill: %s}: check()." % self._type)
-        return True
-
-    
-    def setup(self):
-        rospy.loginfo("{skill: %s}: setup()." % self._type)
-        return True
-
-
-    def shutdown(self):
-        rospy.loginfo("{skill: %s}: shutdown()." % self._type)
-        return True
-        
-
-    def start(self):
-        rospy.loginfo("{skill: %s}: start()." % self._type)
-        return True
-
-
-    def pause(self):
-        rospy.loginfo("{skill: %s}: pause()." % self._type)
-        return True
 
     def move(self, distance=0.0, timeout=None):
         """
@@ -252,7 +253,7 @@ class BaseSkill(RobotSkill):
         """
         return self.move(-distance, timeout)
 
-    def rotate_rad(self, angle = 0.0, signo = 1, timeout = None):
+    def _rotate_rad(self, angle = 0.0, signo = 1, timeout = None):
         """
         This method rotates the base by "angle" degrees.
 
@@ -266,19 +267,19 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise 
         """
-        rospy.loginfo("{skill: %s}: rotate_rad(). Rotating %f rads." % (self._type, angle))
+        rospy.loginfo("{skill: %s}: _rotate_rad(). Rotating %f rads." % (self._type, angle))
         covered = 0.0
         rate = rospy.Rate(self.pub_rate)
-        ini_pose = self.curr_pose
+        prev_pose = self.curr_pose
         self.ang_pid.initialize()
-        rospy.loginfo("Starting at: %f rads" % (math.acos(ini_pose.pose.pose.orientation.w) * 2))
+        rospy.loginfo("Starting at: %f rads" % (math.acos(prev_pose.pose.pose.orientation.w) * 2))
 
         start = rospy.get_rostime()
-        timeout = rospy.Duration(float(timeout)) if timeout is not None else rospy.Duration(abs(float(angle)) / self.mean_ang_vel)
+        timeout = rospy.Duration(float(timeout)) if timeout is not None else rospy.Duration(min(abs(float(angle)) / self.mean_ang_vel, 30))
         try:
             while not rospy.is_shutdown():
                 elapsed_time = rospy.get_rostime() - start
-                covered = self._rotation_rad(self.curr_pose, ini_pose, angle)
+                covered = self._rotation_rad(self.curr_pose, prev_pose, covered)
                 rospy.loginfo("Rotated angle: %f rads, Current pos: %f" % (covered, math.acos(self.curr_pose.pose.pose.orientation.w) * 2))
                 if elapsed_time < timeout:
                     if angle != 0:
@@ -290,6 +291,7 @@ class BaseSkill(RobotSkill):
                             rospy.loginfo("Error: %f rads or %f percent" % (shortest_angular_distance(covered, angle), abs(shortest_angular_distance(covered, angle) / angle) * 100))
                             return True
                         else:
+                            prev_pose = self.curr_pose
                             vel = Twist()
                             vel.angular.z = signo * self._get_angular_vel(angle, covered)
 
@@ -316,7 +318,16 @@ class BaseSkill(RobotSkill):
             return False
 
     def rotate(self, angle=0.0, signo=1, timeout = None):
-        return self.rotate_rad(angle * math.pi / 180.0, signo)
+        ang = normalize_angle(angle * math.pi / 180)
+        rospy.loginfo("Angle to rotate %f rad" % ang)
+        signo = 1 if ang > 0 else -1
+        return self._rotate_rad(abs(ang), signo)
+
+    def rotate_rad(self, angle=0.0, signo=1, timeout = None):
+        ang = normalize_angle(angle)
+        rospy.loginfo("Angle to rotate %f rad" % ang)
+        signo = 1 if ang > 0 else -1
+        return self._rotate_rad(abs(ang), signo)
 
     def rotate_right(self, angle = 0.0):
         """
@@ -331,7 +342,7 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise 
         """
-        return self.rotate(angle, -1)
+        return self._rotate_rad(angle * math.pi / 180, -1)
 
     def rotate_left(self, angle = 0.0, timeout = None):
         """
@@ -346,7 +357,7 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise 
         """
-        return self.rotate(angle)
+        return self._rotate_rad(angle * math.pi / 180)
 
     def _move_forward_private_version(self, distance=0.0):
         """
@@ -354,108 +365,7 @@ class BaseSkill(RobotSkill):
         """
         return True
 
-    def testing(self):
-        vel_pub = rospy.Publisher("/bender/nav/cmd_vel", Twist, queue_size=1)
-
-        vel_msg = Twist()
-        n_of_tests = 10
-
-        pid = PID(kp = 1, kd = .1)
-
-        n_of_vels = 5
-        vel_step = (self.max_linear_vel - self.min_linear_vel) / (n_of_vels - 1)
-
-        rate = rospy.Rate(self.pub_rate)
-
-        curr_vel = 0
-
-        test_res = []
-        for i in range(n_of_tests):
-            test_res.append([])
-
-        try:
-            for i in range(n_of_tests / 2):
-                for j in range(n_of_vels):
-                    #Forward movement
-                    target_vel = self.min_linear_vel + j * vel_step
-                    rospy.loginfo("Test %i: forward at %f m/s" % (i, target_vel))
-                    cnt = 0
-                    while not rospy.is_shutdown():
-                        if self.curr_pose.twist.twist.linear.x < target_vel:
-                            vel_msg = Twist()
-                            sp = pid.compute_output(target_vel - curr_vel)
-                            sp2 = sp if sp <= self.max_linear_vel else self.max_linear_vel
-                            curr_vel = sp2 if sp2 >= self.min_linear_vel else self.min_linear_vel
-
-                            vel_msg.linear.x = curr_vel
-
-                            vel_pub.publish(vel_msg)
-                            rate.sleep()
-                        else:
-                            vel_msg = Twist()
-                            vel_msg.linear.x = curr_vel
-
-                            vel_pub.publish(vel_msg)
-                            cnt +=1
-                            rate.sleep()
-                            if cnt > 1.0 / self.pub_rate:
-                                break
-                    ini_time = rospy.get_rostime()
-                    vel_pub.publish(Twist())
-                    while True:
-                        if self.curr_pose.twist.twist.linear.x == 0:
-                            elapsed_time = rospy.get_rostime() - ini_time
-                            test_res[i].append(elapsed_time.to_sec())
-                            break
-
-                    curr_vel = 0
-                    #Backwards movement
-                    target_vel *= -1
-                    rospy.loginfo("Test %i: backwards at %f m/s" % (i + n_of_tests / 2, target_vel))
-                    cnt = 0
-                    while self.curr_pose.twist.twist.linear.x > target_vel and not rospy.is_shutdown():
-                        if self.curr_pose.twist.twist.linear.x > target_vel:
-                            vel_msg = Twist()
-                            sp = pid.compute_output(target_vel - curr_vel)
-                            sp2 = sp if -sp <= self.max_linear_vel else -self.max_linear_vel
-                            curr_vel = sp2 if -sp2 >= self.min_linear_vel else -self.min_linear_vel
-
-                            vel_msg.linear.x = curr_vel
-
-                            vel_pub.publish(vel_msg)
-                            rate.sleep()
-                        else:
-                            vel_msg = Twist()
-                            vel_msg.linear.x = curr_vel
-
-                            vel_pub.publish(vel_msg)
-                            cnt +=1
-                            rate.sleep()
-                            if cnt > 1.0 / self.pub_rate:
-                                break
-                    ini_time = rospy.get_rostime()
-                    vel_pub.publish(Twist())
-                    while True:
-                        if self.curr_pose.twist.twist.linear.x == 0:
-                            elapsed_time = rospy.get_rostime() - ini_time
-                            test_res[i + n_of_tests / 2].append(elapsed_time.to_sec())
-                            break
-                    curr_vel = 0
-            rospy.loginfo(test_res)
-            prom = []
-            for i in range(n_of_vels):
-                suma = 0
-                for j in range(n_of_tests):
-                    suma += test_res[j][i]
-                prom.append(suma / n_of_tests)
-            rospy.loginfo(prom)
-            return True
-        except rospy.ROSException:
-            return False
-
-
-
-### Angle functions ###
+    ### Angle functions ###
 
 def normalize_angle_positive(angle):
     """ Normalizes the angle to be 0 to 2*pi
@@ -473,7 +383,7 @@ def normalize_angle(angle):
 def shortest_angular_distance(from_angle, to_angle):
     """ Given 2 angles, this returns the shortest angular
         difference.  The inputs and ouputs are of course radians.
- 
+
         The result would always be -pi <= result <= pi. Adding the result
         to "from" will always get you an equivelent angle to "to".
     """
