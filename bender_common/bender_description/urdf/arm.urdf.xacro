@@ -28,12 +28,14 @@
   <xacro:property name="shoulder_roll_joint_lower" value="-0.23776" />
 
   <!-- Links mass -->
-  <xacro:property name="shoulder_pitch_mass" value="${0.216}" />
-  <xacro:property name="shoulder_roll_mass"  value="${0.282}" />
-  <xacro:property name="shoulder_yaw_mass"   value="${0.256}" />
-  <xacro:property name="elbow_pitch_mass"    value="${0.243}" />
-  <xacro:property name="elbow_yaw_mass"      value="${0.222}" />
-  <xacro:property name="wrist_pitch_mass"    value="${0.430}" />
+  <xacro:property name="TO_KG" value="${0.001}" />
+  <xacro:property name="TO_KG_M2" value="${0.000000001}" />
+  <xacro:property name="shoulder_pitch_mass" value="${237.99*TO_KG}" />
+  <xacro:property name="shoulder_roll_mass"  value="${284.50*TO_KG}" />
+  <xacro:property name="shoulder_yaw_mass"   value="${261.97*TO_KG}" />
+  <xacro:property name="elbow_pitch_mass"    value="${245.92*TO_KG}" />
+  <xacro:property name="elbow_yaw_mass"      value="${199.60*TO_KG}" />
+  <xacro:property name="wrist_pitch_mass"    value="${492.01*TO_KG}" />
 
   <!-- Torque -->
   <xacro:property name="shoulder_pitch_torque" value="${mx106_torque}" />
@@ -67,10 +69,17 @@
       name="${prefix}${side}_shoulder_pitch_link">
       <inertial>
         <origin
-          xyz="0 ${- reflect * 0.02} 0"
+          xyz="0 0 0"
           rpy="0 0 0" />
         <mass value="${shoulder_pitch_mass}" />
-        <cuboid_inertia_def x="0.05" y="0.07" z="0.07" mass="${shoulder_pitch_mass}"/>
+        <inertia
+          ixx="${221387.60*TO_KG_M2}"
+          iyy="${113152.17*TO_KG_M2}"
+          izz="${164719.59*TO_KG_M2}"
+          ixy="${-1674.85*TO_KG_M2}"
+          iyz="${-77398.27*TO_KG_M2}"
+          ixz="${966.22*TO_KG_M2}"
+        />
       </inertial>
       <visual>
         <origin
@@ -116,10 +125,17 @@
       name="${prefix}${side}_shoulder_roll_link">
       <inertial>
         <origin
-          xyz="0.04 0 -0.075"
-          rpy="0 -0.25 0" />
+          xyz="0.0 0 0.0"
+          rpy="0 0.0 0" />
         <mass value="${shoulder_roll_mass}" />
-        <cuboid_inertia_def x="0.05" y="0.035" z="0.18" mass="${shoulder_roll_mass}"/>
+        <inertia
+          ixx="${3996527.93*TO_KG_M2}"
+          iyy="${4616215.27*TO_KG_M2}"
+          izz="${4616215.27*TO_KG_M2}"
+          ixy="${-167.80*TO_KG_M2}"
+          iyz="${428.69*TO_KG_M2}"
+          ixz="${-1563629.34*TO_KG_M2}"
+        />
       </inertial>
       <visual>
         <origin
@@ -165,10 +181,17 @@
       name="${prefix}${side}_shoulder_yaw_link">
       <inertial>
         <origin
-          xyz="-0.015 0 -0.115"
+          xyz="0 0 0"
           rpy="0 0 0" />
         <mass value="${shoulder_yaw_mass}" />
-        <cuboid_inertia_def x="0.05" y="0.035" z="0.23" mass="${shoulder_yaw_mass}"/>
+        <inertia
+          ixx="${6037713.48*TO_KG_M2}"
+          iyy="${6119754.54*TO_KG_M2}"
+          izz="${86667.41*TO_KG_M2}"
+          ixy="${924.54*TO_KG_M2}"
+          iyz="${8129.28*TO_KG_M2}"
+          ixz="${685061.98*TO_KG_M2}"
+        />
       </inertial>
       <visual>
         <origin
@@ -214,10 +237,17 @@
       name="${prefix}${side}_elbow_pitch_link">
       <inertial>
         <origin
-          xyz="0.015 -0.025 -0.05"
+          xyz="0 0 0"
           rpy="0 0 0" />
         <mass value="${elbow_pitch_mass}" />
-        <cuboid_inertia_def x="0.05" y="0.07" z="0.10" mass="${elbow_pitch_mass}"/>
+        <inertia
+          ixx="${1042579.00*TO_KG_M2}"
+          iyy="${929112.85*TO_KG_M2}"
+          izz="${143277.29*TO_KG_M2}"
+          ixy="${-38569.80*TO_KG_M2}"
+          iyz="${329101.58*TO_KG_M2}"
+          ixz="${-107274.76*TO_KG_M2}"
+        />
       </inertial>
       <visual>
         <origin
@@ -263,10 +293,17 @@
       name="${prefix}${side}_elbow_yaw_link">
       <inertial>
         <origin
-          xyz="-0.015 0 -0.12"
+          xyz="0 0 0"
           rpy="0 0 0" />
         <mass value="${elbow_yaw_mass}" />
-        <cuboid_inertia_def x="0.05" y="0.035" z="0.32" mass="${elbow_yaw_mass}"/>
+        <inertia
+          ixx="${5623975.01*TO_KG_M2}"
+          iyy="${5707839.48*TO_KG_M2}"
+          izz="${125573.79*TO_KG_M2}"
+          ixy="${-106.64*TO_KG_M2}"
+          iyz="${-848.52*TO_KG_M2}"
+          ixz="${562590.78*TO_KG_M2}"
+        />
       </inertial>
       <visual>
         <origin
@@ -312,10 +349,17 @@
       name="${prefix}${side}_wrist_pitch_link">
       <inertial>
         <origin
-          xyz="0 -0.02 -0.05"
+          xyz="0 0 0"
           rpy="0 0 0" />
         <mass value="${wrist_pitch_mass}" />
-        <cuboid_inertia_def x="0.04" y="0.08" z="0.07" mass="${wrist_pitch_mass}"/>
+        <inertia
+          ixx="${6346473.13*TO_KG_M2}"
+          iyy="${6213377.71*TO_KG_M2}"
+          izz="${187625.24*TO_KG_M2}"
+          ixy="${2135.45*TO_KG_M2}"
+          iyz="${725135.57*TO_KG_M2}"
+          ixz="${19363.35*TO_KG_M2}"
+        />
       </inertial>
       <visual>
         <origin

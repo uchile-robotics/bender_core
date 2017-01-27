@@ -7,8 +7,8 @@
   <xacro:property name="int_finger_joint_upper" value="0.69029" />
   <xacro:property name="int_finger_joint_lower" value="-0.02556" />
 
-  <xacro:property name="gripper_mass" value="1.0" />
-  <xacro:property name="gripper_effort" value="1.0" />
+  <xacro:property name="gripper_mass" value="0.160" />
+  <xacro:property name="gripper_effort" value="${rx28_torque}" />
 
   <xacro:macro name="gripper" params="side reflect prefix">
     <!-- Transmission -->
