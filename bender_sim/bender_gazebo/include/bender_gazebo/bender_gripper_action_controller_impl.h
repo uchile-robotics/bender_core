@@ -109,10 +109,7 @@ MultiGripperActionController()
 bool MultiGripperActionController::init(hardware_interface::EffortJointInterface* hw,
                   ros::NodeHandle&   root_nh,
                   ros::NodeHandle&   controller_nh)
-{
-  ROS_DEBUG_STREAM_NAMED(name_, "Init MultiGripperActionController with '" <<
-    this->getHardwareInterfaceType() << "'.");
-  
+{  
   using namespace util;
   
   // Cache controller node handle
@@ -120,6 +117,8 @@ bool MultiGripperActionController::init(hardware_interface::EffortJointInterface
   
   // Controller name
   name_ = getLeafNamespace(controller_nh_);
+  ROS_DEBUG_STREAM_NAMED(name_, "Init MultiGripperActionController with '" <<
+  this->getHardwareInterfaceType() << "'.");
 
   // Set logger level to debug
   if (verbose_){
@@ -230,7 +229,7 @@ update(const ros::Time& time, const ros::Duration& period)
   // Read buffer
   command_struct_rt_ = *(commands_.readFromRT());
 
-  double max_effort_ = command_struct_rt_[0].max_effort_;
+  double max_effort_ = command_struct_rt_[0].max_effort_*3.1; // TODO Fix max effort for gripper skill
 
   std::vector<double> error_position(num_joints_), error_velocity(num_joints_),
     current_position(num_joints_), current_velocity(num_joints_), desired_position(num_joints_);
@@ -252,7 +251,7 @@ update(const ros::Time& time, const ros::Duration& period)
 void MultiGripperActionController::
 goalCB(GoalHandle gh)
 {
-  ROS_INFO_STREAM_NAMED(name_,"Recieved new action goal");
+  ROS_INFO_NAMED(name_, "[%s] Recieved new action goal", name_.c_str());
   
   // Precondition: Running controller
   if (!this->isRunning())

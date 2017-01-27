@@ -140,7 +140,7 @@
     name="${prefix}${side}_int_finger_link">
       <xacro:gripper_type type="${type}" />
     </link>
-    <xacro:gazebo_friction_link link="${side}_int_finger_link" color="DarkGrey" />
+    <xacro:gazebo_friction_link link="${prefix}${side}_int_finger_link" color="DarkGrey" />
     <joint
       name="${side}_int_finger_fixed_joint"
       type="fixed">
@@ -169,7 +169,7 @@
     name="${prefix}${side}_ext_finger_link">
       <xacro:gripper_type type="${type}" />
     </link>
-    <xacro:gazebo_friction_link link="${side}_ext_finger_link" color="DarkGrey" />
+    <xacro:gazebo_friction_link link="${prefix}${side}_ext_finger_link" color="DarkGrey" />
     <joint
       name="${side}_ext_finger_fixed_joint"
       type="fixed">
