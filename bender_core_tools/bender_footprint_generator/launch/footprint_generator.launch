@@ -1,0 +1,8 @@
+<launch>
+
+    <node pkg="bender_footprint_generator" type="footprint_generator.py" name="footprint_generator"
+          ns="/bender/nav/" output="screen">
+        <rosparam file="$(find bender_footprint_generator)/config/footprint_generator.yaml"/>
+    </node>
+
+</launch>

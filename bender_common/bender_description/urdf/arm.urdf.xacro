@@ -28,12 +28,15 @@
   <xacro:property name="shoulder_roll_joint_lower" value="-0.23776" />
 
   <!-- Links mass -->
-  <xacro:property name="shoulder_pitch_mass" value="${0.216}" />
-  <xacro:property name="shoulder_roll_mass"  value="${0.282}" />
-  <xacro:property name="shoulder_yaw_mass"   value="${0.256}" />
-  <xacro:property name="elbow_pitch_mass"    value="${0.243}" />
-  <xacro:property name="elbow_yaw_mass"      value="${0.222}" />
-  <xacro:property name="wrist_pitch_mass"    value="${0.430}" />
+  <xacro:property name="TO_KG" value="${0.001}" />
+  <xacro:property name="TO_M" value="${0.001}" />
+  <xacro:property name="TO_KG_M2" value="${0.000000001}" />
+  <xacro:property name="shoulder_pitch_mass" value="${237.99*TO_KG}" />
+  <xacro:property name="shoulder_roll_mass"  value="${284.50*TO_KG}" />
+  <xacro:property name="shoulder_yaw_mass"   value="${261.97*TO_KG}" />
+  <xacro:property name="elbow_pitch_mass"    value="${245.92*TO_KG}" />
+  <xacro:property name="elbow_yaw_mass"      value="${199.60*TO_KG}" />
+  <xacro:property name="wrist_pitch_mass"    value="${492.01*TO_KG}" />
 
   <!-- Torque -->
   <xacro:property name="shoulder_pitch_torque" value="${mx106_torque}" />
@@ -56,18 +59,18 @@
     <xacro:gazebo_link link="${prefix}${side}_wrist_pitch_link" color="Grey" />
 
     <!-- Transmissions -->
-    <xacro:joint_pos_transmission joint="${side}_shoulder_pitch_joint"/>
-    <xacro:joint_pos_transmission joint="${side}_shoulder_roll_joint"/>
-    <xacro:joint_pos_transmission joint="${side}_shoulder_yaw_joint"/>
-    <xacro:joint_pos_transmission joint="${side}_elbow_pitch_joint"/>
-    <xacro:joint_pos_transmission joint="${side}_elbow_yaw_joint"/>
-    <xacro:joint_pos_transmission joint="${side}_wrist_pitch_joint"/>
+    <xacro:joint_transmission joint="${side}_shoulder_pitch_joint"/>
+    <xacro:joint_transmission joint="${side}_shoulder_roll_joint"/>
+    <xacro:joint_transmission joint="${side}_shoulder_yaw_joint"/>
+    <xacro:joint_transmission joint="${side}_elbow_pitch_joint"/>
+    <xacro:joint_transmission joint="${side}_elbow_yaw_joint"/>
+    <xacro:joint_transmission joint="${side}_wrist_pitch_joint"/>
 
     <link
       name="${prefix}${side}_shoulder_pitch_link">
       <inertial>
         <origin
-          xyz="0 ${- reflect * 0.02} 0"
+          xyz="${-0.30*TO_M} ${-reflect*23.75*TO_M} ${-13.7*TO_M}"
           rpy="0 0 0" />
         <mass value="${shoulder_pitch_mass}" />
         <cuboid_inertia_def x="0.05" y="0.07" z="0.07" mass="${shoulder_pitch_mass}"/>
@@ -116,8 +119,8 @@
       name="${prefix}${side}_shoulder_roll_link">
       <inertial>
         <origin
-          xyz="0.04 0 -0.075"
-          rpy="0 -0.25 0" />
+          xyz="${46.28*TO_M} ${-0.01*TO_M} ${-118.24*TO_M}"
+          rpy="0 0 0" />
         <mass value="${shoulder_roll_mass}" />
         <cuboid_inertia_def x="0.05" y="0.035" z="0.18" mass="${shoulder_roll_mass}"/>
       </inertial>
@@ -165,7 +168,7 @@
       name="${prefix}${side}_shoulder_yaw_link">
       <inertial>
         <origin
-          xyz="-0.015 0 -0.115"
+          xyz="${-17.25*TO_M} ${-0.20*TO_M} ${-151.64*TO_M}"
           rpy="0 0 0" />
         <mass value="${shoulder_yaw_mass}" />
         <cuboid_inertia_def x="0.05" y="0.035" z="0.23" mass="${shoulder_yaw_mass}"/>
@@ -214,7 +217,7 @@
       name="${prefix}${side}_elbow_pitch_link">
       <inertial>
         <origin
-          xyz="0.015 -0.025 -0.05"
+          xyz="${7.17*TO_M} ${-21.86*TO_M} ${-60.81*TO_M}"
           rpy="0 0 0" />
         <mass value="${elbow_pitch_mass}" />
         <cuboid_inertia_def x="0.05" y="0.07" z="0.10" mass="${elbow_pitch_mass}"/>
@@ -263,7 +266,7 @@
       name="${prefix}${side}_elbow_yaw_link">
       <inertial>
         <origin
-          xyz="-0.015 0 -0.12"
+          xyz="${-19.08*TO_M} ${0.03*TO_M} ${-152.08*TO_M}"
           rpy="0 0 0" />
         <mass value="${elbow_yaw_mass}" />
         <cuboid_inertia_def x="0.05" y="0.035" z="0.32" mass="${elbow_yaw_mass}"/>
@@ -312,7 +315,7 @@
       name="${prefix}${side}_wrist_pitch_link">
       <inertial>
         <origin
-          xyz="0 -0.02 -0.05"
+          xyz="${-0.03*TO_M} ${-13.24*TO_M} ${-111.35*TO_M}"
           rpy="0 0 0" />
         <mass value="${wrist_pitch_mass}" />
         <cuboid_inertia_def x="0.04" y="0.08" z="0.07" mass="${wrist_pitch_mass}"/>
