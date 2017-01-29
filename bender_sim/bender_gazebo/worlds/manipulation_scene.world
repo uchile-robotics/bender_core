@@ -347,10 +347,10 @@
       <wall_time>1485628358 683906663</wall_time>
       <iterations>781277</iterations>
       <model name='baltica'>
-        <pose frame=''>0.437758 -0.22 0.573396 1.5e-05 -5.5e-05 0.040302</pose>
+        <pose frame=''>0.440118 -0.267433 0.574622 0.030789 0.009136 0.028783</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>0.437751 -0.214453 0.688396 1.5e-05 -5.5e-05 0.040302</pose>
+          <pose frame=''>0.46 -0.267433 0.688396 1.5e-05 -5.5e-05 0.040302</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 -0 -0 0 -0 0</acceleration>
           <wrench>0 -0 -0 0 -0 0</wrench>

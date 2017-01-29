@@ -42,16 +42,12 @@ if __name__ == "__main__":
     # Go to grap position
     robot.r_arm.send_joint_goal([-0.01, 0.0, 0.0, 1.34, 0.0, 0.26], interval=2.0)
     robot.r_arm.wait_for_motion_done()
-    
-    while not rospy.is_shutdown(): 
-        # Close gripper
-        robot.r_gripper.close()
-        rospy.loginfo(robot.r_gripper.get_result())
-        rospy.sleep(1.0)
-        # Open gripper
-        robot.r_gripper.open()
-        rospy.loginfo(robot.r_gripper.get_result())
-        rospy.sleep(1.0)
+
+    # Close gripper and lift arm
+    robot.r_gripper.close()
+    rospy.loginfo(robot.r_gripper.get_result())
+    robot.r_arm.send_joint_goal([-0.84, 0.0, 0.0, 1.8, 0.0, 1.2 ], interval=2.0)
+    robot.r_arm.wait_for_motion_done()
 
     # Shutdown robot
     robot.shutdown()
