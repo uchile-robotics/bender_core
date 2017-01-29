@@ -74,13 +74,13 @@ bender:
     joints:
       - r_int_finger_joint
       - r_ext_finger_joint
-    goal_tolerance: 0.1
+    goal_tolerance: 0.05
     max_effort: 3.1 # RX28 at 15.5 V
-    stalled_velocity_threshold: 0.05
+    stall_velocity_threshold: 0.02
     stall_timeout: 0.2
     gains:
-      r_int_finger_joint: {p: 100.0, i: 10.0, d: 0.5, i_clamp_min: 0.0, i_clamp_max: 0.0}
-      r_ext_finger_joint: {p: 100.0, i: 10.0, d: 0.5, i_clamp_min: 0.0, i_clamp_max: 0.0}
+      r_int_finger_joint: {p: 100.0, i: 1.0, d: 1.0, i_clamp: 3.1}
+      r_ext_finger_joint: {p: 100.0, i: 1.0, d: 1.0, i_clamp: 3.1}
 
   # Left gripper controller controller
   l_gripper_controller:
@@ -88,10 +88,10 @@ bender:
     joints:
       - l_int_finger_joint
       - l_ext_finger_joint
-    goal_tolerance: 0.1
+    goal_tolerance: 0.05
     max_effort: 3.1 # RX28 at 15.5 V
-    stalled_velocity_threshold: 0.5
+    stall_velocity_threshold: 0.02
     stall_timeout: 0.2
     gains:
-      l_int_finger_joint: {p: 100.0, i: 10.0, d: 0.5, i_clamp_min: 0.0, i_clamp_max: 0.0}
-      l_ext_finger_joint: {p: 100.0, i: 10.0, d: 0.5, i_clamp_min: 0.0, i_clamp_max: 0.0}
+      l_int_finger_joint: {p: 100.0, i: 1.0, d: 1.0, i_clamp: 3.1}
+      l_ext_finger_joint: {p: 100.0, i: 1.0, d: 1.0, i_clamp: 3.1}

@@ -339,66 +339,6 @@
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
       </link>
-      <pose frame=''>0.790283 -0.605844 0 0 -0 0</pose>
-    </model>
-    <model name='baltica_0'>
-      <link name='link'>
-        <pose frame=''>0 0 0.115 0 -0 0</pose>
-        <inertial>
-          <mass>0.39</mass>
-          <inertia>
-            <ixx>0.00058</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.00058</iyy>
-            <iyz>0</iyz>
-            <izz>0.00019</izz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <cylinder>
-              <radius>0.03302</radius>
-              <length>0.12268</length>
-            </cylinder>
-          </geometry>
-          <surface>
-            <contact>
-              <ode>
-                <min_depth>0.005</min_depth>
-              </ode>
-            </contact>
-            <friction>
-              <ode>
-                <mu>0.9</mu>
-                <mu2>0.9</mu2>
-              </ode>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <cylinder>
-              <radius>0.03302</radius>
-              <length>0.12268</length>
-            </cylinder>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://baltica/materials/scripts</uri>
-              <uri>model://baltica/materials/textures</uri>
-              <name>Baltica/Diffuse</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-      </link>
       <pose frame=''>0.490524 -0.347714 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
@@ -407,20 +347,10 @@
       <wall_time>1485628358 683906663</wall_time>
       <iterations>781277</iterations>
       <model name='baltica'>
-        <pose frame=''>26.3867 14.1052 -0.058659 1e-06 -1e-06 0</pose>
+        <pose frame=''>0.437758 -0.22 0.573396 1.5e-05 -5.5e-05 0.040302</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>26.3867 14.1052 0.056341 1e-06 -1e-06 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 -0 0 0 -0 0</acceleration>
-          <wrench>0 -0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='baltica_0'>
-        <pose frame=''>0.561313 0.024799 0.573398 0 -0 0.040302</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose frame=''>0.561313 0.024799 0.688398 0 -0 0.040302</pose>
+          <pose frame=''>0.437751 -0.214453 0.688396 1.5e-05 -5.5e-05 0.040302</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 -0 -0 0 -0 0</acceleration>
           <wrench>0 -0 -0 0 -0 0</wrench>

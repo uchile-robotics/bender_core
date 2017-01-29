@@ -93,9 +93,10 @@ public:
     {
       // Compute PID Command
       double command = pids_[i]->computeCommand(error_position[i], error_velocity[i], period);
+      // Effort saturation
       command = std::min<double>(fabs(max_allowed_effort), std::max<double>(-fabs(max_allowed_effort), command));
       (*joint_handles_ptr_)[i].setCommand(command);
-      mean_effort += command;
+      mean_effort += fabs(command);
     }
     return mean_effort/num_joints_;
   }
