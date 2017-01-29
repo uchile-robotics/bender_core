@@ -2,7 +2,7 @@
   <world name='default'>
     <light name='sun' type='directional'>
       <cast_shadows>1</cast_shadows>
-      <pose frame=''>0 0 10 0 -0 0</pose>
+      <pose frame=''>0 0 15 0 -0 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.1 0.1 0.1 1</specular>
       <attenuation>
@@ -11,7 +11,7 @@
         <linear>0.01</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <direction>-0.5 0.5 -1</direction>
+      <direction>0.0 0.0 -1.0</direction>
     </light>
     <model name='ground_plane'>
       <static>1</static>
@@ -479,10 +479,10 @@
         <collision name='Wall_0_Collision'>
           <geometry>
             <box>
-              <size>4 0.15 2.5</size>
+              <size>4 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -498,10 +498,11 @@
           </surface>
         </collision>
         <visual name='Wall_0_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>4 0.15 2.5</size>
+              <size>4 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -523,10 +524,10 @@
         <collision name='Wall_1_Collision'>
           <geometry>
             <box>
-              <size>2.75031 0.15 2.5</size>
+              <size>2.75031 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -542,10 +543,11 @@
           </surface>
         </collision>
         <visual name='Wall_1_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>2.75031 0.15 2.5</size>
+              <size>2.75031 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -567,10 +569,10 @@
         <collision name='Wall_10_Collision'>
           <geometry>
             <box>
-              <size>2.41 0.15 2.5</size>
+              <size>2.41 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -586,10 +588,11 @@
           </surface>
         </collision>
         <visual name='Wall_10_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>2.41 0.15 2.5</size>
+              <size>2.41 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -611,10 +614,10 @@
         <collision name='Wall_12_Collision'>
           <geometry>
             <box>
-              <size>1.6 0.15 2.5</size>
+              <size>1.6 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -630,10 +633,11 @@
           </surface>
         </collision>
         <visual name='Wall_12_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>1.6 0.15 2.5</size>
+              <size>1.6 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -655,10 +659,10 @@
         <collision name='Wall_14_Collision'>
           <geometry>
             <box>
-              <size>0.5 0.15 2.5</size>
+              <size>0.5 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -674,10 +678,11 @@
           </surface>
         </collision>
         <visual name='Wall_14_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.5 0.15 2.5</size>
+              <size>0.5 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -699,10 +704,10 @@
         <collision name='Wall_15_Collision'>
           <geometry>
             <box>
-              <size>0.85 0.15 2.5</size>
+              <size>0.85 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -718,10 +723,11 @@
           </surface>
         </collision>
         <visual name='Wall_15_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.85 0.15 2.5</size>
+              <size>0.85 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -743,10 +749,10 @@
         <collision name='Wall_17_Collision'>
           <geometry>
             <box>
-              <size>0.25 0.15 2.5</size>
+              <size>0.25 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -762,10 +768,11 @@
           </surface>
         </collision>
         <visual name='Wall_17_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.25 0.15 2.5</size>
+              <size>0.25 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -787,10 +794,10 @@
         <collision name='Wall_18_Collision'>
           <geometry>
             <box>
-              <size>0.5 0.15 2.5</size>
+              <size>0.5 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -806,10 +813,11 @@
           </surface>
         </collision>
         <visual name='Wall_18_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.5 0.15 2.5</size>
+              <size>0.5 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -831,10 +839,10 @@
         <collision name='Wall_19_Collision'>
           <geometry>
             <box>
-              <size>0.65 0.15 2.5</size>
+              <size>0.65 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -850,10 +858,11 @@
           </surface>
         </collision>
         <visual name='Wall_19_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.65 0.15 2.5</size>
+              <size>0.65 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -875,10 +884,10 @@
         <collision name='Wall_2_Collision'>
           <geometry>
             <box>
-              <size>2.6 0.15 2.5</size>
+              <size>2.6 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -894,10 +903,11 @@
           </surface>
         </collision>
         <visual name='Wall_2_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>2.6 0.15 2.5</size>
+              <size>2.6 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -919,10 +929,10 @@
         <collision name='Wall_21_Collision'>
           <geometry>
             <box>
-              <size>2.25 0.15 2.5</size>
+              <size>2.25 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -938,10 +948,11 @@
           </surface>
         </collision>
         <visual name='Wall_21_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>2.25 0.15 2.5</size>
+              <size>2.25 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -963,10 +974,10 @@
         <collision name='Wall_22_Collision'>
           <geometry>
             <box>
-              <size>0.6 0.15 2.5</size>
+              <size>0.6 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -982,10 +993,11 @@
           </surface>
         </collision>
         <visual name='Wall_22_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.6 0.15 2.5</size>
+              <size>0.6 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1007,10 +1019,10 @@
         <collision name='Wall_24_Collision'>
           <geometry>
             <box>
-              <size>1 0.15 2.5</size>
+              <size>1 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1026,10 +1038,11 @@
           </surface>
         </collision>
         <visual name='Wall_24_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>1 0.15 2.5</size>
+              <size>1 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1051,10 +1064,10 @@
         <collision name='Wall_25_Collision'>
           <geometry>
             <box>
-              <size>1.75 0.15 2.5</size>
+              <size>1.75 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1070,10 +1083,11 @@
           </surface>
         </collision>
         <visual name='Wall_25_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>1.75 0.15 2.5</size>
+              <size>1.75 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1095,10 +1109,10 @@
         <collision name='Wall_26_Collision'>
           <geometry>
             <box>
-              <size>0.6 0.15 2.5</size>
+              <size>0.6 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1114,10 +1128,11 @@
           </surface>
         </collision>
         <visual name='Wall_26_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.6 0.15 2.5</size>
+              <size>0.6 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1139,10 +1154,10 @@
         <collision name='Wall_28_Collision'>
           <geometry>
             <box>
-              <size>3.1 0.15 2.5</size>
+              <size>3.1 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1158,10 +1173,11 @@
           </surface>
         </collision>
         <visual name='Wall_28_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>3.1 0.15 2.5</size>
+              <size>3.1 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1183,10 +1199,10 @@
         <collision name='Wall_30_Collision'>
           <geometry>
             <box>
-              <size>1.5 0.15 2.5</size>
+              <size>1.5 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1202,10 +1218,11 @@
           </surface>
         </collision>
         <visual name='Wall_30_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>1.5 0.15 2.5</size>
+              <size>1.5 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1227,10 +1244,10 @@
         <collision name='Wall_32_Collision'>
           <geometry>
             <box>
-              <size>0.6 0.15 2.5</size>
+              <size>0.6 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1246,10 +1263,11 @@
           </surface>
         </collision>
         <visual name='Wall_32_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.6 0.15 2.5</size>
+              <size>0.6 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1271,10 +1289,10 @@
         <collision name='Wall_37_Collision'>
           <geometry>
             <box>
-              <size>3.01 0.15 2.5</size>
+              <size>3.01 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1290,10 +1308,11 @@
           </surface>
         </collision>
         <visual name='Wall_37_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>3.01 0.15 2.5</size>
+              <size>3.01 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1315,10 +1334,10 @@
         <collision name='Wall_4_Collision'>
           <geometry>
             <box>
-              <size>2.75 0.15 2.5</size>
+              <size>2.75 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1334,10 +1353,11 @@
           </surface>
         </collision>
         <visual name='Wall_4_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>2.75 0.15 2.5</size>
+              <size>2.75 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1359,10 +1379,10 @@
         <collision name='Wall_46_Collision'>
           <geometry>
             <box>
-              <size>0.832201 0.15 2.5</size>
+              <size>0.832201 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1378,10 +1398,11 @@
           </surface>
         </collision>
         <visual name='Wall_46_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.832201 0.15 2.5</size>
+              <size>0.832201 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1403,10 +1424,10 @@
         <collision name='Wall_47_Collision'>
           <geometry>
             <box>
-              <size>0.32 0.15 2.5</size>
+              <size>0.32 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1422,10 +1443,11 @@
           </surface>
         </collision>
         <visual name='Wall_47_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.32 0.15 2.5</size>
+              <size>0.32 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1447,10 +1469,10 @@
         <collision name='Wall_48_Collision'>
           <geometry>
             <box>
-              <size>1.072 0.15 2.5</size>
+              <size>1.072 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1466,10 +1488,11 @@
           </surface>
         </collision>
         <visual name='Wall_48_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>1.072 0.15 2.5</size>
+              <size>1.072 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1491,10 +1514,10 @@
         <collision name='Wall_49_Collision'>
           <geometry>
             <box>
-              <size>1.58004 0.15 2.5</size>
+              <size>1.58004 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1510,10 +1533,11 @@
           </surface>
         </collision>
         <visual name='Wall_49_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>1.58004 0.15 2.5</size>
+              <size>1.58004 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1535,10 +1559,10 @@
         <collision name='Wall_5_Collision'>
           <geometry>
             <box>
-              <size>0.75 0.15 2.5</size>
+              <size>0.75 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1554,10 +1578,11 @@
           </surface>
         </collision>
         <visual name='Wall_5_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.75 0.15 2.5</size>
+              <size>0.75 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1579,10 +1604,10 @@
         <collision name='Wall_50_Collision'>
           <geometry>
             <box>
-              <size>2.01321 0.15 2.5</size>
+              <size>2.01321 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1598,10 +1623,11 @@
           </surface>
         </collision>
         <visual name='Wall_50_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>2.01321 0.15 2.5</size>
+              <size>2.01321 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1623,10 +1649,10 @@
         <collision name='Wall_51_Collision'>
           <geometry>
             <box>
-              <size>0.741002 0.15 2.5</size>
+              <size>0.741002 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1642,10 +1668,11 @@
           </surface>
         </collision>
         <visual name='Wall_51_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.741002 0.15 2.5</size>
+              <size>0.741002 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1667,10 +1694,10 @@
         <collision name='Wall_54_Collision'>
           <geometry>
             <box>
-              <size>0.3 0.15 2.5</size>
+              <size>0.3 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1686,10 +1713,11 @@
           </surface>
         </collision>
         <visual name='Wall_54_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.3 0.15 2.5</size>
+              <size>0.3 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1711,10 +1739,10 @@
         <collision name='Wall_56_Collision'>
           <geometry>
             <box>
-              <size>0.75 0.15 2.5</size>
+              <size>0.75 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1730,10 +1758,11 @@
           </surface>
         </collision>
         <visual name='Wall_56_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.75 0.15 2.5</size>
+              <size>0.75 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -1774,6 +1803,7 @@
           </surface>
         </collision>
         <visual name='Wall_59_Visual'>
+          <transparency>0.3</transparency>
           <pose frame=''>0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
@@ -1818,6 +1848,7 @@
           </surface>
         </collision>
         <visual name='Wall_60_Visual'>
+          <transparency>0.3</transparency>
           <pose frame=''>0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
@@ -1862,6 +1893,7 @@
           </surface>
         </collision>
         <visual name='Wall_61_Visual'>
+          <transparency>0.3</transparency>
           <pose frame=''>0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
@@ -1906,6 +1938,7 @@
           </surface>
         </collision>
         <visual name='Wall_62_Visual'>
+          <transparency>0.3</transparency>
           <pose frame=''>0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
@@ -1950,6 +1983,7 @@
           </surface>
         </collision>
         <visual name='Wall_63_Visual'>
+          <transparency>0.3</transparency>
           <pose frame=''>0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
@@ -1975,10 +2009,10 @@
         <collision name='Wall_7_Collision'>
           <geometry>
             <box>
-              <size>4.64 0.15 2.5</size>
+              <size>4.64 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -1994,10 +2028,11 @@
           </surface>
         </collision>
         <visual name='Wall_7_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>4.64 0.15 2.5</size>
+              <size>4.64 0.15 1.5</size>
             </box>
           </geometry>
           <material>
@@ -2038,6 +2073,7 @@
           </surface>
         </collision>
         <visual name='Wall_73_Visual'>
+          <transparency>0.3</transparency>
           <pose frame=''>0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
@@ -2082,6 +2118,7 @@
           </surface>
         </collision>
         <visual name='Wall_78_Visual'>
+          <transparency>0.3</transparency>
           <pose frame=''>0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
@@ -2126,6 +2163,7 @@
           </surface>
         </collision>
         <visual name='Wall_79_Visual'>
+          <transparency>0.3</transparency>
           <pose frame=''>0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
@@ -2170,6 +2208,7 @@
           </surface>
         </collision>
         <visual name='Wall_82_Visual'>
+          <transparency>0.3</transparency>
           <pose frame=''>0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
@@ -2214,6 +2253,7 @@
           </surface>
         </collision>
         <visual name='Wall_84_Visual'>
+          <transparency>0.3</transparency>
           <pose frame=''>0 0 0.25 0 -0 0</pose>
           <geometry>
             <box>
@@ -2239,10 +2279,10 @@
         <collision name='Wall_9_Collision'>
           <geometry>
             <box>
-              <size>2.5 0.15 2.5</size>
+              <size>2.5 0.15 1.5</size>
             </box>
           </geometry>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <max_contacts>10</max_contacts>
           <surface>
             <contact>
@@ -2258,10 +2298,11 @@
           </surface>
         </collision>
         <visual name='Wall_9_Visual'>
-          <pose frame=''>0 0 1.25 0 -0 0</pose>
+          <transparency>0.3</transparency>
+          <pose frame=''>0 0 0.75 0 -0 0</pose>
           <geometry>
             <box>
-              <size>2.5 0.15 2.5</size>
+              <size>2.5 0.15 1.5</size>
             </box>
           </geometry>
           <material>

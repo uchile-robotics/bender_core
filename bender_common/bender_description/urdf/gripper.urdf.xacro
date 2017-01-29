@@ -96,11 +96,11 @@
       </visual>
       <collision>
         <origin
-          xyz="-0.03 0 0.011"
-          rpy="0 0 ${M_PI}" />
+          xyz="0 0 0.011"
+          rpy="0 0 0" />
         <geometry>
           <mesh
-            filename="package://bender_description/meshes/collision/one_finger.stl" />
+            filename="package://bender_description/meshes/collision/finger.stl" scale="0.35 1.0 1.0"/>
         </geometry>
       </collision>
     </xacro:if>
@@ -124,11 +124,11 @@
       </visual>
       <collision>
         <origin
-          xyz="-0.065 0 0.011"
-          rpy="0 0 ${M_PI}" />
+          xyz="0.0275 0 0.011"
+          rpy="0 0 0" />
         <geometry>
           <mesh
-            filename="package://bender_description/meshes/collision/two_finger.stl" />
+            filename="package://bender_description/meshes/collision/finger.stl"/>
         </geometry>
       </collision>
     </xacro:unless>
