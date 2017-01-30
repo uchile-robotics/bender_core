@@ -287,7 +287,7 @@ class GripperActionController():
                 self.joint_state.effort[i] = self.joint_states[joint_name].load
                 # Gripper feedback
                 self.feedback.position += self.joint_states[joint_name].current_pos
-                self.feedback.effort += self.joint_states[joint_name].load*DXL_MAX_TORQUE_TICK
+                self.feedback.effort += self.joint_states[joint_name].load
                 i += 1
 
             # Mean position and effort
