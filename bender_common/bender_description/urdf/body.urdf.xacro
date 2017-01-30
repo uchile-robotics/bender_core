@@ -23,8 +23,8 @@
         <origin
           xyz="0 ${- reflect * 0.025} 0"
           rpy="${M_PI/2} 0 0" />
-        <cylinder_inertia_def length="0.05" radius="0.1" mass="10.0"/>
-        <mass value="10.0" />
+        <cylinder_inertia_def length="0.05" radius="0.1" mass="50.0"/>
+        <mass value="50.0" />
       </inertial>
       <visual>
         <xacro:if value="${(reflect+1)/2}">
@@ -92,10 +92,10 @@
       name="${prefix}body">
       <inertial>
         <origin
-          xyz="0 0 0.7"
+          xyz="0 0 0.1"
           rpy="0 0 0" />
-        <mass value="100.0" />
-        <cuboid_inertia_def x="0.2" y="0.4" z="1.25" mass="100.0"/>
+        <mass value="400.0" />
+        <cuboid_inertia_def x="0.1" y="0.4" z="0.25" mass="400.0"/>
       </inertial>
       <visual>
         <origin

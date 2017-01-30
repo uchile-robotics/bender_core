@@ -4,3 +4,5 @@ port: /dev/bender/base
 tf_prefix: bender
 
 RevCount: 531
+odom_frame: bender/odom
+base_link_frame: bender/base_link

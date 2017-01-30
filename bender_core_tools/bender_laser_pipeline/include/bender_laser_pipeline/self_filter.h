@@ -10,7 +10,6 @@
 #include <tf/transform_datatypes.h>
 #include <tf/transform_listener.h>
 
-#include <bender_utils/ParameterServerWrapper.h>
 
 namespace bender_laser_pipeline
 {
