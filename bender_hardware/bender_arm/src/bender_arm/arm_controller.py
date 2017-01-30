@@ -81,6 +81,7 @@ class ArmController(JointTrajectoryActionController):
                 # Sensor joint state
                 self.sensor_joint_state.position[i] = state.current_pos
                 self.sensor_joint_state.velocity[i] = state.velocity
+                self.sensor_joint_state.effort[i] = state.load
             # Publish msgs
             self.joint_states_pub.publish(self.sensor_joint_state)
             self.state_pub.publish(self.msg)
