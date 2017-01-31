@@ -7,8 +7,11 @@ import math
 from bender_core.robot_skill import RobotSkill
 from bender_core.core.joy import JoySkill
 from control_util.pid import PID
+
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
+
+from std_srvs.srv import Empty
 
 
 class BaseSkill(RobotSkill):
@@ -25,6 +28,9 @@ class BaseSkill(RobotSkill):
         self.register_dependency(JoySkill.get_type())
         self.pose_pub = rospy.Publisher("/bender/nav/cmd_vel", Twist, queue_size=1)
         self.pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
+
+        self.enable_motors = rospy.ServiceProxy("/bender/nav/base/enable_motors", Empty)
+        self.disable_motors = rospy.ServiceProxy("/bender/nav/base/disable_motors", Empty)
 
         self.linear_acc = 0.5
         self.max_linear_vel = 0.5
@@ -62,12 +68,14 @@ class BaseSkill(RobotSkill):
         
 
     def start(self):
-        rospy.loginfo("{skill: %s}: start()." % self._type)
+        rospy.loginfo("{skill: %s}: start(). Enabling motors for movement." % self._type)
+        self.enable_motors()
         return True
 
 
     def pause(self):
-        rospy.loginfo("{skill: %s}: pause()." % self._type)
+        rospy.loginfo("{skill: %s}: pause(). Disabling motors for movement." % self._type)
+        self.disable_motors()
         return True
 
     def _update_pos(self, data):
@@ -317,19 +325,45 @@ class BaseSkill(RobotSkill):
             rospy.loginfo("Couldn't reach goal :(")
             return False
 
-    def rotate(self, angle=0.0, signo=1, timeout = None):
+    def rotate(self, angle=0.0, timeout = None):
+        """
+        This method rotates the base in an unspecified direction in order to reach the given angle with the shortest possible rotation.
+
+        The rotation angle is normalized to [pi, -pi], positive angles result in a counter-clockwise rotation,
+        as for negative angles, the rotation will be clockwise.
+
+        Args:
+            angle (float): Un-normalized, Sexagecimal degrees of rotation.
+                Defaults to 0.0
+
+        Returns:
+            bool: True on success, False otherwise.
+        """
         ang = normalize_angle(angle * math.pi / 180)
         rospy.loginfo("Angle to rotate %f rad" % ang)
         signo = 1 if ang > 0 else -1
         return self._rotate_rad(abs(ang), signo)
 
     def rotate_rad(self, angle=0.0, signo=1, timeout = None):
+        """
+        This method rotates the base in an unspecified direction in order to reach the given angle with the shortest possible rotation.
+
+        The rotation angle is normalized to [pi, -pi], positive angles result in a counter-clockwise rotation,
+        as for negative angles, the rotation will be clockwise.
+
+        Args:
+            angle (float): Un-normalized, degrees of rotation in Radians.
+                Defaults to 0.0
+
+        Returns:
+            bool: True on success, False otherwise.
+        """
         ang = normalize_angle(angle)
         rospy.loginfo("Angle to rotate %f rad" % ang)
         signo = 1 if ang > 0 else -1
         return self._rotate_rad(abs(ang), signo)
 
-    def rotate_right(self, angle = 0.0):
+    def rotate_right(self, angle = 0.0, timeout = None):
         """
         This method rotates the base clockwise by "angle" degrees.
 
@@ -342,7 +376,7 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise 
         """
-        return self._rotate_rad(angle * math.pi / 180, -1)
+        return self._rotate_rad(angle * math.pi / 180, -1, timeout)
 
     def rotate_left(self, angle = 0.0, timeout = None):
         """
@@ -357,13 +391,7 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise 
         """
-        return self._rotate_rad(angle * math.pi / 180)
-
-    def _move_forward_private_version(self, distance=0.0):
-        """
-        Methods starting with '_' will not be displayed in the skill overview
-        """
-        return True
+        return self._rotate_rad(angle * math.pi / 180, timeout = timeout)
 
     ### Angle functions ###
 
