@@ -85,6 +85,7 @@
 
     <!-- excution dependencies -->
     <exec_depend>gazebo_ros_control</exec_depend>
+    <exec_depend>gazebo_plugins</exec_depend>
     <exec_depend>ros_control</exec_depend>
     <exec_depend>ros_controllers</exec_depend>
     <exec_depend>rqt_joint_trajectory_controller</exec_depend>
