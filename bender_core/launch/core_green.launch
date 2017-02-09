@@ -19,6 +19,10 @@
 	<!-- robot simulation -->
 	<arg name="simulation" default="false"/>
 	<arg name="sim_world"  default="amtc"/>
+
+	<!-- Safety control -->
+	<arg name="safety" default="true"/>
+	<arg name="asus_scan" default="false"/>
 	<!-- TODO: <arg name="simulator"  default="gazebo"/> -->
 
 
@@ -72,6 +76,11 @@
 
 	<!-- footprint generator -->
 	<include file="$(find bender_footprint_generator)/launch/footprint_generator.launch"/>
+
+	<!-- Safety control -->
+	<include if="$(arg safety)" file="$(find bender_safety)/launch/safety_control.launch">
+		<arg name="asus_scan" value="$(arg asus_scan)"/>
+	</include>
 
 	<!-- rqt_batteries -->
 	<!--

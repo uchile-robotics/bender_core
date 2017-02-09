@@ -25,23 +25,23 @@
 
 	<node pkg="bender_stage" type="laser_scan_proxy.py" name="laser_scan_proxy_rear" respawn="true" ns="/bender/stage/">
 		<remap from="input_scan"  to="/bender/stage/base_scan_1"/>
-		<remap from="output_scan" to="/bender/sensors/laser_rear/scan"/>
+		<remap from="output_scan" to="/bender/sensors/laser_rear_BAD/scan"/>
 		<param name="frame_id" value="/bender/sensors/laser_rear_link"/>
 	</node>
 
 
 	<!-- hokuyo corrector -->
 	<!-- useful to mirror laser readings (ex: when using an inverted laser, which stage cant handle) -->
-	<!--node pkg="bender_sensors" type="laser_inverter" name="hokuyo_corrector" ns="/bender/stage/">
+	<node pkg="bender_sensors" type="laser_inverter" name="hokuyo_corrector" ns="/bender/stage/">
 
-		< ! - - original stage reading - - >
-		<remap from="hokuyo_corrector/scan_in"  to="/bender/stage/laser_front_BAD/scan"/>
+		<!-- original stage reading -->
+		<remap from="hokuyo_corrector/scan_in"  to="/bender/stage/laser_rear_BAD/scan"/>
 
-		< ! - - remapped stage reading - - > 
-		<remap from="hokuyo_corrector/scan_out" to="/bender/sensors/laser_front/scan"/>
-		<param name="scan_out_frame"         value="/bender/sensors/laser_front_link"/>
+		<!-- remapped stage reading --> 
+		<remap from="hokuyo_corrector/scan_out" to="/bender/sensors/laser_rear/scan"/>
+		<param name="scan_out_frame"         value="/bender/sensors/laser_rear_link"/>
 
-	</node-->
+	</node>
 
 
 

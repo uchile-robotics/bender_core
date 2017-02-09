@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+__author__ = 'Diego Bano'
+__email__  = 'diego.bano@ug.uchile.cl'
 
 import rospy
 import math
@@ -177,7 +179,7 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise 
         """
-        rospy.loginfo("{skill: %s}: move(). Moving by %f meters." % (self._type, abs(distance)))
+        #rospy.loginfo("{skill: %s}: move(). Moving by %f meters." % (self._type, abs(distance)))
 
         covered = 0
         rate = rospy.Rate(self.pub_rate)
@@ -193,7 +195,7 @@ class BaseSkill(RobotSkill):
 
                 elapsed_time = rospy.get_rostime() - start
                 covered = self._distance(self.curr_pose, ini_pose)
-                rospy.loginfo("Distance covered: %f meters" % (covered))
+                #rospy.loginfo("Distance covered: %f meters" % (covered))
                 if elapsed_time < timeout:
                     if distance != 0:
                         if abs(distance) - covered <= abs(distance) / 100.0:
@@ -207,14 +209,14 @@ class BaseSkill(RobotSkill):
                             vel = Twist()
                             vel.linear.x = signo * self._get_linear_vel(abs(distance), covered)
                             
-                            rospy.loginfo("Moving at %f m/s" % (vel.linear.x))
+                            #rospy.loginfo("Moving at %f m/s" % (vel.linear.x))
                             
                             self.pose_pub.publish(vel)
                     else:
                         vel = Twist()
                         vel.linear.x = signo * self._get_linear_vel(abs(distance), covered)
                         
-                        rospy.loginfo("{Continuous movement} Moving at %f m/s" % (vel.linear.x))
+                        #rospy.loginfo("{Continuous movement} Moving at %f m/s" % (vel.linear.x))
                         
                         self.pose_pub.publish(vel)
                 else:
@@ -228,6 +230,7 @@ class BaseSkill(RobotSkill):
         except rospy.ROSException:
             rospy.loginfo("Couldn't reach goal :(")
             return False
+
 
     def move_forward(self, distance=0.0, timeout=None):
         """
@@ -246,6 +249,7 @@ class BaseSkill(RobotSkill):
 
         return self.move(distance, timeout)
 
+
     def move_backwards(self, distance=0.0, timeout=None):
         """
         This method moves the base backwards by "distance" meters.
@@ -259,7 +263,84 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise 
         """
+        rospy.loginfo("{skill: %s}: move_backwards(). Moving backwards by %f meters." % (self._type, distance))
         return self.move(-distance, timeout)
+
+
+    def move_right(self, distance=0.0, timeout=None):
+        """
+        This method moves the base backwards by "distance" meters.
+
+        Primitive movement of a determined distance, a given distance of 0 will result in continuous movement
+
+        Args:
+            distance (float): Distance to move the base.
+                Defaults to 0.0
+
+        Returns:
+            bool: True on success, False otherwise 
+        """
+        rospy.loginfo("{skill: %s}: move_right(). Moving by %f meters." % (self._type, abs(distance)))
+        rospy.loginfo("Starting movement.")
+        ini_pose = self.curr_pose
+        d_back = .5
+        d_right = distance
+        if not self.move_backwards(d_back, timeout = 5):
+            d_back = self._distance(ini_pose, self.curr_pose)
+        self.rotate_right(90)
+        turning_pose = self.curr_pose
+        if not self.move_forward(d_right, timeout = 5):
+            rospy.loginfo("There's something in the way, correcting trajectory.")
+            d_right -= self._distance(turning_pose, self.curr_pose)
+            self.rotate_left(90)
+            d_back /= 2
+            if d_back != 0 and not self.move_forward(d_back):
+                return False
+            self.rotate_right(90)
+            if not self.move_forward(d_right):
+                return False
+        self.rotate_left(90)
+        self.move_forward(d_back)
+        return True
+
+
+    def move_left(self, distance=0.0, timeout=None):
+        """
+        This method moves the base backwards by "distance" meters.
+
+        Primitive movement of a determined distance, a given distance of 0 will result in continuous movement
+
+        Args:
+            distance (float): Distance to move the base.
+                Defaults to 0.0
+
+        Returns:
+            bool: True on success, False otherwise 
+        """
+        rospy.loginfo("{skill: %s}: move_left(). Moving by %f meters." % (self._type, abs(distance)))
+        rospy.loginfo("Starting movement.")
+        ini_pose = self.curr_pose
+        d_back = .5
+        d_left = distance
+        if not self.move_backwards(d_back, timeout = 5):
+            d_back = self._distance(ini_pose, self.curr_pose)
+        self.rotate_left(90)
+        turning_pose = self.curr_pose
+        if not self.move_forward(d_left, timeout = 5):
+            rospy.loginfo("There's something in the way, correcting trajectory.")
+            d_left -= self._distance(turning_pose, self.curr_pose)
+            self.rotate_right(90)
+            if d_back > .1:
+                d_back /= 2
+                if d_back != 0 and not self.move_forward(d_back):
+                    return False
+                self.rotate_left(90)
+                if not self.move_forward(d_left):
+                    return False
+        self.rotate_right(90)
+        self.move_forward(d_back)
+        return True
+
 
     def _rotate_rad(self, angle = 0.0, signo = 1, timeout = None):
         """
@@ -275,12 +356,12 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise 
         """
-        rospy.loginfo("{skill: %s}: _rotate_rad(). Rotating %f rads." % (self._type, angle))
+        #rospy.loginfo("{skill: %s}: _rotate_rad(). Rotating %f rads." % (self._type, angle))
         covered = 0.0
         rate = rospy.Rate(self.pub_rate)
         prev_pose = self.curr_pose
         self.ang_pid.initialize()
-        rospy.loginfo("Starting at: %f rads" % (math.acos(prev_pose.pose.pose.orientation.w) * 2))
+        #rospy.loginfo("Starting at: %f rads" % (math.acos(prev_pose.pose.pose.orientation.w) * 2))
 
         start = rospy.get_rostime()
         timeout = rospy.Duration(float(timeout)) if timeout is not None else rospy.Duration(min(abs(float(angle)) / self.mean_ang_vel, 30))
@@ -288,7 +369,7 @@ class BaseSkill(RobotSkill):
             while not rospy.is_shutdown():
                 elapsed_time = rospy.get_rostime() - start
                 covered = self._rotation_rad(self.curr_pose, prev_pose, covered)
-                rospy.loginfo("Rotated angle: %f rads, Current pos: %f" % (covered, math.acos(self.curr_pose.pose.pose.orientation.w) * 2))
+                #rospy.loginfo("Rotated angle: %f rads, Current pos: %f" % (covered, math.acos(self.curr_pose.pose.pose.orientation.w) * 2))
                 if elapsed_time < timeout:
                     if angle != 0:
                         if angle - covered <= angle / 100.0:
@@ -303,14 +384,14 @@ class BaseSkill(RobotSkill):
                             vel = Twist()
                             vel.angular.z = signo * self._get_angular_vel(angle, covered)
 
-                            rospy.loginfo("Moving at %f rad/s" % (vel.angular.z))
+                            #rospy.loginfo("Moving at %f rad/s" % (vel.angular.z))
                             self.pose_pub.publish(vel)
                     else:
                         vel = Twist()
                         vel.angular.z = signo * self._get_angular_vel(angle, covered)
-                        
-                        rospy.loginfo("{Continuous movement} Moving at %f rad/s (Not currently working)" % (vel.linear.x))
-                        
+
+                        #rospy.loginfo("{Continuous movement} Moving at %f rad/s (Not currently working)" % (vel.linear.x))
+
                         self.pose_pub.publish(vel)
                 else:
                     vel = Twist()
@@ -324,6 +405,7 @@ class BaseSkill(RobotSkill):
         except rospy.ROSException:
             rospy.loginfo("Couldn't reach goal :(")
             return False
+
 
     def rotate(self, angle=0.0, timeout = None):
         """
@@ -339,10 +421,13 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise.
         """
+        rospy.loginfo("{skill: %s}: rotate(). Rotating %f rads." % (self._type, angle))
+
         ang = normalize_angle(angle * math.pi / 180)
         rospy.loginfo("Angle to rotate %f rad" % ang)
         signo = 1 if ang > 0 else -1
         return self._rotate_rad(abs(ang), signo)
+
 
     def rotate_rad(self, angle=0.0, signo=1, timeout = None):
         """
@@ -358,10 +443,12 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise.
         """
+        rospy.loginfo("{skill: %s}: rotate_rad(). Rotating %f rads." % (self._type, angle))
         ang = normalize_angle(angle)
         rospy.loginfo("Angle to rotate %f rad" % ang)
         signo = 1 if ang > 0 else -1
         return self._rotate_rad(abs(ang), signo)
+
 
     def rotate_right(self, angle = 0.0, timeout = None):
         """
@@ -376,7 +463,9 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise 
         """
+        rospy.loginfo("{skill: %s}: rotate_right(). Rotating %f rads." % (self._type, angle))
         return self._rotate_rad(angle * math.pi / 180, -1, timeout)
+
 
     def rotate_left(self, angle = 0.0, timeout = None):
         """
@@ -391,7 +480,9 @@ class BaseSkill(RobotSkill):
         Returns:
             bool: True on success, False otherwise 
         """
+        rospy.loginfo("{skill: %s}: rotate_left(). Rotating %f rads." % (self._type, angle))
         return self._rotate_rad(angle * math.pi / 180, timeout = timeout)
+
 
     ### Angle functions ###
 
