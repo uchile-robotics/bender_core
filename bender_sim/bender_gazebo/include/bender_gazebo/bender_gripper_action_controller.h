@@ -133,11 +133,6 @@ private:
   double stall_timeout_, stall_velocity_threshold_; // Stall related parameters
   double default_max_effort_;                       // Max allowed effort
   double goal_tolerance_;
-  
-  /**
-   * \brief Check for success and publish appropriate result and feedback.
-   **/
-  void checkForSuccess(const ros::Time& time, std::vector<double>& error_position, std::vector<double>& current_position, std::vector<double>& current_velocity);
 
 };
 

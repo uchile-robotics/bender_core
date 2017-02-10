@@ -1,18 +1,38 @@
+# hokuyo laserscan configuration for urg_node ROS node
+#
+# on bender: frontal laser
+# 
 
+# connection
+serial_port: /dev/bender/sensors/hokuyo_H1311689   # orange
+#serial_port: /dev/bender/sensors/hokuyo_H0804550   # blue
+#serial_port: /dev/bender/sensors/hokuyo_H0903381   # black
+
+# frame
 frame_id: /bender/sensors/laser_front_link
-max_ang:  2.01  # ~ -115 [deg]
-min_ang: -2.01  # ~  115 [deg]
-port: /dev/sensors/hokuyo_H1311689   # orange
-#port: /dev/sensors/hokuyo_H0804550   # blue
-#port: /dev/sensors/hokuyo_H0903381   # black
 
+# angles in radians
+angle_max:  2.01  # ~  115 [deg]
+angle_min: -2.01  # ~ -115 [deg]
 
-allow_unsafe_settings: false
+# Whether the node should calibrate the device's time offset on startup.
+# If true, the node will exchange of series of messages with the device
+# in order to determine the time delay in the connection. This calibration
+# step is necessary to produce accurate timestamps on scans. 
 calibrate_time: true
-cluster: 1
-intensity: false
-time_offset: 0.0
+
+# enforce defaults
+ip_address: ""
+ip_port: 10940
+serial_baud: 115200
+allow_unsafe_settings: false
 skip: 0
+cluster: 1
+time_offset: 0.0
+publish_intensity: false
+publish_multiecho: false
+diagnostics_tolerance: 0.05
+diagnostics_window_time: 5.0
 
 #	max_ang_limit:	read-only
 #	min_ang_limit:	read-only

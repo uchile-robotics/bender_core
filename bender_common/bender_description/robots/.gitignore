@@ -1,0 +1,3 @@
+# Ignore generated robot descriptions
+*.sdf
+*.urdf

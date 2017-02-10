@@ -22,11 +22,14 @@ from core.base import BaseSkill
 from core.sound import SoundSkill
 from core.tts import TTSSkill
 
+from core.light_head import LightHead
+
 from core.arm     import LeftArmSkill, RightArmSkill
 from core.gripper import LeftGripperSkill, RightGripperSkill
 
 # str to Skill class dict
 _str_to_skill = {
+    LightHead._type : LightHead,
     KnowledgeSkill._type : KnowledgeSkill,
     RGBDSkill._type : RGBDSkill,
     LaserSkill._type : LaserSkill,

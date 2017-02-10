@@ -10,7 +10,6 @@ Requisitos
 
 * Ubuntu 14.04 (Trusty)
 * ROS Indigo
-* Gazebo 2.2.5
 
 Instalación
 -----------
@@ -24,13 +23,24 @@ $ rosdep install --from-paths src --ignore-src --rosdistro=indigo -y
 
 ### Añadir OSRF PPA (Ubuntu 14.04 Trusty, ROS Indigo) e instalar Gazebo 7
 
-Permite obtener actualizaciones más reguralares de Gazebo.
+En ROS Indigo usa por defecto Gazebo 2, para obtener nuevas funcionalidades es recomendable usar Gazebo 7, para instalarlo desde `apt-get` es necesario instalar el PPA.
 
 ~~~
 $ sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu trusty main" > /etc/apt/sources.list.d/gazebo-latest.list'
 $ wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 $ sudo apt-get update
-$ sudo apt-get install gazebo7 ros-indigo-gazebo7-ros-pkgs ros-indigo-gazebo7-plugins ros-indigo-gazebo7-ros-control
+~~~
+
+Para desinstalar por completo Gazebo 2 usar:
+
+~~~
+$ sudo apt-get purge gazebo2 libsdformat-dev libsdformat1 ros-indigo-gazebo-msgs ros-indigo-gazebo-plugins ros-indigo-gazebo-ros ros-indigo-gazebo-ros-control ros-indigo-gazebo-ros-pkgs
+~~~
+
+Finalmente, para instalar Gazebo 7 ejecutar en el terminal:
+
+~~~
+$ sudo apt-get install gazebo7 gazebo7-common gazebo7-plugin-base libgazebo7 libgazebo7-dev libsdformat4 libsdformat4-dev ros-indigo-gazebo7-msgs ros-indigo-gazebo7-plugins ros-indigo-gazebo7-ros ros-indigo-gazebo7-ros-control ros-indigo-gazebo7-ros-pkgs sdformat-sdf 
 ~~~
 
 ### Instalar modelos propios
