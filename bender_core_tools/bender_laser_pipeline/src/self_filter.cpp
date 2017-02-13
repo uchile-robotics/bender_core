@@ -7,7 +7,6 @@ bender_laser_pipeline::LaserScanSelfFilter::LaserScanSelfFilter() {
 // TODO: wait for tfs a few seconds while configuring the pipeline
 bool bender_laser_pipeline::LaserScanSelfFilter::configure() {
 
-    bender_utils::ParameterServerWrapper psw;
     bool succeeded = true;
     if (!getParam("target_frames", _target_frames)) {
         ROS_ERROR(
@@ -40,6 +39,7 @@ bool bender_laser_pipeline::LaserScanSelfFilter::configure() {
             succeeded = false;
         }
     }
+    ros::Duration(3).sleep();
     return succeeded;
 }
 
@@ -91,11 +91,12 @@ bool bender_laser_pipeline::LaserScanSelfFilter::update(
             ROS_WARN_STREAM_THROTTLE(1, "Ignoring frame: '"
                     << target_frame.c_str()
                     << "'. Transform Exception: " << ex.what());
+            continue;
         }
 
         // link does not collides with the laser scan plane
         if (fabsf((float)link_point_transformed.point.z) > radius) {
-            return false;
+            continue;
         }
 
         // angular limits

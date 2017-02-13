@@ -30,7 +30,7 @@ cd $WORK_DIR
 #  - - - - - - - - - Download files - - - - - - - - - - - 
 # Download bender_gazebo meshes
 echo "$installer Downloading models"
-"$BENDER_SYSTEM"/shell/megadown/megadown 'https://mega.nz/#!bl9xAZRJ!V2Z8QBmRs7ZmYBh5aJttPynx1Y6ZEd4qLebDxn1RcRk'
+"$BENDER_SYSTEM"/shell/megadown/megadown 'https://mega.nz/#!W5USDRYK!doksKMcdNrF1VVdCr7qrXwp2dFMrrhX8ic8EuEALWqc'
 if [ $? -ne 0 ]; then
     echo "$installer ${red}Error downloading mesh files.${reset}"
     exit 1 # Terminate and indicate error

@@ -70,6 +70,9 @@
 		<arg name="output_scan" value="/bender/sensors/laser_front/scan_filtered"/>
 	</include>
 
+	<!-- footprint generator -->
+	<include file="$(find bender_footprint_generator)/launch/footprint_generator.launch"/>
+
 	<!-- rqt_batteries -->
 	<!--
 	<include file="$(find rqt_batteries)/launch/bender_batteries.launch"/>
