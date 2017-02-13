@@ -7,6 +7,9 @@ from bender_core.robot_skill import RobotSkill
 
 
 class TestSkill(RobotSkill):
+
+    _type = "test_skill"
+
     """
     The TestSkill is intented to run tests on the robot_skill module.
 
