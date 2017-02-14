@@ -159,7 +159,7 @@ class HeadDXL: public DeviceDXL
 	uint8_t getGColor(uint8_t rgb_code){ return colorLevel((rgb_code & 0b00001100)>>2);}
 	uint8_t getBColor(uint8_t rgb_code){ return colorLevel((rgb_code & 0b00000011)>>0);}
 
-	void swapServo(Servo *servo, angle_min, angle_max)
+	void swapServo(Servo *servo, uint8_t angle_min, uint8_t angle_max)
 	{
 		for(uint8_t i=angle_min;i<angle_max;i++)
 		{
@@ -318,7 +318,7 @@ void setup() {
   delay(50);
   
   // Init serial communication using Dynamixel format
-  serialDxl.init(115200, &Serial3 , &head_dxl);
+  serialDxl.init(200000, &Serial3 , &head_dxl);
 
   head_dxl.init(servos_pins, servos, LEDs);
   head_dxl.SetDefaulState(servos, LEDs);

@@ -35,7 +35,12 @@ class HeadController(object):
         self.dxl_io = dxl_io
         self.controller_namespace = controller_namespace
         self.port_namespace = port_namespace
-        self.head_interface = HeadHW(dxl_io, dev_id = HeadController.DEV_ID)
+
+        self.state_update_rate = rospy.get_param(self.controller_namespace + '/rate', 2)
+        rospy.logwarn("Using rate: {}".format(self.state_update_rate))
+        self.device_id = rospy.get_param(self.controller_namespace + '/id', 1)
+        rospy.logwarn("Using id: {}".format(self.device_id))
+        self.head_interface = HeadHW(dxl_io, dev_id = self.device_id)
         self.servos_hw = ServosHW(self.head_interface)
         self.emotions_controller = EmotionsManager(self.head_interface, self.servos_hw)
         self.expression_state = ExpressionCommand()
@@ -47,8 +52,12 @@ class HeadController(object):
         
     def initialize(self):
         # Get params and allocate msgs
-        self.state_update_rate = rospy.get_param(self.controller_namespace + '/rate', 2)
+        # self.state_update_rate = rospy.get_param(self.controller_namespace + '/rate', 2)
+        # rospy.logerr("Using rate: {}".format(self.state_update_rate))
+        # self.device_id = rospy.get_param(self.controller_namespace + '/id', 1)
+        # rospy.logerr("Using id: {}".format(self.device_id))
         self.expression_state.expression = "defaulf"
+        return True
 
     def start(self):
         # Create subs, services, publishers, threads

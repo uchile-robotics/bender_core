@@ -3,6 +3,5 @@ head_controller:
     module: head_controller
     package: bender_head
     type: HeadController
-  device:
-    rate: 5
-    id: 1
+  rate: 5
+  id: 16

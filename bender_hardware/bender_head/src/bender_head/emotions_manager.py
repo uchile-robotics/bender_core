@@ -18,9 +18,10 @@ class EmotionsManager(object):
 		self.servos_hw = servos_hw
 		self.actual_expresion = ""
 		# Check param
-		self.emotions = rospy.get_param('~emotions')
-		self.dynamic_emotions = rospy.get_param('~dynamic_emotions')
-		self.colors = rospy.get_param('~eye_colors')
+		rospy.logwarn(rospy.get_namespace())
+		self.emotions = rospy.get_param('emotions')
+		self.dynamic_emotions = rospy.get_param('dynamic_emotions')
+		self.colors = rospy.get_param('eye_colors')
 
 	def get_rgb_colors(self, str_colors):
 		rgb_colors = []
