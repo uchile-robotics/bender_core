@@ -1,24 +1,27 @@
 #!/usr/bin/python
 
-import roslib; roslib.load_manifest('bender_head')
+import roslib
 import time
-from dynamixel_io import DynamixelIO
+from dynamixel_driver.dynamixel_io import DynamixelIO
+
+roslib.load_manifest('bender_head')
 
 # NON ROS HARDWARE INTERFACE
 
 """The ServosHW class allows to actuate the organs (servos) by a percentage, without the need to know the physical restrictions.
-It use the intermediate level methods defined in HeadHWController class.
+It use the intermediate level methods defined in HeadHW.
 IMPORTAT: Modify only if you are sure of physical restrictions of the actuators"""
 
 # Use HW controller
-from head_hw_controller import HeadHWController, SERVO0, SERVO1, SERVO2, SERVO3, SERVO4, SERVO5
+from head_hw import HeadHW, SERVO0, SERVO1, SERVO2, SERVO3, SERVO4, SERVO5
 
 class ServosHW(object):
 	def __init__(self, hw_controller):
 		self.hw_controller = hw_controller
 
 	def remapRange(self, value, toLow, toHigh):
-		if (value<0 or value>100): return "Warning value out of range"
+		if (value<0 or value>100):
+			return "Warning value out of range"
 		fromLow = 0
 		fromHigh = 100
 		new_range = toHigh-toLow
@@ -60,7 +63,7 @@ class ServosHW(object):
 if __name__ == '__main__':
 	DEV_ID = 1
 	dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
-	hw_controller = HeadHWController(dxl, dev_id = DEV_ID)
+	hw_controller = HeadHW(dxl, dev_id = DEV_ID)
 	servos = ServosHW(hw_controller)
 	while True:
 		servos.left_ear(50)

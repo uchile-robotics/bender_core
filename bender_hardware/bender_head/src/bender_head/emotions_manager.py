@@ -9,10 +9,10 @@ import time
 and facial gestures defined in FacialGestures class. This interface is used for ros interface."""
 
 # Use HW controllers
-from head_hw_controller import HeadHWController
+from head_hw import HeadHW
 from servos_hw import ServosHW
 
-class EmotionsController(object):
+class EmotionsManager(object):
 	def __init__(self, hw_controller, servos_hw):
 		self.hw_controller = hw_controller
 		self.servos_hw = servos_hw
@@ -79,9 +79,9 @@ class EmotionsController(object):
 # if __name__ == '__main__':
 # 	DEV_ID = 1
 # 	dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
-# 	hw_controller = HeadHWController(dxl, dev_id = DEV_ID)
+# 	hw_controller = HeadHW(dxl, dev_id = DEV_ID)
 # 	servos_hw = ServosHW(hw_controller)
-# 	emotions_controller = EmotionsController(hw_controller, servos_hw)
+# 	emotions_controller = EmotionsManager(hw_controller, servos_hw)
 # 	test_emotions = ['sad', 'surprised', 'angry', 'happy', 'apagado']
 # 	for emotion in test_emotions:
 # 		emotions_controller.set_emotion(emotion)

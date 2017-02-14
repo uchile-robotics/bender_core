@@ -1,14 +1,15 @@
 #!/usr/bin/python
 
-import roslib; roslib.load_manifest('bender_head')
+import roslib
 import sys
 import time
-#from dynamixel_driver.dynamixel_io import DynamixelIO
-from dynamixel_io import DynamixelIO
+from dynamixel_driver.dynamixel_io import DynamixelIO
+
+roslib.load_manifest('bender_head')
 
 # NON ROS HARDWARE INTERFACE
 
-"""The HeadHWController class provides low-level methods to control the 'Servos & LEDs arduino device'
+"""The HeadHW class provides low-level methods to control the 'Servos & LEDs arduino device'
 using Dynamixel protocol, provided by DynamixelIO class.
 IMPORTANT: Modify only if you are sure of hardware specifications. See Documentation"""
 
@@ -23,7 +24,7 @@ SERVO5 = 5
 LED_SELECT_STATE = 8
 LED_COLOR_STATE = 9
 
-class HeadHWController(object):
+class HeadHW(object):
 	#red = 
 	def __init__(self, dxl_io, dev_id = 1):
 		self.dxl = dxl_io
@@ -46,8 +47,10 @@ class HeadHWController(object):
 		except Exception as e:
 			print 'Exception thrown while reading addres %d' % (state_variable)
 			return e
-		if (state_variable == LED_COLOR_STATE): self.state = [(result[5] & int('0b00110000',2))>>4, (result[5] & int('0b00001100',2))>>2, (result[5] & int('0b00000011',2))]
-		else: self.state = [result[5]]
+		if (state_variable == LED_COLOR_STATE):
+			self.state = [(result[5] & int('0b00110000',2))>>4, (result[5] & int('0b00001100',2))>>2, (result[5] & int('0b00000011',2))]
+		else:
+			self.state = [result[5]]
 		return self.state
 
 	def select_command(self, com = 1):
@@ -81,19 +84,23 @@ class HeadHWController(object):
 		return
 
 	def swapServo(self, servo_i):
-		for i in range(180): self.moveServoTo(servo_i, i)
-		for i in range(180,0,-1): self.moveServoTo(servo_i, i)
+		for i in range(180):
+			self.moveServoTo(servo_i, i)
+		for i in range(180,0,-1):
+			self.moveServoTo(servo_i, i)
 
 	def parallelSwapServos(self):
 		for pos in range(0,180,10):
-			for servo_i in range(5): self.moveServoTo(servo_i, pos)
+			for servo_i in range(5):
+				self.moveServoTo(servo_i, pos)
 
 		for pos in range(180,0,-10):
-			for servo_i in range(5): self.moveServoTo(servo_i, pos)
+			for servo_i in range(5):
+				self.moveServoTo(servo_i, pos)
 
 	def updateLedColor(self, numLed, r_color, g_color, b_color):
 		if (numLed < 0) or (numLed > 36):
-			print 'command %d out of range' % (com)
+			print 'LED %d out of range' % (numLed)
 			#return
 		result = []
 		color_code = (r_color<<4) | (g_color<<2) | b_color
@@ -134,7 +141,7 @@ class HeadHWController(object):
 			print "parameter eye must be <left> or <right>, <%s> given" %(eye)
 			return
 		if len(rgb_colors)!=16:
-			print "bad number of colors: %d. Must be 16" %(len(colors))
+			print "bad number of colors: %d. Must be 16" %(len(rgb_colors))
 			return
 		if (eye=="left"):
 			#print "left"
@@ -155,14 +162,14 @@ class HeadHWController(object):
 		if (len(leds)!=len(rgb_colors)):
 			print "The number of LEDs must be the same as the number of colors. %d leds and %d colors given"
 			return
-		for i_led in range(len(leds)): self.updateLedColor(leds[i_led], rgb_colors[i_led][0], rgb_colors[i_led][1], rgb_colors[i_led][2])
+		for i_led in range(len(leds)):
+			self.updateLedColor(leds[i_led], rgb_colors[i_led][0], rgb_colors[i_led][1], rgb_colors[i_led][2])
 		self.updateLedColor_ready()
 
 if __name__ == '__main__':
-	import time
 	DEV_ID = 1
 	dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 115200)
-	head = HeadHWController(dxl, dev_id = DEV_ID)
+	head = HeadHW(dxl, dev_id = DEV_ID)
 	red = [1,0,0]
 	green = [0,1,0]
 	blue = [0,0,1]
