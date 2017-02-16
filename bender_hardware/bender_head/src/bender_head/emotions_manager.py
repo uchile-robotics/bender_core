@@ -38,7 +38,7 @@ class EmotionsManager(object):
 		left_eye_colors = self.get_rgb_colors(emo['eyes']['left_eye'])
 		right_eye_colors = self.get_rgb_colors(emo['eyes']['right_eye'])
 		self.hw_controller.set_eye_colors("left", left_eye_colors)
-		self.hw_controller.set_eye_colors("right", left_eye_colors[::-1])
+		self.hw_controller.set_eye_colors('right', left_eye_colors)
 
 		if (emo['servos']!='NonUsed'):
 			self.servos_hw.left_ear(emo['servos']['left_ear'])
@@ -56,7 +56,7 @@ class EmotionsManager(object):
 			self.hw_controller.set_eye_colors('left', left_eye_colors)
 		if emo['right_eye'] != 'NonUsed':
 			right_eye_colors = self.get_rgb_colors(emo['right_eye'])
-			self.hw_controller.set_eye_colors('right', left_eye_colors[::-1])
+			self.hw_controller.set_eye_colors('right', left_eye_colors)
 		
 		movements = emo['sizes']
 		max_iter = max(movements)

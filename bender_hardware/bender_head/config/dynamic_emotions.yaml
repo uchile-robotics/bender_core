@@ -2,8 +2,8 @@ dynamic_emotions:
     veryHappy:
         #LEDs colors
         #This are always set first
-        left_eye: [black, black, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black]
-        right_eye: [black, black, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black]
+        left_eye: [black, black, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black, black, black, black, black]
+        right_eye: [black, black, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black, black, black, black, black]
         #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
         #Orden execution: for each element in array, is set: 
         #left_ear, right_ear, left_eyebrow, right_eyebrow, mouth, and so on with the next element, if exist the element for the part
@@ -12,14 +12,14 @@ dynamic_emotions:
         right_ear: [40, 20, 60, 30, 90, 40]
         left_eyebrow: [70]
         right_eyebrow: [70]
-        mouth: [20]
+        mouth: [60]
         sizes: [1, 6, 1, 1, 1]
         time: 400.0
     eyebrow1313:
         #LEDs colors
         #This are always set first
-        left_eye: [blue,blue,blue,red,red,red,black,black,black,blue,red,blue,green,green,green,green]
-        right_eye: [blue,blue,blue,red,red,red,black,black,black,blue,red,blue,green,green,green,green]
+        left_eye: [blue,blue,blue,red,red,red,black,black,black,blue,red,blue,green,green,green,green, black, black, black, black]
+        right_eye: [blue,blue,blue,red,red,red,black,black,black,blue,red,blue,green,green,green,green, black, black, black, black]
         #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
         #Orden execution: for each element in array, is set: 
         #left_ear, right_ear, left_eyebrow, right_eyebrow, mouth, and so on with the next element, if exist the element for the part
@@ -33,8 +33,8 @@ dynamic_emotions:
         time: 150.0
     fear:
         #LEDs colors
-        left_eye: [magenta, blue, magenta, blue, magenta, black, black, black, black, magenta, blue, magenta, blue, black, black, black]
-        right_eye: [yellow3, yellow3, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black]
+        left_eye: [magenta, blue, magenta, blue, magenta, black, black, black, black, magenta, blue, magenta, blue, black, black, black, black, black, black, black]
+        right_eye: [yellow3, yellow3, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black, black, black, black, black]
         #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
         left_ear: [0]
         right_ear: [0]
@@ -72,8 +72,8 @@ dynamic_emotions:
         #time in miliseconds
     test2:
         #LEDs colors
-        left_eye: [yellow2, yellow2, yellow2, yellow2, black, black, black, black, yellow2, yellow2, yellow2, black, black, black, black, black]
-        right_eye: [yellow3, yellow3, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black]
+        left_eye: [yellow2, yellow2, yellow2, yellow2, black, black, black, black, yellow2, yellow2, yellow2, black, black, black, black, black, black, black, black, black]
+        right_eye: [yellow3, yellow3, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black, black, black, black, black]
         #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
         left_ear: [70, 45, 70, 45, 70, 70, 70, 70, 45, 55, 70, 70, 70, 70, 55, 70, 45, 70]
         right_ear: [70, 45, 70, 45, 70, 70, 70, 70, 45, 55, 70, 70, 70, 70, 55, 70, 45, 70]

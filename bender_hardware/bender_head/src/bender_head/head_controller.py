@@ -87,7 +87,7 @@ class HeadController(object):
             self.emotions_controller.set_dynamic_emotion(msg.expression)
         elif (msg.expression == "id"):
             device_id = self.head_interface.get_state(3)
-            print("device_id = "+str(device_id))
+            rospy.logwarn("device_id = "+str(device_id))
         elif (msg.expression[0] == "-"):
             self.emotions_controller.moveNeck(int(msg.expression[1:]))
         else:
@@ -101,6 +101,15 @@ class HeadController(object):
             print('STDMSG: Mover servo a:'+str(msg.X))
             self.joystick_msg.expression = '-'+str(msg.X)
             self.joy_pub.publish(self.joystick_msg)
+        elif (msg.Order == "changeID"):
+            try: 
+                new_id = int(msg.X)
+                self.head_interface.change_id(new_id)
+                device_id = self.head_interface.get_state(3)
+                rospy.logwarn("New device_id = "+str(device_id))
+                self.device_id = device_id
+            except:
+                rospy.logerr("Invalid ID: {}, should be an Integer".format(msg.X))
 
 
     def list_expressions(self, msg):

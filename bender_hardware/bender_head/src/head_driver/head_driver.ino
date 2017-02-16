@@ -140,7 +140,8 @@ class HeadDXL: public DeviceDXL
 		for(uint8_t i=0; i<size; i++)
 		{
 			LEDs_ring1->setPixelColor(i, R_colors[i], G_colors[i], B_colors[i]);
-			LEDs_ring2->setPixelColor(i, R_colors[i+16], G_colors[i+16], B_colors[i+16]);
+			//LEDs_ring2->setPixelColor(i, R_colors[i+16], G_colors[i+16], B_colors[i+16]);
+     LEDs_ring2->setPixelColor(i, R_colors[i+20], G_colors[i+20], B_colors[i+20]);
 		}
 		LEDs_ring1->show();
 		delay(5);
@@ -198,7 +199,7 @@ class HeadDXL: public DeviceDXL
 	void updateLEDs(Adafruit_NeoPixel LEDs[])
 	{
 		if (led_select_command_.data == 0xFE){	//array of colors updated, ready to show
-			setPixelsTo(&LEDs[0], &LEDs[1], R_colors_, G_colors_, B_colors_, 16); //show colors in LEDs
+			setPixelsTo(&LEDs[0], &LEDs[1], R_colors_, G_colors_, B_colors_, 20); //show colors in LEDs
 			//DEBUG_PRINTLN("show command (0xFE)");
 		}
 		else if (led_select_command_.data == 0xFD){	//updating array of colors
@@ -231,17 +232,38 @@ class HeadDXL: public DeviceDXL
     void SetDefaulState(Servo servos[], Adafruit_NeoPixel LEDs[])
     {
     	//Default colors
-		uint8_t R_colors_default[32] = {0,0,0,153,153,153,0,0,0,0,153,0,0,0,0,0,0,0,0,153,153,153,0,0,0,0,153,0,0,0,0,0};
-		uint8_t G_colors_default[32] = {0,0,0,0,0,0,0,0,0,0,0,0,153,153,153,153,0,0,0,0,0,0,0,0,0,0,0,0,153,153,153,153};
-		uint8_t B_colors_default[32] = {153,153,153,0,0,0,0,0,0,153,0,153,0,0,0,0,153,153,153,0,0,0,0,0,0,153,0,153,0,0,0,0};
+		uint8_t R_colors_default[40] = {
+		  0, 0, 0, 153, 153, 153, 0, 0, //1-8
+		  0, 0, 153, 0, 0, 0, 0, 0,     //9-16
+		  102, 0, 0, 102,               //17-20
+     
+		  0, 0, 0, 153, 153, 153, 0, 0, //21-28
+		  0, 0, 153, 0, 0, 0, 0, 0,     //29-36
+		  102, 0, 0, 102};              //37-40
+		uint8_t G_colors_default[40] = {
+		  0, 0, 0, 0, 0, 0, 0, 0,         //1-8
+		  0, 0, 0, 0, 153, 153, 153, 153, //9-16
+		  0, 102, 0, 102,                 //17-20
+     
+		  0, 0, 0, 0, 0, 0, 0, 0,         //21-28
+		  0, 0, 0, 0, 153, 153, 153, 153, //29-36
+		  0, 102, 0, 102};                //37-40
+		uint8_t B_colors_default[40] = {
+		  153, 153, 153, 0, 0, 0, 0, 0, //1-8
+		  0, 153, 0, 153, 0, 0, 0, 0,   //9-16
+		  0, 0, 102, 0,                 //17-20
+     
+		  153, 153, 153, 0, 0, 0, 0, 0, //21-28
+		  0, 153, 0, 153, 0, 0, 0, 0,   //29-36
+		  0, 0, 102, 0};                //37-40
 		
-    	moveServoTo(&servos[0], 50);
+    moveServoTo(&servos[0], 50);
 		moveServoTo(&servos[1], 120);
 		moveServoTo(&servos[2], 100);
 		moveServoTo(&servos[3], 120);
 		moveServoTo(&servos[4], 100);
 		moveServoTo(&servos[5], 100);
-		setPixelsTo(&LEDs[0], &LEDs[1], R_colors_default, G_colors_default, B_colors_default, 16); //show colors in LEDs
+		setPixelsTo(&LEDs[0], &LEDs[1], R_colors_default, G_colors_default, B_colors_default, 20); //show colors in LEDs
     }
 
     inline bool onReset()
@@ -280,9 +302,9 @@ class HeadDXL: public DeviceDXL
     MMap::VariablePtr varList_[SERVO_MMAP_SIZE];
 	
 	//LEDs colors
-	uint8_t R_colors_[32] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-	uint8_t G_colors_[32] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-	uint8_t B_colors_[32] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	uint8_t R_colors_[40] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	uint8_t G_colors_[40] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	uint8_t B_colors_[40] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	uint8_t led_to_change_ = 0;
 	uint8_t new_color_code_ = 0;
 	
@@ -303,8 +325,8 @@ Servo servos[]={servo0, servo1, servo2, servo3, servo4, servo5};
 uint8_t servos_pins[] = {pin_servo0, pin_servo1, pin_servo2, pin_servo3, pin_servo4, pin_servo5};
 
 //Objetos para manejar los LEDs
-Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(pixelNumber, data_led_pin1, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(pixelNumber, data_led_pin2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(pixelNumber+4, data_led_pin1, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(pixelNumber+4, data_led_pin2, NEO_GRB + NEO_KHZ800);
 
 Adafruit_NeoPixel LEDs[] = {strip1, strip2};
 

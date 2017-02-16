@@ -4,4 +4,4 @@ head_controller:
     package: bender_head
     type: HeadController
   rate: 5
-  id: 16
+  id: 35

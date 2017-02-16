@@ -53,6 +53,21 @@ class HeadHW(object):
 			self.state = [result[5]]
 		return self.state
 
+	def change_id(self, new_id):
+		if new_id<32:
+			print 'Not Allow ID:%d. Must be greater than 31' % (new_id)
+			return
+		
+		result = []
+		try:
+			result = self.dxl.write(self.id, 3, [new_id])
+			if result>0:
+				self.id = new_id
+		except Exception as e:
+			print 'Exception thrown while writing addres %d' % (SERVO_SELECT_STATE)
+			raise e
+		return result
+
 	def select_command(self, com = 1):
 		if (com != SERVO0) and (com != SERVO1) and (com != SERVO2) and (com != SERVO3) and (com != SERVO4) and (com != SERVO5) and (com != 6):
 			print 'Unknown command %d' % (com)
@@ -99,7 +114,7 @@ class HeadHW(object):
 				self.moveServoTo(servo_i, pos)
 
 	def updateLedColor(self, numLed, r_color, g_color, b_color):
-		if (numLed < 0) or (numLed > 36):
+		if (numLed < 0) or (numLed > 40):
 			print 'LED %d out of range' % (numLed)
 			#return
 		result = []
@@ -137,25 +152,49 @@ class HeadHW(object):
 		self.updateLedColor_ready()
 
 	def set_eye_colors(self, eye, rgb_colors):
+		n_leds = 20
 		if (eye!="left" and eye!="right"):
 			print "parameter eye must be <left> or <right>, <%s> given" %(eye)
 			return
-		if len(rgb_colors)!=16:
-			print "bad number of colors: %d. Must be 16" %(len(rgb_colors))
+		if len(rgb_colors)!=n_leds:
+			print "bad number of colors: %d. Must be 20" %(len(rgb_colors))
 			return
 		if (eye=="left"):
 			#print "left"
-			first_led = 0
-			last_led = 16
+			for i_led in range(0,n_leds,1):
+				color = rgb_colors[i_led]
+				r_color = color[0]
+				g_color = color[1]
+				b_color = color[2]
+				self.updateLedColor(i_led, r_color, g_color, b_color)
 		else:
 			#print "right"
-			first_led = 16
-			last_led = 32
-		for i_led in range(first_led,last_led,1):
-			r_color = rgb_colors[i_led-16][0]
-			g_color = rgb_colors[i_led-16][1]
-			b_color = rgb_colors[i_led-16][2]
-			self.updateLedColor(i_led, r_color, g_color, b_color)
+			"""
+			Map:
+			20 -> 15
+			21 -> 14
+			22 -> 13
+			...
+			35 -> 0
+
+			36 -> 16
+			37 -> 17
+			38 -> 18
+			39 -> 19
+			"""
+			for i_led in range(n_leds,2*n_leds-4,1): #i:20->35
+				color = rgb_colors[2*n_leds - i_led - 5]
+				r_color = color[0]
+				g_color = color[1]
+				b_color = color[2]
+				self.updateLedColor(i_led, r_color, g_color, b_color)
+			for i_led in range(2*n_leds-4,2*n_leds,1): #i:36->39
+				color = rgb_colors[i_led - 20]
+				r_color = color[0]
+				g_color = color[1]
+				b_color = color[2]
+				self.updateLedColor(i_led, r_color, g_color, b_color)
+		#Colors Updated
 		self.updateLedColor_ready()
 
 	def set_this_leds_to(self, leds, rgb_colors):
