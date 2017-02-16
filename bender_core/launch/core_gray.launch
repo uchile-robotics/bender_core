@@ -5,10 +5,10 @@
 	<!-- ================================================== -->
 	
 	<!-- visualization -->
-	<arg name="rviz"       default="false"/>
+	<arg name="rviz"       default="true"/>
 
 	<!-- robot configuration -->
-	<arg name="model_type"     default="light_head"/>
+	<arg name="model_type"     default="mask_head"/>
 	<arg name="tf_gui"         default="false"/>
 	<arg name="language"       default="english"/>
 	
