@@ -23,9 +23,8 @@ add_message_files(
   CylindricalObject.msg
   data_follow.msg
   detections.msg
-  Emotion.msg
+  FaceEmotion.msg
   EmotionDetect.msg
-  ExpressionCommand.msg
   FKinfo.msg
   grip.msg
   KinectTrackerData.msg

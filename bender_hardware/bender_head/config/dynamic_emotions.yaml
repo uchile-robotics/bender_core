@@ -13,8 +13,7 @@ dynamic_emotions:
         left_eyebrow: [70]
         right_eyebrow: [70]
         mouth: [60]
-        sizes: [1, 6, 1, 1, 1]
-        time: 400.0
+        time: 200.0
     eyebrow1313:
         #LEDs colors
         #This are always set first
@@ -29,57 +28,36 @@ dynamic_emotions:
         left_eyebrow: [80, 50, 80, 50]
         right_eyebrow: [80, 50, 80, 50]
         mouth: [60]
-        sizes: [1,1,4,4,1]
         time: 150.0
     fear:
         #LEDs colors
         left_eye: [magenta, blue, magenta, blue, magenta, black, black, black, black, magenta, blue, magenta, blue, black, black, black, black, black, black, black]
-        right_eye: [yellow3, yellow3, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black, black, black, black, black]
+        right_eye: [magenta, blue, magenta, blue, magenta, black, black, black, black, magenta, blue, magenta, blue, black, black, black, black, black, black, black]
         #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
         left_ear: [0]
         right_ear: [0]
         left_eyebrow: [80, 85, 80, 85, 78, 83,80, 85, 80, 85, 78, 83, 80, 85, 80, 85, 78, 83, 80, 85, 80, 85, 78, 83]
         right_eyebrow: [80 , 85, 80, 85, 78, 83, 80 , 85, 80, 85, 78, 83, 80 , 85, 80, 85, 78, 83, 80 , 85, 80, 85, 78, 83]
         mouth: [20, 25, 20, 25, 21, 26 , 21, 26, 20, 25, 20, 25, 21, 26 , 21, 25, 20, 24, 20, 25, 21, 26,21,26]
-        sizes: [1, 1, 24, 24, 24]
         time: 50.0
         #time in miliseconds
     talk1:
-        #LEDs colors
-        left_eye: NonUsed
-        right_eye: NonUsed
-        #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
-        left_ear: NonUsed
-        right_ear: NonUsed
-        left_eyebrow: NonUsed
-        right_eyebrow: NonUsed
         mouth: [10, 70, 10, 90, 50]
-        sizes: [1, 1, 1, 1, 5]
         time: 110.0
         #time in miliseconds
     talk2:
-        #LEDs colors
-        left_eye: NonUsed
-        right_eye: NonUsed
-        #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
-        left_ear: NonUsed
-        right_ear: NonUsed
-        left_eyebrow: NonUsed
-        right_eyebrow: NonUsed
         mouth: [30, 80, 20 ,60]
-        sizes: [1, 1, 1, 1, 4]
         time: 110.0
         #time in miliseconds
     test2:
         #LEDs colors
         left_eye: [yellow2, yellow2, yellow2, yellow2, black, black, black, black, yellow2, yellow2, yellow2, black, black, black, black, black, black, black, black, black]
-        right_eye: [yellow3, yellow3, black, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black, black, black, black, black]
+        right_eye: [yellow2, yellow2, yellow2, yellow2, black, black, black, black, yellow2, yellow2, yellow2, black, black, black, black, black, black, black, black, black]
         #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
         left_ear: [70, 45, 70, 45, 70, 70, 70, 70, 45, 55, 70, 70, 70, 70, 55, 70, 45, 70]
         right_ear: [70, 45, 70, 45, 70, 70, 70, 70, 45, 55, 70, 70, 70, 70, 55, 70, 45, 70]
         left_eyebrow: [45]
         right_eyebrow: [45]
         mouth: [10, 70, 10, 90, 10, 10, 10, 10, 70, 90, 10, 10, 10, 10, 90, 10, 90, 10]
-        sizes: [18, 18, 1, 1, 18]
         time: 110.0
         #time in miliseconds

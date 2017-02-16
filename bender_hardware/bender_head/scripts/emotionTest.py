@@ -9,11 +9,8 @@ __author__ = 'gdiaz'
 
 import rospy
 import time
-
-from threading import Thread
-
-from  head_controller import HeadController
-from bender_msgs.msg import Emotion
+    
+from bender_msgs.msg import FaceEmotion
 
 class EmotionTest(object):
 
@@ -21,7 +18,7 @@ class EmotionTest(object):
         # Only argument stuff
         self.running = False
         self.state_update_rate = 5
-        self.msg = Emotion()
+        self.msg = FaceEmotion()
         self.emotions = rospy.get_param('/bender/emotions')
         self.dynamic_emotions = rospy.get_param('/bender/dynamic_emotions')
 
@@ -30,30 +27,24 @@ class EmotionTest(object):
         self.running = True
         #subscribers
         #publishers
-        self.emotion_pub = rospy.Publisher('/bender/test_port_manager/cmd', Emotion, queue_size = 50)
+        self.emotion_pub = rospy.Publisher('/bender/led_head_controller/emotion_cmd', FaceEmotion, queue_size = 50)
         # Thread(target=self.run_test).start()
 
-    def stop(self):
-        self.running = False
-        self.emotion_pub.unregister()
-
-    def run_test(self):
+    def run_static(self):
         # rate = rospy.Rate(self.state_update_rate)
         # while self.running and not rospy.is_shutdown():
         rospy.logwarn("Starting Static Emotions Test")
         for emotion, values in self.emotions.iteritems():
             rospy.loginfo("Emotion: {}".format(emotion))
-            self.msg.Order = "changeFace"
-            self.msg.Action = emotion
-            self.msg.X = 0
+            self.msg.emotion_name = emotion
             self.emotion_pub.publish(self.msg)
-            time.sleep(5)
+            time.sleep(2)
+
+    def run_dynamic(self):
         rospy.logwarn("Starting Dynamic Emotions Test")
         for emotion, values in self.dynamic_emotions.iteritems():
             rospy.loginfo("Emotion: {}".format(emotion))
-            self.msg.Order = "changeFace"
-            self.msg.Action = emotion
-            self.msg.X = 0
+            self.msg.emotion_name = emotion
             self.emotion_pub.publish(self.msg)
             time.sleep(5)
             # rate.sleep()
@@ -62,5 +53,4 @@ if __name__ == '__main__':
     rospy.init_node('Test_Emotions')
     emotions_test = EmotionTest()
     emotions_test.start()
-    emotions_test.run_test()
-    emotions_test.stop()
+    emotions_test.run_static()

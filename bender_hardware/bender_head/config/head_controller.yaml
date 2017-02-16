@@ -1,7 +1,0 @@
-head_controller:
-  controller:
-    module: head_controller
-    package: bender_head
-    type: HeadController
-  rate: 5
-  id: 35

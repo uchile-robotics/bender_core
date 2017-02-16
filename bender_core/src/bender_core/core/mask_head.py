@@ -3,7 +3,7 @@
 """
 Joint space control using joint trajectory action
 """
-__author__ = "Rodrigo Muñoz"
+__author__ = "Cristopher Gomez, Rodrigo Munoz"
 
 import copy
 from threading import Lock
@@ -52,7 +52,7 @@ class MaskHeadSkill(RobotSkill):
         super(MaskHeadSkill, self).__init__()
         self._description = "Joint space control for mask head"
         # Head topic
-        self._jta_topic = "/bender/head_controller/follow_joint_trajectory"
+        self._jta_topic = "/bender/head_controlle/follow_joint_trajectory"
         # Name
         self.name = MaskHeadSkill._type
         # Joint names
@@ -67,7 +67,7 @@ class MaskHeadSkill(RobotSkill):
         self._jta_client = None
         # Only for check, joint states is obtained using robot context
         self._joint_state_topic = self.context.get_joint_state_topic()
-
+        
     def get_joint_state(self):
         """
         Get current joint state.
