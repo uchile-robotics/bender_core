@@ -38,8 +38,8 @@ emotions:
   angry3:
     eyes:
         #LEDs colors
-        left_eye: [red,red,red,red,red,black,black,black,red,red,red,red,black,black,red,red,red,red,yellow3,red]
-        right_eye: [red,red,red,red,black,black,black,black,black,red,black,black,black,black,black,black,red,red,yellow3,red]
+        left_eye: [red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,black,black,black,black]
+        right_eye: [red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,red3,black,black,black,black]
     servos:
         #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
         left_ear: 20
@@ -152,3 +152,17 @@ emotions:
         left_eye: [white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3, black, black, black, black]
         right_eye: [white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3,white3, black, black, black, black]
     servos: NonUsed
+
+  neutral:
+    #LEDs colors
+    eyes:
+        left_eye: [black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black]
+        right_eye: [black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black]
+    #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
+    servos:
+        #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
+        left_ear: 50
+        right_ear: 50
+        left_eyebrow: 50
+        right_eyebrow: 45
+        mouth: 30
