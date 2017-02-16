@@ -20,6 +20,9 @@ class EmotionsManager(object):
         self.emotions = rospy.get_param('emotions')
         self.dynamic_emotions = rospy.get_param('dynamic_emotions')
         self.colors = rospy.get_param('eye_colors')
+        self.led_colors = dict()
+        self.led_colors['eyes'] = {'left' : ['black']*16, 'right' : ['black']*16} 
+        self.led_colors['cheeks'] = {'left' : ['black']*4, 'right' : ['black']*4} 
         self.led_length = {'cheeks': 4, 'eyes': 16}
 
     def get_rgb_colors(self, str_colors):
@@ -29,25 +32,23 @@ class EmotionsManager(object):
             rgb_colors.append(rgb_color)
         return rgb_colors
 
-    def moveNeck(self, angle):      
-        self.servos_hw.neck(angle)
-
     def _get_color_config(self, emo, part, side):
         colors = None
         if part in emo and side in emo[part]:
-            colors = self.get_rgb_colors(emo[part][side])
+            colors = emo[part][side]
         else:
-            colors = self.get_rgb_colors(['black']*self.led_length[part])
+            colors = ['black']*self.led_length[part]
         return colors
 
     def set_emotion(self, emotion):
         emo = self.emotions[emotion]
-        # For some reason cheeks are inverted
-        left_eye_colors = self._get_color_config(emo, 'eyes', 'left') + self._get_color_config(emo, 'cheeks', 'right') 
-        right_eye_colors = self._get_color_config(emo, 'eyes', 'right') + self._get_color_config(emo, 'cheeks', 'left')
-
-        self.hw_controller.set_eye_colors('left', left_eye_colors)
-        self.hw_controller.set_eye_colors('right', right_eye_colors)
+        self.led_colors['eyes']['left']     = self._get_color_config(emo, 'eyes', 'left')
+        self.led_colors['cheeks']['left']   = self._get_color_config(emo, 'cheeks', 'left')
+        self.led_colors['eyes']['right']    = self._get_color_config(emo, 'eyes', 'right')
+        self.led_colors['cheeks']['right']  = self._get_color_config(emo, 'cheeks', 'right')
+        # Send command, for some reason cheeks are inverted
+        self.hw_controller.set_eye_colors('left', self.get_rgb_colors(self.led_colors['eyes']['left'] + self.led_colors['cheeks']['right']))
+        self.hw_controller.set_eye_colors('right', self.get_rgb_colors(self.led_colors['eyes']['right'] + self.led_colors['cheeks']['left']))
         if 'servos' in emo:
             self.servos_hw.left_ear(emo['servos']['left_ear'])
             self.servos_hw.right_ear(emo['servos']['right_ear'])
@@ -57,16 +58,24 @@ class EmotionsManager(object):
 
         self.actual_emotion = emotion
 
+    def _get_update_color_config(self, emo, part, side):
+        colors = None
+        if part in emo and side in emo[part]:
+            colors = emo[part][side]
+        else:
+            colors = self.led_colors[part][side]
+        return colors
+
     def set_dynamic_emotion(self, emotion):
         emo = self.dynamic_emotions[emotion]
-        if 'left_eye' in emo:
-            left_eye_colors = self.get_rgb_colors(emo['left_eye'])
-            self.hw_controller.set_eye_colors('left', left_eye_colors)
-        if 'right_eye' in emo:
-            # Use inverted
-            right_eye_colors = self.get_rgb_colors(emo['right_eye'])
-            self.hw_controller.set_eye_colors('right', right_eye_colors)
-
+        self.led_colors['eyes']['left']     = self._get_update_color_config(emo, 'eyes', 'left')
+        self.led_colors['cheeks']['left']   = self._get_update_color_config(emo, 'cheeks', 'left')
+        self.led_colors['eyes']['right']    = self._get_update_color_config(emo, 'eyes', 'right')
+        self.led_colors['cheeks']['right']  = self._get_update_color_config(emo, 'cheeks', 'right')
+        # Send command, for some reason cheeks are inverted
+        self.hw_controller.set_eye_colors('left', self.get_rgb_colors(self.led_colors['eyes']['left'] + self.led_colors['cheeks']['right']))
+        self.hw_controller.set_eye_colors('right', self.get_rgb_colors(self.led_colors['eyes']['right'] + self.led_colors['cheeks']['left']))
+        
         max_iter = 0
         for emotion in emo:
             if emotion == 'time':
