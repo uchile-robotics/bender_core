@@ -5,15 +5,15 @@
 	<!-- ================================================== -->
 	
 	<!-- visualization -->
-	<arg name="rviz"       default="true"/>
+	<arg name="rviz"       default="false"/>
 
 	<!-- robot configuration -->
 	<arg name="model_type"     default="light_head"/>
 	<arg name="tf_gui"         default="false"/>
-	<arg name="language"       default="spanish"/>
+	<arg name="language"       default="english"/>
 	
 	<!-- available languages: { english , spanish } -->
-	<arg name="show_subtitles" default="true"/>
+	<arg name="show_subtitles" default="false"/>
 
 
 	<!-- robot simulation -->
@@ -42,5 +42,7 @@
 
 	<!-- RVIZ -->
 	<include file="$(find bender_utils)/launch/rviz.launch" if="$(arg rviz)"/>
+	<!-- Batt -->
+	<include file="$(find rqt_batteries)/launch/bender_batteries.launch"/>
 
 </launch>
