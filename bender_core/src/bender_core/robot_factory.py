@@ -12,6 +12,7 @@ import inspect
 import importlib
 import pkgutil
 
+
 def get_classes(package_name, class_type):
     """
     Get specific classes that lies in a package.
@@ -35,6 +36,7 @@ def get_classes(package_name, class_type):
                 class_list.append(obj)
     return class_list
 
+
 def get_skill_dict(packages=list()):
     """
     Get skill dict with {skill._type, skill} entry.
@@ -54,11 +56,13 @@ def get_skill_dict(packages=list()):
             skill_dict.update({skill_class._type : skill_class})
     return skill_dict
 
+
 # Core and skills
 # @TODO Make a config file for robot configuration and avoid robot specific code
 _str_to_skill = get_skill_dict(['bender_core', 'bender_skills'])
 _core_skills = ['sound', 'head', 'laser', 'knowledge', 'tts', 'l_gripper', 'rgbd', 'l_arm', 
     'r_gripper', 'base', 'joy', 'r_arm']
+
 
 def build(skills=_core_skills):
     """
