@@ -54,3 +54,4 @@ if __name__ == '__main__':
     emotions_test = EmotionTest()
     emotions_test.start()
     emotions_test.run_static()
+    emotions_test.run_dynamic()

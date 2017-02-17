@@ -88,20 +88,6 @@ emotions:
             right_eyebrow: 90
             mouth: 0
 
-    sad3:
-        eyes:
-            left: [black, black, black, black, blue, blue, black, blue, blue, black, blue, blue, black, black, black, black]
-            right: [black, black, black, black, blue, blue, black, blue, blue, black, blue, blue, black, black, black, black]
-        cheeks:
-            left: [blue, black, blue, black]
-            right: [blue, black, blue, black]
-        servos:
-            left_ear: 10
-            right_ear: 10
-            left_eyebrow: 90
-            right_eyebrow: 90
-            mouth: 0
-
     happy1:
         eyes:
             left: [black, black, yellow, yellow, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black]

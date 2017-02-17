@@ -58,45 +58,61 @@ class EmotionsManager(object):
 
         self.actual_emotion = emotion
 
-    def _get_update_color_config(self, emo, part, side):
+    def _get_update_color_config(self, emo, part, side, idx=0):
         colors = None
-        if part in emo and side in emo[part]:
-            colors = emo[part][side]
+        if part in emo and side in emo[part] and idx < len(emo[part][side]):
+            colors = emo[part][side][idx]
         else:
             colors = self.led_colors[part][side]
         return colors
 
     def set_dynamic_emotion(self, emotion):
         emo = self.dynamic_emotions[emotion]
-        self.led_colors['eyes']['left']     = self._get_update_color_config(emo, 'eyes', 'left')
-        self.led_colors['cheeks']['left']   = self._get_update_color_config(emo, 'cheeks', 'left')
-        self.led_colors['eyes']['right']    = self._get_update_color_config(emo, 'eyes', 'right')
-        self.led_colors['cheeks']['right']  = self._get_update_color_config(emo, 'cheeks', 'right')
-        # Send command, for some reason cheeks are inverted
-        self.hw_controller.set_eye_colors('left', self.get_rgb_colors(self.led_colors['eyes']['left'] + self.led_colors['cheeks']['right']))
-        self.hw_controller.set_eye_colors('right', self.get_rgb_colors(self.led_colors['eyes']['right'] + self.led_colors['cheeks']['left']))
         
+        # Find largest array
         max_iter = 0
-        for emotion in emo:
-            if emotion == 'time':
+        for part in emo:
+            if part == 'time':
                 continue
-            max_iter = max(max_iter, len(emo[emotion]))
+            for element in emo[part]:
+                max_iter = max(max_iter, len(emo[part][element]))
+
 
         for i in range(max_iter):
-            if 'left_ear' in emo and i < len(emo['left_ear']):
-                self.servos_hw.left_ear(emo['left_ear'][i])
+            if 'servos' in emo:
+                servos = emo['servos']
+                if 'left_ear' in servos and i < len(servos['left_ear']):
+                    self.servos_hw.left_ear(servos['left_ear'][i])
 
-            if 'right_ear' in emo and i < len(emo['right_ear']):
-                self.servos_hw.right_ear(emo['right_ear'][i])
+                if 'right_ear' in servos and i < len(servos['right_ear']):
+                    self.servos_hw.right_ear(servos['right_ear'][i])
 
-            if 'left_eyebrow' in emo and i < len(emo['left_eyebrow']):
-                self.servos_hw.left_eyebrow(emo['left_eyebrow'][i])
+                if 'left_eyebrow' in servos and i < len(servos['left_eyebrow']):
+                    self.servos_hw.left_eyebrow(servos['left_eyebrow'][i])
 
-            if 'right_eyebrow' in emo and i < len(emo['right_eyebrow']):
-                self.servos_hw.right_eyebrow(emo['right_eyebrow'][i])
+                if 'right_eyebrow' in servos and i < len(servos['right_eyebrow']):
+                    self.servos_hw.right_eyebrow(servos['right_eyebrow'][i])
 
-            if 'mouth' in emo and i < len(emo['mouth']):
-                self.servos_hw.mouth(emo['mouth'][i])
+                if 'mouth' in servos and i < len(servos['mouth']):
+                    self.servos_hw.mouth(servos['mouth'][i])
+
+            # Only publish when cmd change with respect to current configuration
+            left_eyes_cmd = self._get_update_color_config(emo, 'eyes', 'left', i)
+            left_cheek_cmd = self._get_update_color_config(emo, 'cheeks', 'left', i)
+            right_eyes_cmd = self._get_update_color_config(emo, 'eyes', 'right', i)
+            right_cheek_cmd = self._get_update_color_config(emo, 'cheeks', 'right', i)
+
+            if left_eyes_cmd != self.led_colors['eyes']['left'] or right_cheek_cmd != self.led_colors['cheeks']['right']:
+                self.led_colors['eyes']['left'] = left_eyes_cmd
+                self.led_colors['cheeks']['right'] = right_cheek_cmd
+                # Send command, for some reason cheeks are inverted
+                self.hw_controller.set_eye_colors('left', self.get_rgb_colors(self.led_colors['eyes']['left'] + self.led_colors['cheeks']['right']))
+            
+            if right_eyes_cmd != self.led_colors['eyes']['right'] or right_cheek_cmd != self.led_colors['cheeks']['left']:
+                self.led_colors['eyes']['right'] = right_eyes_cmd
+                self.led_colors['cheeks']['left'] = left_cheek_cmd
+                # Send command, for some reason cheeks are inverted
+                self.hw_controller.set_eye_colors('right', self.get_rgb_colors(self.led_colors['eyes']['right'] + self.led_colors['cheeks']['left']))
 
             time.sleep(int(emo['time'])/1000.0)
 
