@@ -4,6 +4,6 @@ serial_ports:
   test_port:
     port_name: '/dev/bender/dxl_test'
     baud_rate: 200000
-    min_motor_id: 1
+    min_motor_id: 34
     max_motor_id: 35
     update_rate: 30

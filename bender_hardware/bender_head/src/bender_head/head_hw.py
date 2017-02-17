@@ -1,11 +1,9 @@
 #!/usr/bin/python
 
-import roslib
 import sys
 import time
+import rospy
 from dynamixel_driver.dynamixel_io import DynamixelIO
-
-roslib.load_manifest('bender_head')
 
 # NON ROS HARDWARE INTERFACE
 
@@ -23,6 +21,7 @@ SERVO4 = 4
 SERVO5 = 5
 LED_SELECT_STATE = 8
 LED_COLOR_STATE = 9
+BRIGHTNESS = 10
 
 class HeadHW(object):
 	#red = 
@@ -36,8 +35,8 @@ class HeadHW(object):
 		try:
 			result = self.dxl.ping(self.id)
 		except Exception as e:
-			print 'Exception thrown while pinging device %d - %s' % (self.id, e)
-			raise e
+			rospy.logwarn('Exception thrown while pinging device %d - %s' % (self.id, e))
+			# raise e
 		return result
 
 	def get_state(self, state_variable):
@@ -45,8 +44,8 @@ class HeadHW(object):
 		try:
 			result = self.dxl.read(self.id, state_variable, 1)
 		except Exception as e:
-			print 'Exception thrown while reading addres %d' % (state_variable)
-			return e
+			rospy.logwarn('Exception thrown while writing addres %d' % (state_variable))
+			# return e
 		if (state_variable == LED_COLOR_STATE):
 			self.state = [(result[5] & int('0b00110000',2))>>4, (result[5] & int('0b00001100',2))>>2, (result[5] & int('0b00000011',2))]
 		else:
@@ -64,7 +63,7 @@ class HeadHW(object):
 			if result>0:
 				self.id = new_id
 		except Exception as e:
-			print 'Exception thrown while writing addres %d' % (SERVO_SELECT_STATE)
+			rospy.logwarn('Exception thrown while writing addres %d' % (SERVO_SELECT_STATE))
 			raise e
 		return result
 
@@ -76,8 +75,8 @@ class HeadHW(object):
 		try:
 			result = self.dxl.write(self.id, SERVO_SELECT_STATE, [com])
 		except Exception as e:
-			print 'Exception thrown while writing addres %d' % (SERVO_SELECT_STATE)
-			raise e
+			rospy.logwarn('Exception thrown while writing addres %d' % (SERVO_SELECT_STATE))
+			# raise e
 		return result
 
 	def pos_command(self, com = 0):
@@ -88,9 +87,22 @@ class HeadHW(object):
 		try:
 			result = self.dxl.write(self.id, SERVO_POS_STATE, [com])
 		except Exception as e:
-			print 'Exception thrown while writing addres %d' % (SERVO_SELECT_STATE)
-			raise e
+			rospy.logwarn('Exception thrown while writing addres %d' % (SERVO_SELECT_STATE))
+			# raise e
 		return result
+
+	def set_brightness(self, bright):
+		if (bright < 0) or (bright > 255):
+			print 'brightness %d out of range' % (bright)
+			#return
+		result = []
+		try:
+			result = self.dxl.write(self.id, BRIGHTNESS, [bright])
+		except Exception as e:
+			rospy.logwarn('Exception thrown while writing addres %d' % (BRIGHTNESS))
+			# raise e
+		self.updateLedColor_ready()
+		# return result
 
 	def moveServoTo(self, servo_i, pos):
 		self.select_command(servo_i)	#update servo select value
@@ -127,9 +139,9 @@ class HeadHW(object):
 			result3 = self.dxl.write(self.id, LED_SELECT_STATE, [0xFD]) 	# confirm change in color
 			time.sleep(0.001)
 		except Exception as e:
-			print 'Exception thrown while writing addres %d' % (LED_SELECT_STATE)
-			raise e
-		return result3
+			rospy.logwarn('Exception thrown while writing addres %d' % (LED_SELECT_STATE))
+			# raise e
+		# return result3
 
 	def updateLedColor_ready(self):
 		result = []
@@ -137,15 +149,15 @@ class HeadHW(object):
 			result1 = self.dxl.write(self.id, LED_SELECT_STATE, [0xFE])	# this command shows the color set by updateLedColor
 			time.sleep(0.01)
 		except Exception as e:
-			print 'Exception thrown while writing addres %d, command 0xFE' % (LED_SELECT_STATE)
-			raise e
+			rospy.logwarn('Exception thrown while writing addres %d, command 0xFE' % (LED_SELECT_STATE))
+			# raise e
 		try:
 			result2 = self.dxl.write(self.id, LED_SELECT_STATE, [0xFC])	# this command ends the change in LEDs rings
 			time.sleep(0.01)
 		except Exception as e:
-			print 'Exception thrown while writing addres %d, command 0xFC' % (LED_SELECT_STATE)
-			raise e
-		return result2
+			rospy.logwarn('Exception thrown while writing addres %d, command 0xFC' % (LED_SELECT_STATE))
+			# raise e
+		# return result2
 
 	def changeLedColor(self, numLed, rgb_color):
 		self.updateLedColor(numLed, rgb_color[0], rgb_color[1], rgb_color[2])

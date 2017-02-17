@@ -7,7 +7,7 @@ import random
 
 from threading import Thread
 
-from std_msgs.msg import Bool
+from std_msgs.msg import Bool, UInt8
 from bender_msgs.msg import FaceEmotion
 
 # Use HW interface
@@ -52,6 +52,8 @@ class LedHeadController(object):
         # subscribers
         self.command_sub = rospy.Subscriber(self.controller_namespace + '/emotion_cmd', FaceEmotion, self.process_command)
         self.move_mouth_sub = rospy.Subscriber(self.controller_namespace + '/move_mouth', Bool, self.move_mouth)
+        self.brightness_sub = rospy.Subscriber(self.controller_namespace + '/brightness', UInt8, self.set_brightness)
+
         # publishers
         self.state_pub = rospy.Publisher(self.controller_namespace + '/emotion_state', FaceEmotion, queue_size=50)
         Thread(target=self.update_state).start()
@@ -60,6 +62,9 @@ class LedHeadController(object):
         self.running = False
         self.command_sub.unregister()
         self.state_pub.unregister()
+
+    def set_brightness(self, msg):
+        self.head_interface.set_brightness(msg.data)
 
     def process_command(self, msg):
         if msg.emotion_name in self.static_emotion_list:

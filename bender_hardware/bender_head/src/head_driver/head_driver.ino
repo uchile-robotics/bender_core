@@ -69,7 +69,7 @@ class HeadDXL: public DeviceDXL
     servo_pos_command_(SERVO_POS_COMMAND, MMap::Access::RW, 0U, 180U, 0U), // Servo command 2
 	led_select_command_(LED_SELECT_COMMAND, MMap::Access::RW, 0U, 254U, 0U), // array LEDs command 1
 	led_color_command_(LED_COLOR_COMMAND, MMap::Access::RW, 0U, 254U, 0U), // array LEDs command 2
-	led_brightness_(LED_BRIGHTNESS, MMap::Access::RW, 1U, 5U, 15U) // array LEDs command 3
+	led_brightness_(LED_BRIGHTNESS, MMap::Access::RW, 1U, 255U, 15U) // array LEDs command 3
     {
       // Config pins
       pinMode(dir_pin_, OUTPUT);
@@ -125,7 +125,7 @@ class HeadDXL: public DeviceDXL
       for(uint8_t i=0;i<2;i++)
 	  {
 	  	LEDs[i].begin();
-	    LEDs[i].setBrightness(5);
+	    LEDs[i].setBrightness(15);
 	    LEDs[i].show(); // Initialize all pixels to 'off'
 	  }
     }
@@ -144,15 +144,15 @@ class HeadDXL: public DeviceDXL
      LEDs_ring2->setPixelColor(i, R_colors[i+20], G_colors[i+20], B_colors[i+20]);
 		}
 		LEDs_ring1->show();
-		delayMicroseconds(5);
+		delay(5);
 		LEDs_ring2->show();
-		delayMicroseconds(5);
+		delay(5);
 		DEBUG_PRINTLN("LEDs_rings->show()");
 	}
 
 	uint8_t getRColor(uint8_t rgb_code){ return 36U*((rgb_code & 0b11100000)>>5);}
 	uint8_t getGColor(uint8_t rgb_code){ return 36U*((rgb_code & 0b00011100)>>2);}
-	uint8_t getBColor(uint8_t rgb_code){ return 85U*((rgb_code & 0b00000011)>>0);}
+	uint8_t getBColor(uint8_t rgb_code){ return 72U*((rgb_code & 0b00000011)>>0);}
 
 	void swapServo(Servo *servo, uint8_t angle_min, uint8_t angle_max)
 	{
@@ -193,9 +193,9 @@ class HeadDXL: public DeviceDXL
 	void updateLEDs(Adafruit_NeoPixel LEDs[])
 	{
 		if (led_select_command_.data == 0xFE){	//array of colors updated, ready to show
-      /*LEDs[1].setBrightness(led_brightness_.data);
       LEDs[0].setBrightness(led_brightness_.data);
-      delayMicroseconds(5);*/
+      LEDs[1].setBrightness(led_brightness_.data);
+      delayMicroseconds(5);
 			setPixelsTo(&LEDs[0], &LEDs[1], R_colors_, G_colors_, B_colors_, 20); //show colors in LEDs
 			//DEBUG_PRINTLN("show command (0xFE)");
 		}
@@ -335,7 +335,6 @@ SerialDXL serialDxl;
 void setup() {
   //Serial port for debug
   Serial.begin(115200);
-  delay(50);
   
   // Init serial communication using Dynamixel format
   serialDxl.init(200000, &Serial3 , &head_dxl);
