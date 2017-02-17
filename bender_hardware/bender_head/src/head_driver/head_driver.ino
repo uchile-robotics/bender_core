@@ -17,14 +17,14 @@
  */ 
 
 // We add 5 UInt8 (5 bytes)
-#define SERVO_MMAP_SIZE DEVICEDXL_MIN_BUFFER+4
+#define SERVO_MMAP_SIZE DEVICEDXL_MIN_BUFFER+5
 
 // MMap position for command
 #define SERVO_SELECT_COMMAND DEVICEDXL_MIN_BUFFER
 #define SERVO_POS_COMMAND DEVICEDXL_MIN_BUFFER+1
 #define LED_SELECT_COMMAND DEVICEDXL_MIN_BUFFER+2
 #define LED_COLOR_COMMAND DEVICEDXL_MIN_BUFFER+3
-//#define LED_UPDATE_COLOR_COMMAND DEVICEDXL_MIN_BUFFER+4
+#define LED_BRIGHTNESS DEVICEDXL_MIN_BUFFER+4
 
 // Number of servos in the array
 #define num_servos 6
@@ -68,8 +68,8 @@ class HeadDXL: public DeviceDXL
     servo_select_command_(SERVO_SELECT_COMMAND, MMap::Access::RW, 0U, 7U, 0U), // Servo command 1
     servo_pos_command_(SERVO_POS_COMMAND, MMap::Access::RW, 0U, 180U, 0U), // Servo command 2
 	led_select_command_(LED_SELECT_COMMAND, MMap::Access::RW, 0U, 254U, 0U), // array LEDs command 1
-	led_color_command_(LED_COLOR_COMMAND, MMap::Access::RW, 0U, 254U, 0U) // array LEDs command 2
-//	led_update_color_command_(LED_UPDATE_COLOR_COMMAND, MMap::Access::RW, 0U, 1U, 0U) // array LEDs command 3
+	led_color_command_(LED_COLOR_COMMAND, MMap::Access::RW, 0U, 254U, 0U), // array LEDs command 2
+	led_brightness_(LED_BRIGHTNESS, MMap::Access::RW, 1U, 5U, 15U) // array LEDs command 3
     {
       // Config pins
       pinMode(dir_pin_, OUTPUT);
@@ -91,7 +91,7 @@ class HeadDXL: public DeviceDXL
       mmap_.registerVariable(&servo_pos_command_);
       mmap_.registerVariable(&led_select_command_);
       mmap_.registerVariable(&led_color_command_);
-//      mmap_.registerVariable(&led_update_color_command_);
+      mmap_.registerVariable(&led_brightness_);
       
       /*
        * Load default values
@@ -132,7 +132,7 @@ class HeadDXL: public DeviceDXL
 	void moveServoTo(Servo *servo, uint8_t pos)
 	{
 		servo->write(pos);
-		delay(2);
+		//delay(2);
 	}
 	void setPixelsTo(Adafruit_NeoPixel *LEDs_ring1, Adafruit_NeoPixel *LEDs_ring2, uint8_t R_colors[], uint8_t G_colors[], uint8_t B_colors[], uint8_t size)
 	{
@@ -144,21 +144,15 @@ class HeadDXL: public DeviceDXL
      LEDs_ring2->setPixelColor(i, R_colors[i+20], G_colors[i+20], B_colors[i+20]);
 		}
 		LEDs_ring1->show();
-		delay(5);
+		delayMicroseconds(5);
 		LEDs_ring2->show();
-		delay(5);
+		delayMicroseconds(5);
 		DEBUG_PRINTLN("LEDs_rings->show()");
 	}
-	uint8_t colorLevel(uint8_t level_code)
-	{
-		if(level_code==0) return 0;	//min component color value
-		else if(level_code==1) return 102;
-		else if(level_code==2) return 153;
-		else if(level_code==3) return 255;	//max component color value
-	}
-	uint8_t getRColor(uint8_t rgb_code){ return colorLevel((rgb_code & 0b00110000)>>4);}
-	uint8_t getGColor(uint8_t rgb_code){ return colorLevel((rgb_code & 0b00001100)>>2);}
-	uint8_t getBColor(uint8_t rgb_code){ return colorLevel((rgb_code & 0b00000011)>>0);}
+
+	uint8_t getRColor(uint8_t rgb_code){ return 36U*((rgb_code & 0b11100000)>>5);}
+	uint8_t getGColor(uint8_t rgb_code){ return 36U*((rgb_code & 0b00011100)>>2);}
+	uint8_t getBColor(uint8_t rgb_code){ return 85U*((rgb_code & 0b00000011)>>0);}
 
 	void swapServo(Servo *servo, uint8_t angle_min, uint8_t angle_max)
 	{
@@ -199,6 +193,9 @@ class HeadDXL: public DeviceDXL
 	void updateLEDs(Adafruit_NeoPixel LEDs[])
 	{
 		if (led_select_command_.data == 0xFE){	//array of colors updated, ready to show
+      /*LEDs[1].setBrightness(led_brightness_.data);
+      LEDs[0].setBrightness(led_brightness_.data);
+      delayMicroseconds(5);*/
 			setPixelsTo(&LEDs[0], &LEDs[1], R_colors_, G_colors_, B_colors_, 20); //show colors in LEDs
 			//DEBUG_PRINTLN("show command (0xFE)");
 		}
@@ -260,7 +257,7 @@ class HeadDXL: public DeviceDXL
     moveServoTo(&servos[0], 50);
 		moveServoTo(&servos[1], 120);
 		moveServoTo(&servos[2], 100);
-		moveServoTo(&servos[3], 120);
+		moveServoTo(&servos[3], 50);
 		moveServoTo(&servos[4], 100);
 		moveServoTo(&servos[5], 100);
 		setPixelsTo(&LEDs[0], &LEDs[1], R_colors_default, G_colors_default, B_colors_default, 20); //show colors in LEDs
@@ -296,6 +293,7 @@ class HeadDXL: public DeviceDXL
     // LEDs variables
     MMap::UInt8 led_select_command_;
     MMap::UInt8 led_color_command_;
+    MMap::UInt8 led_brightness_;
     
     // Memory map
     uint8_t msgBuf_[SERVO_MMAP_SIZE];
