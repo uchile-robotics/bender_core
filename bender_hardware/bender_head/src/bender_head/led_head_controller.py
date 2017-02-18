@@ -26,13 +26,18 @@ class LedHeadController(object):
         # Only argument stuff
         self.running = False
         self.dxl_io = dxl_io
+        print dxl_io
+        for i in range(10):
+            print dxl_io.ping(35)
+            rospy.sleep(0.01)
+
         self.controller_namespace = controller_namespace
         self.port_namespace = port_namespace
 
         self.state_update_rate = rospy.get_param(self.controller_namespace + '/rate', 2)
-        # rospy.logwarn("Using rate: {}".format(self.state_update_rate))
+        rospy.logwarn("Using rate: {}".format(self.state_update_rate))
         self.device_id = rospy.get_param(self.controller_namespace + '/id', 1)
-        # rospy.logwarn("Using id: {}".format(self.device_id))
+        rospy.logwarn("Using id: {}".format(self.device_id))
         self.head_interface = HeadHW(dxl_io, dev_id=self.device_id)
         self.servos_hw = ServosHW(self.head_interface)
         self.emotions_controller = EmotionsManager(self.head_interface, self.servos_hw)

@@ -52,7 +52,7 @@ class MaskHeadSkill(RobotSkill):
         super(MaskHeadSkill, self).__init__()
         self._description = "Joint space control for mask head"
         # Head topic
-        self._jta_topic = "/bender/head_controlle/follow_joint_trajectory"
+        self._jta_topic = "/bender/head_controller/follow_joint_trajectory"
         # Name
         self.name = MaskHeadSkill._type
         # Joint names

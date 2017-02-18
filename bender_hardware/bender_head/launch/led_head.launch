@@ -11,8 +11,8 @@
 
     <!-- Head low lovel controller spawner -->
     <node name="led_head_controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
-        args="--manager=test_port_manager
-              --port=test_port
+        args="--manager=l_port_manager
+              --port=l_port
               led_head_controller"
         output="screen"/>
   </group>
