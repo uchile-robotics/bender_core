@@ -1,4 +1,5 @@
 #define LOGGER_MIN_SEVERITY LOGGER_SEVERITY_NONE
+// https://github.com/rorromr/serial_dxl/archive/v0.1.tar.gz
 #include <SerialDXL.h>
 #include <Servo.h>
 #include <Adafruit_NeoPixel.h>
