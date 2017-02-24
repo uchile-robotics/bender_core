@@ -79,8 +79,8 @@ dynamic_emotions:
             left_ear: [0]
             right_ear: [0]
             left_eyebrow: [80, 85, 80, 85, 78, 83,80, 85, 80, 85, 78, 83, 80, 85, 80, 85, 78, 83, 80, 85, 80, 85, 78, 83]
-            right_eyebrow: [80 , 85, 80, 85, 78, 83, 80 , 85, 80, 85, 78, 83, 80 , 85, 80, 85, 78, 83, 80 , 85, 80, 85, 78, 83]
-            mouth: [20, 25, 20, 25, 21, 26 , 21, 26, 20, 25, 20, 25, 21, 26 , 21, 25, 20, 24, 20, 25, 21, 26,21,26]
+            right_eyebrow: [80, 85, 80, 85, 78, 83, 80, 85, 80, 85, 78, 83, 80, 85, 80, 85, 78, 83, 80, 85, 80, 85, 78, 83]
+            mouth: [20, 25, 20, 25, 21, 26, 21, 26, 20, 25, 20, 25, 21, 26, 21, 25, 20, 24, 20, 25, 21, 26,21,26]
         time: 50.0
         #time in miliseconds
     talk1:
@@ -90,7 +90,7 @@ dynamic_emotions:
         #time in miliseconds
     talk2:
         servos:
-            mouth: [30, 80, 20 ,60]
+            mouth: [30, 80, 20, 60]
         time: 110.0
         #time in miliseconds
     test2:
@@ -110,7 +110,7 @@ dynamic_emotions:
     calibrate_eyebrows:
         #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
         servos:
-            left_eyebrow: [10 40 70 100 130 160 130 100 70 40 10]
-            right_eyebrow: [10 40 70 100 130 160 130 100 70 40 10]
-        time: 200.0
+            left_eyebrow: [0, 20, 40, 60, 80, 100, 80, 60, 40, 20, 0]
+            right_eyebrow: [0, 20, 40, 60, 80, 100, 80, 60, 40, 20, 0]
+        time: 400.0
         #time in miliseconds
