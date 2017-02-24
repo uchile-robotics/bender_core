@@ -1,4 +1,5 @@
 #define LOGGER_MIN_SEVERITY LOGGER_SEVERITY_NONE
+// #define LOGGER_MIN_SEVERITY LOGGER_SEVERITY_DEBUG
 // https://github.com/rorromr/serial_dxl/archive/v0.1.tar.gz
 #include <SerialDXL.h>
 #include <Servo.h>
@@ -18,15 +19,35 @@
  * This variables are inside DeviceDXL class
  */ 
 
-// We add 5 UInt8 (5 bytes)
-#define SERVO_MMAP_SIZE 5
+// We add 13 UInt8 (13 bytes)
+#define SERVO_MMAP_SIZE 13
 
-// MMap position for command
-#define SERVO_SELECT_COMMAND 6
-#define SERVO_POS_COMMAND    7
-#define LED_SELECT_COMMAND   8
-#define LED_COLOR_COMMAND    9
-#define LED_BRIGHTNESS       10
+// MMap position for commands (mem Addrs)
+
+#define SERVO0_POS      6
+#define SERVO1_POS      7 
+#define SERVO2_POS      8 
+#define SERVO3_POS      9 
+#define SERVO4_POS      10
+#define SERVO5_POS      11
+#define SERVO_CMD       12
+#define LED_SELECT      13
+#define LED_COLOR_R     14
+#define LED_COLOR_G     15
+#define LED_COLOR_B     16
+#define LED_BRIGHTNESS  17
+#define LED_CMD         18
+
+//Servos commands (not addr)
+#define SERVO1_SWAP 20
+#define SERVOS_INACTIVE 21
+
+//LEDs commands (not addr)
+#define SHOW_R1 1
+#define SHOW_R2 2
+#define UPDATE_C 3
+#define CHANGE_BRIGHT 4
+#define LEDS_INACTIVE 21
 
 // Number of servos in the array
 #define num_servos 6
@@ -47,9 +68,9 @@
 #define pixelNumber 16
 
 /**
- * @brief SERVO control using DXL communication protocol
- * @details SERVO control using Dynamixel communication protocol over RS485.
- * This implementation uses 2 uint8_t variable to control state of 5 SERVOs in address 6 and 7
+ * @brief SERVO and NeoPixel LEDs control using DXL communication protocol
+ * @details SERVO and NeoPixel LEDs control using Dynamixel communication protocol over RS485.
+ * This implementation uses 6 uint8_t variables to control state of 6 SERVOs and 4 variables for NeoPixel LEDs
  * of memory map (MMap).
  * 
  * @param dir_pin Toggle communication pin.
@@ -65,13 +86,19 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
     dir_pin_(dir_pin),    // Direction pin for RS485
     reset_pin_(reset_pin), // Reset pin
     numServos_(numServos), // numero de servos
-    //servos_pins_(servos_pins),    // SERVOS pins
-    //servos_(servos),          // Puntero a objeto Servo
-    servo_select_command_(MMap::Access::RW, MMap::Storage::RAM), // Servo command 1
-    servo_pos_command_(MMap::Access::RW, MMap::Storage::RAM), // Servo command 2
-    led_select_command_(MMap::Access::RW, MMap::Storage::RAM), // array LEDs command 1
-    led_color_command_(MMap::Access::RW, MMap::Storage::RAM), // array LEDs command 2
-    led_brightness_(MMap::Access::RW, MMap::Storage::RAM)// array LEDs command 3
+    servo0_pos_(MMap::Access::RW, MMap::Storage::RAM),
+    servo1_pos_(MMap::Access::RW, MMap::Storage::RAM),
+    servo2_pos_(MMap::Access::RW, MMap::Storage::RAM),
+    servo3_pos_(MMap::Access::RW, MMap::Storage::RAM),
+    servo4_pos_(MMap::Access::RW, MMap::Storage::RAM),
+    servo5_pos_(MMap::Access::RW, MMap::Storage::RAM),
+    servo_cmd_(MMap::Access::RW, MMap::Storage::RAM),
+    led_select_(MMap::Access::RW, MMap::Storage::RAM),  // select LED command
+    led_color_r_(MMap::Access::RW, MMap::Storage::RAM), // R channel LEDs colors
+    led_color_g_(MMap::Access::RW, MMap::Storage::RAM), // G channel LEDs colors
+    led_color_b_(MMap::Access::RW, MMap::Storage::RAM), // B channel LEDs colors
+    led_brightness_(MMap::Access::RW, MMap::Storage::RAM),
+    led_cmd_(MMap::Access::RW, MMap::Storage::RAM)
     {
       // Config pins
       pinMode(dir_pin_, OUTPUT);
@@ -89,11 +116,20 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
         * Register variables
         */
         DeviceDXL::init();
-        mmap_.registerVariable(&servo_select_command_);
-        mmap_.registerVariable(&servo_pos_command_);
-        mmap_.registerVariable(&led_select_command_);
-        mmap_.registerVariable(&led_color_command_);
+
+        mmap_.registerVariable(&servo0_pos_);
+        mmap_.registerVariable(&servo1_pos_);
+        mmap_.registerVariable(&servo2_pos_);
+        mmap_.registerVariable(&servo3_pos_);
+        mmap_.registerVariable(&servo4_pos_);
+        mmap_.registerVariable(&servo5_pos_);
+        mmap_.registerVariable(&servo_cmd_);
+        mmap_.registerVariable(&led_select_);
+        mmap_.registerVariable(&led_color_r_);
+        mmap_.registerVariable(&led_color_g_);
+        mmap_.registerVariable(&led_color_b_);
         mmap_.registerVariable(&led_brightness_);
+        mmap_.registerVariable(&led_cmd_);
         mmap_.init();
 
         /*
@@ -101,11 +137,6 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
         */
         DEBUG_PRINTLN("Load default");
         mmap_.load(); // Load values from EEPROM
-        DEBUG_PRINT("data: ");DEBUG_PRINTLN(servo_select_command_.data);
-        DEBUG_PRINT("data: ");DEBUG_PRINTLN(servo_pos_command_.data);
-        DEBUG_PRINT("data: ");DEBUG_PRINTLN(led_select_command_.data);
-        DEBUG_PRINT("data: ");DEBUG_PRINTLN(led_color_command_.data);
-        //DEBUG_PRINT("data: ");DEBUG_PRINTLN(led_update_color_command_.data);
 
         /*
         * Read sensor data
@@ -136,23 +167,39 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
     void moveServoTo(Servo *servo, uint8_t pos)
     {
         servo->write(pos);
-        //delay(2);
     }
 
     void setPixelsTo(Adafruit_NeoPixel *LEDs_ring1, Adafruit_NeoPixel *LEDs_ring2, uint8_t R_colors[], uint8_t G_colors[], uint8_t B_colors[], uint8_t size)
     {
-        //Serial.println(sizeof(pixelPositions));
         for(uint8_t i=0; i<size; i++)
         {
             LEDs_ring1->setPixelColor(i, R_colors[i], G_colors[i], B_colors[i]);
-            //LEDs_ring2->setPixelColor(i, R_colors[i+16], G_colors[i+16], B_colors[i+16]);
             LEDs_ring2->setPixelColor(i, R_colors[i+20], G_colors[i+20], B_colors[i+20]);
         }
         LEDs_ring1->show();
         delay(5);
         LEDs_ring2->show();
         delay(5);
-        DEBUG_PRINTLN("LEDs_rings->show()");
+        // DEBUG_PRINTLN("LEDs_rings->show()");
+    }
+
+    void showRing(uint8_t select, Adafruit_NeoPixel *ring, uint8_t R_colors[], uint8_t G_colors[], uint8_t B_colors[], uint8_t size)
+    {
+        if (select == 1){
+            for(uint8_t i=0; i<size; i++)
+            {
+                ring->setPixelColor(i, R_colors[i], G_colors[i], B_colors[i]);
+            }
+        }
+        else{
+            for(uint8_t i=0; i<size; i++)
+            {
+                ring->setPixelColor(i, R_colors[i+20], G_colors[i+20], B_colors[i+20]);
+            }
+        }
+
+        ring->show();
+        //delay(5);
     }
 
     uint8_t getRColor(uint8_t rgb_code){ return 36U*((rgb_code & 0b11100000)>>5);}
@@ -175,59 +222,67 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
 
     void updateServos(Servo servos[])
     {
-        if (servo_select_command_.data == 6)    //when both values updated, change state
-        {
-            if (servo_select_ == 0) moveServoTo(&servos[0], servo_pos_);
-            else if (servo_select_ == 1) moveServoTo(&servos[1], servo_pos_);
-            else if (servo_select_ == 2) moveServoTo(&servos[2], servo_pos_);
-            else if (servo_select_ == 3) moveServoTo(&servos[3], servo_pos_);
-            else if (servo_select_ == 4) moveServoTo(&servos[4], servo_pos_);
-            else if (servo_select_ == 5) moveServoTo(&servos[5], servo_pos_);
+        if (servo_cmd_.data == SERVO0_POS){ //when required update servo 1
+              servos[0].write(servo0_pos_.data);
+              servo_cmd_.data = SERVOS_INACTIVE;
         }
-        else if (servo_select_command_.data == 7)   //when both values updated, change state
+        else if (servo_cmd_.data == SERVO1_POS){ //when required update servo 2
+              servos[1].write(servo1_pos_.data);
+              servo_cmd_.data = SERVOS_INACTIVE;
+        }
+        else if (servo_cmd_.data == SERVO2_POS){ //when required update servo 3
+              servos[2].write(servo2_pos_.data);
+              servo_cmd_.data = SERVOS_INACTIVE;
+        }
+        else if (servo_cmd_.data == SERVO3_POS){ //when required update servo 4
+              servos[3].write(servo3_pos_.data);
+              servo_cmd_.data = SERVOS_INACTIVE;
+        }
+        else if (servo_cmd_.data == SERVO4_POS){ //when required update servo 5
+              servos[4].write(servo4_pos_.data);
+              servo_cmd_.data = SERVOS_INACTIVE;
+        }
+        else if (servo_cmd_.data == SERVO5_POS){ //when required update servo 6
+              servos[5].write(servo5_pos_.data);
+              servo_cmd_.data = SERVOS_INACTIVE;
+        }
+        /*else if (servo_cmd_.data == SERVO1_SWAP)   //predefined behavior function
         {
             swapServo(&servos[1], 115, 135);
-            delay(15);
-        }
-        else    //update both values, selct and position
+        }*/
+        /*else    //Inactive
         {
-            servo_select_ = servo_select_command_.data;
-            servo_pos_ = servo_pos_command_.data;
-        }
+            DEBUG_PRINT("No command for servos");
+        }*/
     }
 
     void updateLEDs(Adafruit_NeoPixel LEDs[])
     {
-        if (led_select_command_.data == 0xFE)
-        {
-            //array of colors updated, ready to show
+        if (led_cmd_.data == SHOW_R1){  //Lower bytes array of colors updated, show left eye colors
+            showRing(1, &LEDs[0], R_colors_, G_colors_, B_colors_, 20);
+            led_cmd_.data = LEDS_INACTIVE;
+            DEBUG_PRINTLN("EXEC: show command SHOW_R1");
+        }
+        else if (led_cmd_.data == SHOW_R2){  //Upper bytes of colors updated, show right eye colors
+            showRing(2, &LEDs[1], R_colors_, G_colors_, B_colors_, 20);
+            led_cmd_.data = LEDS_INACTIVE;
+            DEBUG_PRINTLN("EXEC: show command SHOW_R2");
+        }
+        else if (led_cmd_.data == CHANGE_BRIGHT){  //Change brighness of both Rings
             LEDs[0].setBrightness(led_brightness_.data);
             LEDs[1].setBrightness(led_brightness_.data);
-            delayMicroseconds(5);
-            setPixelsTo(&LEDs[0], &LEDs[1], R_colors_, G_colors_, B_colors_, 20); //show colors in LEDs
-            //DEBUG_PRINTLN("show command (0xFE)");
+            led_cmd_.data = LEDS_INACTIVE;
+            DEBUG_PRINTLN("EXEC: command CHANGE_BRIGHT");
         }
-        else if (led_select_command_.data == 0xFD)
-        {
-            //updating array of colors
-            R_colors_[led_to_change_] = getRColor(new_color_code_);
-            G_colors_[led_to_change_] = getGColor(new_color_code_);
-            B_colors_[led_to_change_] = getBColor(new_color_code_);
-            /*DEBUG_PRINT("new_color_code_ = ");DEBUG_PRINTLN(new_color_code_);
-            DEBUG_PRINT("r_color = ");DEBUG_PRINTLN(getRColor(new_color_code_));
-            DEBUG_PRINT("g_color = ");DEBUG_PRINTLN(getGColor(new_color_code_));
-            DEBUG_PRINT("b_color = ");DEBUG_PRINTLN(getBColor(new_color_code_));*/
-            //DEBUG_PRINTLN("change color command (0xFD)");
+        else if (led_cmd_.data == UPDATE_C){ //updating array of colors
+            R_colors_[led_select_.data] = led_color_r_.data;
+            G_colors_[led_select_.data] = led_color_g_.data;
+            B_colors_[led_select_.data] = led_color_b_.data;
+            DEBUG_PRINTLN("EXEC: change color command UPDATE_C");
         }
-        /*else if (led_select_command_.data == 0xFC){   //Leds commands are not used in this case
+        /*else    //Inactive, Leds commands are not used in this case
             //DEBUG_PRINTLN("Led command non used");
-        }*/
-        else if (led_select_command_.data != 0xFC) //update last led number and color received
-        {
-            led_to_change_ = led_select_command_.data;
-            new_color_code_ = led_color_command_.data;
-            //DEBUG_PRINTLN("variables updated");
-        }
+        */
     }
 
     void update()
@@ -237,7 +292,7 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
 
     void update(Servo servos[], Adafruit_NeoPixel LEDs[])
     {
-        //DEBUG_PRINTLN("UPDATE");
+        // DEBUG_PRINTLN("UPDATE");
 
         updateServos(servos);
         updateLEDs(LEDs);
@@ -247,29 +302,29 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
     {
         //Default colors
         uint8_t R_colors_default[40] = {
-          0, 0, 0, 153, 153, 153, 0, 0, //1-8
-          0, 0, 153, 0, 0, 0, 0, 0,     //9-16
-          102, 0, 0, 102,               //17-20
+          153, 153, 153, 0, 0, 0, 0, 153, //1-8
+          153, 153, 0, 0, 0, 0, 0, 0,     //9-16
+          0, 0, 0, 0,               //17-20
      
-          0, 0, 0, 153, 153, 153, 0, 0, //21-28
-          0, 0, 153, 0, 0, 0, 0, 0,     //29-36
-          102, 0, 0, 102};              //37-40
+          0, 0, 0, 0, 0, 0, 153, 153, //21-28
+          153, 0, 0, 0, 0, 153, 153, 153,     //29-36
+          0, 0, 0, 0};              //37-40
         uint8_t G_colors_default[40] = {
-          0, 0, 0, 0, 0, 0, 0, 0,         //1-8
-          0, 0, 0, 0, 153, 153, 153, 153, //9-16
-          0, 102, 0, 102,                 //17-20
+          153, 153, 153, 0, 0, 0, 0, 153,         //1-8
+          153, 153, 0, 0, 0, 0, 0, 0, //9-16
+          0, 0, 0, 0,                 //17-20
      
-          0, 0, 0, 0, 0, 0, 0, 0,         //21-28
-          0, 0, 0, 0, 153, 153, 153, 153, //29-36
-          0, 102, 0, 102};                //37-40
+          0, 0, 0, 0, 0, 0, 153, 153,         //21-28
+          153, 0, 0, 0, 0, 153, 153, 153, //29-36
+          0, 0, 0, 0};                //37-40
         uint8_t B_colors_default[40] = {
-          153, 153, 153, 0, 0, 0, 0, 0, //1-8
-          0, 153, 0, 153, 0, 0, 0, 0,   //9-16
-          0, 0, 102, 0,                 //17-20
+          0, 0, 0, 0, 0, 0, 0, 0, //1-8
+          0, 0, 0, 0, 0, 0, 0, 0,   //9-16
+          0, 0, 0, 0,                 //17-20
      
-          153, 153, 153, 0, 0, 0, 0, 0, //21-28
-          0, 153, 0, 153, 0, 0, 0, 0,   //29-36
-          0, 0, 102, 0};                //37-40
+          0, 0, 0, 0, 0, 0, 0, 0, //21-28
+          0, 0, 0, 0, 0, 0, 0, 0,   //29-36
+          0, 0, 0, 0};                //37-40
         
         moveServoTo(&servos[0], 50);
         moveServoTo(&servos[1], 120);
@@ -303,25 +358,27 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
     //const uint8_t servos_pins_[5]; // SERVOs pins
     //Servo *servos_[5]; //puntero a objeto Servo
     
-    // SERVOs variables
-    MMap::Integer<UInt8, 0U, 7U, 0U>::type servo_select_command_;
-    MMap::Integer<UInt8, 0U, 180U, 0U>::type servo_pos_command_;
+        // SERVOs variables
+    MMap::Integer<UInt8, 0U, 170U, 0U>::type servo0_pos_;
+    MMap::Integer<UInt8, 0U, 170U, 0U>::type servo1_pos_;
+    MMap::Integer<UInt8, 0U, 170U, 0U>::type servo2_pos_;
+    MMap::Integer<UInt8, 0U, 170U, 0U>::type servo3_pos_;
+    MMap::Integer<UInt8, 0U, 170U, 0U>::type servo4_pos_;
+    MMap::Integer<UInt8, 0U, 170U, 0U>::type servo5_pos_;
+    MMap::Integer<UInt8, 0U, 20U, 21U>::type servo_cmd_;
 
     // LEDs variables
-    MMap::Integer<UInt8, 0U, 254U, 0U>::type led_select_command_;
-    MMap::Integer<UInt8, 0U, 254U, 0U>::type led_color_command_;
+    MMap::Integer<UInt8, 0U, 255U, 0U>::type led_select_;
+    MMap::Integer<UInt8, 0U, 255U, 0U>::type led_color_r_;
+    MMap::Integer<UInt8, 0U, 255U, 0U>::type led_color_g_;
+    MMap::Integer<UInt8, 0U, 255U, 0U>::type led_color_b_;
     MMap::Integer<UInt8, 1U, 255U, 15U>::type led_brightness_;  
+    MMap::Integer<UInt8, 0U, 255U, 0U>::type led_cmd_;
     
     //LEDs colors
     uint8_t R_colors_[40] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     uint8_t G_colors_[40] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     uint8_t B_colors_[40] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    uint8_t led_to_change_ = 0;
-    uint8_t new_color_code_ = 0;
-    
-    //servos
-    uint8_t servo_select_ = 0;
-    uint8_t servo_pos_ = 0;
 };
 
 //Objetos para posicionar los servos (PWM)
@@ -360,8 +417,9 @@ void setup() {
 
 void loop() {
     // Update msg buffer
-    while (Serial3.available())
+    while (Serial3.available()){
         serialDxl.process(Serial3.read());
+    }
 
     head_dxl.mmap_.deserialize();
     head_dxl.update(servos, LEDs);
