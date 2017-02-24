@@ -107,3 +107,10 @@ dynamic_emotions:
             mouth: [10, 70, 10, 90, 10, 10, 10, 10, 70, 90, 10, 10, 10, 10, 90, 10, 90, 10]
         time: 110.0
         #time in miliseconds
+    calibrate_eyebrows:
+        #Servos positions in percentage. Meanings: ears: elevation %, eyebrow: 0%->angry & 100%->very surprised, mouth: opening %
+        servos:
+            left_eyebrow: [10 40 70 100 130 160 130 100 70 40 10]
+            right_eyebrow: [10 40 70 100 130 160 130 100 70 40 10]
+        time: 200.0
+        #time in miliseconds
