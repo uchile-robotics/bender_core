@@ -13,7 +13,7 @@ It use the intermediate level methods defined in HeadHW.
 IMPORTAT: Modify only if you are sure of physical restrictions of the actuators"""
 
 # Use HW controller
-from head_hw import HeadHW, SERVO0, SERVO1, SERVO2, SERVO3, SERVO4, SERVO5
+from head_hw import HeadHW, SERVO0_POS, SERVO1_POS, SERVO2_POS, SERVO3_POS, SERVO4_POS, SERVO5_POS
 
 class ServosHW(object):
 	def __init__(self, hw_controller):
@@ -32,33 +32,33 @@ class ServosHW(object):
 	def left_ear(self, lifting_percentage):
 		if (lifting_percentage != -1):
 			angle = self.remapRange(lifting_percentage, 160, 50)
-			self.hw_controller.moveServoTo(SERVO0, angle)
+			self.hw_controller.moveServoTo(SERVO0_POS, angle)
 
 	def right_ear(self, lifting_percentage):
 		if (lifting_percentage != -1):
 			angle = self.remapRange(lifting_percentage, 110, 40)
-			self.hw_controller.moveServoTo(SERVO3, angle)
+			self.hw_controller.moveServoTo(SERVO3_POS, angle)
 		
 	def left_eyebrow(self, lifting_percentage):
 		if (lifting_percentage != -1):
 			angle = self.remapRange(lifting_percentage, 40, 140)
-			self.hw_controller.moveServoTo(SERVO2, angle)
+			self.hw_controller.moveServoTo(SERVO2_POS, angle)
 		
 	def right_eyebrow(self, lifting_percentage):
 		if (lifting_percentage != -1):
 			angle = self.remapRange(lifting_percentage, 140, 40)
-			self.hw_controller.moveServoTo(SERVO4, angle)
+			self.hw_controller.moveServoTo(SERVO4_POS, angle)
 		
 	def mouth(self, opening_percentage):
 		if (opening_percentage != -1):
 			angle = self.remapRange(opening_percentage, 80, 140)
-			self.hw_controller.moveServoTo(SERVO1, angle)
+			self.hw_controller.moveServoTo(SERVO1_POS, angle)
 
 	def neck(self, angle):
 		#if (opening_percentage != -1):
 			#angle = self.remapRange(opening_percentage, 60, 120)
 		angle2 = 90-angle
-		self.hw_controller.moveServoTo(SERVO5, int(angle2*0.8))
+		self.hw_controller.moveServoTo(SERVO5_POS, int(angle2*0.8))
 
 if __name__ == '__main__':
 	DEV_ID = 1

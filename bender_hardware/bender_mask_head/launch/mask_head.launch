@@ -4,8 +4,8 @@
     <rosparam file="$(find bender_mask_head)/config/head_controller.yaml" command="load"/>
     <!-- light_head low lovel controller spawner -->
     <node name="head_controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
-        args="--manager=r_port_manager
-              --port=r_port
+        args="--manager=l_port_manager
+              --port=l_port
               head_yaw_joint_controller
               head_pitch_joint_controller"
         output="screen"/>
@@ -14,7 +14,7 @@
     <rosparam file="$(find bender_mask_head)/config/head_trajectory.yaml" command="load"/>
     <!-- Spawn Follow Joint Trajectory Action for light_head -->
     <node name="head_controller_spawner_meta" pkg="dynamixel_controllers" type="controller_spawner.py"
-            args="--manager=r_port_manager
+            args="--manager=l_port_manager
                   --type=meta
                   head_controller
                   head_yaw_joint_controller
