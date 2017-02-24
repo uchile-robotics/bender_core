@@ -176,4 +176,13 @@ emotions:
         eyes:
             left: [Black, Maroon, Green, Olive, Navy, Purple, Teal, Silver, Grey, Red, Lime, Yellow, Fuchsia, Aqua, White, Grey0]
             right: [NavyBlue, DarkBlue, Blue3, Blue1, DarkGreen, DeepSkyBlue4, DodgerBlue3, DodgerBlue2, Green4, SpringGreen4, Turquoise4, DeepSkyBlue3, DeepSkyBlue3, DodgerBlue1, Green3, SpringGreen3]
-            Blue : [0,0,255]
+        cheeks:
+            left: [DarkCyan, LightSeaGreen, DeepSkyBlue2, DeepSkyBlue1]
+            right: [Green3, SpringGreen3, SpringGreen2, Cyan3]
+    rainbow2:
+        eyes:
+            left: [DarkTurquoise, Turquoise2, Green1, SpringGreen2, SpringGreen1, MediumSpringGreen, Cyan2, Cyan1, DarkRed, DeepPink4, Purple4, Purple3, BlueViolet, Orange4, Grey37, MediumPurple4]
+            right: [SlateBlue3, SlateBlue3, RoyalBlue1, Chartreuse3, SteelBlue1, SkyBlue3, CadetBlue, CadetBlue, DarkSeaGreen4, Chartreuse3, CornflowerBlue, SteelBlue3, SteelBlue, PaleTurquoise4, DarkSeaGreen4, Chartreuse4]
+        cheeks:
+            left: [PaleGreen3, SeaGreen3, Aquamarine3, MediumTurquoise]
+            right: [SteelBlue1, Chartreuse2, SeaGreen2, SeaGreen1]
