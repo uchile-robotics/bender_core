@@ -21,11 +21,9 @@ SERVO4_POS = 10
 SERVO5_POS = 11
 SERVO_CMD = 12
 LED_SELECT = 13
-LED_COLOR_R = 14
-LED_COLOR_G = 15
-LED_COLOR_B = 16
-LED_BRIGHTNESS = 17
-LED_CMD = 18
+LED_COLOR = 14
+LED_BRIGHTNESS = 15
+LED_CMD = 16
 
 # Servos commands (not addr)
 SERVO1_SWAP = 20
@@ -107,10 +105,9 @@ class HeadHW(object):
         if (numLed < 0) or (numLed > 40):
             rospy.logwarn('LED %d out of range' % (numLed))
             return
+        encode8bitColor = ((r_color * 7 / 255) << 5) + ((g_color * 7 / 255) << 2) + ((b_color * 3 / 255))
         self.write_addr(LED_SELECT, numLed)
-        self.write_addr(LED_COLOR_R, r_color)
-        self.write_addr(LED_COLOR_G, g_color)
-        self.write_addr(LED_COLOR_B, b_color)
+        self.write_addr(LED_COLOR, encode8bitColor)
         self.write_addr(LED_CMD, UPDATE_C)
         self.write_addr(LED_CMD, LEDS_INACTIVE)
 
@@ -119,6 +116,7 @@ class HeadHW(object):
             self.write_addr(LED_CMD, SHOW_R1)           #This command call "show" method for each led in left eye on Arduino
         elif (eye == "right"):
             self.write_addr(LED_CMD, SHOW_R2)       #This command call "show" method for each led in right eye on Arduino
+        time.sleep(0.1)
 
     def changeLedColor(self, numLed, rgb_color):
         self.updateLedColor(numLed, rgb_color[0], rgb_color[1], rgb_color[2])

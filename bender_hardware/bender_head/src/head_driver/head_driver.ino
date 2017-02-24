@@ -1,5 +1,5 @@
-// #define LOGGER_MIN_SEVERITY LOGGER_SEVERITY_NONE
-#define LOGGER_MIN_SEVERITY LOGGER_SEVERITY_DEBUG
+#define LOGGER_MIN_SEVERITY LOGGER_SEVERITY_NONE
+// #define LOGGER_MIN_SEVERITY LOGGER_SEVERITY_DEBUG
 // https://github.com/rorromr/serial_dxl/archive/v0.1.tar.gz
 #include <SerialDXL.h>
 #include <Servo.h>
@@ -20,7 +20,7 @@
  */ 
 
 // We add 13 UInt8 (13 bytes)
-#define SERVO_MMAP_SIZE 13
+#define SERVO_MMAP_SIZE 11
 
 // MMap position for commands (mem Addrs)
 
@@ -32,11 +32,9 @@
 #define SERVO5_POS      11
 #define SERVO_CMD       12
 #define LED_SELECT      13
-#define LED_COLOR_R     14
-#define LED_COLOR_G     15
-#define LED_COLOR_B     16
-#define LED_BRIGHTNESS  17
-#define LED_CMD         18
+#define LED_COLOR_      14
+#define LED_BRIGHTNESS  15
+#define LED_CMD         16
 
 //Servos commands (not addr)
 #define SERVO1_SWAP 20
@@ -94,9 +92,7 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
     servo5_pos_(MMap::Access::RW, MMap::Storage::RAM),
     servo_cmd_(MMap::Access::RW, MMap::Storage::RAM),
     led_select_(MMap::Access::RW, MMap::Storage::RAM),  // select LED command
-    led_color_r_(MMap::Access::RW, MMap::Storage::RAM), // R channel LEDs colors
-    led_color_g_(MMap::Access::RW, MMap::Storage::RAM), // G channel LEDs colors
-    led_color_b_(MMap::Access::RW, MMap::Storage::RAM), // B channel LEDs colors
+    led_color_(MMap::Access::RW, MMap::Storage::RAM), // 8 bit encode color, RRRGGGBB
     led_brightness_(MMap::Access::RW, MMap::Storage::RAM),
     led_cmd_(MMap::Access::RW, MMap::Storage::RAM)
     {
@@ -125,9 +121,7 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
         mmap_.registerVariable(&servo5_pos_);
         mmap_.registerVariable(&servo_cmd_);
         mmap_.registerVariable(&led_select_);
-        mmap_.registerVariable(&led_color_r_);
-        mmap_.registerVariable(&led_color_g_);
-        mmap_.registerVariable(&led_color_b_);
+        mmap_.registerVariable(&led_color_);
         mmap_.registerVariable(&led_brightness_);
         mmap_.registerVariable(&led_cmd_);
         mmap_.init();
@@ -202,9 +196,9 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
         //delay(5);
     }
 
-    uint8_t getRColor(uint8_t rgb_code){ return 36U*((rgb_code & 0b11100000)>>5);}
-    uint8_t getGColor(uint8_t rgb_code){ return 36U*((rgb_code & 0b00011100)>>2);}
-    uint8_t getBColor(uint8_t rgb_code){ return 72U*((rgb_code & 0b00000011)>>0);}
+    uint8_t decodeRColor(uint8_t rgb8bit_encode){ return 36U*((rgb8bit_encode & 0b11100000)>>5);}
+    uint8_t decodeGColor(uint8_t rgb8bit_encode){ return 36U*((rgb8bit_encode & 0b00011100)>>2);}
+    uint8_t decodeBColor(uint8_t rgb8bit_encode){ return 85U*((rgb8bit_encode & 0b00000011)>>0);}
 
     void swapServo(Servo *servo, uint8_t angle_min, uint8_t angle_max)
     {
@@ -271,13 +265,15 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
         else if (led_cmd_.data == CHANGE_BRIGHT){  //Change brighness of both Rings
             LEDs[0].setBrightness(led_brightness_.data);
             LEDs[1].setBrightness(led_brightness_.data);
+            showRing(1, &LEDs[0], R_colors_, G_colors_, B_colors_, 20);
+            showRing(2, &LEDs[1], R_colors_, G_colors_, B_colors_, 20);
             led_cmd_.data = LEDS_INACTIVE;
             DEBUG_PRINTLN("EXEC: command CHANGE_BRIGHT");
         }
         else if (led_cmd_.data == UPDATE_C){ //updating array of colors
-            R_colors_[led_select_.data] = led_color_r_.data;
-            G_colors_[led_select_.data] = led_color_g_.data;
-            B_colors_[led_select_.data] = led_color_b_.data;
+            R_colors_[led_select_.data] = decodeRColor(led_color_.data);
+            G_colors_[led_select_.data] = decodeGColor(led_color_.data);
+            B_colors_[led_select_.data] = decodeBColor(led_color_.data);
             DEBUG_PRINTLN("EXEC: change color command UPDATE_C");
         }
         /*else    //Inactive, Leds commands are not used in this case
@@ -369,10 +365,8 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
 
     // LEDs variables
     MMap::Integer<UInt8, 0U, 255U, 0U>::type led_select_;
-    MMap::Integer<UInt8, 0U, 255U, 0U>::type led_color_r_;
-    MMap::Integer<UInt8, 0U, 255U, 0U>::type led_color_g_;
-    MMap::Integer<UInt8, 0U, 255U, 0U>::type led_color_b_;
-    MMap::Integer<UInt8, 1U, 255U, 15U>::type led_brightness_;  
+    MMap::Integer<UInt8, 0U, 255U, 0U>::type led_color_;
+    MMap::Integer<UInt8, 1U, 255U, 15U>::type led_brightness_;
     MMap::Integer<UInt8, 0U, 255U, 0U>::type led_cmd_;
     
     //LEDs colors

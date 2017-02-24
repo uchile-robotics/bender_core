@@ -154,6 +154,11 @@ emotions:
             left: [white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3]
             right: [white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3, white3]
 
+    lantern4:
+        eyes:
+            left: [White, White, White, White, White, White, White, White, White, White, White, White, White, White, White, White]
+            right: [White, White, White, White, White, White, White, White, White, White, White, White, White, White, White, White]
+
     neutral:
         eyes:
             left: [black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black]
@@ -167,3 +172,8 @@ emotions:
             left_eyebrow: 50
             right_eyebrow: 45
             mouth: 30
+    rainbow1:
+        eyes:
+            left: [Black, Maroon, Green, Olive, Navy, Purple, Teal, Silver, Grey, Red, Lime, Yellow, Fuchsia, Aqua, White, Grey0]
+            right: [NavyBlue, DarkBlue, Blue3, Blue1, DarkGreen, DeepSkyBlue4, DodgerBlue3, DodgerBlue2, Green4, SpringGreen4, Turquoise4, DeepSkyBlue3, DeepSkyBlue3, DodgerBlue1, Green3, SpringGreen3]
+            Blue : [0,0,255]
