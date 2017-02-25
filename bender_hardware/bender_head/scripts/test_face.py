@@ -46,12 +46,15 @@ class EmotionTest(object):
             rospy.loginfo("Emotion: {}".format(emotion))
             self.msg.emotion_name = emotion
             self.emotion_pub.publish(self.msg)
-            time.sleep(5)
+            time.sleep(7)
             # rate.sleep()
 
 if __name__ == '__main__':
     rospy.init_node('Test_Emotions')
+    time.sleep(7)
     emotions_test = EmotionTest()
     emotions_test.start()
     emotions_test.run_static()
     emotions_test.run_dynamic()
+    rospy.logwarn("Test Finish")
+    time.sleep(2)

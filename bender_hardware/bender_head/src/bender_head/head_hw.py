@@ -21,11 +21,9 @@ SERVO4_POS = 10
 SERVO5_POS = 11
 SERVO_CMD = 12
 LED_SELECT = 13
-LED_COLOR_R = 14
-LED_COLOR_G = 15
-LED_COLOR_B = 16
-LED_BRIGHTNESS = 17
-LED_CMD = 18
+LED_COLOR = 14
+LED_BRIGHTNESS = 15
+LED_CMD = 16
 
 # Servos commands (not addr)
 SERVO1_SWAP = 20
@@ -35,6 +33,7 @@ SERVOS_INACTIVE = 21
 SHOW_R1 = 1
 SHOW_R2 = 2
 UPDATE_C = 3
+CHANGE_BRIGHT = 4
 LEDS_INACTIVE = 21
 
 class HeadHW(object):
@@ -48,10 +47,8 @@ class HeadHW(object):
         result = []
         try:
             result = self.dxl.write(self.id, addr, [value])
-            # time.sleep(0.1)
         except Exception as e:
             rospy.logwarn('Exception thrown while writing addres %d, value %d' % (addr, value))
-            # raise e
         return result
 
     def ping(self):
@@ -60,7 +57,6 @@ class HeadHW(object):
             result = self.dxl.ping(self.id)
         except Exception as e:
             rospy.logwarn('Exception thrown while pinging device %d - %s' % (self.id, e))
-            # raise e
         return result
 
     def get_state(self, state_variable):
@@ -77,19 +73,18 @@ class HeadHW(object):
         if new_id<32:
             print 'Not Allow ID:%d. Must be greater than 31' % (new_id)
             return
-        
         self.write_addr(3, new_id)
 
     def set_brightness(self, bright):
         if (bright < 0) or (bright > 255):
             print 'brightness %d out of range' % (bright)
             return
-        #self.write_addr(LED_BRIGHTNESS, bright)
+        self.write_addr(LED_BRIGHTNESS, bright)
+        self.write_addr(LED_CMD, CHANGE_BRIGHT)
 
     def moveServoTo(self, servo_addr, pos):
         self.write_addr(servo_addr, pos)            #Update servo position
         self.write_addr(SERVO_CMD, servo_addr)      #Move Servo (call to servo.write(pos) in Arduino)
-        self.write_addr(SERVO_CMD, SERVOS_INACTIVE) #Let servos in actual states
 
     def swapServo(self, servo_addr):
         for i in range(180):
@@ -109,11 +104,10 @@ class HeadHW(object):
     def updateLedColor(self, numLed, r_color, g_color, b_color):
         if (numLed < 0) or (numLed > 40):
             rospy.logwarn('LED %d out of range' % (numLed))
-            #return
+            return
+        encode8bitColor = ((r_color * 7 / 255) << 5) + ((g_color * 7 / 255) << 2) + ((b_color * 3 / 255))
         self.write_addr(LED_SELECT, numLed)
-        self.write_addr(LED_COLOR_R, r_color)
-        self.write_addr(LED_COLOR_G, g_color)
-        self.write_addr(LED_COLOR_B, b_color)
+        self.write_addr(LED_COLOR, encode8bitColor)
         self.write_addr(LED_CMD, UPDATE_C)
         self.write_addr(LED_CMD, LEDS_INACTIVE)
 
@@ -122,9 +116,7 @@ class HeadHW(object):
             self.write_addr(LED_CMD, SHOW_R1)           #This command call "show" method for each led in left eye on Arduino
         elif (eye == "right"):
             self.write_addr(LED_CMD, SHOW_R2)       #This command call "show" method for each led in right eye on Arduino
-        #time.sleep(0.1)
-        # self.write_addr(LED_CMD, LEDS_INACTIVE)                         #This command let the LEDs in actual state
-
+        time.sleep(0.1)
 
     def changeLedColor(self, numLed, rgb_color):
         self.updateLedColor(numLed, rgb_color[0], rgb_color[1], rgb_color[2])
@@ -179,15 +171,6 @@ class HeadHW(object):
                 self.updateLedColor(i_led, r_color, g_color, b_color)
             self.showColors(eye)
 
-    def set_this_leds_to(self, leds, rgb_colors):
-        if (len(leds)!=len(rgb_colors)):
-            print "The number of LEDs must be the same as the number of colors. %d leds and %d colors given"
-            return
-        for i_led in range(len(leds)):
-            self.updateLedColor(leds[i_led], rgb_colors[i_led][0], rgb_colors[i_led][1], rgb_colors[i_led][2])
-        self.showColors("left")
-        self.showColors("right")
-
 if __name__ == '__main__':
     DEV_ID = 35
     dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 200000)
@@ -195,12 +178,12 @@ if __name__ == '__main__':
     red = [100,0,0]
     green = [0,100,0]
     blue = [0,0,100]
-    # while True:
-    #     head.changeLedColor(0, green)
-    #     print head.ping()
-    #     head.moveServoTo(SERVO2_POS, 0)
-    #     head.changeLedColor(0, blue)
-    #     for pos in range(20, 160, 10):
-    #         head.moveServoTo(SERVO2_POS, pos)
-    #     head.changeLedColor(0, red)
-    #     head.parallelSwapServos()
+    while True:
+        head.changeLedColor(0, green)
+        print head.ping()
+        head.moveServoTo(SERVO2_POS, 0)
+        head.changeLedColor(0, blue)
+        for pos in range(20, 160, 10):
+            head.moveServoTo(SERVO2_POS, pos)
+        head.changeLedColor(0, red)
+        # head.parallelSwapServos()

@@ -41,12 +41,12 @@ class ServosHW(object):
 		
 	def left_eyebrow(self, lifting_percentage):
 		if (lifting_percentage != -1):
-			angle = self.remapRange(lifting_percentage, 40, 140)
+			angle = self.remapRange(lifting_percentage, 140, 40)
 			self.hw_controller.moveServoTo(SERVO2_POS, angle)
 		
 	def right_eyebrow(self, lifting_percentage):
 		if (lifting_percentage != -1):
-			angle = self.remapRange(lifting_percentage, 140, 40)
+			angle = self.remapRange(lifting_percentage, 40, 140)
 			self.hw_controller.moveServoTo(SERVO4_POS, angle)
 		
 	def mouth(self, opening_percentage):
