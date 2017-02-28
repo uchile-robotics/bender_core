@@ -9,7 +9,10 @@ from robot import Robot
 from robot_skill import RobotSkill
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9ed94afa7cab56f6a75812747fe52cee7fe105d0
 =======
 >>>>>>> 9ed94afa7cab56f6a75812747fe52cee7fe105d0
 import inspect
