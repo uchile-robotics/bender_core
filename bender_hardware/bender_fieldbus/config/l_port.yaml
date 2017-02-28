@@ -5,5 +5,5 @@ serial_ports:
     port_name: "/dev/bender/l_port"
     baud_rate: 200000
     min_motor_id: 1
-    max_motor_id: 30
+    max_motor_id: 35
     update_rate: 30

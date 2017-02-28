@@ -21,4 +21,13 @@
 	<arg name="sim_world"  default="amtc"/>
 	<!-- TODO: <arg name="simulator"  default="gazebo"/> -->
 
+
+	<!-- rqt_batteries -->
+	
+	<include file="$(find rqt_batteries)/launch/notebook_battery.launch">
+		<arg name="name" value="vision"/>
+	</include>
+
+
+
 </launch>

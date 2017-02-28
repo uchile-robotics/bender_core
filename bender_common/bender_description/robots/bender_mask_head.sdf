@@ -1,0 +1,1948 @@
+<sdf version='1.4'>
+  <model name='bender'>
+    <link name='bender/base_link'>
+      <pose>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>5.40095e-05 -2.62342e-11 0.100639 0 -0 0</pose>
+        <mass>400.263</mass>
+        <inertia>
+          <ixx>7.67807</ixx>
+          <ixy>-3.90883e-09</ixy>
+          <ixz>-0.0162249</ixz>
+          <iyy>2.68129</iyy>
+          <iyz>1.33397e-08</iyz>
+          <izz>5.67121</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/base_link_collision_bender/body'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/collision/body.stl</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='bender/base_link_collision_bender/sensors/laser_front_link'>
+        <pose>0.22 0 0.33 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.1</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='bender/base_link_collision_bender/sensors/laser_rear_link'>
+        <pose>-0.22 0 0.09 3.14159 -2.06823e-13 3.14159</pose>
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.1</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='bender/base_link_collision_bender/sensors/rgbd_waist_link'>
+        <pose>0.147272 0 0.920374 0 0.47 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.2 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/base_link_visual_bender/body'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/body.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <visual name='bender/base_link_visual_bender/neck_link'>
+        <pose>-0.00974877 0 1.3411 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/neck_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <visual name='bender/base_link_visual_bender/sensors/laser_front_link'>
+        <pose>0.22 0 0.33 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/sensors/hokuyo.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name='bender/base_link_visual_bender/sensors/laser_rear_link'>
+        <pose>-0.22 0 0.09 3.14159 -2.06823e-13 3.14159</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/sensors/hokuyo.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name='bender/base_link_visual_bender/sensors/rgbd_waist_link'>
+        <pose>0.138357 0 0.924903 2.0408 -2.03343e-12 1.5708</pose>
+        <geometry>
+          <mesh>
+            <scale>0.001 0.001 0.001</scale>
+            <uri>model://bender_description/meshes/sensors/asus_xtion_pro_live.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <sensor name='laser_front' type='ray'>
+        <visualize>0</visualize>
+        <update_rate>10</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>720</samples>
+              <resolution>1</resolution>
+              <min_angle>-1.5708</min_angle>
+              <max_angle>1.5708</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.1</min>
+            <max>6</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name='gazebo_ros_laser_front_hokuyo_controller' filename='libgazebo_ros_laser.so'>
+          <topicName>bender/sensors/laser_front/scan</topicName>
+          <frameName>bender/sensors/laser_front_link</frameName>
+        </plugin>
+        <pose>0.22 0 0.33 0 -0 0</pose>
+      </sensor>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <sensor name='laser_rear' type='ray'>
+        <visualize>0</visualize>
+        <update_rate>10</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>720</samples>
+              <resolution>1</resolution>
+              <min_angle>-1.5708</min_angle>
+              <max_angle>1.5708</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.1</min>
+            <max>6</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name='gazebo_ros_laser_rear_hokuyo_controller' filename='libgazebo_ros_laser.so'>
+          <topicName>bender/sensors/laser_rear/scan</topicName>
+          <frameName>bender/sensors/laser_rear_link</frameName>
+        </plugin>
+        <pose>-0.22 0 0.09 3.14159 -2.06823e-13 3.14159</pose>
+      </sensor>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+      <sensor name='rgbd_waist' type='depth'>
+        <always_on>1</always_on>
+        <update_rate>5</update_rate>
+        <camera name='__default__'>
+          <horizontal_fov>0.994838</horizontal_fov>
+          <image>
+            <format>B8G8R8</format>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>5</far>
+          </clip>
+        </camera>
+        <plugin name='rgbd_waist_controller' filename='libgazebo_ros_openni_kinect.so'>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>5.0</updateRate>
+          <cameraName>rgbd_waist</cameraName>
+          <imageTopicName>/bender/sensors/rgbd_waist/rgb/image_raw</imageTopicName>
+          <cameraInfoTopicName>/bender/sensors/rgbd_waist/rgb/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>/bender/sensors/rgbd_waist/depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>/bender/sensors/rgbd_waist/depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>/bender/sensors/rgbd_waist/depth/points</pointCloudTopicName>
+          <frameName>bender/sensors/rgbd_waist_depth_optical_frame</frameName>
+          <baseline>0.1</baseline>
+          <distortion_k1>0.0</distortion_k1>
+          <distortion_k2>0.0</distortion_k2>
+          <distortion_k3>0.0</distortion_k3>
+          <distortion_t1>0.0</distortion_t1>
+          <distortion_t2>0.0</distortion_t2>
+          <pointCloudCutoff>0.35</pointCloudCutoff>
+          <pointCloudCutoffMax>2.0</pointCloudCutoffMax>
+        </plugin>
+        <pose>0.147272 0.049 0.920374 0 0.47 0</pose>
+      </sensor>
+    </link>
+    <link name='bender/front_left_wheel'>
+      <pose>0.122037 0.156681 0.101 0 -0 0</pose>
+      <inertial>
+        <pose>0 0.025 0 1.5708 -0 0</pose>
+        <mass>50</mass>
+        <inertia>
+          <ixx>0.135417</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.135417</iyy>
+          <iyz>0</iyz>
+          <izz>0.25</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/front_left_wheel_collision'>
+        <pose>0 0.025 0 1.5708 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.05</length>
+            <radius>0.1</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <kp>1e+06</kp>
+              <kd>100</kd>
+              <max_vel>1</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.8</mu>
+              <mu2>0.8</mu2>
+              <fdir1>1 0 0</fdir1>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/front_left_wheel_visual'>
+        <pose>0 0 0 -3.14159 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/wheel.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='front_left_wheel_joint' type='revolute'>
+      <child>bender/front_left_wheel</child>
+      <parent>bender/base_link</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics/>
+      </axis>
+    </joint>
+    <link name='bender/front_right_wheel'>
+      <pose>0.122037 -0.156681 0.101 0 -0 0</pose>
+      <inertial>
+        <pose>0 -0.025 0 1.5708 -0 0</pose>
+        <mass>50</mass>
+        <inertia>
+          <ixx>0.135417</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.135417</iyy>
+          <iyz>0</iyz>
+          <izz>0.25</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/front_right_wheel_collision'>
+        <pose>0 -0.025 0 1.5708 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.05</length>
+            <radius>0.1</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <kp>1e+06</kp>
+              <kd>100</kd>
+              <max_vel>1</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.8</mu>
+              <mu2>0.8</mu2>
+              <fdir1>1 0 0</fdir1>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/front_right_wheel_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/wheel.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='front_right_wheel_joint' type='revolute'>
+      <child>bender/front_right_wheel</child>
+      <parent>bender/base_link</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics/>
+      </axis>
+    </joint>
+    <link name='bender/l_shoulder_pitch_link'>
+      <pose>-0.01941 0.238791 1.2466 0 -0 0</pose>
+      <inertial>
+        <pose>-0.0003 0.02375 -0.0137 0 -0 0</pose>
+        <mass>0.23799</mass>
+        <inertia>
+          <ixx>0.000194359</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00014676</iyy>
+          <iyz>0</iyz>
+          <izz>0.00014676</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/l_shoulder_pitch_link_collision'>
+        <pose>0 0.02 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.07 0.07</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/l_shoulder_pitch_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/l_shoulder_pitch.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='l_shoulder_pitch_joint' type='revolute'>
+      <child>bender/l_shoulder_pitch_link</child>
+      <parent>bender/base_link</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-1.53397</lower>
+          <upper>1.94815</upper>
+          <effort>10.85</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/l_shoulder_roll_link'>
+      <pose>-0.04119 0.272691 1.2166 0 -0 0</pose>
+      <inertial>
+        <pose>0.04628 -1e-05 -0.11824 0 -0 0</pose>
+        <mass>0.2845</mass>
+        <inertia>
+          <ixx>0.000797193</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000827421</iyy>
+          <iyz>0</iyz>
+          <izz>8.83135e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/l_shoulder_roll_link_collision'>
+        <pose>0.04 0 -0.075 0 -0.25 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.035 0.18</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/l_shoulder_roll_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/shoulder_roll.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='l_shoulder_roll_joint' type='revolute'>
+      <child>bender/l_shoulder_roll_link</child>
+      <parent>bender/l_shoulder_pitch_link</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-0.23776</lower>
+          <upper>1.51096</upper>
+          <effort>10.85</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/l_shoulder_yaw_link'>
+      <pose>-0.00901 0.272691 1.08 0 -0 0</pose>
+      <inertial>
+        <pose>-0.01725 -0.0002 -0.15164 0 -0 0</pose>
+        <mass>0.26197</mass>
+        <inertia>
+          <ixx>0.00118159</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00120943</iyy>
+          <iyz>0</iyz>
+          <izz>8.13199e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/l_shoulder_yaw_link_collision'>
+        <pose>-0.015 0 -0.115 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.035 0.23</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/l_shoulder_yaw_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/shoulder_yaw.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='l_shoulder_yaw_joint' type='revolute'>
+      <child>bender/l_shoulder_yaw_link</child>
+      <parent>bender/l_shoulder_roll_link</parent>
+      <axis>
+        <xyz>0 0 -1</xyz>
+        <limit>
+          <lower>-1.48284</lower>
+          <upper>1.38057</upper>
+          <effort>4.44054</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/l_elbow_pitch_link'>
+      <pose>-0.024908 0.294471 0.87 0 -0 0</pose>
+      <inertial>
+        <pose>0.00717 -0.02186 -0.06081 0 -0 0</pose>
+        <mass>0.24592</mass>
+        <inertia>
+          <ixx>0.000305351</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000256167</iyy>
+          <iyz>0</iyz>
+          <izz>0.000151651</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/l_elbow_pitch_link_collision'>
+        <pose>0.015 -0.025 -0.05 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.07 0.1</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/l_elbow_pitch_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/elbow_pitch.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='l_elbow_pitch_joint' type='revolute'>
+      <child>bender/l_elbow_pitch_link</child>
+      <parent>bender/l_shoulder_yaw_link</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-1.03543</lower>
+          <upper>1.86378</upper>
+          <effort>10.85</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/l_elbow_yaw_link'>
+      <pose>-0.038508 0.272191 0.77782 0 -0 0</pose>
+      <inertial>
+        <pose>-0.01908 3e-05 -0.15208 0 -0 0</pose>
+        <mass>0.1996</mass>
+        <inertia>
+          <ixx>0.00172363</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00174484</iyy>
+          <iyz>0</iyz>
+          <izz>6.19592e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/l_elbow_yaw_link_collision'>
+        <pose>-0.015 0 -0.12 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.035 0.32</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/l_elbow_yaw_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/elbow_yaw.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='l_elbow_yaw_joint' type='revolute'>
+      <child>bender/l_elbow_yaw_link</child>
+      <parent>bender/l_elbow_pitch_link</parent>
+      <axis>
+        <xyz>0 0 -1</xyz>
+        <limit>
+          <lower>-1.20161</lower>
+          <upper>1.30387</upper>
+          <effort>4.44054</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/l_wrist_pitch_link'>
+      <pose>-0.056729 0.289291 0.5151 0 -0 0</pose>
+      <inertial>
+        <pose>-3e-05 -0.01324 -0.11135 0 -0 0</pose>
+        <mass>0.49201</mass>
+        <inertia>
+          <ixx>0.000463309</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000266505</iyy>
+          <iyz>0</iyz>
+          <izz>0.000328007</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/l_wrist_pitch_link_collision'>
+        <pose>0 -0.02 -0.05 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.04 0.08 0.07</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/l_wrist_pitch_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/wrist_pitch.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='l_wrist_pitch_joint' type='revolute'>
+      <child>bender/l_wrist_pitch_link</child>
+      <parent>bender/l_elbow_yaw_link</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-1.07378</lower>
+          <upper>1.22717</upper>
+          <effort>3.1</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/l_base_ext_finger_link'>
+      <pose>-0.038979 0.290141 0.4357 0.523599 -0 0</pose>
+      <inertial>
+        <pose>-0.018 -0.03 -0.07 0 -0 0</pose>
+        <mass>0.16</mass>
+        <inertia>
+          <ixx>0.000357667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000293417</iyy>
+          <iyz>-0.000140729</iyz>
+          <izz>0.000130917</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/l_base_ext_finger_link_collision_bender/l_ext_finger_link'>
+        <pose>0.0275 0 0.011 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/collision/finger.stl</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <kp>1e+06</kp>
+              <kd>1</kd>
+              <min_depth>0.005</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/l_base_ext_finger_link_visual_bender/l_ext_finger_link'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/two_finger.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='l_ext_finger_joint' type='revolute'>
+      <child>bender/l_base_ext_finger_link</child>
+      <parent>bender/l_wrist_pitch_link</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-0.02556</lower>
+          <upper>0.69029</upper>
+          <effort>3.1</effort>
+          <velocity>10</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.2</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/l_base_int_finger_link'>
+      <pose>-0.038979 0.253741 0.4357 -0.523599 0 0</pose>
+      <inertial>
+        <pose>-0.017 0.03 -0.07 0 -0 0</pose>
+        <mass>0.16</mass>
+        <inertia>
+          <ixx>0.000357667</ixx>
+          <ixy>-1.32679e-17</ixy>
+          <ixz>2.91108e-17</ixz>
+          <iyy>0.000293417</iyy>
+          <iyz>0.000140729</iyz>
+          <izz>0.000130917</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/l_base_int_finger_link_collision_bender/l_int_finger_link'>
+        <pose>-0.0625 5.68764e-15 0.011 0 -0 3.14159</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/collision/finger.stl</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <kp>1e+06</kp>
+              <kd>1</kd>
+              <min_depth>0.005</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/l_base_int_finger_link_visual_bender/l_int_finger_link'>
+        <pose>-0.035 0 0 0 -0 3.14159</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/two_finger.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='l_int_finger_joint' type='revolute'>
+      <child>bender/l_base_int_finger_link</child>
+      <parent>bender/l_wrist_pitch_link</parent>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <limit>
+          <lower>-0.02556</lower>
+          <upper>0.69029</upper>
+          <effort>3.1</effort>
+          <velocity>10</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.2</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/head_link'>
+      <pose>-0.0367488 0 1.394 0 -0 0</pose>
+      <inertial>
+        <pose>-0.012141 -1.7505e-05 0.041401 0 -0 0</pose>
+        <mass>0.17983</mass>
+        <inertia>
+          <ixx>0.00015925</ixx>
+          <ixy>4.0867e-07</ixy>
+          <ixz>-7.9102e-06</ixz>
+          <iyy>0.0001892</iyy>
+          <iyz>-6.1427e-08</iyz>
+          <izz>8.7881e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/head_link_collision'>
+        <pose>0 0 0.07 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.13 0.13 0.21</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/head_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/head_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='head_yaw_joint' type='revolute'>
+      <child>bender/head_link</child>
+      <parent>bender/base_link</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1.8919</lower>
+          <upper>1.8919</upper>
+          <effort>4.44054</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/face_link'>
+      <pose>-0.0367488 0.02598 1.4619 0 -0 0</pose>
+      <inertial>
+        <pose>0.046115 -0.026111 0.10189 0 -0 0</pose>
+        <mass>0.33187</mass>
+        <inertia>
+          <ixx>0.0013461</ixx>
+          <ixy>-2.8029e-07</ixy>
+          <ixz>-9.224e-05</ixz>
+          <iyy>0.00080978</iyy>
+          <iyz>-6.6351e-07</iyz>
+          <izz>0.00074443</izz>
+        </inertia>
+      </inertial>
+      <visual name='bender/face_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/face_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+      <sensor name='rgbd_head' type='depth'>
+        <always_on>1</always_on>
+        <update_rate>5</update_rate>
+        <camera name='__default__'>
+          <horizontal_fov>0.994838</horizontal_fov>
+          <image>
+            <format>B8G8R8</format>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>5</far>
+          </clip>
+        </camera>
+        <plugin name='rgbd_head_controller' filename='libgazebo_ros_openni_kinect.so'>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>5.0</updateRate>
+          <cameraName>rgbd_head</cameraName>
+          <imageTopicName>/bender/sensors/rgbd_head/rgb/image_raw</imageTopicName>
+          <cameraInfoTopicName>/bender/sensors/rgbd_head/rgb/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>/bender/sensors/rgbd_head/depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>/bender/sensors/rgbd_head/depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>/bender/sensors/rgbd_head/depth/points</pointCloudTopicName>
+          <frameName>bender/sensors/rgbd_head_depth_optical_frame</frameName>
+          <baseline>0.1</baseline>
+          <distortion_k1>0.0</distortion_k1>
+          <distortion_k2>0.0</distortion_k2>
+          <distortion_k3>0.0</distortion_k3>
+          <distortion_t1>0.0</distortion_t1>
+          <distortion_t2>0.0</distortion_t2>
+          <pointCloudCutoff>0.35</pointCloudCutoff>
+          <pointCloudCutoffMax>2.0</pointCloudCutoffMax>
+        </plugin>
+        <pose>0.05332 0.0208 0.14105 0 0.031904 0</pose>
+      </sensor>
+    </link>
+    <joint name='head_pitch_joint' type='revolute'>
+      <child>bender/face_link</child>
+      <parent>bender/head_link</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-0.39372</lower>
+          <upper>0.88459</upper>
+          <effort>4.44054</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/r_shoulder_pitch_link'>
+      <pose>-0.01941 -0.238791 1.2466 0 -0 0</pose>
+      <inertial>
+        <pose>-0.0003 -0.02375 -0.0137 0 -0 0</pose>
+        <mass>0.23799</mass>
+        <inertia>
+          <ixx>0.000194359</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00014676</iyy>
+          <iyz>0</iyz>
+          <izz>0.00014676</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/r_shoulder_pitch_link_collision'>
+        <pose>0 -0.02 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.07 0.07</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/r_shoulder_pitch_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/r_shoulder_pitch.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='r_shoulder_pitch_joint' type='revolute'>
+      <child>bender/r_shoulder_pitch_link</child>
+      <parent>bender/base_link</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-1.53397</lower>
+          <upper>1.94815</upper>
+          <effort>10.85</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/r_shoulder_roll_link'>
+      <pose>-0.04119 -0.272691 1.2166 0 -0 0</pose>
+      <inertial>
+        <pose>0.04628 -1e-05 -0.11824 0 -0 0</pose>
+        <mass>0.2845</mass>
+        <inertia>
+          <ixx>0.000797193</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000827421</iyy>
+          <iyz>0</iyz>
+          <izz>8.83135e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/r_shoulder_roll_link_collision'>
+        <pose>0.04 0 -0.075 0 -0.25 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.035 0.18</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/r_shoulder_roll_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/shoulder_roll.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='r_shoulder_roll_joint' type='revolute'>
+      <child>bender/r_shoulder_roll_link</child>
+      <parent>bender/r_shoulder_pitch_link</parent>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <limit>
+          <lower>-0.23776</lower>
+          <upper>1.51096</upper>
+          <effort>10.85</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/r_shoulder_yaw_link'>
+      <pose>-0.00901 -0.272691 1.08 0 -0 0</pose>
+      <inertial>
+        <pose>-0.01725 -0.0002 -0.15164 0 -0 0</pose>
+        <mass>0.26197</mass>
+        <inertia>
+          <ixx>0.00118159</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00120943</iyy>
+          <iyz>0</iyz>
+          <izz>8.13199e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/r_shoulder_yaw_link_collision'>
+        <pose>-0.015 0 -0.115 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.035 0.23</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/r_shoulder_yaw_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/shoulder_yaw.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='r_shoulder_yaw_joint' type='revolute'>
+      <child>bender/r_shoulder_yaw_link</child>
+      <parent>bender/r_shoulder_roll_link</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1.48284</lower>
+          <upper>1.38057</upper>
+          <effort>4.44054</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/r_elbow_pitch_link'>
+      <pose>-0.024908 -0.250911 0.87 0 -0 0</pose>
+      <inertial>
+        <pose>0.00717 -0.02186 -0.06081 0 -0 0</pose>
+        <mass>0.24592</mass>
+        <inertia>
+          <ixx>0.000305351</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000256167</iyy>
+          <iyz>0</iyz>
+          <izz>0.000151651</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/r_elbow_pitch_link_collision'>
+        <pose>0.015 -0.025 -0.05 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.07 0.1</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/r_elbow_pitch_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/elbow_pitch.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='r_elbow_pitch_joint' type='revolute'>
+      <child>bender/r_elbow_pitch_link</child>
+      <parent>bender/r_shoulder_yaw_link</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-1.03543</lower>
+          <upper>1.86378</upper>
+          <effort>10.85</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/r_elbow_yaw_link'>
+      <pose>-0.038508 -0.273191 0.77782 0 -0 0</pose>
+      <inertial>
+        <pose>-0.01908 3e-05 -0.15208 0 -0 0</pose>
+        <mass>0.1996</mass>
+        <inertia>
+          <ixx>0.00172363</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00174484</iyy>
+          <iyz>0</iyz>
+          <izz>6.19592e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/r_elbow_yaw_link_collision'>
+        <pose>-0.015 0 -0.12 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.035 0.32</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/r_elbow_yaw_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/elbow_yaw.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='r_elbow_yaw_joint' type='revolute'>
+      <child>bender/r_elbow_yaw_link</child>
+      <parent>bender/r_elbow_pitch_link</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1.20161</lower>
+          <upper>1.30387</upper>
+          <effort>4.44054</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/r_wrist_pitch_link'>
+      <pose>-0.056729 -0.256091 0.5151 0 -0 0</pose>
+      <inertial>
+        <pose>-3e-05 -0.01324 -0.11135 0 -0 0</pose>
+        <mass>0.49201</mass>
+        <inertia>
+          <ixx>0.000463309</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000266505</iyy>
+          <iyz>0</iyz>
+          <izz>0.000328007</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/r_wrist_pitch_link_collision'>
+        <pose>0 -0.02 -0.05 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.04 0.08 0.07</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.2</mu>
+              <mu2>0.2</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/r_wrist_pitch_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/wrist_pitch.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='r_wrist_pitch_joint' type='revolute'>
+      <child>bender/r_wrist_pitch_link</child>
+      <parent>bender/r_elbow_yaw_link</parent>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-1.07378</lower>
+          <upper>1.22717</upper>
+          <effort>3.1</effort>
+          <velocity>5.23599</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.15</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/r_base_ext_finger_link'>
+      <pose>-0.038979 -0.291641 0.4357 -0.523599 0 0</pose>
+      <inertial>
+        <pose>-0.017 0.03 -0.07 0 -0 0</pose>
+        <mass>0.16</mass>
+        <inertia>
+          <ixx>0.000357667</ixx>
+          <ixy>-1.32679e-17</ixy>
+          <ixz>2.91108e-17</ixz>
+          <iyy>0.000293417</iyy>
+          <iyz>0.000140729</iyz>
+          <izz>0.000130917</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/r_base_ext_finger_link_collision_bender/r_ext_finger_link'>
+        <pose>-0.035 0 0.011 0 -0 3.14159</pose>
+        <geometry>
+          <mesh>
+            <scale>0.35 1 1</scale>
+            <uri>model://bender_description/meshes/collision/finger.stl</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <kp>1e+06</kp>
+              <kd>1</kd>
+              <min_depth>0.005</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/r_base_ext_finger_link_visual_bender/r_ext_finger_link'>
+        <pose>-0.035 0 0 0 -0 3.14159</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/one_finger.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='r_ext_finger_joint' type='revolute'>
+      <child>bender/r_base_ext_finger_link</child>
+      <parent>bender/r_wrist_pitch_link</parent>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <limit>
+          <lower>-0.02556</lower>
+          <upper>0.69029</upper>
+          <effort>3.1</effort>
+          <velocity>10</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.2</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/r_base_int_finger_link'>
+      <pose>-0.038979 -0.255241 0.4357 0.523599 -0 0</pose>
+      <inertial>
+        <pose>-0.018 -0.03 -0.07 0 -0 0</pose>
+        <mass>0.16</mass>
+        <inertia>
+          <ixx>0.000357667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000293417</iyy>
+          <iyz>-0.000140729</iyz>
+          <izz>0.000130917</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/r_base_int_finger_link_collision_bender/r_int_finger_link'>
+        <pose>0 0 0.011 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.35 1 1</scale>
+            <uri>model://bender_description/meshes/collision/finger.stl</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <kp>1e+06</kp>
+              <kd>1</kd>
+              <min_depth>0.005</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/r_base_int_finger_link_visual_bender/r_int_finger_link'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/one_finger.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='r_int_finger_joint' type='revolute'>
+      <child>bender/r_base_int_finger_link</child>
+      <parent>bender/r_wrist_pitch_link</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-0.02556</lower>
+          <upper>0.69029</upper>
+          <effort>3.1</effort>
+          <velocity>10</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.2</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='bender/rear_left_wheel'>
+      <pose>-0.122037 0.156681 0.101 0 -0 0</pose>
+      <inertial>
+        <pose>0 0.025 0 1.5708 -0 0</pose>
+        <mass>50</mass>
+        <inertia>
+          <ixx>0.135417</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.135417</iyy>
+          <iyz>0</iyz>
+          <izz>0.25</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/rear_left_wheel_collision'>
+        <pose>0 0.025 0 1.5708 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.05</length>
+            <radius>0.1</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <kp>1e+06</kp>
+              <kd>100</kd>
+              <max_vel>1</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.8</mu>
+              <mu2>0.8</mu2>
+              <fdir1>1 0 0</fdir1>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/rear_left_wheel_visual'>
+        <pose>0 0 0 -3.14159 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/wheel.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='rear_left_wheel_joint' type='revolute'>
+      <child>bender/rear_left_wheel</child>
+      <parent>bender/base_link</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics/>
+      </axis>
+    </joint>
+    <link name='bender/rear_right_wheel'>
+      <pose>-0.122037 -0.156681 0.101 0 -0 0</pose>
+      <inertial>
+        <pose>0 -0.025 0 1.5708 -0 0</pose>
+        <mass>50</mass>
+        <inertia>
+          <ixx>0.135417</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.135417</iyy>
+          <iyz>0</iyz>
+          <izz>0.25</izz>
+        </inertia>
+      </inertial>
+      <collision name='bender/rear_right_wheel_collision'>
+        <pose>0 -0.025 0 1.5708 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.05</length>
+            <radius>0.1</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <kp>1e+06</kp>
+              <kd>100</kd>
+              <max_vel>1</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>0.8</mu>
+              <mu2>0.8</mu2>
+              <fdir1>1 0 0</fdir1>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='bender/rear_right_wheel_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://bender_description/meshes/visual/wheel.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/DarkGrey</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+    </link>
+    <joint name='rear_right_wheel_joint' type='revolute'>
+      <child>bender/rear_right_wheel</child>
+      <parent>bender/base_link</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics/>
+      </axis>
+    </joint>
+    <plugin name='skid_steer_drive_controller' filename='libgazebo_ros_skid_steer_drive.so'>
+      <robotNamespace>bender/nav</robotNamespace>
+      <updateRate>50.0</updateRate>
+      <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
+      <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
+      <leftRearJoint>rear_left_wheel_joint</leftRearJoint>
+      <rightRearJoint>rear_right_wheel_joint</rightRearJoint>
+      <wheelSeparation>0.4</wheelSeparation>
+      <wheelDiameter>0.215</wheelDiameter>
+      <robotBaseFrame>bender/base_link</robotBaseFrame>
+      <torque>200</torque>
+      <MaxForce>5.0</MaxForce>
+      <commandTopic>base/cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>bender/odom</odometryFrame>
+      <broadcastTF>1</broadcastTF>
+    </plugin>
+    <static>0</static>
+    <plugin name='ros_control' filename='libgazebo_ros_control.so'>
+      <robotNamespace>bender/</robotNamespace>
+    </plugin>
+  </model>
+</sdf>
