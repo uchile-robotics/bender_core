@@ -8,7 +8,10 @@ import rospy
 from robot import Robot
 from robot_skill import RobotSkill
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9ed94afa7cab56f6a75812747fe52cee7fe105d0
 import inspect
 import importlib
 import pkgutil
