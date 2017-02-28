@@ -1,0 +1,94 @@
+verbose: true
+base_link: light_head_base_link 
+models:
+ - name: bender_arm
+   type: chain
+   frame: wrist_roll_link
+ - name: camera
+   type: camera3d
+   frame: head_camera_rgb_optical_frame
+   topic: /bender/sensors/rgbd_head/depth/points
+free_params:
+
+ - l_shoulder_pitch_joint
+ - l_shoulder_roll_joint
+ - l_shoulder_yaw_joint
+ - l_elbow_pitch_joint
+ - l_elbow_yaw_joint
+ - l_wrist_pitch_joint
+ - light_head_pitch_joint
+ - light_head_yaw_joint
+ - camera_fx
+ - camera_fy
+ - camera_cx
+ - camera_cy
+ - camera_z_offset
+ - camera_z_scaling
+free_frames:
+ - name: head_camera_rgb_joint
+   x: true
+   y: true
+   z: true
+   roll: true
+   pitch: true
+   yaw: true
+ - name: head_pan_joint
+   x: true
+   y: true
+   z: true
+   roll: true
+   pitch: true
+   yaw: true
+ - name: checkerboard
+   x: true
+   y: false
+   z: true
+   roll: false
+   pitch: true
+   yaw: false
+error_blocks:
+ - name: hand_eye
+   type: camera3d_to_arm
+   camera: camera
+   arm: arm
+ - name: restrict_camera
+   type: outrageous
+   param: head_camera_rgb_joint
+   joint_scale: 0.0
+   position_scale: 0.1
+rotation_scale: 0.1
+chains:
+  - name: l_arm
+    topic: /bender/l_arm_controller/follow_joint_trajectory
+    joints:
+     - l_shoulder_pitch_joint
+     - l_shoulder_roll_joint
+     - l_shoulder_yaw_joint
+     - l_elbow_pitch_joint
+     - l_elbow_yaw_joint
+     - l_wrist_pitch_joint
+    planning_group: l_arm
+  - name: r_arm
+    topic: /bender/r_arm_controller/follow_joint_trajectory
+    joints:
+     - r_shoulder_pitch_joint
+     - r_shoulder_roll_joint
+     - r_shoulder_yaw_joint
+     - r_elbow_pitch_joint
+     - r_elbow_yaw_joint
+     - r_wrist_pitch_joint
+    planning_group: r_arm
+  - name: light_head
+    topic: /bender/light_head_controller/follow_joint_trajectory
+    joints:
+     - light_head_pitch_joint
+     - light_head_yaw_joint
+duration: 2.0
+features:
+  checkerboard_finder:
+    type: robot_calibration/CheckerboardFinder
+    topic: /bender/sensors/rgbd_head/depth/points
+    camera_sensor_name: camera
+    chain_sensor_name: r_arm
+    points_x: 4
+    points_y: 5

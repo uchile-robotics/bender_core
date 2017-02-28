@@ -83,7 +83,7 @@ def update_robot_launch(launch, calibration, install_dir):
     copy_file(temp_launch, os.path.join(install_dir, "robot.launch"))
 
 def get_calibration_dict(directory, calibration = None):
-    if calibration == None:
+    if calibration is None:
         calibration = dict()
     # Load file
     try:
@@ -116,7 +116,7 @@ def get_calibration_dict(directory, calibration = None):
     return calibration
 
 def get_base_calibration_dict(directory, calibration = None):
-    if calibration == None:
+    if calibration is None:
         calibration = dict()
     # Load file
     try:
