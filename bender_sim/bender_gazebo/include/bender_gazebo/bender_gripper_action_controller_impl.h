@@ -109,10 +109,7 @@ MultiGripperActionController()
 bool MultiGripperActionController::init(hardware_interface::EffortJointInterface* hw,
                   ros::NodeHandle&   root_nh,
                   ros::NodeHandle&   controller_nh)
-{
-  ROS_DEBUG_STREAM_NAMED(name_, "Init MultiGripperActionController with '" <<
-    this->getHardwareInterfaceType() << "'.");
-  
+{  
   using namespace util;
   
   // Cache controller node handle
@@ -120,13 +117,8 @@ bool MultiGripperActionController::init(hardware_interface::EffortJointInterface
   
   // Controller name
   name_ = getLeafNamespace(controller_nh_);
-
-  // Set logger level to debug
-  if (verbose_){
-    log4cxx::Logger::getLogger(ROSCONSOLE_DEFAULT_NAME)->setLevel(
-    ros::console::g_level_lookup[ros::console::levels::Debug]);
-    ros::console::notifyLoggerLevelsChanged();
-  }
+  ROS_DEBUG_STREAM_NAMED(name_, "Init MultiGripperActionController with '" <<
+  this->getHardwareInterfaceType() << "'.");
   
   // Action status checking update rate
   double action_monitor_rate = 20.0;
@@ -173,18 +165,18 @@ bool MultiGripperActionController::init(hardware_interface::EffortJointInterface
       return false;
     }
   }
-  
+
   // Default tolerances
-  controller_nh_.param<double>("goal_tolerance", goal_tolerance_, 0.01);
-  goal_tolerance_ = fabs(goal_tolerance_);
+  controller_nh_.param<double>("goal_tolerance", goal_tolerance_, 0.05);
+  goal_tolerance_ = std::abs(goal_tolerance_);
   ROS_DEBUG_NAMED(name_, "Goal tolerance setting at %.3f", goal_tolerance_);
   // Max allowable effort 
   controller_nh_.param<double>("max_effort", default_max_effort_, 0.0);
-  default_max_effort_ = fabs(default_max_effort_);
+  default_max_effort_ = std::abs(default_max_effort_);
   ROS_DEBUG_NAMED(name_, "Max allowable effort setting at %.3f", default_max_effort_);
   // Stall - stall velocity threshold, stall timeout
-  controller_nh_.param<double>("stall_velocity_threshold", stall_velocity_threshold_, 0.001);
-  controller_nh_.param<double>("stall_timeout", stall_timeout_, 1.0);
+  controller_nh_.param<double>("stall_velocity_threshold", stall_velocity_threshold_, 0.05);
+  controller_nh_.param<double>("stall_timeout", stall_timeout_, 0.5);
   ROS_DEBUG_NAMED(name_, "Stall velocity threshold %.3f, stall timeout %.03f",
     stall_velocity_threshold_, stall_timeout_);
   
@@ -230,7 +222,7 @@ update(const ros::Time& time, const ros::Duration& period)
   // Read buffer
   command_struct_rt_ = *(commands_.readFromRT());
 
-  double max_effort_ = command_struct_rt_[0].max_effort_;
+  double max_effort_ = command_struct_rt_[0].max_effort_*3.1; // TODO Fix max effort for gripper skill
 
   std::vector<double> error_position(num_joints_), error_velocity(num_joints_),
     current_position(num_joints_), current_velocity(num_joints_), desired_position(num_joints_);
@@ -240,19 +232,82 @@ update(const ros::Time& time, const ros::Duration& period)
     current_position[i] = joints_[i].getPosition();
     current_velocity[i] = joints_[i].getVelocity();
     error_position[i] =  desired_position[i] - current_position[i];
-    error_velocity[i] = - current_velocity[i];
+    error_velocity[i] = - current_velocity[i]; // Zero reference speed
   }
-    
-  checkForSuccess(time, error_position, current_position, current_velocity);
-  // Hardware interface adapter: Generate and send commands
+  // Generate and send commands to hardware interface adapter
   computed_command_ = hw_iface_adapter_.updateCommand(period, error_position, error_velocity, max_effort_);
+  
+  /* Condition checking, this implementation is based on PR2 Gripper controller.
+   * See: https://github.com/PR2/pr2_controllers/blob/pr2_controllers-1.9.3/pr2_gripper_action/src/pr2_gripper_action.cpp#L199
+   */
+  // Null active goal
+  if(!rt_active_goal_)
+  {
+    return;
+  }
+  if(rt_active_goal_->gh_.getGoalStatus().status != actionlib_msgs::GoalStatus::ACTIVE)
+    return;
+
+  // Check goal tolerance for joints
+  bool reach_goal_tolerance = true;
+  for(unsigned int i = 0; i < num_joints_ ; ++i)
+  {
+    if (std::abs(error_position[i]) > goal_tolerance_)
+    {
+      reach_goal_tolerance = false;
+      break;
+    }
+  }
+  // Mean position of gripper joints
+  double mean_position = 0;
+  for(unsigned int i = 0; i < num_joints_ ; ++i)
+  {
+    mean_position += current_position[i];
+  }
+  mean_position /= num_joints_;
+  // Set result
+  if(reach_goal_tolerance)
+  {
+    pre_alloc_result_->effort = computed_command_;
+    pre_alloc_result_->position = mean_position;
+    pre_alloc_result_->reached_goal = true;
+    pre_alloc_result_->stalled = false;
+    rt_active_goal_->setSucceeded(pre_alloc_result_);
+  }
+  else
+  {
+    // Check stall velocity for joint
+    bool reach_stall_velocity = false;
+    for(unsigned int i = 0; i < num_joints_ ; ++i)
+    {
+      if (std::abs(current_velocity[i]) < stall_velocity_threshold_ && computed_command_ > 0.95*max_effort_)
+      {
+        reach_stall_velocity = true;
+        break;
+      }
+    }
+    // Update movement time time
+    if (!reach_stall_velocity)
+    {
+      last_movement_time_ = time;
+    }
+    // Check stall timeout
+    else if( (time - last_movement_time_).toSec() > stall_timeout_ && max_effort_ != 0.0)
+    {
+      pre_alloc_result_->effort = computed_command_;
+      pre_alloc_result_->position = mean_position;
+      pre_alloc_result_->reached_goal = false;
+      pre_alloc_result_->stalled = true;
+      rt_active_goal_->setAborted(pre_alloc_result_);
+    }
+  }
 }
 
 
 void MultiGripperActionController::
 goalCB(GoalHandle gh)
 {
-  ROS_INFO_STREAM_NAMED(name_,"Recieved new action goal");
+  ROS_DEBUG_NAMED(name_, "[%s] Recieved new action goal (effort=%.2f)", name_.c_str(), gh.getGoal()->command.max_effort);
   
   // Precondition: Running controller
   if (!this->isRunning())
@@ -321,62 +376,6 @@ setHoldPosition(const ros::Time& time)
     command_struct_[i].max_effort_ = default_max_effort_;
   }
   commands_.writeFromNonRT(command_struct_);
-}
-
-void MultiGripperActionController::
-checkForSuccess(const ros::Time& time, std::vector<double>& error_position,
-    std::vector<double>& current_position, std::vector<double>& current_velocity)
-{
-  if(!rt_active_goal_)
-    return;
-
-  if(rt_active_goal_->gh_.getGoalStatus().status != actionlib_msgs::GoalStatus::ACTIVE)
-    return;
-
-  // Check goal tolerance for joints
-  bool reach_goal_tolerance = true;
-  for(unsigned int i = 0; i < num_joints_ ; ++i) {
-    if (!(fabs(error_position[i]) < goal_tolerance_)) {
-      reach_goal_tolerance = false; break; }
-  }
-  // Mean position
-  double mean_position = 0;
-  for(unsigned int i = 0; i < num_joints_ ; ++i) {
-    mean_position += current_position[i];
-  }
-  mean_position /= num_joints_;
-  // Set result
-  if(reach_goal_tolerance)
-  {
-    pre_alloc_result_->effort = computed_command_;
-    pre_alloc_result_->position = mean_position;
-    pre_alloc_result_->reached_goal = true;
-    pre_alloc_result_->stalled = false;
-    rt_active_goal_->setSucceeded(pre_alloc_result_);
-  }
-  else
-  {
-    // Check stall velocity for joint
-    bool reach_stall_velocity = true;
-    for(unsigned int i = 0; i < num_joints_ ; ++i) {
-      if (!(fabs(current_velocity[i]) < stall_velocity_threshold_)) {
-        reach_stall_velocity = false; break; }
-    }
-    // Update movement time time
-    if (!reach_stall_velocity)
-    {
-      last_movement_time_ = time;
-    }
-    // Check stall timeout
-    else if( (time - last_movement_time_).toSec() > stall_timeout_)
-    {
-      pre_alloc_result_->effort = computed_command_;
-      pre_alloc_result_->position = mean_position;
-      pre_alloc_result_->reached_goal = false;
-      pre_alloc_result_->stalled = true;
-      rt_active_goal_->setAborted(pre_alloc_result_);
-    }
-  }
 }
 
 } // namespace

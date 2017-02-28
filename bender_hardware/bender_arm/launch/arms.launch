@@ -6,8 +6,8 @@
   <!-- Launch both arms -->
   <include file="$(find bender_arm)/launch/both.launch"/>
 
-  <!-- Launch light_head -->
-  <include file="$(find bender_light_head)/launch/light_head.launch"/>
+  <!-- Launch mask_head -->
+  <include file="$(find bender_mask_head)/launch/mask_head.launch"/>
 
   <!-- Launch grippers -->
   <include file="$(find bender_gripper)/launch/r_gripper.launch"/>

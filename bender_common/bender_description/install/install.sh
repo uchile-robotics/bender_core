@@ -28,7 +28,7 @@ cd "$WORK_DIR"
 #  - - - - - - - - - Download files - - - - - - - - - - - 
 # Download bender_description meshes
 echo "$installer Downloading mesh files"
-"$BENDER_SYSTEM"/bash/megadown/megadown 'https://mega.nz/#!uhVDlZzJ!Aif_SjqiGVa3rPiTN8yAknialgE9Y0kykY-3OtIW0vg'
+"$BENDER_SYSTEM"/shell/megadown/megadown 'https://mega.nz/#!m0sAUDTA!ZtRQpf0niHwpAzjq8OrcBStvEqngK_RtvXa9TF2vo54'
 if [ $? -ne 0 ]; then
     echo "$installer ${red}Error downloading mesh files.${reset}"
     exit 1 # Terminate and indicate error

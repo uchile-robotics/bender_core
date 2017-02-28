@@ -8,7 +8,7 @@
 	<arg name="rviz"       default="true"/>
 
 	<!-- robot configuration -->
-	<arg name="model_type"     default="light_head"/>
+	<arg name="model_type"     default="mask_head"/>
 	<arg name="tf_gui"         default="false"/>
 	<arg name="language"       default="spanish"/>
 	
@@ -58,17 +58,28 @@
 		<arg name="model_type" value="$(arg model_type)"/>
 	</include>
 
+
 	<!-- Joystick -->
 	<include file="$(find bender_joy)/launch/joysticks.launch"/>
 
 	<!-- cmd_vel_mux -->
 	<include file="$(find bender_cmd_vel_mux)/launch/mux.launch"/>
 
+	<!-- robot laser self filter -->
+	<include file="$(find bender_laser_pipeline)/launch/laser_pipeline.launch">
+		<arg name="input_scan"  value="/bender/sensors/laser_front/scan"/>
+		<arg name="output_scan" value="/bender/sensors/laser_front/scan_filtered"/>
+	</include>
+
+	<!-- footprint generator -->
+	<include file="$(find bender_footprint_generator)/launch/footprint_generator.launch"/>
 
 	<!-- rqt_batteries -->
-	<!--
-	<include file="$(find rqt_batteries)/launch/bender_batteries.launch"/>
-	-->
+	
+	<include file="$(find rqt_batteries)/launch/notebook_battery.launch">
+		<arg name="name" value="nav"/>
+	</include>
+
 
 
 	

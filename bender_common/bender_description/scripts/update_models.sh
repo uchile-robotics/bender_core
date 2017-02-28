@@ -17,25 +17,43 @@ installer="${bold}[bender_description]:${reset}"
 #  - - - - - - - - - Main - - - - - - - - - - - 
 BASEDIR=$(pwd)
 cd "$BENDER_WS"/base_ws/src/bender_common/bender_description/robots
-echo "$installer Deleting old models."
-rm -rf bender.urdf
-rm -rf bender.sdf
-if [ $? -ne 0 ]; then
-    echo "$installer ${red}Error deleting files.${reset}"
-    exit 1 # Terminate and indicate error
-fi
+
 echo "$installer Exporting URDF."
-rosrun xacro xacro.py bender_asus.urdf.xacro prefix:="bender/" > bender.urdf
-if [ $? -ne 0 ]; then
-    echo "$installer ${red}Error exporting URDF.${reset}"
-    exit 1 # Terminate and indicate error
-fi
+for i in $(ls *.urdf.xacro);do
+    urdf_name=${i%$'.urdf.xacro'}
+    printf "%s\tExporting %s.urdf" "${installer}" "${urdf_name}"
+    rosrun xacro xacro.py ${i} prefix:="bender/" > ${urdf_name}.urdf
+    if [ $? -ne 0 ]; then
+        printf "\n%s%s Error exporting %s.urdf%s\n" "${installer}" "${red}" "${urdf_name}" "${reset}"
+        cd $BASEDIR
+        exit 1 # Terminate and indicate error
+    else
+        printf " %s\xe2\x9c\x93\n%s" "${green}" "${reset}"
+    fi
+done
+
 echo "$installer Exporting SDF."
-gz sdf -p bender.urdf > bender.sdf
-# In Gazebo 7 use
-# gzsdf print bender.urdf > bender.sdf
-if [ $? -ne 0 ]; then
-    echo "$installer ${red}Error exporting SDF.${reset}"
-    exit 1 # Terminate and indicate error
-fi
+for i in $(ls *.urdf);do
+    urdf_name=${i%$'.urdf'}
+    printf "%s\tExporting %s.sdf" "${installer}" "${urdf_name}"
+    # Check for gz command (Gazebo 3 or higher)
+    if [ -x "$(command -v gz)" ]; then
+        gz sdf -p ${urdf_name}.urdf > ${urdf_name}.sdf
+    elif [ -x "$(command -v gzsdf)" ]; then
+        # Check for gzsdf command (Gazebo 2)
+        gzsdf print ${urdf_name}.urdf > ${urdf_name}.sdf
+    else
+        echo "$installer ${red}Gazebo is not installed.${reset}"
+        cd $BASEDIR
+        exit 1
+    fi
+    if [ $? -ne 0 ]; then
+        printf "\n%s%s Error exporting %s.sdf%s\n" "${installer}" "${red}" "${urdf_name}" "${reset}"
+        cd $BASEDIR
+        exit 1 # Terminate and indicate error
+    else
+        printf " %s\xe2\x9c\x93\n%s" "${green}" "${reset}"
+    fi
+done
+
 cd $BASEDIR

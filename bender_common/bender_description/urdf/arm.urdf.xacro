@@ -28,19 +28,23 @@
   <xacro:property name="shoulder_roll_joint_lower" value="-0.23776" />
 
   <!-- Links mass -->
-  <xacro:property name="link_mass" value="1.0" />
-  <xacro:property name="elbow_yaw_mass" value="${link_mass}" />
-  <xacro:property name="elbow_pitch_mass" value="${link_mass}" />
-  <xacro:property name="shoulder_yaw_mass" value="${link_mass}" />
-  <xacro:property name="shoulder_pitch_mass" value="${link_mass}" />
-  <xacro:property name="wrist_pitch_mass" value="${link_mass}" />
-  <xacro:property name="shoulder_roll_mass" value="${link_mass}" />
+  <xacro:property name="TO_KG" value="${0.001}" />
+  <xacro:property name="TO_M" value="${0.001}" />
+  <xacro:property name="TO_KG_M2" value="${0.000000001}" />
+  <xacro:property name="shoulder_pitch_mass" value="${237.99*TO_KG}" />
+  <xacro:property name="shoulder_roll_mass"  value="${284.50*TO_KG}" />
+  <xacro:property name="shoulder_yaw_mass"   value="${261.97*TO_KG}" />
+  <xacro:property name="elbow_pitch_mass"    value="${245.92*TO_KG}" />
+  <xacro:property name="elbow_yaw_mass"      value="${199.60*TO_KG}" />
+  <xacro:property name="wrist_pitch_mass"    value="${492.01*TO_KG}" />
 
-  <!-- Effort -->
-  <xacro:property name="effort_shoulder" value="80" />
-  <xacro:property name="effort_elbow" value="30" />
-  <xacro:property name="effort_wrisp" value="15" />
-
+  <!-- Torque -->
+  <xacro:property name="shoulder_pitch_torque" value="${mx106_torque}" />
+  <xacro:property name="shoulder_roll_torque"  value="${mx106_torque}" />
+  <xacro:property name="shoulder_yaw_torque"   value="${rx64_torque}" />
+  <xacro:property name="elbow_pitch_torque"    value="${mx106_torque}" />
+  <xacro:property name="elbow_yaw_torque"      value="${rx64_torque}" />
+  <xacro:property name="wrist_pitch_torque"    value="${rx28_torque}" />
   
   <xacro:macro name="bender_arm" params="side parent reflect prefix">
 
@@ -66,7 +70,7 @@
       name="${prefix}${side}_shoulder_pitch_link">
       <inertial>
         <origin
-          xyz="0 ${- reflect * 0.02} 0"
+          xyz="${-0.30*TO_M} ${-reflect*23.75*TO_M} ${-13.7*TO_M}"
           rpy="0 0 0" />
         <mass value="${shoulder_pitch_mass}" />
         <cuboid_inertia_def x="0.05" y="0.07" z="0.07" mass="${shoulder_pitch_mass}"/>
@@ -103,11 +107,11 @@
       <axis
         xyz="0 -1 0" />
       <limit
-        effort="${effort_shoulder}"
+        effort="${shoulder_pitch_torque}"
         lower="${shoulder_pitch_joint_lower}"
         upper="${shoulder_pitch_joint_upper}"
         velocity="${vel_arm * M_PI / 180}"/>
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${shoulder_pitch_joint_lower-soft_margin}" soft_upper_limit="${shoulder_pitch_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
 
@@ -115,8 +119,8 @@
       name="${prefix}${side}_shoulder_roll_link">
       <inertial>
         <origin
-          xyz="0.04 0 -0.075"
-          rpy="0 -0.25 0" />
+          xyz="${46.28*TO_M} ${-0.01*TO_M} ${-118.24*TO_M}"
+          rpy="0 0 0" />
         <mass value="${shoulder_roll_mass}" />
         <cuboid_inertia_def x="0.05" y="0.035" z="0.18" mass="${shoulder_roll_mass}"/>
       </inertial>
@@ -154,9 +158,9 @@
       <limit
         lower="${shoulder_roll_joint_lower}"
         upper="${shoulder_roll_joint_upper}"
-        effort="${effort_shoulder}"
+        effort="${shoulder_roll_torque}"
         velocity="${vel_arm * M_PI / 180}" />
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${shoulder_roll_joint_lower-soft_margin}" soft_upper_limit="${shoulder_roll_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
 
@@ -164,7 +168,7 @@
       name="${prefix}${side}_shoulder_yaw_link">
       <inertial>
         <origin
-          xyz="-0.015 0 -0.115"
+          xyz="${-17.25*TO_M} ${-0.20*TO_M} ${-151.64*TO_M}"
           rpy="0 0 0" />
         <mass value="${shoulder_yaw_mass}" />
         <cuboid_inertia_def x="0.05" y="0.035" z="0.23" mass="${shoulder_yaw_mass}"/>
@@ -203,9 +207,9 @@
       <limit
         lower="${shoulder_yaw_joint_lower}"
         upper="${shoulder_yaw_joint_upper}"
-        effort="${effort_shoulder}"
+        effort="${shoulder_yaw_torque}"
         velocity="${vel_arm * M_PI / 180}" />
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${shoulder_yaw_joint_lower-soft_margin}" soft_upper_limit="${shoulder_yaw_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
     
@@ -213,7 +217,7 @@
       name="${prefix}${side}_elbow_pitch_link">
       <inertial>
         <origin
-          xyz="0.015 -0.025 -0.05"
+          xyz="${7.17*TO_M} ${-21.86*TO_M} ${-60.81*TO_M}"
           rpy="0 0 0" />
         <mass value="${elbow_pitch_mass}" />
         <cuboid_inertia_def x="0.05" y="0.07" z="0.10" mass="${elbow_pitch_mass}"/>
@@ -252,9 +256,9 @@
       <limit
         lower="${elbow_pitch_joint_lower}"
         upper="${elbow_pitch_joint_upper}"
-        effort="${effort_elbow}"
+        effort="${elbow_pitch_torque}"
         velocity="${vel_arm * M_PI / 180}" />
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${elbow_pitch_joint_lower-soft_margin}" soft_upper_limit="${elbow_pitch_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
     
@@ -262,7 +266,7 @@
       name="${prefix}${side}_elbow_yaw_link">
       <inertial>
         <origin
-          xyz="-0.015 0 -0.12"
+          xyz="${-19.08*TO_M} ${0.03*TO_M} ${-152.08*TO_M}"
           rpy="0 0 0" />
         <mass value="${elbow_yaw_mass}" />
         <cuboid_inertia_def x="0.05" y="0.035" z="0.32" mass="${elbow_yaw_mass}"/>
@@ -301,9 +305,9 @@
       <limit
         lower="${elbow_yaw_joint_lower}"
         upper="${elbow_yaw_joint_upper}"
-        effort="${effort_elbow}"
+        effort="${elbow_yaw_torque}"
         velocity="${vel_arm * M_PI / 180}" />
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${elbow_yaw_joint_lower-soft_margin}" soft_upper_limit="${elbow_yaw_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
 
@@ -311,7 +315,7 @@
       name="${prefix}${side}_wrist_pitch_link">
       <inertial>
         <origin
-          xyz="0 -0.02 -0.05"
+          xyz="${-0.03*TO_M} ${-13.24*TO_M} ${-111.35*TO_M}"
           rpy="0 0 0" />
         <mass value="${wrist_pitch_mass}" />
         <cuboid_inertia_def x="0.04" y="0.08" z="0.07" mass="${wrist_pitch_mass}"/>
@@ -350,9 +354,9 @@
       <limit
         lower="${wrist_pitch_joint_lower}"
         upper="${wrist_pitch_joint_upper}"
-        effort="${effort_wrisp}"
+        effort="${wrist_pitch_torque}"
         velocity="${vel_arm * M_PI / 180}" />
-      <dynamics damping="${damping}" friction="${friccion}" />
+      <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
       <safety_controller soft_lower_limit="${wrist_pitch_joint_lower-soft_margin}" soft_upper_limit="${wrist_pitch_joint_upper+soft_margin}" k_position="30" k_velocity="30"/>
     </joint>
     <!-- Gripper Joints -->
