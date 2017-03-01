@@ -1,0 +1,25 @@
+<launch>
+
+	<!-- Unused: Only for robot/gazebo/stage compatibility -->
+	<arg name="gui"        default="THIS-PARAM-SHOULD-NOT-BE-USED"/>
+	<arg name="model_type" default="THIS-PARAM-SHOULD-NOT-BE-USED" />
+	<arg name="rqt_gui"    default="THIS-PARAM-SHOULD-NOT-BE-USED" />
+	<arg name="worldname"  default="THIS-PARAM-SHOULD-NOT-BE-USED"/>
+
+
+	<!-- - - - - - - ROBOT - - - - - -  -->
+
+	<!-- transforms -->
+	<include file="$(find bender_tf)/launch/tf.launch">
+		<arg name="use_gui"    value="false"/>
+		<arg name="model_type" value="$(arg model_type)"/>
+	</include>
+
+	<!-- Laser/Lasers -->
+	<include file="$(find bender_sensors)/launch/hokuyo/hokuyo_front.launch"/>
+	<include file="$(find bender_sensors)/launch/hokuyo/hokuyo_rear.launch"/>
+
+	<!-- Rosaria -->
+	<include file="$(find bender_base)/launch/base.launch"/>
+
+</launch>
