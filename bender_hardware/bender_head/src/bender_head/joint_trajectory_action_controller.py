@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+	#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import division
 
@@ -40,12 +40,14 @@ class JointTrajectoryActionController(object):
 			
 		self.port_to_joints = {}
 		for c in controllers:
-			if c.port_namespace not in self.port_to_joints: self.port_to_joints[c.port_namespace] = []
+			if c.port_namespace not in self.port_to_joints:
+				self.port_to_joints[c.port_namespace] = []
 			self.port_to_joints[c.port_namespace].append(c.joint_name)
 			
 		self.port_to_io = {}
 		for c in controllers:
-			if c.port_namespace in self.port_to_io: continue
+			if c.port_namespace in self.port_to_io: 
+				continue
 			self.port_to_io[c.port_namespace] = c.dxl_io
 			
 		self.joint_states = dict(zip(self.joint_names, [c.joint_state for c in controllers]))
@@ -107,7 +109,8 @@ class JointTrajectoryActionController(object):
 		self.running = False
 
 	def process_command(self, msg):
-		if self.action_server.is_active(): self.action_server.set_preempted()
+		if self.action_server.is_active():
+			self.action_server.set_preempted()
 		
 		while self.action_server.is_active():
 			rospy.sleep(0.01)
