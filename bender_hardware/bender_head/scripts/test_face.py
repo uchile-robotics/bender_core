@@ -27,7 +27,7 @@ class EmotionTest(object):
         self.running = True
         #subscribers
         #publishers
-        self.emotion_pub = rospy.Publisher('/bender/led_head_controller/emotion_cmd', FaceEmotion, queue_size = 50)
+        self.emotion_pub = rospy.Publisher('/bender/face_controller/emotion_cmd', FaceEmotion, queue_size = 50)
         # Thread(target=self.run_test).start()
 
     def run_static(self):

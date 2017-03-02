@@ -1,7 +1,0 @@
-led_head_controller:
-  controller:
-    module: led_head_controller
-    package: bender_head
-    type: LedHeadController
-  rate: 5
-  id: 35

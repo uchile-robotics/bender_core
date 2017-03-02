@@ -20,11 +20,11 @@ from control_msgs.msg import (FollowJointTrajectoryAction, FollowJointTrajectory
 # Robot skill
 from bender_core.robot_skill import RobotSkill
 
-class MaskHeadSkill(RobotSkill):
+class NeckSkill(RobotSkill):
     """
     Joint space control using joint trajectory action for mask head
     """
-    _type = "mask_head"
+    _type = "neck"
 
     # Class constants
     JOINT_NAMES = ["head_yaw_joint", "head_pitch_joint"]
@@ -49,20 +49,20 @@ class MaskHeadSkill(RobotSkill):
         """
         Joint space control using joint trajectory action for mask head
         """
-        super(MaskHeadSkill, self).__init__()
-        self._description = "Joint space control for mask head"
+        super(NeckSkill, self).__init__()
+        self._description = "Joint space control for neck joints"
         # Head topic
         self._jta_topic = "/bender/head_controller/follow_joint_trajectory"
         # Name
-        self.name = MaskHeadSkill._type
+        self.name = NeckSkill._type
         # Joint names
-        self.joint_names = MaskHeadSkill.JOINT_NAMES
+        self.joint_names = NeckSkill.JOINT_NAMES
         # Empty joint state message
         self._joint_state = JointState()
         self._joint_state.name = self.joint_names
-        self._joint_state.position = [0.0]*MaskHeadSkill.NUM_JOINTS
-        self._joint_state.velocity = [0.0]*MaskHeadSkill.NUM_JOINTS
-        self._joint_state.effort = [0.0]*MaskHeadSkill.NUM_JOINTS
+        self._joint_state.position = [0.0]*NeckSkill.NUM_JOINTS
+        self._joint_state.velocity = [0.0]*NeckSkill.NUM_JOINTS
+        self._joint_state.effort = [0.0]*NeckSkill.NUM_JOINTS
         # ROS clients (avoid linter warnings)
         self._jta_client = None
         # Only for check, joint states is obtained using robot context
@@ -177,7 +177,7 @@ class MaskHeadSkill(RobotSkill):
         dt = interval/segments
         t = 0.1
         inter_points = list()
-        for i in range(MaskHeadSkill.NUM_JOINTS):
+        for i in range(NeckSkill.NUM_JOINTS):
             # TODO(rorromr) Use parabolic interpolation
             inter_points.append(np.linspace(current_state.position[i], joint_goal[i], segments))
         for j in range(segments):
@@ -217,13 +217,13 @@ class MaskHeadSkill(RobotSkill):
         """
         Move head to home position.
         """
-        self.send_joint_goal(yaw=MaskHeadSkill.YAW_HOME_POSITION, pitch=MaskHeadSkill.PITCH_HOME_POSITION)
+        self.send_joint_goal(yaw=NeckSkill.YAW_HOME_POSITION, pitch=NeckSkill.PITCH_HOME_POSITION)
 
     def look_at_ground(self):
         """
         Look at the ground.
         """
-        self.send_joint_goal(yaw=MaskHeadSkill.YAW_HOME_POSITION, pitch=0.9*MaskHeadSkill.PITCH_MIN_POSITION)
+        self.send_joint_goal(yaw=NeckSkill.YAW_HOME_POSITION, pitch=0.9*NeckSkill.PITCH_MIN_POSITION)
 
     def look_at(self, pose):
         """
@@ -236,12 +236,13 @@ class MaskHeadSkill(RobotSkill):
         # Transform to reference frame
         pose.header.stamp = rospy.Time() # Use last transform
         try:
-            target_pose = self.context.get_tf_listener().transformPose(MaskHeadSkill.REF_FRAME, pose)
+            target_pose = self.context.get_tf_listener().transformPose(NeckSkill.REF_FRAME, pose)
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-            self.logerr("Error on transform from \"{}\" to \"{}\"".format(pose.header.frame_id, MaskHeadSkill.REF_FRAME))
+            self.logerr("Error on transform from \"{}\" to \"{}\"".format(pose.header.frame_id, NeckSkill.REF_FRAME))
             return
         # Trasnform based on spherical coordinate
         x,y,z = target_pose.pose.position.x, target_pose.pose.position.y, target_pose.pose.position.z
+        z-=0.15 # Center point
         yaw = math.atan2(y,x)
         pitch = -(math.pi/2 - math.acos(z/math.sqrt(x*x + y*y + z*z)))
         self.send_joint_goal(yaw, pitch)
