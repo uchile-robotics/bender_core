@@ -1,21 +1,31 @@
 <launch>
-  <!-- Arguments -->
+
+  <!-- - - - - - - -  REAL Parameters - - - - - - - -->
+
+  <!-- Gazebo GUI -->
   <arg name="gui" default="true"/>
-  <!-- Publish TF frames of the robot -->
-  <arg name="publish_tf" default="true" />
+
   <!-- RQT GUI for control base and arms -->
   <arg name="rqt_gui" default="false" />
-  <!-- Open RViz -->
-  <arg name="rviz" default="false" />
+
   <!-- Map -->
   <arg name="worldname" default="empty" />
+
+  <!-- Bender model type -->
+  <arg name="model_type" default="asus" />
+
+
+  <!-- - - - - - - -  USEFUL Parameters - - - - - - - -->
+
+  <!-- Publish /clock -->
+  <arg name="use_sim_time" value="true"/>
+
   <!-- Prefix for link and Gazebo sensor topics -->
   <!-- ros_control doesnt support! @TODO -->
   <arg name="prefix" default="bender/" />
-  <!-- Publish /clock -->
-  <arg name="use_sim_time" value="true"/>
-  <!-- Bender model type -->
-  <arg name="model_type" default="asus" />
+
+
+  <!-- - - - - - - -  NODES - - - - - - - -->
 
   <!-- Load joint names and constants from YAML file to parameter server -->
   <rosparam file="$(find bender_description)/config/constants.yaml" command="load"/>
@@ -48,14 +58,6 @@
   <include file="$(find bender_gazebo)/launch/bender_control.launch.xml">
     <arg name="model_type" value="$(arg model_type)" />
   </include>
-
-  <!-- Publish TF frames -->
-  <node if="$(arg publish_tf)" name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
-    <remap from="joint_states" to="/bender/joint_states"/>
-  </node>
-
-  <!-- RViz -->
-  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bender_gazebo)/config/rviz_gazebo.rviz"/>
   
   <!-- RQT Control perspective -->
   <node if="$(arg rqt_gui)" name="rqt_command" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find bender_gazebo)/config/control.perspective"/>
