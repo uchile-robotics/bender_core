@@ -32,7 +32,9 @@ for i in $(ls *.urdf.xacro);do
     fi
 done
 
+
 echo "$installer Exporting SDF."
+mkdir -p $HOME/.gazebo # prevent log errors
 for i in $(ls *.urdf);do
     urdf_name=${i%$'.urdf'}
     printf "%s\tExporting %s.sdf" "${installer}" "${urdf_name}"
