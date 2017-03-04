@@ -18,7 +18,7 @@ emotions:
 
     zzz: {dummy: 0}
 
-    angry1:
+    angry2:
         eyes:
             left: [red, red, red, red, black, black, black, black, black, red, red, black, black, black, black, black]
             right: [red, red, red, red, black, black, black, black, black, red, red, black, black, black, black, black]
@@ -28,22 +28,22 @@ emotions:
         servos:
             left_ear: 40
             right_ear: 40
-            left_eyebrow: 20
-            right_eyebrow: 20
+            left_eyebrow: 0
+            right_eyebrow: 0
             mouth: 20
 
-    angry2:
+    angry1:
         eyes:
-            left: [red, red, red, red, black, black, black, black, black, red, black, black, black, black, black, black]
-            right: [red, red, red, red, black, black, black, black, black, red, black, black, black, black, black, black]
+            left: [black, red, red, red, red, black, black, black, black, black, red, red, black, black, black, black]
+            right: [black, red, red, red, red, black, black, black, black, black, red, red, black, black, black, black]
         cheeks:
             left: [black, black, black, black]
             right: [black, black, black, black]
         servos:
             left_ear: 40
             right_ear: 40
-            left_eyebrow: 0
-            right_eyebrow: 0
+            left_eyebrow: 20
+            right_eyebrow: 20
             mouth: 0
 
     angry3:
@@ -118,8 +118,8 @@ emotions:
 
     happy3:
         eyes:
-            left: [yellow3, yellow3, yellow3, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black]
-            right: [yellow3, yellow3, yellow3, black, yellow3, yellow3, black, black, black, black, yellow3, yellow3, yellow3, yellow3, black, black]
+            left: [green3, green3, green3, black, green3, green3, black, black, black, black, green3, green3, green3, green3, black, black]
+            right: [green3, green3, green3, black, green3, green3, black, black, black, black, green3, green3, green3, green3, black, black]
         cheeks:
             left: [black,black,black,black]
             right: [black,black,black,black]
@@ -172,6 +172,13 @@ emotions:
             left_eyebrow: 50
             right_eyebrow: 45
             mouth: 30
+    rainbow0:
+        eyes:
+            left: [Maroon, Green, Olive, Navy, Purple, Teal, Silver, Red, Lime, Yellow, Fuchsia, Aqua, White, DarkGreen, DeepSkyBlue4, Green1]
+            right: [SlateBlue3, Black, Violet, Thistle1, Grey39, Salmon1, Yellow3, Plum3, DeepPink3, DarkSeaGreen1, RosyBrown, SlateBlue1, Orange4, Purple3, DarkRed, Cyan1]
+        cheeks:
+            left: [black, black, black, black]
+            right: [black, black, black, black]
     rainbow1:
         eyes:
             left: [Black, Maroon, Green, Olive, Navy, Purple, Teal, Silver, Grey, Red, Lime, Yellow, Fuchsia, Aqua, White, Grey0]
@@ -186,3 +193,16 @@ emotions:
         cheeks:
             left: [PaleGreen3, SeaGreen3, Aquamarine3, MediumTurquoise]
             right: [SteelBlue1, Chartreuse2, SeaGreen2, SeaGreen1]
+    flushed:
+        eyes:
+            left: [magenta,  black, magenta, black, magenta, black, magenta, black, magenta, black, magenta, black, magenta, black, magenta, black]
+            right: [magenta,  black, magenta, black, magenta, black, magenta, black, magenta, black, magenta, black, magenta, black, magenta, black]
+        cheeks:
+            left: [ black, red, black, red3]
+            right: [black, red, black, red3]
+        servos:
+            left_ear: 50
+            right_ear: 50
+            left_eyebrow: 70
+            right_eyebrow: 70
+            mouth: 30

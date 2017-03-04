@@ -225,7 +225,7 @@ class NeckSkill(RobotSkill):
         """
         self.send_joint_goal(yaw=NeckSkill.YAW_HOME_POSITION, pitch=0.9*NeckSkill.PITCH_MIN_POSITION)
 
-    def look_at(self, pose):
+    def look_at(self, pose, interval = 0.4):
         """
         Look at pose.
 
@@ -245,4 +245,4 @@ class NeckSkill(RobotSkill):
         z-=0.15 # Center point
         yaw = math.atan2(y,x)
         pitch = -(math.pi/2 - math.acos(z/math.sqrt(x*x + y*y + z*z)))
-        self.send_joint_goal(yaw, pitch)
+        self.send_joint_goal(yaw, pitch, interval)
