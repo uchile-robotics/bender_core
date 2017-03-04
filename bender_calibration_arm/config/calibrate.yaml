@@ -1,21 +1,29 @@
 verbose: true
-base_link: light_head_base_link 
+base_link: bender/base_link
 models:
- - name: bender_arm
+ - name: bender/l_arm
    type: chain
-   frame: wrist_roll_link
+   frame: bender/l_wrist_pitch_link
+ - name: bender/r_arm
+   type: chain
+   frame: bender/r_wrist_pitch_link
  - name: camera
    type: camera3d
-   frame: head_camera_rgb_optical_frame
+   frame: bender/sensors/rgbd_head_rgb_optical_frame
    topic: /bender/sensors/rgbd_head/depth/points
 free_params:
-
  - l_shoulder_pitch_joint
  - l_shoulder_roll_joint
  - l_shoulder_yaw_joint
  - l_elbow_pitch_joint
  - l_elbow_yaw_joint
  - l_wrist_pitch_joint
+ - r_shoulder_pitch_joint
+ - r_shoulder_roll_joint
+ - r_shoulder_yaw_joint
+ - r_elbow_pitch_joint
+ - r_elbow_yaw_joint
+ - r_wrist_pitch_joint
  - light_head_pitch_joint
  - light_head_yaw_joint
  - camera_fx
