@@ -22,4 +22,11 @@
 	<!-- Rosaria -->
 	<include file="$(find bender_base)/launch/base.launch"/>
 
+	<!-- rqt_batteries -->
+	
+	<include file="$(find rqt_batteries)/launch/notebook_battery.launch">
+		<arg name="name" value="nav"/>
+	</include>
+
+
 </launch>
