@@ -22,7 +22,7 @@ from bender_core.robot_skill import RobotSkill
 
 class NeckSkill(RobotSkill):
     """
-    Joint space control using joint trajectory action for mask head
+    Joint space control using joint trajectory action for head
     """
     _type = "neck"
 
@@ -36,10 +36,19 @@ class NeckSkill(RobotSkill):
     YAW_HOME_POSITION = 0.0
     """float: Roll angle home postion"""
 
+    YAW_MIN_POSITION = -1.8
+    """float: Roll angle min position"""
+
+    YAW_MAX_POSITION = 1.8
+    """float: Roll angle max position"""
+
     PITCH_HOME_POSITION = 0.0
     """float: Pitch angle home postion"""
 
-    PITCH_MIN_POSITION = 0.6
+    PITCH_MIN_POSITION = -0.3
+    """float: Pitch angle min position"""
+
+    PITCH_MAX_POSITION = 0.6
     """float: Minimum pitch angle"""
 
     REF_FRAME = "bender/head_link"
@@ -47,7 +56,7 @@ class NeckSkill(RobotSkill):
 
     def __init__(self):
         """
-        Joint space control using joint trajectory action for mask head
+        Joint space control using joint trajectory action for head
         """
         super(NeckSkill, self).__init__()
         self._description = "Joint space control for neck joints"
@@ -223,7 +232,7 @@ class NeckSkill(RobotSkill):
         """
         Look at the ground.
         """
-        self.send_joint_goal(yaw=NeckSkill.YAW_HOME_POSITION, pitch=0.9*NeckSkill.PITCH_MIN_POSITION)
+        self.send_joint_goal(yaw=NeckSkill.YAW_HOME_POSITION, pitch=0.9*NeckSkill.PITCH_MAX_POSITION)
 
     def look_at(self, pose, interval = 0.4):
         """
@@ -246,3 +255,25 @@ class NeckSkill(RobotSkill):
         yaw = math.atan2(y,x)
         pitch = -(math.pi/2 - math.acos(z/math.sqrt(x*x + y*y + z*z)))
         self.send_joint_goal(yaw, pitch, interval)
+    def look_right(self,interval=1.0):
+        """
+        Look at right 
+        """
+        self.send_joint_goal(yaw=NeckSkill.YAW_MIN_POSITION*0.85/2,pitch=NeckSkill.PITCH_HOME_POSITION,interval=interval)
+    def look_left(self,interval=1.0):
+        """
+        Look at left 
+        """
+        self.send_joint_goal(yaw=NeckSkill.YAW_MAX_POSITION*0.85/2,pitch=NeckSkill.PITCH_HOME_POSITION,interval=interval)    
+    def nope(self):
+        """
+        BLOCKING
+        Nod with the head
+        """
+        self.look_right(interval=0.9)
+        self.wait_for_motion_done()
+        self.look_left(interval=0.9)
+        self.wait_for_motion_done()
+        self.look_right(interval=0.9)
+        self.wait_for_motion_done()
+        self.home()

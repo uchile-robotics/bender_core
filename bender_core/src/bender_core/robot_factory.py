@@ -61,7 +61,7 @@ def get_skill_dict(packages=list()):
 # @TODO Make a config file for robot configuration and avoid robot specific code
 _str_to_skill = get_skill_dict(['bender_core', 'bender_skills'])
 _core_skills = ['sound', 'head', 'laser', 'knowledge', 'tts', 'l_gripper', 'rgbd', 'l_arm', 
-    'r_gripper', 'base', 'joy', 'r_arm']
+    'r_gripper', 'base', 'joy', 'r_arm','neck']
 
 
 def build(skills=_core_skills):
