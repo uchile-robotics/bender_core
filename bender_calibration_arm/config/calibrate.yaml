@@ -24,8 +24,8 @@ free_params:
  - r_elbow_pitch_joint
  - r_elbow_yaw_joint
  - r_wrist_pitch_joint
- - light_head_pitch_joint
- - light_head_yaw_joint
+ - head_pitch_joint
+ - head_yaw_joint
  - camera_fx
  - camera_fy
  - camera_cx
@@ -86,11 +86,11 @@ chains:
      - r_elbow_yaw_joint
      - r_wrist_pitch_joint
     planning_group: r_arm
-  - name: light_head
-    topic: /bender/light_head_controller/follow_joint_trajectory
+  - name: head
+    topic: /bender/head_controller/follow_joint_trajectory
     joints:
-     - light_head_pitch_joint
-     - light_head_yaw_joint
+     - head_pitch_joint
+     - head_yaw_joint
 duration: 2.0
 features:
   checkerboard_finder:
