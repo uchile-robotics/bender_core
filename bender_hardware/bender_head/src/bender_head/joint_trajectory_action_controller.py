@@ -85,6 +85,7 @@ class JointTrajectoryActionController(object):
 		self.msg.actual.velocities = [0.0] * self.num_joints
 		self.msg.error.positions = [0.0] * self.num_joints
 		self.msg.error.velocities = [0.0] * self.num_joints
+
 		
 		return True
 
@@ -103,6 +104,9 @@ class JointTrajectoryActionController(object):
 		# Joint state publisher
 		self.joint_states_pub = rospy.Publisher(self.joint_states_topic,
 			JointState, queue_size=20)
+		# Torque disable
+		for joint in self.joint_to_controller:
+			self.joint_to_controller[joint].set_torque_enable(False)
 		Thread(target=self.update_state).start()
 
 	def stop(self):
