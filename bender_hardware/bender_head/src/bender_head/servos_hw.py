@@ -51,7 +51,7 @@ class ServosHW(object):
 		
 	def mouth(self, opening_percentage):
 		if (opening_percentage != -1):
-			angle = self.remapRange(opening_percentage, 80, 140)
+			angle = self.remapRange(opening_percentage, 90, 140)
 			self.hw_controller.moveServoTo(SERVO1_POS, angle)
 
 	def neck(self, angle):

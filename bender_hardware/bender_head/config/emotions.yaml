@@ -12,7 +12,7 @@ emotions:
             right_ear: 90
             left_eyebrow: 82
             right_eyebrow: 55
-            mouth: 90
+            mouth: 20
 
     light_off: {dummy: 0}
 
@@ -30,7 +30,7 @@ emotions:
             right_ear: 40
             left_eyebrow: 0
             right_eyebrow: 0
-            mouth: 20
+            mouth: 90
 
     angry1:
         eyes:
@@ -44,7 +44,7 @@ emotions:
             right_ear: 40
             left_eyebrow: 20
             right_eyebrow: 20
-            mouth: 0
+            mouth: 100
 
     angry3:
         eyes:
@@ -72,7 +72,7 @@ emotions:
             right_ear: 10
             left_eyebrow: 90
             right_eyebrow: 90
-            mouth: 0
+            mouth: 90
 
     sad2:
         eyes:
@@ -86,7 +86,7 @@ emotions:
             right_ear: 10
             left_eyebrow: 90
             right_eyebrow: 90
-            mouth: 0
+            mouth: 100
 
     happy1:
         eyes:
@@ -100,7 +100,7 @@ emotions:
             right_ear: 90
             left_eyebrow: 60
             right_eyebrow: 55
-            mouth: 30
+            mouth: 80
 
     happy2:
         eyes:
@@ -114,7 +114,7 @@ emotions:
             right_ear: 60
             left_eyebrow: 70
             right_eyebrow: 65
-            mouth: 40
+            mouth: 60
 
     happy3:
         eyes:
@@ -128,7 +128,7 @@ emotions:
             right_ear: 70
             left_eyebrow: 70
             right_eyebrow: 65
-            mouth: 60
+            mouth: 40
 
     confundido:
         eyes:
@@ -142,7 +142,7 @@ emotions:
             right_ear: 10
             left_eyebrow: 10
             right_eyebrow: 70
-            mouth: 60
+            mouth: 0
 
     lantern1:
         eyes:
@@ -171,7 +171,7 @@ emotions:
             right_ear: 50
             left_eyebrow: 50
             right_eyebrow: 45
-            mouth: 30
+            mouth: 100
     rainbow0:
         eyes:
             left: [Maroon, Green, Olive, Navy, Purple, Teal, Silver, Red, Lime, Yellow, Fuchsia, Aqua, White, DarkGreen, DeepSkyBlue4, Green1]
@@ -205,4 +205,4 @@ emotions:
             right_ear: 50
             left_eyebrow: 70
             right_eyebrow: 70
-            mouth: 30
+            mouth: 80

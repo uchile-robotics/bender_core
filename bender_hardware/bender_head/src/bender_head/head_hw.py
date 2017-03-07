@@ -34,6 +34,7 @@ SHOW_R1 = 1
 SHOW_R2 = 2
 UPDATE_C = 3
 CHANGE_BRIGHT = 4
+SHOW_RAINBOW = 5
 LEDS_INACTIVE = 21
 
 class HeadHW(object):
@@ -81,6 +82,10 @@ class HeadHW(object):
             return
         self.write_addr(LED_BRIGHTNESS, bright)
         self.write_addr(LED_CMD, CHANGE_BRIGHT)
+
+    def show_rainbow(self):
+        self.write_addr(LED_CMD, SHOW_RAINBOW)
+        time.sleep(1)
 
     def moveServoTo(self, servo_addr, pos):
         self.write_addr(servo_addr, pos)            #Update servo position
