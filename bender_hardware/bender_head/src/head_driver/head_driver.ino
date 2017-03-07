@@ -45,6 +45,7 @@
 #define SHOW_R2 2
 #define UPDATE_C 3
 #define CHANGE_BRIGHT 4
+#define SHOW_RAINBOW 5
 #define LEDS_INACTIVE 21
 
 // Number of servos in the array
@@ -196,6 +197,37 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
         //delay(5);
     }
 
+    uint32_t Wheel(byte WheelPos, Adafruit_NeoPixel *LEDs_ring)
+    {
+      WheelPos = 255 - WheelPos;
+      if(WheelPos < 85) {
+        return LEDs_ring->Color(255 - WheelPos * 3, 0, WheelPos * 3);
+      }
+      if(WheelPos < 170) {
+        WheelPos -= 85;
+        return LEDs_ring->Color(0, WheelPos * 3, 255 - WheelPos * 3);
+      }
+      WheelPos -= 170;
+      return LEDs_ring->Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+    }
+
+    void rainbow(Adafruit_NeoPixel *LEDs_ring1, Adafruit_NeoPixel *LEDs_ring2, uint8_t size, uint8_t wait)
+    {
+      uint16_t i, j;
+      for(j=0; j<256; j++)
+      {
+        for(i=0; i<20; i++)
+        {
+          LEDs_ring1->setPixelColor(i, Wheel((i+j) & 255, LEDs_ring1));
+          LEDs_ring2->setPixelColor(i, Wheel((i+j) & 255, LEDs_ring2));
+        }
+        LEDs_ring1->show();
+        delay(wait);
+        LEDs_ring2->show();
+        delay(wait);
+      }
+    }
+
     uint8_t decodeRColor(uint8_t rgb8bit_encode){ return 36U*((rgb8bit_encode & 0b11100000)>>5);}
     uint8_t decodeGColor(uint8_t rgb8bit_encode){ return 36U*((rgb8bit_encode & 0b00011100)>>2);}
     uint8_t decodeBColor(uint8_t rgb8bit_encode){ return 85U*((rgb8bit_encode & 0b00000011)>>0);}
@@ -270,6 +302,11 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
             led_cmd_.data = LEDS_INACTIVE;
             DEBUG_PRINTLN("EXEC: command CHANGE_BRIGHT");
         }
+        else if (led_cmd_.data == SHOW_RAINBOW){
+            led_cmd_.data = LEDS_INACTIVE;
+            rainbow(&LEDs[0], &LEDs[1], 20, 20);
+            DEBUG_PRINTLN("EXEC: show command SHOW_RAINBOW");
+        }
         else if (led_cmd_.data == UPDATE_C){ //updating array of colors
             R_colors_[led_select_.data] = decodeRColor(led_color_.data);
             G_colors_[led_select_.data] = decodeGColor(led_color_.data);
@@ -323,7 +360,7 @@ class HeadDXL: public DeviceDXL<SERVO_MODEL, SERVO_FIRMWARE, SERVO_MMAP_SIZE>
           0, 0, 0, 0};                //37-40
         
         moveServoTo(&servos[0], 50);
-        moveServoTo(&servos[1], 120);
+        moveServoTo(&servos[1], 140);
         moveServoTo(&servos[2], 100);
         moveServoTo(&servos[3], 50);
         moveServoTo(&servos[4], 100);
