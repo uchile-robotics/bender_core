@@ -53,7 +53,7 @@
 	</include>
 
 	<!-- footprint generator -->
-	<include file="$(find bender_footprint_generator)/launch/footprint_generator.launch"/>
+	<!-- <include file="$(find bender_footprint_generator)/launch/footprint_generator.launch"/> -->
 
 
 	
