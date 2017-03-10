@@ -4,7 +4,7 @@
 import rospy
 
 from bender_core.robot_skill import RobotSkill
-from std_msgs.msg import Bool, UInt8
+from std_msgs.msg import Bool, UInt8, Empty
 from bender_msgs.msg import FaceEmotion
 
 class FaceSkill(RobotSkill):
@@ -20,6 +20,7 @@ class FaceSkill(RobotSkill):
         self._topic_brighness = '/bender/face_controller/brightness'
         self._topic_emotion = '/bender/face_controller/emotion_cmd'
         self._topic_mouth = '/bender/face_controller/move_mouth'
+        self._topic_rainbow = '/bender/face_controller/rainbow'
 
         self._brighness_pub = None
         self._emotion_pub = None
@@ -38,6 +39,7 @@ class FaceSkill(RobotSkill):
         self._brighness_pub = rospy.Publisher(self._topic_brighness, UInt8, queue_size=5)
         self._emotion_pub = rospy.Publisher(self._topic_emotion, FaceEmotion, queue_size=5)
         self._mouth_pub = rospy.Publisher(self._topic_mouth, Bool, queue_size=5)
+        self._rainbow_pub = rospy.Publisher(self._topic_rainbow, Empty, queue_size=5)
         return True
 
     def shutdown(self):
@@ -82,6 +84,15 @@ class FaceSkill(RobotSkill):
         sat_value = min(255, max(0, intensity))
         self.brightness_msg.data = sat_value
         self._brighness_pub.publish(self.brightness_msg)
+
+    def show_rainbow(self):
+        """
+        Set a hardware defined rainbow.
+
+        Examples:
+            >>> robot.face.show_rainbow()
+        """
+        self._brighness_pub.publish()
 
     def move_mouth(self):
         """

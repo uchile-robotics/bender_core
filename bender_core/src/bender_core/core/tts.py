@@ -23,7 +23,7 @@ class TTSSkill(RobotSkill):
         self._tts_topic = "/bender/hw/tts/say"
         self._set_language_topic = "/bender/hw/tts/set_language"
         self._stop_tts_topic = "/bender/hw/tts/stop_speech"
-        self._is_talking_topic = "/bender/hw/head/move_mouth"
+        #self._is_talking_topic = "/bender/hw/head/move_mouth"
 
         self._tts_client = None
         self._set_language_client = None
