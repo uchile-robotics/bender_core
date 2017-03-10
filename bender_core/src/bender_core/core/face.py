@@ -17,9 +17,9 @@ class FaceSkill(RobotSkill):
         super(FaceSkill, self).__init__()
         self._description = "face skill"
 
-        self._topic_brighness = '/bender/led_head_controller/brightness'
-        self._topic_emotion = '/bender/led_head_controller/emotion_cmd'
-        self._topic_mouth = '/bender/led_head_controller/move_mouth'
+        self._topic_brighness = '/bender/face_controller/brightness'
+        self._topic_emotion = '/bender/face_controller/emotion_cmd'
+        self._topic_mouth = '/bender/face_controller/move_mouth'
 
         self._brighness_pub = None
         self._emotion_pub = None

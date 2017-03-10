@@ -7,7 +7,7 @@ eye_colors:
   blue : [0,0,200]
   yellow : [200,200,0]
   cian : [0,200,100]
-  magenta : [200,0,100]
+  magenta : [80,0,90]
 
   #tonos 2
   white2 : [200,200,200]

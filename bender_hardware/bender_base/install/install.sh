@@ -20,6 +20,20 @@ installer="[INSTALLER]:"
 # # # # # # # # # # # # # # # # # # # #
 
 # Rosaria install --> chequeo del fork y rama / tag  ok
+# TODO: unificar como metodo llamado desde bender_system 
+# (esto se usa en el instalador de bender)
+bender_cd forks
+if [ ! -d rosaria ]; then
+  echo "Cloning -rosaria- fork from github."
+  git clone https://github.com/uchile-robotics/rosaria.git
+  cd rosaria
+  git checkout master
+else
+  echo "-rosaria- fork already exists. updating"
+  cd rosaria
+  git checkout -- .
+  git pull origin master
+fi
 
 #  - - - - - - - - - Install Rules - - - - - - - - - - 
 
