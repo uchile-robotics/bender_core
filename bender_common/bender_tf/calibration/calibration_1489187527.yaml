@@ -1,0 +1,36 @@
+base_fixed_jont: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+body_fixed_jont: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+chest_base_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+head_base_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+head_pitch_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+head_up_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+l_arm_base_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+l_ext_finger_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+l_int_finger_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+laser_front_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+laser_rear_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+left_eye_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+light_head_base_joint: {pitch: 0.03, roll: 0.031416, x: 0.06, y: 0.0, yaw: 0.0, z: -0.084}
+neck_base_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: -0.092}
+r_arm_base_joint: {pitch: 0.0, roll: 0.0, x: -0.03, y: 0.01, yaw: 0.0, z: -0.054}
+r_ext_finger_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+r_int_finger_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_head_camera_depth_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_head_camera_depth_optical_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0,
+  z: 0.0}
+rgbd_head_camera_rgb_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_head_camera_rgb_optical_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0,
+  z: 0.0}
+rgbd_head_depth_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_head_depth_optical_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_head_rgb_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_head_rgb_optical_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_waist_camera_depth_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_waist_camera_depth_optical_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0,
+  z: 0.0}
+rgbd_waist_camera_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_waist_camera_rgb_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_waist_camera_rgb_optical_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0,
+  z: 0.0}
+right_eye_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+waist_base_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
