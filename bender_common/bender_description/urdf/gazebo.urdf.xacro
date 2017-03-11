@@ -137,8 +137,8 @@
         <wheelSeparation>0.4</wheelSeparation>
         <wheelDiameter>0.215</wheelDiameter>
         <robotBaseFrame>${prefix}base_link</robotBaseFrame>
-        <torque>200</torque>
-        <MaxForce>5.0</MaxForce>
+        <torque>400</torque>
+        <MaxForce>10.0</MaxForce>
         <commandTopic>base/cmd_vel</commandTopic>
         <odometryTopic>odom</odometryTopic>
         <odometryFrame>${prefix}odom</odometryFrame>
