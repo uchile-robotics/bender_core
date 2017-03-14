@@ -26,7 +26,7 @@
         <remap from="~diagnostics" to="tts/$(arg soundplay_name)/diagnostics"/>
 
         <!-- hook for moving robot mouth -->
-        <remap from="~is_talking" to="head/move_mouth"/>
+        <remap from="~is_talking" to="/bender/face_controller/move_mouth"/>
     </node>
 
 

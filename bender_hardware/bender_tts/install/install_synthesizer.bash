@@ -69,11 +69,17 @@ sudo apt-get install festvox-ellpc11k
 festvox_path="/usr/share/festival/voices"
 festvox_path_en="$festvox_path"/english
 
+# required for mbrola3.0.1h_i386.deb
+sudo apt-get install libc6 libc6-dev
 
 # Install the mbrola parser
 if [ -d "$mbrola_folder" ]; then
 	
 	cd "$mbrola_folder"
+	sudo dpkg -i mbrola3.0.1h_i386.deb
+
+	# repeat to fix missing dependencies
+	sudo apt-get -f install
 	sudo dpkg -i mbrola3.0.1h_i386.deb
 
 	# Unzip/tar

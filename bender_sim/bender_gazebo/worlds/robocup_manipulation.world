@@ -1,0 +1,790 @@
+<sdf version='1.4'>
+  <world name='default'>
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+    </model>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>-5 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>0.8 0.0 -0.9</direction>
+    </light>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>-1.84184 -4.09661 2.762 2.98015e-17 0.3727 0.83078</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+    <physics type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
+    </physics>
+    <scene>
+      <ambient>0.6 0.6 0.6 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>0</shadows>
+    </scene>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name="robocup15_shelf">
+    <static>true</static>
+    <link name="link">
+      <inertial>
+        <pose>1.5 0.5 0.5 0 0 0</pose>
+        <mass>40.0</mass>
+        <inertia>
+          <ixx>3</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>3</iyy>
+          <iyz>0</iyz>
+          <izz>3</izz>
+        </inertia>
+      </inertial>
+
+      <collision name="support_colision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://robocup15_shelf/meshes/shelf_supports.stl</uri>
+             <scale> 0.02 0.02 0.02 </scale>
+          </mesh>
+        </geometry>
+      </collision>
+
+      <visual name="support_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://robocup15_shelf/meshes/shelf_supports.stl</uri>
+             <scale> 0.02 0.02 0.02 </scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="table1_collision">
+        <pose>0 0 0.35 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://robocup15_shelf/meshes/shelf_table.stl</uri>
+             <scale> 0.02 0.02 0.02 </scale>
+          </mesh>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.6</mu>
+              <mu2>0.6</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      
+      <visual name="table1_visual">
+        <pose>0 0 0.35 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://robocup15_shelf/meshes/shelf_table.stl</uri>
+             <scale> 0.02 0.02 0.02 </scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/WhiteGlow</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="table2_collision">
+        <pose>0 0 0.70 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://robocup15_shelf/meshes/shelf_table.stl</uri>
+             <scale> 0.02 0.02 0.02 </scale>
+          </mesh>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.6</mu>
+              <mu2>0.6</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="table2_visual">
+        <pose>0 0 0.70 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://robocup15_shelf/meshes/shelf_table.stl</uri>
+             <scale> 0.02 0.02 0.02 </scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/WhiteGlow</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="table3_collision">
+        <pose>0 0 1.05 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://robocup15_shelf/meshes/shelf_table.stl</uri>
+             <scale> 0.02 0.02 0.02 </scale>
+          </mesh>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.6</mu>
+              <mu2>0.6</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="table3_visual">
+        <pose>0 0 1.05 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://robocup15_shelf/meshes/shelf_table.stl</uri>
+             <scale> 0.02 0.02 0.02 </scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/WhiteGlow</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="table4_collision">
+        <pose>0 0 1.4 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://robocup15_shelf/meshes/shelf_table.stl</uri>
+             <scale> 0.02 0.02 0.02 </scale>
+          </mesh>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.6</mu>
+              <mu2>0.6</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="table4_visual">
+        <pose>0 0 1.4 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://robocup15_shelf/meshes/shelf_table.stl</uri>
+             <scale> 0.02 0.02 0.02 </scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/WhiteGlow</name>
+          </script>
+        </material>
+      </visual>
+
+      <velocity_decay>
+        <linear>0.000000</linear>
+        <angular>0.000000</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <gravity>1</gravity>
+    </link>
+  </model>
+  <model name='pringles_green'>
+      <pose>1 0 0.11525 0 -0 0</pose>
+      <link name='link'>
+        <inertial>
+          <mass>0.2</mass>
+          <inertia>
+            <ixx>0.000908</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.000908</iyy>
+            <iyz>0</iyz>
+            <izz>0.0002025</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.04</radius>
+              <length>0.235</length>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.9</mu>
+                <mu2>0.9</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.04</radius>
+              <length>0.235</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://pringles_green/material/scripts</uri>
+              <uri>model://pringles_green/material/textures</uri>
+              <name>Custom/PringlesGreen</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <static>0</static>
+    </model>
+    <model name='cocacola'>
+      <pose>1 0 0.06134 0 -0 0</pose>
+      <link name='link'>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertial>
+          <mass>0.39</mass>
+          <inertia>
+            <ixx>0.00058</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00058</iyy>
+            <iyz>0</iyz>
+            <izz>0.00019</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.03302</radius>
+              <length>0.12268</length>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.9</mu>
+                <mu2>0.9</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <cylinder>
+              <radius>0.03302</radius>
+              <length>0.12268</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://cocacola/materials/scripts</uri>
+              <uri>model://cocacola/materials/textures</uri>
+              <name>CocaCola/Diffuse</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <static>0</static>
+    </model>
+    <model name='heineken'>
+      <pose>1 0 0.06134 0 -0 0</pose>
+      <link name='link'>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertial>
+          <mass>0.39</mass>
+          <inertia>
+            <ixx>0.00058</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00058</iyy>
+            <iyz>0</iyz>
+            <izz>0.00019</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.03302</radius>
+              <length>0.12268</length>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.9</mu>
+                <mu2>0.9</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <cylinder>
+              <radius>0.03302</radius>
+              <length>0.12268</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://heineken/materials/scripts</uri>
+              <uri>model://heineken/materials/textures</uri>
+              <name>Heineken/Diffuse</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <static>0</static>
+    </model>
+    <model name='pringles_red'>
+      <pose>1 0 0.11525 0 -0 0</pose>
+      <link name='link'>
+        <inertial>
+          <mass>0.2</mass>
+          <inertia>
+            <ixx>0.000908</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.000908</iyy>
+            <iyz>0</iyz>
+            <izz>0.0002025</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.04</radius>
+              <length>0.235</length>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.9</mu>
+                <mu2>0.9</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0 3.1415 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.04</radius>
+              <length>0.235</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://pringles_red/material/scripts</uri>
+              <uri>model://pringles_red/material/textures</uri>
+              <name>Custom/PringlesRed</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <static>0</static>
+    </model>
+    <model name='Milk'>
+      <link name='link'>
+        <inertial>
+          <pose>0.055 -0.055 0.05 0 -0 0</pose>
+          <mass>0.4</mass>
+          <inertia>
+            <ixx>0.000617</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.000617</iyy>
+            <iyz>0</iyz>
+            <izz>0.000817</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>model://milk/meshes/mesh.dae</uri>
+              <scale>0.5 0.5 0.5</scale>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>model://milk/meshes/mesh.dae</uri>
+              <scale>0.5 0.5 0.5</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose>1 0 0 0 -0 0</pose>
+      <static>0</static>
+    </model>
+    <model name='baltica'>
+      <pose>1 0 0.06134 0 -0 0</pose>
+      <link name='link'>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertial>
+          <mass>0.39</mass>
+          <inertia>
+            <ixx>0.00058</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00058</iyy>
+            <iyz>0</iyz>
+            <izz>0.00019</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.03302</radius>
+              <length>0.12268</length>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.9</mu>
+                <mu2>0.9</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <cylinder>
+              <radius>0.03302</radius>
+              <length>0.12268</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://baltica/materials/scripts</uri>
+              <uri>model://baltica/materials/textures</uri>
+              <name>Baltica/Diffuse</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <static>0</static>
+    </model>
+    <model name='sprite'>
+      <pose>1 0 0.06134 0 -0 0</pose>
+      <link name='link'>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertial>
+          <mass>0.39</mass>
+          <inertia>
+            <ixx>0.00058</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00058</iyy>
+            <iyz>0</iyz>
+            <izz>0.00019</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.03302</radius>
+              <length>0.12268</length>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.9</mu>
+                <mu2>0.9</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <cylinder>
+              <radius>0.03302</radius>
+              <length>0.12268</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://sprite/materials/scripts</uri>
+              <uri>model://sprite/materials/textures</uri>
+              <name>Sprite/Diffuse</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <static>0</static>
+    </model>
+    <state world_name='default'>
+      <sim_time>824 831000000</sim_time>
+      <real_time>1102 875965497</real_time>
+      <wall_time>1485984676 837615163</wall_time>
+      <model name='Milk'>
+        <pose>1.59086 0.535146 1.08779 3.3e-05 9e-06 -1.05514</pose>
+        <link name='link'>
+          <pose>1.59086 0.535146 1.08779 3.3e-05 9e-06 -1.05514</pose>
+          <velocity>0 0 0 0 0 0</velocity>
+          <acceleration>0 0 0 0 0 0</acceleration>
+          <wrench>0 0 0 0 0 0</wrench>
+        </link>
+      </model>
+      <model name='baltica'>
+        <pose>1.54333 0.036125 1.14914 1.4e-05 -0.000141 2.6777</pose>
+        <link name='link'>
+          <pose>1.54333 0.036125 1.14914 1.4e-05 -0.000141 2.6777</pose>
+          <velocity>0 0 0 0 0 0</velocity>
+          <acceleration>0 0 0 0 0 0</acceleration>
+          <wrench>0 0 0 0 0 0</wrench>
+        </link>
+      </model>
+      <model name='cocacola'>
+        <pose>1.56659 0.281164 0.799147 0.000109 -0.000211 -3.03496</pose>
+        <link name='link'>
+          <pose>1.56659 0.281164 0.799147 0.000109 -0.000211 -3.03496</pose>
+          <velocity>0 0 0 0 0 0</velocity>
+          <acceleration>0 0 0 0 0 0</acceleration>
+          <wrench>0 0 0 0 0 0</wrench>
+        </link>
+      </model>
+      <model name='ground_plane'>
+        <pose>0 0 0 0 -0 0</pose>
+        <link name='link'>
+          <pose>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='heineken'>
+        <pose>1.64758 -0.255207 0.799137 -1.7e-05 -0.000117 0.105506</pose>
+        <link name='link'>
+          <pose>1.64758 -0.255207 0.799137 -1.7e-05 -0.000117 0.105506</pose>
+          <velocity>0 0 0 0 0 0</velocity>
+          <acceleration>0 0 0 0 0 0</acceleration>
+          <wrench>0 0 0 0 0 0</wrench>
+        </link>
+      </model>
+      <model name='pringles_green'>
+        <pose>1.52 0.530503 0.505317 0.000164 -1.6e-05 0.373288</pose>
+        <link name='link'>
+          <pose>1.52171 0.530503 0.505317 0.000164 -1.6e-05 0.373288</pose>
+          <velocity>0 0 0 0 0 0</velocity>
+          <acceleration>0 0 0 0 0 0</acceleration>
+          <wrench>0 0 0 0 0 0</wrench>
+        </link>
+      </model>
+      <model name='pringles_red'>
+        <pose>1.52 -0.080746 0.855295 4.3e-05 4.5e-05 -0.718432</pose>
+        <link name='link'>
+          <pose>1.59361 -0.080746 0.855295 4.3e-05 4.5e-05 -0.718432</pose>
+          <velocity>0 0 0 0 0 0</velocity>
+          <acceleration>0 0 0 0 0 0</acceleration>
+          <wrench>0 0 0 0 0 0</wrench>
+        </link>
+      </model>
+      <model name='robocup15_shelf'>
+        <pose>1.31739 1.52689 0.004999 1e-06 8e-06 -1.57465</pose>
+        <link name='link'>
+          <pose>1.31739 1.52689 0.004999 1e-06 8e-06 -1.57465</pose>
+          <velocity>0 0 0 0 0 0</velocity>
+          <acceleration>0 0 0 0 0 0</acceleration>
+          <wrench>0 0 0 0 0 0</wrench>
+        </link>
+      </model>
+      <model name='sprite'>
+        <pose>1.54946 -0.154144 0.449124 -5.7e-05 -6.1e-05 0.260336</pose>
+        <link name='link'>
+          <pose>1.54946 -0.154144 0.449124 -5.7e-05 -6.1e-05 0.260336</pose>
+          <velocity>0 0 0 0 0 0</velocity>
+          <acceleration>0 0 0 0 0 0</acceleration>
+          <wrench>0 0 0 0 0 0</wrench>
+        </link>
+      </model>
+    </state>
+  </world>
+</sdf>

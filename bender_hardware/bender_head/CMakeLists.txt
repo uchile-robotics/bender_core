@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.8.3)
 project(bender_head)
 
 find_package(catkin REQUIRED COMPONENTS
+  bender_fieldbus
+  dynamic_reconfigure
+  message_generation
   bender_msgs
   bender_srvs
   roscpp

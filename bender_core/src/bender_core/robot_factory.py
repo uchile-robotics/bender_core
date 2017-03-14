@@ -6,45 +6,65 @@ __email__  = 'matias.pavez@ing.uchile.cl'
 
 import rospy
 from robot import Robot
+from robot_skill import RobotSkill
 
-## CORE imports
-# knowledge base
-from core.knowledge import KnowledgeSkill
+import inspect
+import importlib
+import pkgutil
 
-# sensors
-from core.rgbd import RGBDSkill
-from core.laser import LaserSkill
 
-# hardware
-from core.joy import JoySkill
-from core.head import HeadSkill
-from core.base import BaseSkill
-from core.sound import SoundSkill
-from core.tts import TTSSkill
+def get_classes(package_name, class_type):
+    """
+    Get specific classes that lies in a package.
+    
+    Args:
+        package_name (str): Package name.
+        class_type (class): Class type.
+    """
+    package = importlib.import_module(package_name)
+    class_list = list()
+    for importer, modname, ispkg in pkgutil.walk_packages(path=package.__path__,
+                                                          prefix=package.__name__+'.',
+                                                          onerror=lambda x: None):
+        try:
+            module = importlib.import_module(modname)
+        except ImportError as e:
+            msg = 'Error at import {}: {}'.format(modname, e)
+            rospy.logerr(msg)
+        for name, obj in inspect.getmembers(module):
+            if inspect.isclass(obj) and issubclass(obj, RobotSkill):
+                class_list.append(obj)
+    return class_list
 
-from core.light_head import LightHead
 
-from core.arm     import LeftArmSkill, RightArmSkill
-from core.gripper import LeftGripperSkill, RightGripperSkill
+def get_skill_dict(packages=list()):
+    """
+    Get skill dict with {skill._type, skill} entry.
+    
+    Args:
+        packages (list of str): Packages that contains RobotSkill.
+    """
+    skill_dict = dict()
+    for package_name in packages:
+        class_list = get_classes(package_name, RobotSkill)
+        for skill_class in class_list:
+            # Check for name error
+            if skill_class._type in skill_dict and skill_class != skill_dict[skill_class._type]:
+                msg = 'Skill type {}({}) already used by {}({})'.format(skill_class.__name__, skill_class, 
+                    skill_dict[skill_class._type].__name__, skill_dict[skill_class._type])
+                rospy.logwarn(msg)
+            skill_dict.update({skill_class._type : skill_class})
+    return skill_dict
 
-# str to Skill class dict
-_str_to_skill = {
-    LightHead._type : LightHead,
-    KnowledgeSkill._type : KnowledgeSkill,
-    RGBDSkill._type : RGBDSkill,
-    LaserSkill._type : LaserSkill,
-    JoySkill._type : JoySkill,
-    HeadSkill._type : HeadSkill,
-    BaseSkill._type : BaseSkill,
-    SoundSkill._type : SoundSkill,
-    TTSSkill._type : TTSSkill,
-    LeftArmSkill._type : LeftArmSkill,
-    RightArmSkill._type : RightArmSkill,
-    LeftGripperSkill._type : LeftGripperSkill,
-    RightGripperSkill._type : RightGripperSkill
-}
 
-def build(skills=_str_to_skill.keys()):
+# Core and skills
+# @TODO Make a config file for robot configuration and avoid robot specific code
+_str_to_skill = get_skill_dict(['bender_core', 'bender_skills'])
+_core_skills = ['sound', 'head', 'laser', 'knowledge', 'tts', 'l_gripper', 'rgbd', 'l_arm', 
+    'r_gripper', 'base', 'joy', 'r_arm','neck']
+
+
+def build(skills=_core_skills):
     """
     Build a robot object based on a skill list. By default build
     a robot using all core skills.
