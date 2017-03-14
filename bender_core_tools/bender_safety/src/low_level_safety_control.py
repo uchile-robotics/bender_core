@@ -7,10 +7,11 @@ from math import sin, cos, atan2, pi, sqrt, pow as mpow
 import numpy
 import roslib
 import tf
-roslib.load_manifest("bender_nav")
+roslib.load_manifest("bender_safety")
 
 from threading import Thread, Lock
 from geometry_msgs.msg import Twist, PoseStamped
+from visualization_msgs.msg import Marker
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import LaserScan
 from bender_srvs.srv import Transformer
@@ -78,6 +79,9 @@ class CmdVelSafety(object):
         # Odom subscriber
         self.odom_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self.odom_input_cb, queue_size = 1)
 
+        self.marker = self.setup_marker()
+        self.marker_pub = rospy.Publisher("/bender/markers/corrected_footprint", Marker, queue_size=1)
+
         # last message
         self.last_msg = Twist()
         self.last_msg_time = rospy.Time.now()
@@ -88,7 +92,7 @@ class CmdVelSafety(object):
                 rot_front = self.laser_front_closest_point[1]
 
                 trans_rear = self.laser_rear_closest_point[0]
-                rot_rear = pi + self.laser_rear_closest_point[1]
+                rot_rear = self.laser_rear_closest_point[1]
 
                 dist_front = self._distance([
                                             trans_front * cos(rot_front), 
@@ -100,7 +104,7 @@ class CmdVelSafety(object):
                                             trans_rear * sin(rot_rear), 
                                             0], 
                                             [0,0,0])
-                #rospy.loginfo("dist front %f m, dist rear %f m" % (dist_front, dist_rear))
+                rospy.loginfo("dist front %f m, dist rear %f m" % (dist_front, dist_rear))
 
                 # Chosing closest point between front and back
                 closest = min(dist_rear, dist_front)
@@ -111,7 +115,9 @@ class CmdVelSafety(object):
 
                 # Calculating correction factor
                 corr_factor = self.get_correction_factor(clos_ang)
-                rospy.loginfo("Closer point at %f m from the center with a %f correction_factor" % (closest, corr_factor))
+                self.marker.scale.x = self.max_rad + corr_factor
+                self.marker_pub.publish(self.marker)
+                #rospy.loginfo("Closer point at %f m from the center with a %f correction_factor" % (closest, corr_factor))
 
                 # Check if closest point is inside the safety area, in which case, stop movement if velocity moves the base in that direction
                 if closest <= self.max_rad + abs(corr_factor) and corr_factor * self.sent_vel > 0:
@@ -311,6 +317,30 @@ class CmdVelSafety(object):
         """
         self.sent_vel = msg.linear.x
         #self.rate_pub.sleep()
+
+    def setup_marker(self):
+        marker = Marker()
+        marker.header.frame_id = "base_link"
+        marker.header.stamp = rospy.get_rostime()
+        marker.ns = "bender/markers"
+        marker.id = 0
+        marker.type = Marker.CYLINDER
+        marker.action = Marker.ADD
+        marker.pose.position.x = 0
+        marker.pose.position.y = 0
+        marker.pose.position.z = 0
+        marker.pose.orientation.x = 0.0
+        marker.pose.orientation.y = 0.0
+        marker.pose.orientation.z = 0.0
+        marker.pose.orientation.w = 1.0
+        marker.scale.x = self.max_rad
+        marker.scale.y = self.max_rad
+        marker.scale.z = 0.01
+        marker.color.a = 0.5
+        marker.color.r = 1.0
+        marker.color.g = 0.0
+        marker.color.b = 0.0
+        return marker
 
 
 def main():
