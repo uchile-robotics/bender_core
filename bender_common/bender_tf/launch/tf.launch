@@ -1,7 +1,7 @@
 <launch>
 
 	<arg name="use_gui" default="false"/>
-	<arg name="model_type" default="light_head"/>
+	<arg name="model_type" default="standard"/>
 	<arg name="joints_already_published" default="false" />
 
 	<!-- transform tree from model -->
