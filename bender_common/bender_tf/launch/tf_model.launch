@@ -3,7 +3,7 @@
   <arg name="prefix" default="bender/" />
   <arg name="use_gui" default="false"  />
   <arg name="rate" default="40" />
-  <arg name="model_type" default="asus" />
+  <arg name="model_type" default="standard" />
   <arg name="use_dynamic_tf" default="true" />
   <arg name="joints_already_published" default="false" />
   

@@ -1,6 +1,6 @@
 <launch>
   <arg name="use_gui" default="true" />
-  <arg name="model_type" default="asus" />
+  <arg name="model_type" default="standard" />
 
   <!-- Cargar modelo con TF-->
   <include file="$(find bender_tf)/launch/tf_model.launch">

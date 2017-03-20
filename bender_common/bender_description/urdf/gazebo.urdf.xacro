@@ -48,15 +48,13 @@
   <!-- Normal links -->
   <xacro:macro name="gazebo_link" params="link color">
     <gazebo reference="${link}">
-      <material>Gazebo/${color}</material>
       <mu1>0.2</mu1>
       <mu2>0.2</mu2>
     </gazebo>
   </xacro:macro>
   <!-- Wheel links -->
-  <xacro:macro name="gazebo_wheel_link" params="link color reflect">
+  <xacro:macro name="gazebo_wheel_link" params="link reflect">
     <gazebo reference="${link}">
-      <material>Gazebo/${color}</material>
       <kp>1000000.0</kp>
       <!-- kp and kd for rubber -->
       <kd>100.0</kd>
@@ -76,6 +74,7 @@
   <!-- Gripper links -->
   <xacro:macro name="gazebo_friction_link" params="link color">
     <gazebo reference="${link}">
+      <selfCollide>true</selfCollide>
       <material>Gazebo/${color}</material>
       <minDepth>0.005</minDepth>
       <mu1>1.0</mu1>

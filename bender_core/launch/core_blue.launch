@@ -5,7 +5,7 @@
 	<!-- ================================================== -->
 	
 	<!-- robot configuration -->
-	<arg name="model_type"     default="light_head"/>
+	<arg name="model_type"     default="standard"/>
 	<arg name="language"       default="spanish"/>
 
 	<!-- GUI -->

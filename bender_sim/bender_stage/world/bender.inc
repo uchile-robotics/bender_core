@@ -53,6 +53,6 @@ define bender position
   hokuyo_front()
 
   # laser rear
-  #hokuyo_rear()
+  hokuyo_rear()
 
 )

@@ -4,15 +4,11 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
         - /Status1
-        - /Grid1
         - /TF1/Frames1
         - /TF1/Tree1
-        - /RobotModel1
-        - /RobotModel1/Links1
-        - /Marker1
-      Splitter Ratio: 0.85906
+        - /Bender1/Links1
+      Splitter Ratio: 0.896296
     Tree Height: 495
   - Class: rviz/Selection
     Name: Selection
@@ -55,19 +51,171 @@ Visualization Manager:
       Reference Frame: <Fixed Frame>
       Value: true
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        bender/base_footprint:
+          Value: false
+        bender/base_link:
+          Value: false
+        bender/face_link:
+          Value: false
+        bender/front_left_wheel:
+          Value: false
+        bender/front_right_wheel:
+          Value: false
+        bender/head_link:
+          Value: false
+        bender/l_arm_base_link:
+          Value: false
+        bender/l_arm_mount:
+          Value: false
+        bender/l_elbow_pitch_link:
+          Value: false
+        bender/l_elbow_yaw_link:
+          Value: false
+        bender/l_ext_finger_link:
+          Value: false
+        bender/l_ext_finger_mount_link:
+          Value: false
+        bender/l_int_finger_link:
+          Value: false
+        bender/l_int_finger_mount_link:
+          Value: false
+        bender/l_shoulder_pitch_link:
+          Value: false
+        bender/l_shoulder_roll_link:
+          Value: false
+        bender/l_shoulder_yaw_link:
+          Value: false
+        bender/l_wrist_pitch_link:
+          Value: false
+        bender/lower_torso_base:
+          Value: false
+        bender/lower_torso_cal:
+          Value: false
+        bender/mobile_base_link:
+          Value: false
+        bender/neck_base:
+          Value: false
+        bender/neck_link:
+          Value: false
+        bender/r_arm_base_link:
+          Value: false
+        bender/r_arm_mount:
+          Value: false
+        bender/r_elbow_pitch_link:
+          Value: false
+        bender/r_elbow_yaw_link:
+          Value: false
+        bender/r_ext_finger_link:
+          Value: false
+        bender/r_ext_finger_mount_link:
+          Value: false
+        bender/r_int_finger_link:
+          Value: false
+        bender/r_int_finger_mount_link:
+          Value: false
+        bender/r_shoulder_pitch_link:
+          Value: false
+        bender/r_shoulder_roll_link:
+          Value: false
+        bender/r_shoulder_yaw_link:
+          Value: false
+        bender/r_wrist_pitch_link:
+          Value: false
+        bender/rear_left_wheel:
+          Value: false
+        bender/rear_right_wheel:
+          Value: false
+        bender/sensors/laser_front_link:
+          Value: false
+        bender/sensors/laser_rear_link:
+          Value: false
+        bender/sensors/rgbd_head_depth_frame:
+          Value: true
+        bender/sensors/rgbd_head_depth_optical_frame:
+          Value: false
+        bender/sensors/rgbd_head_rgb_frame:
+          Value: false
+        bender/sensors/rgbd_head_rgb_optical_frame:
+          Value: false
+        bender/torso_base_link:
+          Value: false
+        bender/upper_torso_base:
+          Value: false
+        bender/waist_base:
+          Value: false
       Marker Scale: 0.6
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
-        {}
+        bender/base_link:
+          bender/base_footprint:
+            {}
+          bender/mobile_base_link:
+            bender/front_left_wheel:
+              {}
+            bender/front_right_wheel:
+              {}
+            bender/rear_left_wheel:
+              {}
+            bender/rear_right_wheel:
+              {}
+          bender/sensors/laser_front_link:
+            {}
+          bender/sensors/laser_rear_link:
+            {}
+          bender/torso_base_link:
+            bender/lower_torso_base:
+              bender/lower_torso_cal:
+                {}
+              bender/upper_torso_base:
+                bender/l_arm_mount:
+                  bender/l_arm_base_link:
+                    bender/l_shoulder_pitch_link:
+                      bender/l_shoulder_roll_link:
+                        bender/l_shoulder_yaw_link:
+                          bender/l_elbow_pitch_link:
+                            bender/l_elbow_yaw_link:
+                              bender/l_wrist_pitch_link:
+                                bender/l_ext_finger_mount_link:
+                                  bender/l_ext_finger_link:
+                                    {}
+                                bender/l_int_finger_mount_link:
+                                  bender/l_int_finger_link:
+                                    {}
+                bender/neck_base:
+                  bender/neck_link:
+                    bender/head_link:
+                      bender/face_link:
+                        bender/sensors/rgbd_head_depth_frame:
+                          bender/sensors/rgbd_head_depth_optical_frame:
+                            {}
+                        bender/sensors/rgbd_head_rgb_frame:
+                          bender/sensors/rgbd_head_rgb_optical_frame:
+                            {}
+                bender/r_arm_mount:
+                  bender/r_arm_base_link:
+                    bender/r_shoulder_pitch_link:
+                      bender/r_shoulder_roll_link:
+                        bender/r_shoulder_yaw_link:
+                          bender/r_elbow_pitch_link:
+                            bender/r_elbow_yaw_link:
+                              bender/r_wrist_pitch_link:
+                                bender/r_ext_finger_mount_link:
+                                  bender/r_ext_finger_link:
+                                    {}
+                                bender/r_int_finger_mount_link:
+                                  bender/r_int_finger_link:
+                                    {}
+                bender/waist_base:
+                  {}
       Update Interval: 0
-      Value: false
+      Value: true
     - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
@@ -86,15 +234,11 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/body:
+        bender/face_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        bender/chest_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         bender/front_left_wheel:
           Alpha: 1
           Show Axes: false
@@ -110,19 +254,12 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        bender/head_up_link:
+        bender/l_arm_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/l_arm_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        bender/l_base_ext_finger_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        bender/l_base_int_finger_link:
+          Value: true
+        bender/l_arm_mount:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -141,11 +278,19 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        bender/l_ext_finger_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         bender/l_int_finger_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
+        bender/l_int_finger_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         bender/l_shoulder_pitch_link:
           Alpha: 1
           Show Axes: false
@@ -166,6 +311,20 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        bender/lower_torso_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        bender/lower_torso_cal:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        bender/mobile_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         bender/neck_base:
           Alpha: 1
           Show Axes: false
@@ -175,15 +334,12 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        bender/r_arm_base:
+        bender/r_arm_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/r_base_ext_finger_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        bender/r_base_int_finger_link:
+          Value: true
+        bender/r_arm_mount:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -202,11 +358,19 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        bender/r_ext_finger_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         bender/r_int_finger_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
+        bender/r_int_finger_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         bender/r_shoulder_pitch_link:
           Alpha: 1
           Show Axes: false
@@ -237,14 +401,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        bender/sensors/camera_left_eye_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        bender/sensors/camera_right_eye_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         bender/sensors/laser_front_link:
           Alpha: 1
           Show Axes: false
@@ -263,11 +419,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/sensors/rgbd_head_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         bender/sensors/rgbd_head_rgb_frame:
           Alpha: 1
           Show Axes: false
@@ -276,75 +427,25 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/sensors/rgbd_waist_depth_frame:
+        bender/torso_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/sensors/rgbd_waist_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        bender/sensors/rgbd_waist_link:
+        bender/upper_torso_base:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        bender/sensors/rgbd_waist_rgb_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        bender/sensors/rgbd_waist_rgb_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         bender/waist_base:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-      Name: RobotModel
+      Name: Bender
       Robot Description: robot_description
       TF Prefix: ""
       Update Interval: 0
       Value: true
       Visual Enabled: true
-    - Class: rviz/Marker
-      Enabled: true
-      Marker Topic: /detection_markers
-      Name: Marker
-      Namespaces:
-        {}
-      Queue Size: 100
-      Value: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: Intensity
-      Decay Time: 0
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: PointCloud2
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.01
-      Style: Flat Squares
-      Topic: /bender/sensors/rgbd_head/depth/points
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: false
   Enabled: true
   Global Options:
     Background Color: 182; 182; 182
@@ -369,22 +470,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 4.20597
+      Distance: 3.17264
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.273733
-        Y: -0.208244
-        Z: 0.713906
+        X: -0.35024
+        Y: 0.29342
+        Z: 0.74961
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.490397
+      Pitch: 0.320397
       Target Frame: bender/base_link
       Value: Orbit (rviz)
-      Yaw: 0.615399
+      Yaw: 5.94858
     Saved: ~
 Window Geometry:
   Displays:
@@ -402,5 +503,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1342
-  X: 55
+  X: 272
   Y: 14

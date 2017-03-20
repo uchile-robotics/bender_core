@@ -177,8 +177,9 @@ class NeckSkill(RobotSkill):
         rospy.sleep(0.05)
         joint_goal = [yaw, pitch]
         current_state = self.get_joint_state()
-        if (rospy.Time.now() - current_state.header.stamp) > rospy.Duration(1.0):
-            self.logerr("Current position has not been updated, check \"{}\" topic.".format(self._joint_state_topic))
+        delay = rospy.Time.now() - current_state.header.stamp
+        if delay > rospy.Duration(1.0):
+            self.logerr("Current position has not been updated, check \"{}\" topic. Delay: {}".format(self._joint_state_topic, delay.to_sec()))
             return
         # Create new goal
         goal = FollowJointTrajectoryGoal()
