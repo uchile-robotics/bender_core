@@ -130,6 +130,7 @@ class Robot(object):
         if skill.robot is None:
             skill._set_robot(self)
         self._skills[skill.get_type()] = skill
+        setattr(self, skill.get_type(), skill)
 
 
     def check(self):

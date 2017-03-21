@@ -31,6 +31,7 @@ def get_classes(package_name, class_type):
         except ImportError as e:
             msg = 'Error at import {}: {}'.format(modname, e)
             rospy.logerr(msg)
+            raise e
         for name, obj in inspect.getmembers(module):
             if inspect.isclass(obj) and issubclass(obj, RobotSkill):
                 class_list.append(obj)
@@ -46,7 +47,10 @@ def get_skill_dict(packages=list()):
     """
     skill_dict = dict()
     for package_name in packages:
-        class_list = get_classes(package_name, RobotSkill)
+        try:
+            class_list = get_classes(package_name, RobotSkill)
+        except:
+            continue
         for skill_class in class_list:
             # Check for name error
             if skill_class._type in skill_dict and skill_class != skill_dict[skill_class._type]:
@@ -60,9 +64,8 @@ def get_skill_dict(packages=list()):
 # Core and skills
 # @TODO Make a config file for robot configuration and avoid robot specific code
 _str_to_skill = get_skill_dict(['bender_core', 'bender_skills'])
-_core_skills = ['sound', 'head', 'laser', 'knowledge', 'tts', 'l_gripper', 'rgbd', 'l_arm', 
-    'r_gripper', 'base', 'joy', 'r_arm','neck']
-
+_core_skills = ['base', 'face', 'knowledge', 'l_arm', 'l_gripper', 
+    'neck', 'r_arm', 'r_gripper', 'sound', 'tts']
 
 def build(skills=_core_skills):
     """
