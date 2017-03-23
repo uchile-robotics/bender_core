@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /knowledge1/places1/known_poses1
+        - /navigation1
         - /navigation1/move_base1
         - /sensors1/laser_front_filtered1
       Splitter Ratio: 0.72
@@ -90,15 +91,11 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/body:
+        bender/face_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        bender/chest_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         bender/front_left_wheel:
           Alpha: 1
           Show Axes: false
@@ -109,15 +106,17 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        bender/l_arm_base:
+        bender/head_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/l_base_ext_finger_link:
+          Value: true
+        bender/l_arm_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/l_base_int_finger_link:
+          Value: true
+        bender/l_arm_mount:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -136,11 +135,19 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        bender/l_ext_finger_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         bender/l_int_finger_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
+        bender/l_int_finger_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         bender/l_shoulder_pitch_link:
           Alpha: 1
           Show Axes: false
@@ -161,17 +168,16 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        bender/light_head_base_link:
+        bender/lower_torso_base:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        bender/light_head_pitch_link:
+        bender/lower_torso_cal:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        bender/light_head_yaw_link:
+        bender/mobile_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -180,15 +186,17 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/r_arm_base:
+        bender/neck_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/r_base_ext_finger_link:
+          Value: true
+        bender/r_arm_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/r_base_int_finger_link:
+          Value: true
+        bender/r_arm_mount:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -207,11 +215,19 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        bender/r_ext_finger_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         bender/r_int_finger_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
+        bender/r_int_finger_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         bender/r_shoulder_pitch_link:
           Alpha: 1
           Show Axes: false
@@ -268,27 +284,15 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/sensors/rgbd_waist_depth_frame:
+        bender/torso_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        bender/sensors/rgbd_waist_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        bender/sensors/rgbd_waist_link:
+        bender/upper_torso_base:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        bender/sensors/rgbd_waist_rgb_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        bender/sensors/rgbd_waist_rgb_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         bender/waist_base:
           Alpha: 1
           Show Axes: false
@@ -338,10 +342,7 @@ Visualization Manager:
               Marker Topic: /bender/knowledge/map_analyzer/map_data
               Name: map_data
               Namespaces:
-                map_bbox: true
-                map_polygon: true
-                map_room_names: true
-                map_rooms: true
+                {}
               Queue Size: 100
               Value: true
             - Alpha: 1
@@ -388,11 +389,11 @@ Visualization Manager:
                   Class: rviz/Map
                   Color Scheme: costmap
                   Draw Behind: false
-                  Enabled: true
+                  Enabled: false
                   Name: obstacles
                   Topic: /bender/nav/move_base/local_costmap/costmap
                   Unreliable: false
-                  Value: true
+                  Value: false
                 - Alpha: 1
                   Class: rviz/Polygon
                   Color: 255; 0; 46
@@ -439,11 +440,11 @@ Visualization Manager:
                   Class: rviz/Map
                   Color Scheme: costmap
                   Draw Behind: true
-                  Enabled: true
+                  Enabled: false
                   Name: obstacles
                   Topic: /bender/nav/move_base/global_costmap/costmap
                   Unreliable: false
-                  Value: true
+                  Value: false
                 - Alpha: 1
                   Class: rviz/Polygon
                   Color: 0; 0; 0
@@ -452,7 +453,7 @@ Visualization Manager:
                   Topic: /bender/nav/move_base/global_costmap/footprint
                   Unreliable: false
                   Value: true
-              Enabled: false
+              Enabled: true
               Name: global_costmap
             - Class: rviz/Group
               Displays:
@@ -855,11 +856,11 @@ Visualization Manager:
         - Alpha: 1
           Class: rviz/Polygon
           Color: 25; 255; 0
-          Enabled: false
+          Enabled: true
           Name: footprint_base
           Topic: /bender/nav/footprint_base
           Unreliable: false
-          Value: false
+          Value: true
       Enabled: true
       Name: navigation
     - Class: rviz/Group
@@ -1137,7 +1138,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -0.025
+      Angle: 0.06
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
