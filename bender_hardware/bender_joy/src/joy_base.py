@@ -59,8 +59,9 @@ class JoystickBase(object):
             self.cancel_goal_client.wait_for_service(0.5)
             self.cancel_goal_client()
             rospy.loginfo("Goal cancelled")
-        except rospy.ServiceException, e:
+        except rospy.ServiceException:
             rospy.loginfo("There is no goal to cancel")
+        except Exception:
             pass
 
 
