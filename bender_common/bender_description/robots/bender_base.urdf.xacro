@@ -24,8 +24,8 @@
   
   <!-- Hokuyo sensors -->
   <xacro:include filename="$(find bender_description)/urdf/laser_sensor.xacro" />
-  <xacro:laser_sensor parent="${prefix}base_link" name="laser_front" prefix="${prefix}sensors/" xyz="0.22 0.0 0.22"  rpy="0.0 0.0 0.0" ns="${prefix}sensors/laser_front"/>
-  <xacro:laser_sensor parent="${prefix}base_link" name="laser_rear"  prefix="${prefix}sensors/" xyz="-0.22 0.0 0.09" rpy="0.0 ${M_PI} 0.0" ns="${prefix}sensors/laser_rear" />
+  <xacro:laser_utm_30lx parent="${prefix}base_link" name="laser_front" prefix="${prefix}sensors/" xyz="0.22 0.0 0.22"  rpy="0.0 0.0 0.0" ns="${prefix}sensors/laser_front"/>
+  <xacro:laser_urg_04lx parent="${prefix}base_link" name="laser_rear"  prefix="${prefix}sensors/" xyz="-0.22 0.0 0.09" rpy="0.0 ${M_PI} 0.0" ns="${prefix}sensors/laser_rear" />
 
   <!-- ROS Controllers -->
   <xacro:ros_control prefix="${prefix}" />
