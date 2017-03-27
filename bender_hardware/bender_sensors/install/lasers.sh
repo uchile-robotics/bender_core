@@ -2,6 +2,8 @@
 
 # - - - - - - I N S T A L L - - - - - -
 # # # # # # # # # # # # # # # # # # # #
+source "$BENDER_WS"/bender_system/install/pkg_install.bash
+installer="[INSTALLER]:"
 
 # urg_node fork install
 # TODO: unificar como metodo llamado desde bender_system 
