@@ -67,7 +67,7 @@ _str_to_skill = get_skill_dict(['bender_core', 'bender_skills'])
 _core_skills = ['base', 'face', 'knowledge', 'l_arm', 'l_gripper', 
     'neck', 'r_arm', 'r_gripper', 'sound', 'tts']
 
-def build(skills=_core_skills):
+def build(skills=_core_skills, check=True, setup=True):
     """
     Build a robot object based on a skill list. By default build
     a robot using all core skills.
@@ -89,14 +89,21 @@ def build(skills=_core_skills):
     for skill_name in skills:
         if skill_name in _str_to_skill:
             robot.set(_str_to_skill[skill_name].get_instance())
-
-            # shortcuts
+            # Skills shortcuts
             if skill_name == 'tts':
                 robot.say = robot.tts.say
-            
         else:
             rospy.logerr("Skill '{0}' is not registered".format(skill_name))
 
     rospy.loginfo("factory: the robot is built")
+    # Robot check
+    if check:
+        if not robot.check():
+            raise RuntimeError("Required skills don't available")
+    # Robot setup
+    if setup:
+        if not robot.setup():
+            raise RuntimeError("Robot setup failed")
+    # Return robot
     return robot
 
