@@ -58,7 +58,7 @@ class CmdVelSafety(object):
         self.front_laser_dist = .25
         self.stoping_acc = 0.3
         # Subscriber variables
-        self.curr_vel = 0
+        self.curr_vel = Twist()
         self.sent_vel = 0
 
         # clock
@@ -111,7 +111,7 @@ class CmdVelSafety(object):
                 if dist_front < dist_rear:
                     clos_ang = rot_front
                 else:
-                    clos_ang = rot_rear
+                    clos_ang = rot_rear + pi
 
                 # Calculating correction factor
                 corr_factor = self.get_correction_factor(clos_ang)
@@ -157,7 +157,7 @@ class CmdVelSafety(object):
         Returns:
             float: Correction factor, > 0 if closest point is in the front, < 0 if it's in the back
         """
-        vel_factor = mpow(max(abs(self.curr_vel), abs(self.sent_vel)), 2) / (2 * self.stoping_acc)
+        vel_factor = mpow(max(abs(self.curr_vel.linear.x), abs(self.sent_vel)), 2) / (2 * self.stoping_acc)
         ang_factor = 1 if cos(obj_rotation) > 0 else -1
         return vel_factor * ang_factor
 
@@ -243,14 +243,17 @@ class CmdVelSafety(object):
             if msg.range_min <= curr_mean and curr_mean <= msg.range_max:
                 curr_ang = msg.angle_min + i * msg.angle_increment
 
-                # Get angle in base_link frame and check if it's in the valid range
+                turn_r = self.curr_vel.linear.x / self.curr_vel.angular.z if self.curr_vel.angular.z > 0 else 0
+
+                curr_dist = sqrt(mpow(self.laser_front_base_dist, 2) + mpow(curr_mean, 2) + 2 * self.laser_front_base_dist * curr_mean * cos(curr_ang))
+
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi - curr_ang))
+
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_front_base_dist + cos(curr_ang) * curr_mean)
-                if abs(base_ang) < self.laser_range:
-                    # Get distance in base_link frame and check if it's the minimum
-                    curr_dist = sqrt(mpow(self.laser_front_base_dist, 2) + mpow(curr_mean, 2) + 2 * self.laser_front_base_dist * curr_mean * cos(curr_ang))
-                    if curr_dist < min_dist:
-                        min_ang = base_ang
-                        min_dist = curr_dist
+
+                if abs(curve_dist - turn_r) < self.max_rad + .2 and curr_dist < min_dist:
+                    min_ang = base_ang
+                    min_dist = curr_dist
         # Update closest point variable
         self.laser_front_closest_point = [min_dist, min_ang]
         self.laser_front_cb_rate.sleep()
@@ -280,14 +283,17 @@ class CmdVelSafety(object):
             if msg.range_min <= curr_mean <= msg.range_max:
                 curr_ang = msg.angle_min + i * msg.angle_increment
 
-                # Get angle in base_link frame and check if it's in the valid range
+                turn_r = self.curr_vel.linear.x / self.curr_vel.angular.z if self.curr_vel.angular.z > 0 else 0
+
+                curr_dist = sqrt(mpow(self.laser_rear_base_dist, 2) + mpow(curr_mean, 2) + 2 * self.laser_rear_base_dist * curr_mean * cos(curr_ang))
+
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(curr_ang + pi))
+
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_rear_base_dist + cos(curr_ang) * curr_mean)
-                if abs(base_ang) < self.laser_range:
-                    # Get distance in base_link frame and check if it's the minimum
-                    curr_dist = sqrt(mpow(self.laser_rear_base_dist, 2) + mpow(curr_mean, 2) + 2 * self.laser_rear_base_dist * curr_mean * cos(curr_ang))
-                    if curr_dist < min_dist:
-                        min_ang = base_ang
-                        min_dist = curr_dist
+
+                if abs(curve_dist - turn_r) < self.max_rad + .2 and curr_dist < min_dist:
+                    min_ang = base_ang
+                    min_dist = curr_dist
         # Update closest point variable
         self.laser_rear_closest_point = [min_dist, min_ang]
         self.laser_rear_cb_rate.sleep()
@@ -302,7 +308,7 @@ class CmdVelSafety(object):
         Returns:
             None
         """
-        self.curr_vel = abs(msg.twist.twist.linear.x)
+        self.curr_vel = msg.twist.twist
         self.rate_pub.sleep()
 
     def vel_output_cb(self, msg):
