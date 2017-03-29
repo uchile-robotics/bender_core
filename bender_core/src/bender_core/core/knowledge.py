@@ -33,7 +33,6 @@ class KnowledgeSkill(RobotSkill):
         return self.pose.setup()
 
     def check(self):
-        rospy.loginfo("{skill: %s}: check()." % self._type)
         return self.pose.check()
 
     def start(self):

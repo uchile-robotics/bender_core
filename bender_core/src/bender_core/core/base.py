@@ -7,7 +7,6 @@ import rospy
 import math
 
 from bender_core.robot_skill import RobotSkill
-from bender_core.core.joy import JoySkill
 from control_util.pid import PID
 
 from geometry_msgs.msg import Twist
@@ -19,15 +18,12 @@ from std_srvs.srv import Empty
 class BaseSkill(RobotSkill):
     """
     The BaseSkill
-
-    Depends on: Joystick
     """
     _type = "base"
 
     def __init__(self):
         super(BaseSkill, self).__init__()
         self._description = "the base skill"
-        self.register_dependency(JoySkill.get_type())
         self.pose_pub = rospy.Publisher("/bender/nav/cmd_vel", Twist, queue_size=1)
         self.pose_sub = rospy.Subscriber("/bender/nav/odom", Odometry, self._update_pos)
 
@@ -55,12 +51,10 @@ class BaseSkill(RobotSkill):
         self.ang_pid = PID(kp = 1, kd = 0.01)
 
     def check(self):
-        rospy.loginfo("{skill: %s}: check()." % self._type)
         return True
 
     
     def setup(self):
-        rospy.loginfo("{skill: %s}: setup()." % self._type)
         return True
 
 

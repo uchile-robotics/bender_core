@@ -2,6 +2,7 @@
 
 # pause button
 b_pause: 'START'
+b_cancel: 'B'
 
 # movement axes
 a_angular: 'LS_HORZ'
