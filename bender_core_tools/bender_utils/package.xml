@@ -55,6 +55,7 @@
     <depend>rospy</depend>
     <depend>std_msgs</depend>
     <depend>std_srvs</depend>
+    <depend>python-termcolor</depend>
 
     
     <!-- build dependencies -->
