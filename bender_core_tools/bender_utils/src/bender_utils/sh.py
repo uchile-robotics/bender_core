@@ -11,14 +11,6 @@ def get_devices_by_vendor(vendor_id):
     return list(usb.core.find(idVendor=vendor_id, find_all=True))
 
 
-def file_exists(filename):
-    """
-    return True if path refers to an existing path.
-    returns False for broken symbolic links.
-    """
-    return os.path.exists(filename)
-
-
 def get_devpath_list(path):
     """
     returns a list of valid ports following the pattern: path[0-9]
@@ -35,7 +27,8 @@ def exec_cmd(cmd, level=0, use_sudo=False):
     if use_sudo:
         cmd = "/usr/bin/sudo " + cmd
     try:
-        SystemCheck.print_cmd(cmd, level)
+        if level >= 0:
+            SystemCheck.print_cmd(cmd, level)
         return subprocess.call(cmd, shell=True) == 0
     except OSError:
         return False
@@ -54,3 +47,19 @@ def mkdir_p(path, level=0, use_sudo=False):
 def create_symlink(source, symlink, level=0, use_sudo=False):
     cmd = "ln -s {} {}".format(source, symlink)
     return exec_cmd(cmd, level, use_sudo)
+
+
+def file_exists_strict(filename):
+    """
+    return True if path refers to an existing path, even if symlink is broken
+    """
+    cmd = "[ -e {} ]".format(filename)
+    return exec_cmd(cmd, -1, False)
+
+
+def file_exists(filename):
+    """
+    return True if path refers to an existing path.
+    returns False for broken symbolic links.
+    """
+    return os.path.exists(filename)
