@@ -9,8 +9,7 @@ class LaserCheckTask(SystemCheckTask):
         self.symlink_base = "/dev/bender/sensors/"
         self.symlink_prefix = "hokuyo_"
         self.get_id_path = "/opt/bender/udev/getID"
-        self.vendor_id = 0x15d1  # hokuyo
-        # self.vendor_id = 0x2341  # arduino
+        self.vendor_id = "15d1"  # hokuyo
 
     def check_id_exec(self):
         if not sh.file_exists(self.get_id_path):
@@ -67,7 +66,7 @@ class LaserCheckTask(SystemCheckTask):
             SystemCheck.print_info("checking device at {} ... ".format(devpath), 2)
 
             # check vendor_id
-            cmd = "[ $(udevadm info --name={}  | grep ID_VENDOR_ID | cut -d'=' -f2) = {:02x} ]".format(devpath,
+            cmd = "[ $(udevadm info --name={}  | grep ID_VENDOR_ID | cut -d'=' -f2) = {} ]".format(devpath,
                                                                                                        self.vendor_id)
             SystemCheck.print_info("vendor_id check ...", 3)
             if not sh.exec_cmd(cmd, level=4):

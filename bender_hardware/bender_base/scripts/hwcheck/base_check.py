@@ -7,7 +7,7 @@ class BaseCheckTask(SystemCheckTask):
         super(BaseCheckTask, self).__init__()
         self.symlink_base = "/dev/bender/"
         self.symlink_name = "base"
-        self.vendor_id = 0x15d1  # hokuyo
+        self.vendor_id = "067b"
 
     def check(self):
         symlink = self.symlink_base + self.symlink_name
@@ -19,7 +19,7 @@ class BaseCheckTask(SystemCheckTask):
             SystemCheck.print_info("Pioneer symlink exists ... ", 1)
 
             # check vendor_id
-            cmd = "[ $(udevadm info --name={}  | grep ID_VENDOR_ID | cut -d'=' -f2) = {:02x} ]".format(symlink,
+            cmd = "[ $(udevadm info --name={}  | grep ID_VENDOR_ID | cut -d'=' -f2) = {} ]".format(symlink,
                                                                                                        self.vendor_id)
             SystemCheck.print_info("vendor_id check ...", 1)
             if sh.exec_cmd(cmd, level=1):
@@ -57,7 +57,7 @@ class BaseCheckTask(SystemCheckTask):
             SystemCheck.print_info("checking device at {} ... ".format(devpath), 2)
 
             # check vendor_id
-            cmd = "[ $(udevadm info --name={}  | grep ID_VENDOR_ID | cut -d'=' -f2) = {:02x} ]".format(devpath,
+            cmd = "[ $(udevadm info --name={}  | grep ID_VENDOR_ID | cut -d'=' -f2) = {} ]".format(devpath,
                                                                                                        self.vendor_id)
             SystemCheck.print_info("vendor_id check ...", 3)
             if not sh.exec_cmd(cmd, level=4):
