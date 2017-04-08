@@ -10,7 +10,7 @@
     <arg name="worldname" default="empty" />
 
     <!-- model type -->
-    <arg name="model_type" default="light_head" />
+    <arg name="model_type" default="standard" />
 
     <!-- GAZEBO -->
     <include file="$(find bender_gazebo)/launch/bender.launch">

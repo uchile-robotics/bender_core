@@ -1,0 +1,27 @@
+base_footprint_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+l_arm_base_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+l_arm_mount_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+l_ext_finger_mount_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0,
+  z: 0.0}
+l_int_finger_mount_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0,
+  z: 0.0}
+laser_front_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+laser_rear_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+lower_torso_cal_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+lower_torso_mount_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+mobile_base_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+neck_base_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+neck_mount_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+r_arm_base_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+r_arm_mount_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+r_ext_finger_mount_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0,
+  z: 0.0}
+r_int_finger_mount_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0,
+  z: 0.0}
+rgbd_head_depth_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_head_depth_optical_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_head_rgb_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+rgbd_head_rgb_optical_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+torso_base_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+upper_torso_mount_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}
+waist_base_fixed_joint: {pitch: 0.0, roll: 0.0, x: 0.0, y: 0.0, yaw: 0.0, z: 0.0}

@@ -31,6 +31,7 @@ def get_classes(package_name, class_type):
         except ImportError as e:
             msg = 'Error at import {}: {}'.format(modname, e)
             rospy.logerr(msg)
+            raise e
         for name, obj in inspect.getmembers(module):
             if inspect.isclass(obj) and issubclass(obj, RobotSkill):
                 class_list.append(obj)
@@ -46,7 +47,10 @@ def get_skill_dict(packages=list()):
     """
     skill_dict = dict()
     for package_name in packages:
-        class_list = get_classes(package_name, RobotSkill)
+        try:
+            class_list = get_classes(package_name, RobotSkill)
+        except:
+            continue
         for skill_class in class_list:
             # Check for name error
             if skill_class._type in skill_dict and skill_class != skill_dict[skill_class._type]:
@@ -60,11 +64,10 @@ def get_skill_dict(packages=list()):
 # Core and skills
 # @TODO Make a config file for robot configuration and avoid robot specific code
 _str_to_skill = get_skill_dict(['bender_core', 'bender_skills'])
-_core_skills = ['sound', 'head', 'laser', 'knowledge', 'tts', 'l_gripper', 'rgbd', 'l_arm', 
-    'r_gripper', 'base', 'joy', 'r_arm','neck']
+_core_skills = ['base', 'face', 'knowledge', 'l_arm', 'l_gripper', 
+    'neck', 'r_arm', 'r_gripper', 'sound', 'tts']
 
-
-def build(skills=_core_skills):
+def build(skills=_core_skills, check=True, setup=True):
     """
     Build a robot object based on a skill list. By default build
     a robot using all core skills.
@@ -86,14 +89,21 @@ def build(skills=_core_skills):
     for skill_name in skills:
         if skill_name in _str_to_skill:
             robot.set(_str_to_skill[skill_name].get_instance())
-
-            # shortcuts
+            # Skills shortcuts
             if skill_name == 'tts':
                 robot.say = robot.tts.say
-            
         else:
             rospy.logerr("Skill '{0}' is not registered".format(skill_name))
 
     rospy.loginfo("factory: the robot is built")
+    # Robot check
+    if check:
+        if not robot.check():
+            raise RuntimeError("Required skills don't available")
+    # Robot setup
+    if setup:
+        if not robot.setup():
+            raise RuntimeError("Robot setup failed")
+    # Return robot
     return robot
 

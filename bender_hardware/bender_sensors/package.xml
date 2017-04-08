@@ -45,11 +45,13 @@
 
     <!-- build, export, and execution dependencies -->
     <depend>roscpp</depend>
+    <depend>rospy</depend>
     <depend>std_msgs</depend>
     <depend>sensor_msgs</depend>
     <depend>bender_msgs</depend>
     <depend>bender_srvs</depend>
     <depend>cv_bridge</depend>
+    <depend>opencv2</depend>
     <depend>image_transport</depend>
     <depend>libusb-1.0-dev</depend>
     <depend>bender_utils</depend>
