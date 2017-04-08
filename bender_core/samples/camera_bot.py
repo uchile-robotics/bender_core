@@ -25,8 +25,10 @@ if __name__ == "__main__":
     skill = robot.get("camera")
     msgimage = skill.get_last_image()
     cv_image = skill.imgmsg_to_cv2(msgimage)
-    skill.display(cv_image)
+    cv_image_cartoon = skill.apply_effect_cartoon(cv_image)
+    skill.display(cv_image_cartoon)
 
-    skill.save_last_img("jaja.jpg")
+    # skill.save_last_img("selfie.jpg")
+    skill.cvimg_to_file(cv_image_cartoon, "selfie.jpg")
 
     robot.shutdown()
