@@ -11,8 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   bender_srvs
 )
 
-catkin_python_setup()
-
 ###################################
 ## catkin specific configuration ##
 ###################################
