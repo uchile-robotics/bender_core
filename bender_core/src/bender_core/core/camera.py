@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import rospy
+import os
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
 
@@ -115,4 +116,7 @@ class CameraSkill(RobotSkill):
         cv2.imshow("Image window", cv_image)
         cv2.waitKey(timeout)
         return cv_image
+
+    def get_path(self, filename):
+        return os.path.abspath(filename)
 
