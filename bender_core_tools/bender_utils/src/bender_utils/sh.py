@@ -1,5 +1,4 @@
 import os
-import usb.core
 import subprocess
 from syscheck import SystemCheck
 
@@ -8,6 +7,8 @@ def get_devices_by_vendor(vendor_id):
     """
     returns a list of usb.core.Device objects matching vendor_id
     """
+    # this requires to install
+    import usb.core
     return list(usb.core.find(idVendor=vendor_id, find_all=True))
 
 
