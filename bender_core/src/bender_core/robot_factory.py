@@ -30,7 +30,7 @@ def get_classes(package_name, class_type):
             module = importlib.import_module(modname)
         except ImportError as e:
             msg = 'Error at import {}: {}'.format(modname, e)
-            rospy.logerr(msg)
+            print msg
             raise e
         for name, obj in inspect.getmembers(module):
             if inspect.isclass(obj) and issubclass(obj, RobotSkill):
