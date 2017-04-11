@@ -53,7 +53,7 @@ class CmdVelSafety(object):
                                                     [0,0,0])
 
         # Security tune-up variables
-        self.max_rad = .6
+        self.max_rad = .5
         self.laser_range = pi / 9
         self.front_laser_dist = .25
         self.stoping_acc = 0.3
@@ -243,13 +243,14 @@ class CmdVelSafety(object):
             if msg.range_min <= curr_mean and curr_mean <= msg.range_max:
                 curr_ang = msg.angle_min + i * msg.angle_increment
 
-                turn_r = self.curr_vel.linear.x / self.curr_vel.angular.z if self.curr_vel.angular.z > 0 else float("inf")
-
                 curr_dist = sqrt(mpow(self.laser_front_base_dist, 2) + mpow(curr_mean, 2) + 2 * self.laser_front_base_dist * curr_mean * cos(curr_ang))
 
-                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi - curr_ang))
+                turn_r = self.curr_vel.linear.x / self.curr_vel.angular.z if self.curr_vel.angular.z > 0 else 0
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_front_base_dist + cos(curr_ang) * curr_mean)
+
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi - curr_ang)) \
+                                if turn_r != 0 else curr_dist * abs(sin(base_ang))
 
                 if abs(curve_dist - turn_r) < self.max_rad + .2 and curr_dist < min_dist:
                     min_ang = base_ang
@@ -283,13 +284,14 @@ class CmdVelSafety(object):
             if msg.range_min <= curr_mean <= msg.range_max:
                 curr_ang = msg.angle_min + i * msg.angle_increment
 
-                turn_r = self.curr_vel.linear.x / self.curr_vel.angular.z if self.curr_vel.angular.z > 0 else float("inf")
-
                 curr_dist = sqrt(mpow(self.laser_rear_base_dist, 2) + mpow(curr_mean, 2) + 2 * self.laser_rear_base_dist * curr_mean * cos(curr_ang))
 
-                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(curr_ang + pi)) if turn_r < float("inf") else 0
+                turn_r = self.curr_vel.linear.x / self.curr_vel.angular.z if self.curr_vel.angular.z > 0 else 0
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_rear_base_dist + cos(curr_ang) * curr_mean)
+
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi - curr_ang)) \
+                                if turn_r != 0 else curr_dist * abs(sin(base_ang))
 
                 if abs(curve_dist - turn_r) < self.max_rad + .2 and curr_dist < min_dist:
                     min_ang = base_ang
