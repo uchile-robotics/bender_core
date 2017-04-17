@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot
+  xmlns:xacro="http://www.ros.org/wiki/xacro"
+  name="bender">
+  <!-- Prefix for Bender links -->
+  <xacro:property name="prefix" value="$(arg prefix)" />
+
+  <!-- Parameters -->
+  <xacro:include filename="$(find bender_description)/urdf/common.xacro" />
+  <!-- URDF Materials -->
+  <xacro:include filename="$(find bender_description)/urdf/materials.urdf.xacro" />
+  <!-- Gazebo macros -->
+  <xacro:include filename="$(find bender_description)/urdf/gazebo.urdf.xacro" />
+  <!-- Calibration parameters, used for arms in body.urdf.xacro -->
+  <xacro:include filename="$(find bender_description)/urdf/calibration.xacro" />
+  <!-- Dynamixel parameters -->
+  <xacro:include filename="$(find bender_description)/urdf/dynamixel.xacro" />
+
+  <!-- ******** Bender Parts ******** -->
+  
+  <!-- Base -->
+  <xacro:include filename="$(find bender_description)/urdf/base.urdf.xacro" />
+  <xacro:base prefix="${prefix}" />
+
+  <!-- Torso -->
+  <xacro:include filename="$(find bender_description)/urdf/torso.urdf.xacro" />
+  <xacro:torso prefix="${prefix}" parent="${prefix}torso_base_link"/>
+
+  <!-- Arm -->
+  <xacro:include filename="$(find bender_description)/urdf/arm.urdf.xacro" />
+  <!-- Left Arm -->
+  <xacro:arm side="l" parent="${prefix}l_arm_mount" reflect="-1" prefix="${prefix}"/>
+  <!-- Right Arm -->
+  <xacro:arm side="r" parent="${prefix}r_arm_mount" reflect="1" prefix="${prefix}"/>
+
+  <!-- Gripper -->
+  <xacro:include filename="$(find bender_description)/urdf/gripper.urdf.xacro" />
+  <!-- Gripper Joints -->
+  <xacro:gripper side="r" reflect="1" prefix="${prefix}" />
+  <xacro:gripper side="l" reflect="-1" prefix="${prefix}" />
+  <!-- Grippers Links -->
+  <xacro:gripper_int side="r" reflect="1" type="0" prefix="${prefix}"/>
+  <xacro:gripper_ext side="r" reflect="1" type="0" prefix="${prefix}"/>
+  <xacro:gripper_int side="l" reflect="-1" type="1" prefix="${prefix}"/>
+  <xacro:gripper_ext side="l" reflect="-1" type="1" prefix="${prefix}"/>
+
+  <!-- Head with Asus depth camera -->
+  <xacro:include filename="$(find bender_description)/urdf/head.urdf.xacro" />
+  <xacro:head parent="${prefix}neck_base" prefix="${prefix}" ns="/${prefix}sensors/rgbd_head" />
+  
+  <!-- Hokuyo sensors -->
+  <xacro:include filename="$(find bender_description)/urdf/laser_sensor.xacro" />
+  <xacro:laser_utm_30lx parent="${prefix}base_link" name="laser_front" prefix="${prefix}sensors/" xyz="0.22 0.0 0.22"  rpy="0.0 0.0 0.0" ns="${prefix}sensors/laser_front"/>
+  <xacro:laser_urg_04lx parent="${prefix}base_link" name="laser_rear"  prefix="${prefix}sensors/" xyz="-0.22 0.0 0.09" rpy="0.0 ${M_PI} 0.0" ns="${prefix}sensors/laser_rear" />
+
+  <!-- ROS Controllers -->
+  <xacro:ros_control prefix="${prefix}" />
+
+  <!-- Chessboard for calibration -->
+  <xacro:include filename="$(find bender_description)/urdf/chessboard.urdf.xacro" />
+  <xacro:chessboard name="l_arm_chessboard" parent="bender/l_wrist_pitch_link" origin="0.03 -0.07 -0.25" rpy="1.5708  -0   1.5708"/>
+  <xacro:chessboard name="r_arm_chessboard" parent="bender/r_wrist_pitch_link" origin="0.05 -0.07 -0.25" rpy="1.5708  -0   1.5708"/>
+
+</robot>

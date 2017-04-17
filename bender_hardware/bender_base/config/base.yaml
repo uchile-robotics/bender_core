@@ -3,3 +3,39 @@
 port: /dev/bender/base
 odom_frame: bender/odom
 base_link_frame: bender/base_link
+
+# baud (int, default: Use ARIA default (internal defaults, /etc/Aria.args file if present, and ARIAARGS environment variable if set))
+# Explicit serial Baud rate. All robots should use 9600 (unless explicitly set in firmware configuration) except Pioneer LX which uses 57600. ARIA may switch to a higher baud rate if possible after connecting. 
+
+# Set desired translation acceleration in m/s/s. May be set via dynamic_reconfigure 
+# trans_accel (float, default: none, use robot controller firmware configuration)
+
+# Set desired translation deceleration in m/s/s. May be set via dynamic_reconfigure 
+# trans_decel (float, default: none, use robot controller firmware configuration)
+
+# Set desired rotation acceleration in rad/s/s. May be set via dynamic_reconfigure 
+#rot_accel (float, default: none, use robot controller firmware configuration)
+
+# Set desired rotation acceleration in rad/s/s. May be set via dynamic_reconfigure 
+# rot_decel (float, default: none, use robot controller firmware configuration)
+
+# Set desired lateral (sideways) acceleration (applies to Seekur only) in m/s/s. May be set via dynamic_reconfigure 
+# lat_accel (float, default: none, use robot controller firmware configuration)
+
+# Set desired lateral (sideways) deceleration (applies to Seekur only) in m/s/s. Maybe set via dynamic_reconfigure 
+# lat_decel (float, default: none, use robot controller firmware configuration)
+
+# Change TicksMM odometry calibration parameter. See robot manual for information. Only available on robots with tunable odometry calibration (Pioneer 3, PeopleBot, PowerBot, AmigoBot). 
+# TicksMM (float, default: none, use robot controller firmware configuration)
+# 165
+
+# Change DriftFactor odometry calibration parameter. See robot manual for information. Only available on robots with tunable odometry calibration (Pioneer 3, PeopleBot, PowerBot, AmigoBot). 
+# DriftFactor (float, default: none, use robot controller firmware configuration)
+# 30
+
+# Change RevCount odometry calibration parameter. See robot manual for information. Only available on robots with tunable odometry calibration (Pioneer 3, PeopleBot, PowerBot, AmigoBot). 
+# RevCount (float, default: none, use robot controller firmware configuration)
+# 32550
+
+# If no cmd_vel command messages are received within this timeout period (in seconds), rosaria will command the robot to stop. If 0, this behavior is disabled and the robot will continue to use the last commanded velocity until a new cmd_vel command is received. Note that this is separate from the robot controller's own watchdog timeout, which protects against loss of communication between rosaria node and the robot controller. 
+# cmd_vel_timeout (float, default: 0.6 sec)

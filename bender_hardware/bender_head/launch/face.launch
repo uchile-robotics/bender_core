@@ -1,0 +1,20 @@
+<launch>
+
+
+  <group ns="bender">
+    <!-- face low level config file -->
+    <rosparam file="$(find bender_head)/config/face_controller.yaml" command="load"/>
+    <!-- face high level config file -->
+    <rosparam file="$(find bender_head)/config/eye_colors.yaml" command="load"/>
+    <rosparam file="$(find bender_head)/config/emotions.yaml" command="load"/>
+    <rosparam file="$(find bender_head)/config/dynamic_emotions.yaml" command="load"/>
+
+    <!-- Head low lovel controller spawner -->
+    <node name="face_controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
+        args="--manager=l_port_manager
+              --port=l_port
+              face_controller"
+        output="screen"/>
+  </group>
+
+</launch>

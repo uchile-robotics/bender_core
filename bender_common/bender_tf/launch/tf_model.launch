@@ -3,8 +3,10 @@
   <arg name="prefix" default="bender/" />
   <arg name="use_gui" default="false"  />
   <arg name="rate" default="40" />
-  <arg name="model_type" default="asus" />
+  <arg name="model_type" default="standard" />
   <arg name="use_dynamic_tf" default="true" />
+  <arg name="joints_already_published" default="false" />
+  
 
   <!-- Load robot model -->
   <include file="$(find bender_description)/launch/load_robot_description.launch">
@@ -20,6 +22,7 @@
   -->
 
   <!-- Robot state publisher -->
+  <!-- DEPRECATE? consultar rorro -->
   <node unless="$(arg use_dynamic_tf)" name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" ns="/bender/">
     <param name="publish_frequency" value="$(arg rate)" />
   </node>
@@ -33,8 +36,10 @@
     <node name="load_calibration" pkg="bender_tf" type="load_calibration" output="screen" />
   </group>
   
+
   <!-- Group joint states -->
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+  <!-- Gazebo already published the complete joint state set of messages, so we provide a way to prevent duplication. -->
+  <node unless="$(arg joints_already_published)" name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="use_gui" value="$(arg use_gui)" />
     <param name="rate" value="$(arg rate)" />
     <rosparam param="source_list">

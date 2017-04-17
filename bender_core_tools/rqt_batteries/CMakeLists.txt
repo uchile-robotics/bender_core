@@ -8,12 +8,14 @@ install(FILES plugin.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
+
+# TODO: que instalar?
 install(PROGRAMS
   scripts/rqt_batteries
-  scripts/test_plugin.py
-  scripts/batt_arms_pub.py
-  scripts/Motor_state_test.py
-  notebook_battery_pub.py
+  #scripts/test_plugin.py
+  #scripts/batt_arms_pub.py
+  #scripts/Motor_state_test.py
+  scripts/notebook_battery_pub.py
 
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

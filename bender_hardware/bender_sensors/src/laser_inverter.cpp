@@ -60,7 +60,7 @@ int main(int argc, char **argv){
 	sub = priv.subscribe("scan_in", 1, callback);
 
 	// [important!] wait for timer initialization!
-	while (ros::ok() && ros::Time::now().isZero());
+	//while (ros::ok() && ros::Time::now().isZero());
 
 	ROS_INFO("Config. Done");
 	ros::spin();

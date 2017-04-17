@@ -1,25 +1,24 @@
 <launch>
 
 	<!-- ================================================== -->
-	<!-- ==================== HARDWARE ==================== -->
+	<!-- ==================== PARAMETERS ================== -->
 	<!-- ================================================== -->
 	
-	<!-- visualization -->
-	<arg name="rviz"       default="true"/>
-
 	<!-- robot configuration -->
-	<arg name="model_type"     default="light_head"/>
-	<arg name="tf_gui"         default="false"/>
+	<arg name="model_type"     default="standard"/>
 	<arg name="language"       default="spanish"/>
-	
-	<!-- available languages: { english , spanish } -->
-	<arg name="show_subtitles" default="true"/>
 
+	<!-- GUI -->
+	<arg name="rviz"           default="true"/>
+	<arg name="rqt_gui"        default="false"/>
+	<arg name="show_subtitles" default="true"/> <!-- { english , spanish } -->
 
 	<!-- robot simulation -->
-	<arg name="simulation" default="false"/>
-	<arg name="sim_world"  default="amtc"/>
-	<!-- TODO: <arg name="simulator"  default="gazebo"/> -->
+	<arg name="robot"      default="real"/> <!-- { real, gazebo, stage } -->
+	<arg name="worldname"  default="amtc"/>
+
+	<!-- simulator specific parameters -->
+	<arg name="gazebo_gui" default="true"/>
 
 
 	<!-- ================================================== -->
@@ -42,5 +41,7 @@
 
 	<!-- RVIZ -->
 	<include file="$(find bender_utils)/launch/rviz.launch" if="$(arg rviz)"/>
+	<!-- Batt -->
+	<include file="$(find rqt_batteries)/launch/bender_batteries.launch"/>
 
 </launch>

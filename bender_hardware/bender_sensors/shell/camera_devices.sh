@@ -4,6 +4,7 @@
 # 
 # matias.pavez.b@gmail.com
 
+alias bender_hwcheck_cameras="rosrun bender_sensors hwcheck_cameras.py"
 
 # - - -  available data - - - 
 
