@@ -1,6 +1,0 @@
-<launch>
-  <!-- Load head controller configurations -->
-  <rosparam file="$(find bender_gazebo)/config/light_head_control.yaml" command="load"/>
-  <!-- Load the controllers, launch in other console -->
-  <node name="neck_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/bender" args="light_head_controller"/>
-</launch>

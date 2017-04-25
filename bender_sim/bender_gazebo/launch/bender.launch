@@ -12,7 +12,7 @@
   <arg name="worldname" default="empty" />
 
   <!-- Bender model type -->
-  <arg name="model_type" default="light_head" />
+  <arg name="model_type" default="standard" />
 
 
   <!-- - - - - - - -  USEFUL Parameters - - - - - - - -->
@@ -23,7 +23,6 @@
   <!-- Prefix for link and Gazebo sensor topics -->
   <!-- ros_control doesnt support! @TODO -->
   <arg name="prefix" default="bender/" />
-
 
   <!-- - - - - - - -  NODES - - - - - - - -->
 
@@ -39,17 +38,6 @@
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gui" value="$(arg gui)"/>
   </include>
-
-  <!-- Load the URDF into the ROS Parameter Server -->
-  <!-- Load model -->
-  <include file="$(find bender_description)/launch/load_robot_description.launch">
-    <arg name="prefix" value="$(arg prefix)" />
-    <arg name="model_type" default="$(arg model_type)" />
-  </include>
-  <!-- Use generated model-->
-  <!-- 
-  <param name="robot_description" textfile="$(find bender_description)/robots/bender.urdf"/>
-  -->
   
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model bender_model -param robot_description"/>
@@ -61,5 +49,8 @@
   
   <!-- RQT Control perspective -->
   <node if="$(arg rqt_gui)" name="rqt_command" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find bender_gazebo)/config/control.perspective"/>
+
+  <!-- TF -->
+
   
 </launch>

@@ -5,13 +5,13 @@
 	<!-- ================================================== -->
 	
 	<!-- robot configuration -->
-	<arg name="model_type"     default="light_head"/>
-	<arg name="language"       default="spanish"/>
+	<arg name="model_type"     default="standard"/>
+	<arg name="language"       default="spanish"/> <!-- { english , spanish } -->
 
 	<!-- GUI -->
 	<arg name="rviz"           default="true"/>
 	<arg name="rqt_gui"        default="false"/>
-	<arg name="show_subtitles" default="true"/> <!-- { english , spanish } -->
+	<arg name="show_subtitles" default="true"/>
 
 	<!-- robot simulation -->
 	<arg name="robot"      default="real"/> <!-- { real, gazebo, stage } -->
