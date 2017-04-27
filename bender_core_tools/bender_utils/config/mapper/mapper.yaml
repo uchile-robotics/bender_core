@@ -15,3 +15,10 @@ food_location: kitchentable
 snacks_location: desk
 cleaningstuff_location: bookcase
 
+
+classes_color : ["blue","red","yellow","back","white"]
+blue: ["greentea", "papayamilk", "puremilk", "water","orangejuice","beer","yogurt"]
+red:   ["biscuits","bubblegum","chocolates","tomatochips","barbecuechips","honeychip","pringles"]
+yellow: ["coconutcereals","cocoballs","eggstars","gramsoup","beansauce","apple","lemon","pear","mate"]
+back: ["sponge","toiletpaper","soap","lotion","toothpaste","cloth"]
+white: ["bowl","plate","tray"]
