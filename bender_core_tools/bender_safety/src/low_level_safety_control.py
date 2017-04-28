@@ -53,10 +53,10 @@ class CmdVelSafety(object):
                                                     [0,0,0])
 
         # Security tune-up variables
-        self.max_rad = .4
+        self.max_rad = .5
         self.laser_range = pi / 9
         self.front_laser_dist = .25
-        self.stoping_acc = 0.3
+        self.stoping_acc = 0.2
         # Subscriber variables
         self.curr_vel = Twist()
         self.sent_vel = 0
@@ -228,6 +228,7 @@ class CmdVelSafety(object):
         Returns:
             None
         """
+        #rospy.loginfo("Current min %f" % min(msg.ranges))
         min_dist = float("inf")
         min_ang = pi
         curr_values = [0, msg.ranges[0], msg.ranges[1]]
@@ -249,8 +250,7 @@ class CmdVelSafety(object):
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_front_base_dist + cos(curr_ang) * curr_mean)
 
-                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi + curr_ang)) \
-                                if turn_r != 0 else curr_dist * abs(sin(base_ang))
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else curr_dist * abs(sin(base_ang))
 
                 if abs(curve_dist - turn_r) < self.max_rad and curr_dist < min_dist:
                     min_ang = base_ang
@@ -290,8 +290,7 @@ class CmdVelSafety(object):
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_rear_base_dist + cos(curr_ang) * curr_mean)
 
-                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi + curr_ang)) \
-                                if turn_r != 0 else curr_dist * abs(sin(base_ang))
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else curr_dist * abs(sin(base_ang))
 
                 if abs(curve_dist - turn_r) < self.max_rad and curr_dist < min_dist:
                     min_ang = base_ang

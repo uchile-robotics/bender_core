@@ -22,7 +22,7 @@ subscribers:
     short_desc: "Low level safety control, possible to override using the joystick"
   - name: "Microsoft joystick"
     topic: "/bender/joy/base/cmd_vel"
-    timeout: 0.1
+    timeout: 1
     priority: 2
     short_desc: "User controlled commands, they have priority over the low level security layer assuming the user knows what they're doing"
 publisher: "/bender/nav/mid_level_mux/cmd_vel"
