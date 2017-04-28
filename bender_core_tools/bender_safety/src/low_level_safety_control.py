@@ -53,7 +53,7 @@ class CmdVelSafety(object):
                                                     [0,0,0])
 
         # Security tune-up variables
-        self.max_rad = .5
+        self.max_rad = .4
         self.laser_range = pi / 9
         self.front_laser_dist = .25
         self.stoping_acc = 0.3
@@ -249,10 +249,10 @@ class CmdVelSafety(object):
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_front_base_dist + cos(curr_ang) * curr_mean)
 
-                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi - curr_ang)) \
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi + curr_ang)) \
                                 if turn_r != 0 else curr_dist * abs(sin(base_ang))
 
-                if abs(curve_dist - turn_r) < self.max_rad + .2 and curr_dist < min_dist:
+                if abs(curve_dist - turn_r) < self.max_rad and curr_dist < min_dist:
                     min_ang = base_ang
                     min_dist = curr_dist
         # Update closest point variable
@@ -290,10 +290,10 @@ class CmdVelSafety(object):
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_rear_base_dist + cos(curr_ang) * curr_mean)
 
-                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi - curr_ang)) \
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi + curr_ang)) \
                                 if turn_r != 0 else curr_dist * abs(sin(base_ang))
 
-                if abs(curve_dist - turn_r) < self.max_rad + .2 and curr_dist < min_dist:
+                if abs(curve_dist - turn_r) < self.max_rad and curr_dist < min_dist:
                     min_ang = base_ang
                     min_dist = curr_dist
         # Update closest point variable
