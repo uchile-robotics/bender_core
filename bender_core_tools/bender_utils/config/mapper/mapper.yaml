@@ -1,5 +1,8 @@
 unknown_class: unknown 
-
+object_smallest: soap
+object_biggest: biscuits
+object_lightest: toothpaste
+object_heaviest: beer
 
 classes : ["drinks","food","snacks","cleaningstuff","containers"]
 drinks: ["greentea", "papayamilk", "puremilk", "water","orangejuice","beer","yogurt"]
