@@ -10,8 +10,6 @@ from threading import Thread
 # ROS
 import rospy
 import actionlib
-# Dynamixel constants
-from dynamixel_driver.dynamixel_const import *
 # Msgs
 from sensor_msgs.msg import JointState
 from control_msgs.msg import (GripperCommand, GripperCommandAction,
@@ -88,8 +86,8 @@ class GripperActionController():
         self.reconfig_server = DynamicReconfServer(GripperParamsConfig,
             self.update_params)
         # Check motor parameters
-    	if not self.set_motor_config():
-    		return False
+        if not self.set_motor_config():
+            return False
         return True
 
     def start(self):
@@ -130,28 +128,28 @@ class GripperActionController():
     def set_motor_config(self):
         # Check motor config
         for joint, controller in self.joint_to_controller.iteritems():
-        	motor_id = controller.motor_id
-        	# Read alarm shutdown
-        	try:
-        		current_config = controller.dxl_io.read(motor_id, DXL_ALARM_SHUTDOWN, 1)[-2]
-	       	except:
-        		return False
-        	rospy.logdebug("Current motor config: {0:b}".format(current_config))
-        	# Check config
-        	if not current_config & DXL_OVERLOAD_ERROR:
-        		rospy.loginfo("Updating current motor config")
-        		updated_config = current_config | DXL_ALARM_SHUTDOWN
-        		try:
-        			controller.dxl_io.write(motor_id, DXL_ALARM_SHUTDOWN, [updated_config])
-	       		except:
-        			return False
+            motor_id = controller.motor_id
+            # Read alarm shutdown
+            try:
+                current_config = controller.dxl_io.read(motor_id, DXL_ALARM_SHUTDOWN, 1)[-2]
+            except:
+                return False
+            rospy.logdebug("Current motor config: {0:b}".format(current_config))
+            # Check config
+            if not current_config & DXL_OVERLOAD_ERROR:
+                rospy.loginfo("Updating current motor config")
+                updated_config = current_config | DXL_ALARM_SHUTDOWN
+                try:
+                    controller.dxl_io.write(motor_id, DXL_ALARM_SHUTDOWN, [updated_config])
+                except:
+                    return False
         return True
 
     def pos_torque_command(self, position, effort):
         # Multipacket
         multi_packet_torque = dict()
         multi_packet_position = dict()
-        raw_effort = 1024 * effort
+        raw_effort = int(1024 * effort)
         # Set torque limit
         for port, joints in self.port_to_joints.items():
             vals_torque = list()
@@ -161,7 +159,7 @@ class GripperActionController():
                 # Get motor ID
                 motor_id = self.joint_to_controller[joint].motor_id
                 # Get the raw position (encoder ticks)
-                pos = self.joint_to_controller[joint].pos_rad_to_raw(position[i])
+                pos = self.joint_to_controller[joint].pos_rad_to_raw(position)
                 spd = self.joint_to_controller[joint].spd_rad_to_raw(self.velocity)
                 # Create effort command
                 vals_torque.append((motor_id, raw_effort))
@@ -196,7 +194,7 @@ class GripperActionController():
         rospy.sleep(0.1)
         self.last_movement_time = rospy.Time.now()
         # Check for success action
-        rate = rospy.Rate(10) # 10hz
+        rate = rospy.Rate(30) # 30hz
         while not rospy.is_shutdown():
             # Check position
             reach_goal_tolerance = True
