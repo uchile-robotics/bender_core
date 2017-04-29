@@ -1,0 +1,5 @@
+---
+sensor_msgs/Image rgb_img
+sensor_msgs/Image depth_img
+bender_msgs/Rect[] BBoxes 
+string[] caption
