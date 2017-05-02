@@ -1,5 +1,12 @@
 unknown_class: unknown 
-
+food_smallest: soap
+food_biggest: biscuits
+food_lightest: sponge
+food_heaviest: lotion
+drink_smallest: yogurt
+drink_biggest: orangejuice
+drink_lightest: water
+drink_heaviest: beer
 
 classes : ["drinks","food","snacks","cleaningstuff","containers"]
 drinks: ["greentea", "papayamilk", "puremilk", "water","orangejuice","beer","yogurt"]
@@ -14,6 +21,7 @@ drinks_location: kitchencounter
 food_location: kitchentable
 snacks_location: desk
 cleaningstuff_location: bookcase
+containers_location: kitchencounter
 
 
 classes_color : ["blue","red","yellow","back","white"]
