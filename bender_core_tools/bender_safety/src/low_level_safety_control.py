@@ -53,7 +53,7 @@ class CmdVelSafety(object):
                                                     [0,0,0])
 
         # Security tune-up variables
-        self.max_rad = .6
+        self.max_rad = .5
         self.laser_range = pi / 9
         self.front_laser_dist = .25
         self.stoping_acc = 0.3
@@ -111,7 +111,7 @@ class CmdVelSafety(object):
                 if dist_front < dist_rear:
                     clos_ang = rot_front
                 else:
-                    clos_ang = rot_rear
+                    clos_ang = rot_rear + pi
 
                 # Calculating correction factor
                 corr_factor = self.get_correction_factor(clos_ang)
