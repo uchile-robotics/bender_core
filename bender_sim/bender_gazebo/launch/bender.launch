@@ -25,6 +25,9 @@
   <arg name="prefix" default="bender/" />
 
   <!-- - - - - - - -  NODES - - - - - - - -->
+  <!-- remap laser scans that need further processing by the laser pipeline -->
+  <remap from="/bender/sensors/laser_front/scan" to="/bender/sensors/laser_front/scan_gazebo" />
+  <remap from="/bender/sensors/laser_rear/scan" to="/bender/sensors/laser_rear/scan_gazebo" />
 
   <!-- Load joint names and constants from YAML file to parameter server -->
   <rosparam file="$(find bender_description)/config/constants.yaml" command="load"/>
@@ -40,7 +43,8 @@
   </include>
   
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
-  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model bender_model -param robot_description"/>
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model bender_model -param robot_description">
+  </node>
 
   <!-- Effort Trajectory controllers, launch in another console -->
   <include file="$(find bender_gazebo)/launch/bender_control.launch.xml">
@@ -50,7 +54,7 @@
   <!-- RQT Control perspective -->
   <node if="$(arg rqt_gui)" name="rqt_command" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find bender_gazebo)/config/control.perspective"/>
 
-  <!-- TF -->
-
+  <!-- Laser limiter pipeline -->
+  <include file="$(find bender_gazebo)/launch/laser_limiters.launch.xml"/>
   
 </launch>

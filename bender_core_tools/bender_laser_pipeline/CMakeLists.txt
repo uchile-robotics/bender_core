@@ -29,3 +29,6 @@ catkin_package(
 
 add_library(bender_laser_pipeline src/laser_scan_filters.cpp src/self_filter.cpp)
 target_link_libraries(bender_laser_pipeline ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_executable(laser_scan_limiter src/laser_scan_limiter.cpp)
+target_link_libraries(laser_scan_limiter ${catkin_LIBRARIES})
