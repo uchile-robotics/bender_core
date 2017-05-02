@@ -61,6 +61,7 @@ add_service_files(
   GenderDetection.srv
   TimerString.srv
   ImageRecognition.srv
+  ImageReport.srv
 )
 
 ## Generate added messages and services with any dependencies listed here
