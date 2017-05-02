@@ -53,10 +53,10 @@ class CmdVelSafety(object):
                                                     [0,0,0])
 
         # Security tune-up variables
-        self.max_rad = .5
-        self.laser_range = pi / 9
+        self.max_rad = .3
+        self.laser_range = pi
         self.front_laser_dist = .25
-        self.stoping_acc = 0.2
+        self.stoping_acc = 0.3
         # Subscriber variables
         self.curr_vel = Twist()
         self.sent_vel = 0
@@ -72,7 +72,7 @@ class CmdVelSafety(object):
         # Velocity publisher
         self.pub = rospy.Publisher('/bender/nav/safety/low_level/cmd_vel', Twist, queue_size=2)
         # Laser subscribers
-        self.laser_front_sub = rospy.Subscriber('/bender/sensors/laser_front/scan', LaserScan, self.laser_front_input_cb, queue_size = 1)
+        self.laser_front_sub = rospy.Subscriber('/bender/sensors/laser_front/scan_filtered', LaserScan, self.laser_front_input_cb, queue_size = 1)
         self.laser_rear_sub = rospy.Subscriber('/bender/sensors/laser_rear/scan', LaserScan, self.laser_rear_input_cb, queue_size = 1)
         # Sent velocity subscriber
         self.vel_sub = rospy.Subscriber("/bender/nav/low_level_mux/cmd_vel", Twist, self.vel_output_cb, queue_size = 1)
@@ -244,20 +244,20 @@ class CmdVelSafety(object):
             if msg.range_min <= curr_mean and curr_mean <= msg.range_max:
                 curr_ang = msg.angle_min + i * msg.angle_increment
 
-                curr_dist = sqrt(mpow(self.laser_front_base_dist, 2) + mpow(curr_mean, 2) + 2 * self.laser_front_base_dist * curr_mean * cos(curr_ang))
-
-                turn_r = self.curr_vel.linear.x / self.curr_vel.angular.z if self.curr_vel.angular.z > 0 else 0
+                turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if self.curr_vel.angular.z != 0 else 0
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_front_base_dist + cos(curr_ang) * curr_mean)
+                
+                curr_dist = sqrt(mpow(self.laser_front_base_dist, 2) + mpow(curr_mean, 2) - 2 * self.laser_front_base_dist * curr_mean * cos(pi - abs(curr_ang)))
 
-                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else curr_dist * abs(sin(base_ang))
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) - 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else curr_dist * abs(sin(base_ang))
 
-                if abs(curve_dist - turn_r) < self.max_rad and curr_dist < min_dist:
+                if curr_dist < min_dist and abs(curve_dist - turn_r) < self.max_rad and abs(base_ang) < self.laser_range:
                     min_ang = base_ang
                     min_dist = curr_dist
         # Update closest point variable
         self.laser_front_closest_point = [min_dist, min_ang]
-        self.laser_front_cb_rate.sleep()
+        #self.laser_front_cb_rate.sleep()
 
     def laser_rear_input_cb(self, msg):
         """
@@ -284,20 +284,20 @@ class CmdVelSafety(object):
             if msg.range_min <= curr_mean <= msg.range_max:
                 curr_ang = msg.angle_min + i * msg.angle_increment
 
-                curr_dist = sqrt(mpow(self.laser_rear_base_dist, 2) + mpow(curr_mean, 2) + 2 * self.laser_rear_base_dist * curr_mean * cos(curr_ang))
-
-                turn_r = self.curr_vel.linear.x / self.curr_vel.angular.z if self.curr_vel.angular.z > 0 else 0
+                turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if self.curr_vel.angular.z != 0 else 0
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_rear_base_dist + cos(curr_ang) * curr_mean)
 
-                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) + 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else curr_dist * abs(sin(base_ang))
+                curr_dist = sqrt(mpow(self.laser_rear_base_dist, 2) + mpow(curr_mean, 2) - 2 * self.laser_rear_base_dist * curr_mean * cos(pi - abs(curr_ang)))
 
-                if abs(curve_dist - turn_r) < self.max_rad and curr_dist < min_dist:
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) - 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else curr_dist * abs(sin(base_ang))
+
+                if curr_dist < min_dist and abs(curve_dist - turn_r) < self.max_rad and abs(base_ang) < self.laser_range:
                     min_ang = base_ang
                     min_dist = curr_dist
         # Update closest point variable
         self.laser_rear_closest_point = [min_dist, min_ang]
-        self.laser_rear_cb_rate.sleep()
+        #self.laser_rear_cb_rate.sleep()
 
     def odom_input_cb(self, msg):
         """
