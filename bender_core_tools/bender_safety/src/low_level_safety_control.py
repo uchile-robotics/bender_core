@@ -53,9 +53,8 @@ class CmdVelSafety(object):
                                                     [0,0,0])
 
         # Security tune-up variables
-        self.max_rad = .3
-        self.laser_range = pi
-        self.front_laser_dist = .25
+        self.max_rad = .4
+        self.laser_range = pi / 9
         self.stoping_acc = 0.3
         # Subscriber variables
         self.curr_vel = Twist()
@@ -247,7 +246,7 @@ class CmdVelSafety(object):
                 turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if self.curr_vel.angular.z != 0 else 0
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_front_base_dist + cos(curr_ang) * curr_mean)
-                
+
                 curr_dist = sqrt(mpow(self.laser_front_base_dist, 2) + mpow(curr_mean, 2) - 2 * self.laser_front_base_dist * curr_mean * cos(pi - abs(curr_ang)))
 
                 curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) - 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else curr_dist * abs(sin(base_ang))
