@@ -55,7 +55,7 @@ class CmdVelSafety(object):
         # Security tune-up variables
         self.max_rad = .4
         self.laser_range = pi / 9
-        self.stoping_acc = 0.3
+        self.stoping_acc = 0.2
         # Subscriber variables
         self.curr_vel = Twist()
         self.sent_vel = 0
@@ -156,7 +156,7 @@ class CmdVelSafety(object):
         Returns:
             float: Correction factor, > 0 if closest point is in the front, < 0 if it's in the back
         """
-        vel_factor = mpow(max(abs(self.curr_vel.linear.x), abs(self.sent_vel)), 2) / (2 * self.stoping_acc)
+        vel_factor = mpow(max(abs(self.curr_vel.linear.x), abs(self.sent_vel)), 2) / (2 * self.stoping_acc * (0.4 / self.curr_vel.linear.x)) if self.curr_vel.linear.x != 0 else 0
         ang_factor = 1 if cos(obj_rotation) > 0 else -1
         return vel_factor * ang_factor
 
