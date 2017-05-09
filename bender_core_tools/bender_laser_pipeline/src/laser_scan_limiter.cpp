@@ -12,7 +12,7 @@ void callback(const sensor_msgs::LaserScan &msg){
 	for (r_it = scan_out.ranges.begin(); r_it != scan_out.ranges.end(); ++r_it)
 	{
 		if (*r_it < msg.range_min) {
-			*r_it = msg.range_min - 1;
+			*r_it = std::max(0.0f, msg.range_min - 1);
 		} else if (*r_it > msg.range_max) {
 			*r_it = msg.range_max + 1;
 		}

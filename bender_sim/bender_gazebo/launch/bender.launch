@@ -26,8 +26,8 @@
 
   <!-- - - - - - - -  NODES - - - - - - - -->
   <!-- remap laser scans that need further processing by the laser pipeline -->
-  <remap from="/bender/sensors/laser_front/scan" to="/bender/sensors/laser_front/scan_gazebo" />
-  <remap from="/bender/sensors/laser_rear/scan" to="/bender/sensors/laser_rear/scan_gazebo" />
+  <remap from="/bender/sensors/laser_front/scan" to="/$(arg gui)sensors/laser_front/scan_gazebo" />
+  <remap from="/bender/sensors/laser_rear/scan" to="/$(arg gui)sensors/laser_rear/scan_gazebo" />
 
   <!-- Load joint names and constants from YAML file to parameter server -->
   <rosparam file="$(find bender_description)/config/constants.yaml" command="load"/>

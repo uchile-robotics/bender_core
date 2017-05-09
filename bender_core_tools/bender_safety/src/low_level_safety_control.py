@@ -53,7 +53,11 @@ class CmdVelSafety(object):
                                                     [0,0,0])
 
         # Security tune-up variables
+<<<<<<< HEAD
         self.max_rad = .3
+=======
+        self.max_rad = .5
+>>>>>>> b56a92e835a74884fa5713834dd1ed632fdcb6b2
         self.laser_range = pi / 9
         self.front_laser_dist = .25
         self.stoping_acc = 0.3
