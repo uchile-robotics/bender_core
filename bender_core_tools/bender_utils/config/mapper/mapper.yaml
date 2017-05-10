@@ -7,6 +7,10 @@ drink_smallest: yogurt
 drink_biggest: orangejuice
 drink_lightest: water
 drink_heaviest: beer
+object_smallest: soap
+object_biggest: biscuits
+object_lightest: toothpaste
+object_heaviest: beer
 
 classes : ["drinks","food","snacks","cleaningstuff","containers"]
 drinks: ["greentea", "papayamilk", "puremilk", "water","orangejuice","beer","yogurt"]
