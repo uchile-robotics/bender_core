@@ -7,4 +7,4 @@ int32[] col
 int32[] row
 int32[] width
 int32[] height
-
+int32[] rot_degrees
