@@ -12,13 +12,13 @@
 #include <QtGui>
 #include <QMessageBox>
 #include <iostream>
-#include "../include/bender_gui_subtitles/main_window.hpp"
+#include "../include/uchile_gui_subtitles/main_window.hpp"
 
 /*****************************************************************************
 ** Namespaces
 *****************************************************************************/
 
-namespace bender_gui_subtitles {
+namespace uchile_gui_subtitles {
 
 using namespace Qt;
 
@@ -73,4 +73,4 @@ void MainWindow::updateTextView() {
     this->adjustSize();
 }
 
-}  // namespace bender_gui_subtitles
+}  // namespace uchile_gui_subtitles

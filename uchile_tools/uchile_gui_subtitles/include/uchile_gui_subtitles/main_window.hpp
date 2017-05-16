@@ -1,12 +1,12 @@
 /**
- * @file /include/bender_gui_subtitles/main_window.hpp
+ * @file /include/uchile_gui_subtitles/main_window.hpp
  *
- * @brief Qt based gui for bender_gui_subtitles.
+ * @brief Qt based gui for uchile_gui_subtitles.
  *
  * @date November 2010
  **/
-#ifndef bender_gui_subtitles_MAIN_WINDOW_H
-#define bender_gui_subtitles_MAIN_WINDOW_H
+#ifndef uchile_gui_subtitles_MAIN_WINDOW_H
+#define uchile_gui_subtitles_MAIN_WINDOW_H
 
 /*****************************************************************************
 ** Includes
@@ -21,7 +21,7 @@
 ** Namespace
 *****************************************************************************/
 
-namespace bender_gui_subtitles {
+namespace uchile_gui_subtitles {
 
 /*****************************************************************************
 ** Interface [MainWindow]
@@ -44,6 +44,6 @@ private:
 	QNode qnode;
 };
 
-}  // namespace bender_gui_subtitles
+}  // namespace uchile_gui_subtitles
 
-#endif // bender_gui_subtitles_MAIN_WINDOW_H
+#endif // uchile_gui_subtitles_MAIN_WINDOW_H

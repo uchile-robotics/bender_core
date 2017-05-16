@@ -14,7 +14,7 @@
 #ifndef Q_MOC_RUN
 
 // NODE
-#include "../include/bender_gui_subtitles/qnode.hpp"
+#include "../include/uchile_gui_subtitles/qnode.hpp"
 
 // C++
 #include <string>
@@ -31,7 +31,7 @@
 ** Namespaces
 *****************************************************************************/
 
-namespace bender_gui_subtitles {
+namespace uchile_gui_subtitles {
 
 /*****************************************************************************
 ** Implementation
@@ -151,4 +151,4 @@ void QNode::displayText(std::string &text) {
     Q_EMIT textUpdated();
 }
 
-}  // namespace bender_gui_subtitles
+}  // namespace uchile_gui_subtitles

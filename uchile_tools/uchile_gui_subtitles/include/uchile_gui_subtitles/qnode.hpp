@@ -1,5 +1,5 @@
 /**
- * @file /include/bender_gui_subtitles/qnode.hpp
+ * @file /include/uchile_gui_subtitles/qnode.hpp
  *
  * @brief Communications central!
  *
@@ -9,8 +9,8 @@
 ** Ifdefs
 *****************************************************************************/
 
-#ifndef bender_gui_subtitles_QNODE_HPP_
-#define bender_gui_subtitles_QNODE_HPP_
+#ifndef uchile_gui_subtitles_QNODE_HPP_
+#define uchile_gui_subtitles_QNODE_HPP_
 
 /*****************************************************************************
 ** Includes
@@ -36,7 +36,7 @@
 ** Namespaces
 *****************************************************************************/
 
-namespace bender_gui_subtitles {
+namespace uchile_gui_subtitles {
 
 /*****************************************************************************
 ** Class
@@ -80,7 +80,7 @@ private:
 
 };
 
-}  // namespace bender_gui_subtitles
+}  // namespace uchile_gui_subtitles
 
 
-#endif /* bender_gui_subtitles_QNODE_HPP_ */
+#endif /* uchile_gui_subtitles_QNODE_HPP_ */
