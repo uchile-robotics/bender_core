@@ -23,7 +23,7 @@ trap save_file INT
 save_file ()
 {
     local calibration_folder filename fullpath
-    calibration_folder="$BENDER_WS/base_ws/src/bender_common/bender_tf/calibration"
+    calibration_folder="$BENDER_WS/base_ws/src/uchile_common/bender_tf/calibration"
     # Check calibration folder
     if [ ! -d "${calibration_folder}" ]; then
         default_folder=$HOME

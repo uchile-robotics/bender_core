@@ -4,7 +4,7 @@
     <!-- PACKAGE INFORMATION -->
     <!-- - - - - - - - - - - -->
 
-    <name>bender_common</name>
+    <name>uchile_common</name>
     <version>2.0.0</version>
 
     <description>Bender common definitions</description>

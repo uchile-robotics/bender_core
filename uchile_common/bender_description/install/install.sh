@@ -55,7 +55,7 @@ fi
 #  - - - - - - - - - Extract files - - - - - - - - - - -
 # Extract files
 echo "$installer Extracting mesh files"
-tar -xzf "$BACKUP_FILE" --directory "$BENDER_WS"/base_ws/src/bender_common/
+tar -xzf "$BACKUP_FILE" --directory "$BENDER_WS"/base_ws/src/uchile_common/
 OUT=$?
 if [ $OUT -ne 0 ]; then
     echo "$installer ${red}Error extracting mesh files.${reset}"

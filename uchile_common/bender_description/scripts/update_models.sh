@@ -16,7 +16,7 @@ installer="${bold}[bender_description]:${reset}"
 
 #  - - - - - - - - - Main - - - - - - - - - - - 
 BASEDIR=$(pwd)
-cd "$BENDER_WS"/base_ws/src/bender_common/bender_description/robots
+cd "$BENDER_WS"/base_ws/src/uchile_common/bender_description/robots
 
 echo "$installer Exporting URDF."
 for i in $(ls *.urdf.xacro);do
