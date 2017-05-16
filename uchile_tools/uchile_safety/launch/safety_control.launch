@@ -3,7 +3,7 @@
 	<arg name="asus_scan" default="false"/>
 
 	<group if="$(arg asus_scan)">
-		<include file="$(find bender_perception_utils)/point_filters/pointcloud_to_laserscan/launch/pointcloud_to_laserscan.launch"/>
+		<include file="$(find uchile_perception_utils)/point_filters/pointcloud_to_laserscan/launch/pointcloud_to_laserscan.launch"/>
 
 		<node pkg="uchile_safety" type="low_level_asus_safety_control.py" name="low_level_safety_control" respawn="true" respawn_delay="1"/>
 	</group>
