@@ -1,5 +1,5 @@
 <library path="src">
-  <class name="BatteriesDashboard" type="rqt_batteries.batteries_dashboard.BatteriesDashboard" base_class_type="rqt_gui_py::Plugin">
+  <class name="BatteriesDashboard" type="uchile_rqt_batteries.batteries_dashboard.BatteriesDashboard" base_class_type="rqt_gui_py::Plugin">
     <description>
       A Python GUI plugin for displaying a dashboard that displays battery levels.
     </description>

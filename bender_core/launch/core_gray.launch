@@ -42,6 +42,6 @@
 	<!-- RVIZ -->
 	<include file="$(find bender_utils)/launch/rviz.launch" if="$(arg rviz)"/>
 	<!-- Batt -->
-	<include file="$(find rqt_batteries)/launch/bender_batteries.launch"/>
+	<include file="$(find uchile_rqt_batteries)/launch/bender_batteries.launch"/>
 
 </launch>

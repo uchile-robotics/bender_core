@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>rqt_batteries</name>
+  <name>uchile_rqt_batteries</name>
   <version>0.0.1</version>
-  <description>rqt_batteries is a GUI that just shows batteries status
+  <description>uchile_rqt_batteries is a GUI that just shows batteries status
   </description>
 
   <author email="sam.pfeiffer@pal-robotics.com">Sammy Pfeiffer</author>

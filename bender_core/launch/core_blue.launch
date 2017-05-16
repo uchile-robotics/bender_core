@@ -21,9 +21,9 @@
 	<arg name="gazebo_gui" default="true"/>
 
 
-	<!-- rqt_batteries -->
+	<!-- uchile_rqt_batteries -->
 	
-	<include file="$(find rqt_batteries)/launch/notebook_battery.launch">
+	<include file="$(find uchile_rqt_batteries)/launch/notebook_battery.launch">
 		<arg name="name" value="vision"/>
 	</include>
 

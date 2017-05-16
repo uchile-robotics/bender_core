@@ -2,7 +2,7 @@
 import subprocess
 import rospy
 from sensor_msgs.msg import BatteryState
-from rqt_batteries.battery_publisher import BatteryStatePublisher
+from uchile_rqt_batteries.battery_publisher import BatteryStatePublisher
 
 class NotebookBatteryPublisher(BatteryStatePublisher):
 	"""Publish notebook battery state"""

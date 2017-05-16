@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-from rqt_batteries.battery_publisher import VoltageBatteryStatePublisher
+from uchile_rqt_batteries.battery_publisher import VoltageBatteryStatePublisher
 from std_msgs.msg import Float64
 
 class VoltageFloatBatteryStatePublisher(VoltageBatteryStatePublisher):

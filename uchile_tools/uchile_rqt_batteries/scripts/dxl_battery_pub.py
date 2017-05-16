@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from rqt_batteries.battery_publisher import VoltageBatteryStatePublisher
+from uchile_rqt_batteries.battery_publisher import VoltageBatteryStatePublisher
 from dynamixel_msgs.msg import MotorStateList
 
 class DynamixelBatteryStatePublisher(VoltageBatteryStatePublisher):

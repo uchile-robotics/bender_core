@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# rqt_batteries: batteries_dashboard.py
+# uchile_rqt_batteries: batteries_dashboard.py
 #
 # Copyright (c) 2015 PAL Robotics SL. All Rights Reserved
 #

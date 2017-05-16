@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# rqt_batteries: wrap_battery.py
+# uchile_rqt_batteries: wrap_battery.py
 #
 # Copyright (c) 2015 PAL Robotics SL. All Rights Reserved
 #
@@ -48,7 +48,7 @@ class WrappedBattery(BatteryDashWidget):
             charge_icons.append([charge_icon])
 
         icon_paths = []
-        icon_paths.append(['rqt_batteries', 'images'])
+        icon_paths.append(['uchile_rqt_batteries', 'images'])
         self._wrapped_battery_name = name
         super(WrappedBattery, self).__init__(name=name,
                                                   icons=icons, charge_icons=charge_icons,

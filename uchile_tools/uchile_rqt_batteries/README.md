@@ -1,6 +1,6 @@
 rqt plugin dashboard for showing battery status.
 
-![Screenshot of the batteries plugin working](https://raw.githubusercontent.com/pal-robotics/rqt_batteries/master/images/rqt_batteries_ss.png)
+![Screenshot of the batteries plugin working](https://raw.githubusercontent.com/pal-robotics/uchile_rqt_batteries/master/images/uchile_rqt_batteries_ss.png)
 
 You must set in the parameter server
 which topics to listen to and it will
