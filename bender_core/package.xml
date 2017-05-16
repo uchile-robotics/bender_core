@@ -75,7 +75,7 @@
     <!-- knowledge depends -->
     <depend>bender_db</depend>
     <depend>uchile_maps</depend>
-    <depend>bender_pose_server</depend>
+    <depend>uchile_pose_server</depend>
 
     <!-- simulation depends -->
     <depend>bender_mock</depend>

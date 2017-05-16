@@ -62,7 +62,7 @@
 	<!-- =================================================== -->
 
 	<!-- Pose Server -->
-	<include file="$(find bender_pose_server)/launch/pose_server.launch"/>
+	<include file="$(find uchile_pose_server)/launch/pose_server.launch"/>
 
 	<!-- Mapper -->
 	<include file="$(find bender_utils)/launch/mapper.launch"/>
