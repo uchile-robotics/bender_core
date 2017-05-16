@@ -48,7 +48,7 @@
 	</include>
 	-->
 	<!-- footprint generator 
-	<include file="$(find bender_footprint_generator)/launch/footprint_generator.launch"/>
+	<include file="$(find uchile_footprint_generator)/launch/footprint_generator.launch"/>
 	-->
 	<!-- Sound Player -->
 	<include file="$(find bender_sound)/launch/sound.launch"/>

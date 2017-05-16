@@ -1,5 +1,5 @@
 
-# bender_footprint_generator
+# uchile_footprint_generator
 
 This ROS package provides a node to dynamically compute the robot footprint. The footprint is based on a baseline polygon which is augmented by the convex hull of the required robot frames.
 

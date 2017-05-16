@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>bender_footprint_generator</name>
+  <name>uchile_footprint_generator</name>
   <version>2.0.0</version>
   <description>
     This ROS package provides a node to dynamically compute the robot footprint. The footprint is
