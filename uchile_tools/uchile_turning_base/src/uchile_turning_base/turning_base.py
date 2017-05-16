@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from bender_turning_base.msg import platoMov
+from uchile_turning_base.msg import platoMov
 
 class TurningBase(object):
     """Base for bender"""

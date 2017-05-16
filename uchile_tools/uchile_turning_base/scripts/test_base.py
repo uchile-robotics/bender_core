@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from bender_turning_base.turning_base import TurningBase
+from uchile_turning_base.turning_base import TurningBase
 
 def main():
     rospy.init_node('turning_base_test', anonymous=True)

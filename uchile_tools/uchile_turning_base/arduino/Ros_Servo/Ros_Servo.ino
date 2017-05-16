@@ -1,13 +1,13 @@
 
 #include <ros.h>
-#include <bender_turning_base/platoMov.h>
+#include <uchile_turning_base/platoMov.h>
 #include <Servo.h>
 
 ros::NodeHandle  nh;
 
 Servo myservo;
 
-void messageCb( const bender_turning_base::platoMov& msg)
+void messageCb( const uchile_turning_base::platoMov& msg)
   {
     myservo.attach(9);
     myservo.write(89);
@@ -15,7 +15,7 @@ void messageCb( const bender_turning_base::platoMov& msg)
     myservo.detach();
   }
 
-ros::Subscriber<bender_turning_base::platoMov> sub("toggle_servo", &messageCb );
+ros::Subscriber<uchile_turning_base::platoMov> sub("toggle_servo", &messageCb );
 
 void setup()
 { 

@@ -33,7 +33,7 @@ from distutils.core import setup
 from catkin_pkg.python_setup import generate_distutils_setup
 
 setup_args = generate_distutils_setup(
-    packages=['bender_turning_base'],
+    packages=['uchile_turning_base'],
     scripts=[],
     package_dir={'': 'src'}
 )

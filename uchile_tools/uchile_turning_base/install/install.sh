@@ -21,12 +21,12 @@ reset=$(tput sgr0)
 bold=$(tput bold)
 
 # Line tittle
-installer="${bold}[bender_turning_base]:${reset}"
+installer="${bold}[uchile_turning_base]:${reset}"
 
 #  - - - - - - - - - Install Rules - - - - - - - - - - - 
 echo "$installer Installing udev rules"
-bender_cd bender_turning_base
-sudo cp -f install/10-bender_turning_base.rules /etc/udev/rules.d/10-bender_turning_base.rules
+bender_cd uchile_turning_base
+sudo cp -f install/10-uchile_turning_base.rules /etc/udev/rules.d/10-uchile_turning_base.rules
 sudo udevadm control --reload
 
 #  - - - - - - - - - Port Permissions  - - - - - - - - - 

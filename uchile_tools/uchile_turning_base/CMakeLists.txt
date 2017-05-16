@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bender_turning_base)
+project(uchile_turning_base)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -102,7 +102,7 @@ catkin_python_setup()
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES bender_turning_base
+#  LIBRARIES uchile_turning_base
 #  CATKIN_DEPENDS roscpp roslib rosserial_arduino rosserial_python std_msgs
 #  DEPENDS system_lib
 )
@@ -119,14 +119,14 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(bender_turning_base
-#   src/${PROJECT_NAME}/bender_turning_base.cpp
+# add_library(uchile_turning_base
+#   src/${PROJECT_NAME}/uchile_turning_base.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(bender_turning_base ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(uchile_turning_base ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 # add_executable(bender_plato_node src/bender_plato_node.cpp)
@@ -155,7 +155,7 @@ include_directories(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS bender_turning_base bender_plato_node
+# install(TARGETS uchile_turning_base bender_plato_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
