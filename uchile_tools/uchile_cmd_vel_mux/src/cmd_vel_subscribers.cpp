@@ -1,7 +1,7 @@
 /**
 * @file /src/cmd_vel_subscribers.cpp
 *
-* @brief Subscriber handlers for the bender_cmd_vel_mux
+* @brief Subscriber handlers for the uchile_cmd_vel_mux
 *
 * License: BSD
 * https://raw.github.com/yujinrobot/yujin_ocs/hydro/yocs_cmd_vel_mux/LICENSE
@@ -13,14 +13,14 @@
 
 #include <fstream>
 
-#include "bender_cmd_vel_mux/cmd_vel_subscribers.hpp"
-#include "bender_cmd_vel_mux/exceptions.hpp"
+#include "uchile_cmd_vel_mux/cmd_vel_subscribers.hpp"
+#include "uchile_cmd_vel_mux/exceptions.hpp"
 
 /*****************************************************************************
 ** Namespaces
 *****************************************************************************/
 
-namespace bender_cmd_vel_mux {
+namespace uchile_cmd_vel_mux {
 
 /*****************************************************************************
 ** Implementation
@@ -71,4 +71,4 @@ void CmdVelSubscribers::configure(const YAML::Node& node) {
   }
 }
 
-} // namespace bender_cmd_vel_mux
+} // namespace uchile_cmd_vel_mux

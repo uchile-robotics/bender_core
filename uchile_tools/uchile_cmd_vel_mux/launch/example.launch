@@ -11,7 +11,7 @@
 
 	<node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"/>
 
-	<node pkg="nodelet" type="nodelet" name="bender_cmd_vel_mux" args="load bender_cmd_vel_mux/CmdVelMuxNodelet nodelet_manager">
-		<param name="yaml_cfg_file" value="$(find bender_cmd_vel_mux)/param/example.yaml"/>
+	<node pkg="nodelet" type="nodelet" name="uchile_cmd_vel_mux" args="load uchile_cmd_vel_mux/CmdVelMuxNodelet nodelet_manager">
+		<param name="yaml_cfg_file" value="$(find uchile_cmd_vel_mux)/param/example.yaml"/>
 	</node>
 </launch>

@@ -1,7 +1,7 @@
 /**
-* @file /include/bender_cmd_vel_mux/cmd_vel_mux_nodelet.hpp
+* @file /include/uchile_cmd_vel_mux/cmd_vel_mux_nodelet.hpp
 *
-* @brief Structure for the bender_cmd_vel_mux.
+* @brief Structure for the uchile_cmd_vel_mux.
 *
 * License: BSD
 * https://raw.github.com/yujinrobot/yujin_ocs/hydro/yocs_cmd_vel_mux/LICENSE
@@ -22,14 +22,14 @@
 #include <nodelet/nodelet.h>
 #include <dynamic_reconfigure/server.h>
 
-#include "bender_cmd_vel_mux/reloadConfig.h"
-#include "bender_cmd_vel_mux/cmd_vel_subscribers.hpp"
+#include "uchile_cmd_vel_mux/reloadConfig.h"
+#include "uchile_cmd_vel_mux/cmd_vel_subscribers.hpp"
 
 /*****************************************************************************
 ** Namespaces
 *****************************************************************************/
 
-namespace bender_cmd_vel_mux {
+namespace uchile_cmd_vel_mux {
 
 /*****************************************************************************
 ** CmdVelMux
@@ -62,9 +62,9 @@ private:
   /*********************
   ** Dynamic Reconfigure
   **********************/
-  dynamic_reconfigure::Server<bender_cmd_vel_mux::reloadConfig> * dynamic_reconfigure_server;
-  dynamic_reconfigure::Server<bender_cmd_vel_mux::reloadConfig>::CallbackType dynamic_reconfigure_cb;
-  void reloadConfiguration(bender_cmd_vel_mux::reloadConfig &config, uint32_t unused_level);
+  dynamic_reconfigure::Server<uchile_cmd_vel_mux::reloadConfig> * dynamic_reconfigure_server;
+  dynamic_reconfigure::Server<uchile_cmd_vel_mux::reloadConfig>::CallbackType dynamic_reconfigure_cb;
+  void reloadConfiguration(uchile_cmd_vel_mux::reloadConfig &config, uint32_t unused_level);
 
   /*********************
    ** Private Classes
@@ -108,6 +108,6 @@ private:
   };
 };
 
-} // namespace bender_cmd_vel_mux
+} // namespace uchile_cmd_vel_mux
 
 #endif /* BENDER_VEL_MUX_NODELET_HPP_ */

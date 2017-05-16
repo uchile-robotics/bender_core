@@ -1,5 +1,5 @@
 /**
-* @file /include/bender_cmd_vel_mux/cmd_vel_subscribers.hpp
+* @file /include/uchile_cmd_vel_mux/cmd_vel_subscribers.hpp
 *
 * @brief Structure for the cmd_vel_mux.
 *
@@ -41,7 +41,7 @@ void operator >> (const YAML::Node& node, T& i)
 ** Namespaces
 *****************************************************************************/
 
-namespace bender_cmd_vel_mux {
+namespace uchile_cmd_vel_mux {
 
 /*****************************************************************************
 ** CmdVelSubscribers
@@ -98,6 +98,6 @@ private:
   std::vector<CmdVelSubs> list;
 };
 
-} // namespace bender_cmd_vel_mux
+} // namespace uchile_cmd_vel_mux
 
 #endif /* BENDER_CMD_VEL_SUBSCRIBERS_HPP_ */

@@ -1,5 +1,5 @@
 /**
-* @file /cmd_vel_mux/include/bender_cmd_vel_mux/exceptions.hpp
+* @file /cmd_vel_mux/include/uchile_cmd_vel_mux/exceptions.hpp
 *
 * @brief Exception classes for cmd_vel_mux.
 *
@@ -19,7 +19,7 @@
 ** Namespaces
 *****************************************************************************/
 
-namespace bender_cmd_vel_mux {
+namespace uchile_cmd_vel_mux {
 
 /*****************************************************************************
 ** Exceptions
@@ -46,6 +46,6 @@ public:
 		virtual ~YamlException() throw() {}
 };
 
-} // namespace bender_cmd_vel_mux
+} // namespace uchile_cmd_vel_mux
 
 #endif /* BENDER_CMD_VEL_EXCEPTIONS_HPP_ */

@@ -1,6 +1,6 @@
-<library path="lib/libbender_cmd_vel_mux_nodelet">
-  <class name="bender_cmd_vel_mux/CmdVelMuxNodelet"
-         type="bender_cmd_vel_mux::CmdVelMuxNodelet"
+<library path="lib/libuchile_cmd_vel_mux_nodelet">
+  <class name="uchile_cmd_vel_mux/CmdVelMuxNodelet"
+         type="uchile_cmd_vel_mux::CmdVelMuxNodelet"
          base_class_type="nodelet::Nodelet">
     <description>
       Implementation for the command velocity multiplexer as a nodelet.

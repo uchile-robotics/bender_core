@@ -14,14 +14,14 @@
 #include <std_msgs/String.h>
 #include <pluginlib/class_list_macros.h>
 
-#include "bender_cmd_vel_mux/cmd_vel_mux_nodelet.hpp"
-#include "bender_cmd_vel_mux/exceptions.hpp"
+#include "uchile_cmd_vel_mux/cmd_vel_mux_nodelet.hpp"
+#include "uchile_cmd_vel_mux/exceptions.hpp"
 
 /*****************************************************************************
 ** Namespaces
 *****************************************************************************/
 
-namespace bender_cmd_vel_mux {
+namespace uchile_cmd_vel_mux {
 
 /*****************************************************************************
 ** Implementation
@@ -79,7 +79,7 @@ void CmdVelMuxNodelet::onInit()
   ** Dynamic Reconfigure
   **********************/
   dynamic_reconfigure_cb = boost::bind(&CmdVelMuxNodelet::reloadConfiguration, this, _1, _2);
-  dynamic_reconfigure_server = new dynamic_reconfigure::Server<bender_cmd_vel_mux::reloadConfig>(nh);
+  dynamic_reconfigure_server = new dynamic_reconfigure::Server<uchile_cmd_vel_mux::reloadConfig>(nh);
   dynamic_reconfigure_server->setCallback(dynamic_reconfigure_cb);
 
   active_subscriber = nh.advertise <std_msgs::String> ("active", 1, true); // latched topic
@@ -93,7 +93,7 @@ void CmdVelMuxNodelet::onInit()
   NODELET_DEBUG("CmdVelMux : successfully initialised");
 }
 
-void CmdVelMuxNodelet::reloadConfiguration(bender_cmd_vel_mux::reloadConfig &config, uint32_t unused_level)
+void CmdVelMuxNodelet::reloadConfiguration(uchile_cmd_vel_mux::reloadConfig &config, uint32_t unused_level)
 {
   std::string yaml_cfg_file;
   ros::NodeHandle &nh = this->getPrivateNodeHandle();
@@ -173,9 +173,9 @@ void CmdVelMuxNodelet::reloadConfiguration(bender_cmd_vel_mux::reloadConfig &con
   ifs.close();
 }
 
-} // namespace bender_cmd_vel_mux
+} // namespace uchile_cmd_vel_mux
 
 
-//PLUGINLIB_DECLARE_CLASS(bender_cmd_vel_mux, CmdVelMuxNodelet, bender_cmd_vel_mux::CmdVelMuxNodelet, nodelet::Nodelet);
-////PLUGINLIB_REGISTER_CLASS(cmd_vel_mux,bender_cmd_vel_mux::CmdVelMuxNodelet,nodelet::Nodelet);
-PLUGINLIB_EXPORT_CLASS(bender_cmd_vel_mux::CmdVelMuxNodelet, nodelet::Nodelet);
+//PLUGINLIB_DECLARE_CLASS(uchile_cmd_vel_mux, CmdVelMuxNodelet, uchile_cmd_vel_mux::CmdVelMuxNodelet, nodelet::Nodelet);
+////PLUGINLIB_REGISTER_CLASS(cmd_vel_mux,uchile_cmd_vel_mux::CmdVelMuxNodelet,nodelet::Nodelet);
+PLUGINLIB_EXPORT_CLASS(uchile_cmd_vel_mux::CmdVelMuxNodelet, nodelet::Nodelet);

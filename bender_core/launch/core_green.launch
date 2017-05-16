@@ -44,7 +44,7 @@
 	<include file="$(find bender_joy)/launch/joysticks.launch"/>
 
 	<!-- cmd_vel_mux -->
-	<include file="$(find bender_cmd_vel_mux)/launch/mux.launch"/>
+	<include file="$(find uchile_cmd_vel_mux)/launch/mux.launch"/>
 
 	<!-- robot laser self filter -->
 	<include file="$(find bender_laser_pipeline)/launch/laser_pipeline.launch">

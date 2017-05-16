@@ -63,7 +63,7 @@
     <depend>bender_description</depend>
 
     <!-- core_tools depends -->
-    <depend>bender_cmd_vel_mux</depend>
+    <depend>uchile_cmd_vel_mux</depend>
     <depend>bender_utils</depend>
 
     <!-- hardware depends -->

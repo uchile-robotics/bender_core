@@ -1,5 +1,5 @@
 # Another example configuration file, though this one is used to test the dynamic reconfiguration
-# of the bender_cmd_vel_mux. Used with reconfigure.launch.
+# of the uchile_cmd_vel_mux. Used with reconfigure.launch.
 
 subscribers:
   - name: "Default input"
