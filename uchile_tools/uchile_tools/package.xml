@@ -4,7 +4,7 @@
     <!-- PACKAGE INFORMATION -->
     <!-- - - - - - - - - - - -->
 
-    <name>bender_core_tools</name>
+    <name>uchile_tools</name>
     <version>2.0.0</version>
 
     <description>Bender tools for the core nodes</description>
