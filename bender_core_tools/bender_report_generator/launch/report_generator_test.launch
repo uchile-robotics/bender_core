@@ -1,0 +1,20 @@
+<launch>
+
+	<!-- Map Server -->
+	<include file="$(find bender_maps)/launch/map_server.launch"/>
+
+	<!-- camera_right_eye -->
+	<include file="$(find bender_sensors)/launch/camera/camera_right_eye.launch">
+		<arg name="cam_number" value="-1"/>
+		<arg name="display" value="true"/>
+	</include>
+
+	<!-- report generator -->
+	<include file="$(find bender_report_generator)/launch/report_generator.launch"/>
+
+	<!-- test report generator -->
+	<node pkg="bender_report_generator" type="test_report_generator" name="test_report_generator" output="screen" ns="/bender/report_generator/">
+		<param name="n_pictures" value="1"/>
+	</node>
+
+</launch>
