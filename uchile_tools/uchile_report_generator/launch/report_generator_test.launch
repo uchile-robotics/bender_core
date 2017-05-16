@@ -10,10 +10,10 @@
 	</include>
 
 	<!-- report generator -->
-	<include file="$(find bender_report_generator)/launch/report_generator.launch"/>
+	<include file="$(find uchile_report_generator)/launch/report_generator.launch"/>
 
 	<!-- test report generator -->
-	<node pkg="bender_report_generator" type="test_report_generator" name="test_report_generator" output="screen" ns="/bender/report_generator/">
+	<node pkg="uchile_report_generator" type="test_report_generator" name="test_report_generator" output="screen" ns="/bender/report_generator/">
 		<param name="n_pictures" value="1"/>
 	</node>
 

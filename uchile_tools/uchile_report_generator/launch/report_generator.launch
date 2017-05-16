@@ -1,0 +1,6 @@
+<launch>
+
+	<!-- report generator -->
+	<node output="screen" pkg="uchile_report_generator" type="report_generator" name="report_generator" ns="/bender/report_generator/"/>
+
+</launch>

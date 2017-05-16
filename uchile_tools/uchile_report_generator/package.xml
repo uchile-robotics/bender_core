@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>bender_report_generator</name>
+  <name>uchile_report_generator</name>
   <version>0.0.0</version>
-  <description>The bender_report_generator package</description>
+  <description>The uchile_report_generator package</description>
 
   <!-- team -->
   <maintainer email="bender.devel@gmail.com">

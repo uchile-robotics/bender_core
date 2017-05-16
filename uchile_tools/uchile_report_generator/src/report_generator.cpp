@@ -1,6 +1,6 @@
-#include <bender_report_generator/report_generator.h>
+#include <uchile_report_generator/report_generator.h>
 
-namespace bender_report_generator {
+namespace uchile_report_generator {
 
 
 ReportGenerator::ReportGenerator(std::string name) {
@@ -9,7 +9,7 @@ ReportGenerator::ReportGenerator(std::string name) {
 
 	ros::NodeHandle priv("~");
 
-	_pkg_path = ros::package::getPath("bender_report_generator");
+	_pkg_path = ros::package::getPath("uchile_report_generator");
     loaded_images = 0;
 
     // - - - - - - - P A R A M E T E R   S E R V E R - - - - - - - - -
@@ -297,15 +297,15 @@ bool ReportGenerator::generate(uchile_srvs::ReportGenerator::Request &req, uchil
 }
 
 
-}  // namespace bender_report_generator
+}  // namespace uchile_report_generator
 
 
 int main(int argc, char **argv) {
 
 	ros::init(argc, argv, "report_generator");
 
-	boost::scoped_ptr<bender_report_generator::ReportGenerator> node(
-			new bender_report_generator::ReportGenerator(ros::this_node::getName())
+	boost::scoped_ptr<uchile_report_generator::ReportGenerator> node(
+			new uchile_report_generator::ReportGenerator(ros::this_node::getName())
 	);
 
 	ros::spin();

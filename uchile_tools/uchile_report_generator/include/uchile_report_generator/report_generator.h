@@ -26,7 +26,7 @@
 #include <uchile_srvs/ReportGenerator.h>
 
 
-namespace bender_report_generator {
+namespace uchile_report_generator {
 
 class ReportGenerator {
 
@@ -92,6 +92,6 @@ public:
 	bool add_map(uchile_srvs::ReportGenerator::Request &req, uchile_srvs::ReportGenerator::Response &res) ;
 };
 
-} /* namespace bender_report_generator */
+} /* namespace uchile_report_generator */
 
 #endif /* REPORT_GENERATOR_H_ */
