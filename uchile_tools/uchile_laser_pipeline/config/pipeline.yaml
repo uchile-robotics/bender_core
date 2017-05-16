@@ -27,7 +27,7 @@ scan_filter_chain:
 # a geometry_msgs::PolygonStamped from a ROS topic.
 # It was designed to filter points colliding with the robot arms.
 - name: robot_self_arms_filter
-  type: bender_laser_pipeline/LaserScanSelfFilter
+  type: uchile_laser_pipeline/LaserScanSelfFilter
   params:
     target_frames: [ "bender/l_int_finger_link", "bender/r_int_finger_link" ]
     inflation_radius_list: [ 0.20, 0.20 ]

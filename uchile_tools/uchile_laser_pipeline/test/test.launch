@@ -1,6 +1,6 @@
 <launch>
 
-    <arg name="rosbag_file" default="$(find bender_laser_pipeline)/test/filtered_still_arms.bag"/>
+    <arg name="rosbag_file" default="$(find uchile_laser_pipeline)/test/filtered_still_arms.bag"/>
 
     <!--
      ROSBAG FILTERING
@@ -16,7 +16,7 @@
     <include file="$(find uchile_tf)/launch/tf_model.launch"/>
 
     <!-- laser pipeline -->
-    <include file="$(find bender_laser_pipeline)/launch/laser_pipeline.launch">
+    <include file="$(find uchile_laser_pipeline)/launch/laser_pipeline.launch">
         <arg name="input_scan"  value="/bender/sensors/laser_front/scan"/>
         <arg name="output_scan" value="/bender/sensors/laser_front/scan_filtered"/>
     </include>
@@ -33,7 +33,7 @@
 
     <!-- joint state killer -->
     <node
-        pkg="bender_laser_pipeline"
+        pkg="uchile_laser_pipeline"
         type="test_joint_state_killer.bash"
         name="test_joint_state_killer"
         output="screen"/>
@@ -46,6 +46,6 @@
         name="$(anon rviz)"
         respawn="false"
         output="screen"
-        args="-d $(find bender_laser_pipeline)/test/test.rviz"/>
+        args="-d $(find uchile_laser_pipeline)/test/test.rviz"/>
 
 </launch>

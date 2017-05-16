@@ -1,11 +1,11 @@
-#include "bender_laser_pipeline/self_filter.h"
+#include "uchile_laser_pipeline/self_filter.h"
 
-bender_laser_pipeline::LaserScanSelfFilter::LaserScanSelfFilter() {
+uchile_laser_pipeline::LaserScanSelfFilter::LaserScanSelfFilter() {
 
 }
 
 // TODO: wait for tfs a few seconds while configuring the pipeline
-bool bender_laser_pipeline::LaserScanSelfFilter::configure() {
+bool uchile_laser_pipeline::LaserScanSelfFilter::configure() {
 
     bool succeeded = true;
     if (!getParam("target_frames", _target_frames)) {
@@ -43,7 +43,7 @@ bool bender_laser_pipeline::LaserScanSelfFilter::configure() {
     return succeeded;
 }
 
-bool bender_laser_pipeline::LaserScanSelfFilter::update(
+bool uchile_laser_pipeline::LaserScanSelfFilter::update(
         const sensor_msgs::LaserScan &input_scan,
         sensor_msgs::LaserScan &output_scan) {
 
@@ -142,7 +142,7 @@ bool bender_laser_pipeline::LaserScanSelfFilter::update(
  * by finding the tangent lines to the projection which intersects
  * the laser center at (0,0)
  */
-void bender_laser_pipeline::LaserScanSelfFilter::getAngularLimits(
+void uchile_laser_pipeline::LaserScanSelfFilter::getAngularLimits(
         float x, float y, float z, float r, float &theta_min, float &theta_max) {
 
     // sphere projection into the laser plane

@@ -42,7 +42,7 @@
 	<include file="$(find uchile_cmd_vel_mux)/launch/mux.launch"/>
 	-->
 	<!-- robot laser self filter 
-	<include file="$(find bender_laser_pipeline)/launch/laser_pipeline.launch">
+	<include file="$(find uchile_laser_pipeline)/launch/laser_pipeline.launch">
 		<arg name="input_scan"  value="/bender/sensors/laser_front/scan"/>
 		<arg name="output_scan" value="/bender/sensors/laser_front/scan_filtered"/>
 	</include>

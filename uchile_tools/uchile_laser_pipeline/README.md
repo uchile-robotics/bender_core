@@ -1,5 +1,5 @@
 
-# bender_laser_pipeline
+# uchile_laser_pipeline
 
 It provides a preprocessing pipeline for bender laser scans sensors, by means of the ROS laser_pipeline architecture. It aims to work on the robot lasers ROS messages (sensor_msgs/LaserScan), in a filtering chain for: outlier removal, range, intensity and shadows filtering, interpolation of removed points and finally self-collision filtering.
 
@@ -33,7 +33,7 @@ TODO
 
 ```bash
 # filtering pipeline
-$ roslaunch bender_laser_pipeline laser_pipeline.launch
+$ roslaunch uchile_laser_pipeline laser_pipeline.launch
 ```
 
 
@@ -53,8 +53,8 @@ Then you should run:
 
 ```bash
 # rosbag information
-$ roslaunch bender_laser_pipeline test.launch rosbag_file:=<rosbag_path>
+$ roslaunch uchile_laser_pipeline test.launch rosbag_file:=<rosbag_path>
 
 # filtering pipeline
-$ roslaunch bender_laser_pipeline laser_pipeline.launch --screen
+$ roslaunch uchile_laser_pipeline laser_pipeline.launch --screen
 ```

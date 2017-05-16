@@ -1,8 +1,8 @@
 <class_libraries>
-  <library path="lib/libbender_laser_pipeline">
+  <library path="lib/libuchile_laser_pipeline">
     <class
-            name="bender_laser_pipeline/LaserScanSelfFilter"
-            type="bender_laser_pipeline::LaserScanSelfFilter"
+            name="uchile_laser_pipeline/LaserScanSelfFilter"
+            type="uchile_laser_pipeline::LaserScanSelfFilter"
 	        base_class_type="filters::FilterBase<sensor_msgs::LaserScan>"
     >
       <description>

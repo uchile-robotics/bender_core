@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bender_laser_pipeline)
+project(uchile_laser_pipeline)
 
 ##############################################################################
 # Find dependencies
@@ -18,7 +18,7 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES bender_laser_pipeline
+  LIBRARIES uchile_laser_pipeline
   CATKIN_DEPENDS ${THIS_PACKAGE_ROS_DEPS}
   DEPENDS
 )
@@ -27,8 +27,8 @@ catkin_package(
 # Build
 ##############################################################################
 
-add_library(bender_laser_pipeline src/laser_scan_filters.cpp src/self_filter.cpp)
-target_link_libraries(bender_laser_pipeline ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+add_library(uchile_laser_pipeline src/laser_scan_filters.cpp src/self_filter.cpp)
+target_link_libraries(uchile_laser_pipeline ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_executable(laser_scan_limiter src/laser_scan_limiter.cpp)
 target_link_libraries(laser_scan_limiter ${catkin_LIBRARIES})

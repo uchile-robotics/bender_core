@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>bender_laser_pipeline</name>
+  <name>uchile_laser_pipeline</name>
   <version>2.0.0</version>
   <description>
     It provides a preprocessing pipeline for bender laser scans sensors,
@@ -53,7 +53,7 @@
 
   <export>
     <cpp cflags="-I${prefix}/include `rosboost-cfg --cflags`" lflags=""/>
-    <filters plugin="${prefix}/bender_laser_pipeline_plugins.xml"/>
+    <filters plugin="${prefix}/uchile_laser_pipeline_plugins.xml"/>
   </export>
 
 </package>

@@ -11,7 +11,7 @@
 #include <tf/transform_listener.h>
 
 
-namespace bender_laser_pipeline
+namespace uchile_laser_pipeline
 {
 
 class LaserScanSelfFilter : public filters::FilterBase<sensor_msgs::LaserScan>
