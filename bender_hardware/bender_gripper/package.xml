@@ -35,9 +35,9 @@
     <!-- about bender and related repository -->
     <url type="website">bender.li2.uchile.cl</url>
     <url type="bugtracker">
-      https://bitbucket.org/uchile-robotics-die/bender_manipulation/issues</url>
+      https://bitbucket.org/uchile-robotics-die/uchile_manipulation/issues</url>
     <url type="repository">
-      https://bitbucket.org/uchile-robotics-die/bender_manipulation</url>
+      https://bitbucket.org/uchile-robotics-die/uchile_manipulation</url>
 
     <license>TODO</license>
 
