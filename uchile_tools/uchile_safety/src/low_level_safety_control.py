@@ -7,7 +7,7 @@ from math import sin, cos, atan2, pi, sqrt, pow as mpow
 import numpy
 import roslib
 import tf
-roslib.load_manifest("bender_safety")
+roslib.load_manifest("uchile_safety")
 
 from threading import Thread, Lock
 from geometry_msgs.msg import Twist, PoseStamped
