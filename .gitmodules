@@ -1,3 +1,0 @@
-[submodule "bender_knowledge"]
-	path = bender_knowledge
-	url = https://benderuchile:benderrobot@bitbucket.org/uchile-robotics-die/bender_knowledge.git
