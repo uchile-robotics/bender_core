@@ -1,4 +1,4 @@
-# srv utilizado por el package: bender_nav
+# srv utilizado por el package: uchile_nav
 # Representa un 'goal' a perseguir y un feedback.
 
 # Request: goal representado por a) o b) (no ambos)
