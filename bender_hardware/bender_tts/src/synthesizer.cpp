@@ -198,7 +198,7 @@ void synthesizer::status_calculation_callback(const diagnostic_msgs::DiagnosticA
 	_is_talking_pub.publish(is_talking_msg_);
 }
 
-} /* namespace bender_speech */
+} /* namespace bender_tts */
 
 int main(int argc, char **argv) {
 	ros::init(argc, argv, "tts");
