@@ -17,10 +17,10 @@
     <!-- PACKAGE INFORMATION -->
     <!-- - - - - - - - - - - -->
 
-    <name>bender_utils</name>
+    <name>uchile_util</name>
     <version>2.0.0</version>
     
-    <description>The bender_utils package</description>
+    <description>The uchile_util package</description>
 
     <!-- team -->
     <maintainer email="bender.devel@gmail.com">

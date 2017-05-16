@@ -3,7 +3,7 @@
 #include <sensor_msgs/LaserScan.h>
 #include <std_msgs/Header.h>
 #include <std_msgs/String.h>
-#include <bender_utils/ParameterServerWrapper.h>
+#include <uchile_util/ParameterServerWrapper.h>
 #include <vector>
 #include <math.h>
 
@@ -48,7 +48,7 @@ int main(int argc, char **argv){
 	ros::NodeHandle priv("~");
 
 	// parameters
-	bender_utils::ParameterServerWrapper psw;
+	uchile_util::ParameterServerWrapper psw;
 	psw.getParameter("scan_out_frame", _frame_out, "");
 	if (_frame_out == "") {
 		ROS_ERROR_STREAM("This node requires the parameter '~scan_out_frame' to be set");

@@ -4,6 +4,6 @@
 
 	<!-- RVIZ -->
 	<node name="$(anon rviz)" pkg="rviz" type="rviz"
-	 respawn="$(arg respawn)" output="screen" args="-d $(find bender_utils)/config/rviz/common.rviz"/>
+	 respawn="$(arg respawn)" output="screen" args="-d $(find uchile_util)/config/rviz/common.rviz"/>
 
 </launch>

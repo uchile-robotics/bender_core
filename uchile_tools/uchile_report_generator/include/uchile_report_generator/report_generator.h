@@ -22,7 +22,7 @@
 #include <cv_bridge/cv_bridge.h>
 
 // Bender
-#include <bender_utils/ParameterServerWrapper.h>
+#include <uchile_util/ParameterServerWrapper.h>
 #include <uchile_srvs/ReportGenerator.h>
 
 

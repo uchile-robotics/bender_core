@@ -1,5 +1,5 @@
-from bender_utils.syscheck import SystemCheck, SystemCheckTask, FileCheckTask
-from bender_utils import sh
+from uchile_util.syscheck import SystemCheck, SystemCheckTask, FileCheckTask
+from uchile_util import sh
 
 
 class CameraCheckTask(SystemCheckTask):

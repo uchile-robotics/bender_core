@@ -4,7 +4,7 @@
 from __future__ import print_function
 import os
 import sys
-from bender_utils.syscheck import SystemCheck, SystemCheckTask, FileCheckTask
+from uchile_util.syscheck import SystemCheck, SystemCheckTask, FileCheckTask
 from bender_fieldbus.check import DynamixelCheck
 
 def head_check():

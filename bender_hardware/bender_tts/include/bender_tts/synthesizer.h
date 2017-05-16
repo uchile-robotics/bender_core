@@ -17,7 +17,7 @@
 
 // Bender
 #include <uchile_srvs/String.h>
-#include <bender_utils/ParameterServerWrapper.h>
+#include <uchile_util/ParameterServerWrapper.h>
 
 namespace bender_tts {
 

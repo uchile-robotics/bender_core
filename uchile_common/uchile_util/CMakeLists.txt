@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bender_utils)
+project(uchile_util)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -35,7 +35,7 @@ include_directories(
 ## Install ##
 #############
 
-# install header files under include/bender_utils
+# install header files under include/uchile_util
 install(
   DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}

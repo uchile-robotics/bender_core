@@ -10,7 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   uchile_srvs
   diagnostic_msgs
   sound_play
-  bender_utils
+  uchile_util
 )
 
 
@@ -30,7 +30,7 @@ catkin_package(
 
 include_directories(include
   ${catkin_INCLUDE_DIRS}
-  ${bender_utils_INCLUDE_DIRS}
+  ${uchile_util_INCLUDE_DIRS}
 )
 
 # - - - tts - - -

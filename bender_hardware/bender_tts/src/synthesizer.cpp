@@ -21,7 +21,7 @@ synthesizer::synthesizer(): nh_("~") {
 	nh_.setParam("talking", false);
 
 	// utility for parameter handling
-	bender_utils::ParameterServerWrapper psw;
+	uchile_util::ParameterServerWrapper psw;
 
 	// used to know if there is any sound playing
 	psw.getParameter("sound_play_node_name", _soundplay_node_name, "sound_play");

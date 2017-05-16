@@ -13,7 +13,7 @@ ReportGenerator::ReportGenerator(std::string name) {
     loaded_images = 0;
 
     // - - - - - - - P A R A M E T E R   S E R V E R - - - - - - - - -
-    bender_utils::ParameterServerWrapper psw;
+    uchile_util::ParameterServerWrapper psw;
 
     // compilation command
     psw.getParameter("compile_cmd", _compile_cmd, "pdflatex -synctex=1 -interaction=nonstopmode");
@@ -61,7 +61,7 @@ void ReportGenerator::loadParametersFile() {
     std::string _report_file;
     //TIMENOW : ros::Time::now
     //NTRIES  :  number of tries
-    bender_utils::ParameterServerWrapper psw;
+    uchile_util::ParameterServerWrapper psw;
     // psw.getParameter("report_file", _report_file, "Homebreakers_TIMENOW");
     psw.getParameter("report_file", _report_file, "Homebreakers_NTRIES");
 

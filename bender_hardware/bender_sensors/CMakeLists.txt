@@ -9,7 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   uchile_srvs
   cv_bridge
   image_transport
-  bender_utils
+  uchile_util
 )
 
 find_package(OpenCV  REQUIRED)
@@ -22,7 +22,7 @@ find_package(OpenCV  REQUIRED)
 catkin_package(
   #INCLUDE_DIRS include
   LIBRARIES bender_sensors
-  CATKIN_DEPENDS uchile_msgs uchile_srvs cv_bridge image_transport roscpp sensor_msgs std_msgs bender_utils
+  CATKIN_DEPENDS uchile_msgs uchile_srvs cv_bridge image_transport roscpp sensor_msgs std_msgs uchile_util
   DEPENDS opencv2
 )
 
@@ -34,7 +34,7 @@ include_directories(
     #include
     ${catkin_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
-    ${bender_utils_INCLUDE_DIRS}
+    ${uchile_util_INCLUDE_DIRS}
 )
 
 ## Declare a cpp executable

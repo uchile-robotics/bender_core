@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import roslib
-roslib.load_manifest('bender_utils')
+roslib.load_manifest('uchile_util')
 import rospy
 import sys
 

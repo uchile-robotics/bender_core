@@ -11,7 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   std_srvs
-  bender_utils
+  uchile_util
 )
 
 find_package(OpenCV  REQUIRED)
@@ -22,7 +22,7 @@ find_package(OpenCV  REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES uchile_report_generator
-  CATKIN_DEPENDS uchile_msgs uchile_srvs cv_bridge nav_msgs roscpp roslib sensor_msgs std_msgs std_srvs bender_utils
+  CATKIN_DEPENDS uchile_msgs uchile_srvs cv_bridge nav_msgs roscpp roslib sensor_msgs std_msgs std_srvs uchile_util
   DEPENDS opencv2
 )
 
@@ -31,7 +31,7 @@ catkin_package(
 ###########
 
 include_directories(include
-  ${catkin_INCLUDE_DIRS}  ${OpenCV_INCLUDE_DIRS} ${bender_utils_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}  ${OpenCV_INCLUDE_DIRS} ${uchile_util_INCLUDE_DIRS}
 )
 
 add_executable(report_generator src/report_generator.cpp)

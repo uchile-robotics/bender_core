@@ -6,7 +6,7 @@ from __future__ import print_function
 import os
 import sys
 from lib_robotis import USB2Dynamixel_Device, Robotis_Servo
-from bender_utils.syscheck import SystemCheck, SystemCheckTask, FileCheckTask
+from uchile_util.syscheck import SystemCheck, SystemCheckTask, FileCheckTask
 
 __author__ = 'Rodrigo Muñoz'
 __email__ = 'rorro.mr@gmail.com'

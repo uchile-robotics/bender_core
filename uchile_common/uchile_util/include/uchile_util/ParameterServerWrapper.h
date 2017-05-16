@@ -18,7 +18,7 @@
 #include <geometry_msgs/Point32.h>
 #include <geometry_msgs/Polygon.h>
 
-namespace bender_utils {
+namespace uchile_util {
 
 class ParameterServerWrapper {
 
@@ -568,5 +568,5 @@ inline std::vector<std::vector<float> > ParameterServerWrapper::parseVVF( const 
 	return result;
 }
 
-} /* namespace bender_utils */
+} /* namespace uchile_util */
 #endif /* PARAMETERSERVERWRAPPER_H_ */
