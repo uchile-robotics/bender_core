@@ -53,11 +53,11 @@ int main(int argc, char **argv)
     sound_play::SoundClient sc; 
     ros::ServiceServer service = nh.advertiseService("play", playSound);
 
-    std::string bender_db_path = ros::package::getPath("bender_db");
-    if(bender_db_path.empty()){
-        ROS_WARN("Package bender_db not found");
+    std::string uchile_db_path = ros::package::getPath("uchile_db");
+    if(uchile_db_path.empty()){
+        ROS_WARN("Package uchile_db not found");
     }
-    nh.param<std::string>("sound_path", _sound_path, bender_db_path+"/sounds/");
+    nh.param<std::string>("sound_path", _sound_path, uchile_db_path+"/sounds/");
 
     ROS_INFO_STREAM("Using sound path: " << _sound_path);
     

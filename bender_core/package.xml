@@ -73,7 +73,7 @@
     <depend>bender_sensors</depend>
 
     <!-- knowledge depends -->
-    <depend>bender_db</depend>
+    <depend>uchile_db</depend>
     <depend>uchile_maps</depend>
     <depend>uchile_pose_server</depend>
 
