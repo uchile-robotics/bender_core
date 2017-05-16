@@ -118,7 +118,7 @@ void ReportGenerator::getMapParameters() {
 
 std::string ReportGenerator::saveMapImage() {
 
-	std::string pgm_map_path = ros::package::getPath("bender_maps") + "/maps/map.pgm";
+	std::string pgm_map_path = ros::package::getPath("uchile_maps") + "/maps/map.pgm";
 	std::string out_map_path = _pkg_path + "/tex/map/map.png";
 
 	cv::Mat pgm_map = cv::imread(pgm_map_path);
