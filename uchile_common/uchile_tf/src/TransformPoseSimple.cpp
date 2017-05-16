@@ -9,7 +9,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <uchile_srvs/Transformer.h>
 
-namespace bender_tf {
+namespace uchile_tf {
 
 class TransformPoseSimple {
 
@@ -72,13 +72,13 @@ bool TransformPoseSimple::transform(uchile_srvs::Transformer::Request &req, uchi
 	return true;
 }
 
-} /* namespace bender_tf */
+} /* namespace uchile_tf */
 
 int main(int argc, char** argv) {
 
 	ros::init(argc, argv, "simple_pose_transformer");
 
-	bender_tf::TransformPoseSimple *node = new bender_tf::TransformPoseSimple(ros::this_node::getName());
+	uchile_tf::TransformPoseSimple *node = new uchile_tf::TransformPoseSimple(ros::this_node::getName());
 
 	ros::MultiThreadedSpinner spinner(2);
 	spinner.spin();

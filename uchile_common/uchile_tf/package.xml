@@ -17,10 +17,10 @@
     <!-- PACKAGE INFORMATION -->
     <!-- - - - - - - - - - - -->
 
-    <name>bender_tf</name>
+    <name>uchile_tf</name>
     <version>2.0.0</version>
     
-    <description>The bender_tf package.</description>
+    <description>The uchile_tf package.</description>
     <maintainer email="bender.devel@gmail.com">
       Bender Team - UChile Homebreakers</maintainer>
     <author     email="bender.devel@gmail.com">

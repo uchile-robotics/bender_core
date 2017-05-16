@@ -13,15 +13,15 @@
 #include <kdl/tree.hpp>
 #include <kdl_parser/kdl_parser.hpp>
 
-#include <bender_tf/dynamic_tf.h>
-#include <bender_tf/dynamic_robot_state_publisher.h>
+#include <uchile_tf/dynamic_tf.h>
+#include <uchile_tf/dynamic_robot_state_publisher.h>
 
 // Util para almacenar joints mimics
 typedef std::map<std::string, boost::shared_ptr<urdf::JointMimic> > MimicMap;
 
 using namespace std;
 
-namespace bender_tf {
+namespace uchile_tf {
 
 class DynamicJointStateListener {
   
@@ -144,7 +144,7 @@ void DynamicJointStateListener::callbackJointState(const sensor_msgs::JointState
 }
 
 
-} // namespace bender_tf
+} // namespace uchile_tf
 
 int main(int argc, char** argv) {
   
@@ -194,7 +194,7 @@ int main(int argc, char** argv) {
     ROS_WARN("Calibration parameters not found in parameter server, using default values.");
   }
 
-  bender_tf::DynamicJointStateListener state_publisher(tree, mimic, node);
+  uchile_tf::DynamicJointStateListener state_publisher(tree, mimic, node);
 
   ros::spin();
 

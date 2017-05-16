@@ -59,7 +59,7 @@
     <!-- common depends -->
     <depend>uchile_msgs</depend>
     <depend>uchile_srvs</depend>
-    <depend>bender_tf</depend>
+    <depend>uchile_tf</depend>
     <depend>bender_description</depend>
 
     <!-- core_tools depends -->

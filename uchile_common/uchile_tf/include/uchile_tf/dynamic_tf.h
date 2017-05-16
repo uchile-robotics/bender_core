@@ -4,14 +4,14 @@
 #include <ros/ros.h>
 // Dynamic reconfigure
 #include <dynamic_reconfigure/server.h>
-#include <bender_tf/tfParametersConfig.h>
+#include <uchile_tf/tfParametersConfig.h>
 #include <boost/thread/mutex.hpp>
 
 // KDL
 #include <kdl/frames.hpp>
 #include <tf_conversions/tf_kdl.h>
 
-namespace bender_tf {
+namespace uchile_tf {
   
   class DynamicTf{
     public:
@@ -20,7 +20,7 @@ namespace bender_tf {
 
       ~DynamicTf();
       
-      void dynamicReconfigCallback(bender_tf::tfParametersConfig &config, uint32_t level);
+      void dynamicReconfigCallback(uchile_tf::tfParametersConfig &config, uint32_t level);
 
       inline void applyTransform(KDL::Frame& frame)
       {
@@ -36,7 +36,7 @@ namespace bender_tf {
       ros::NodeHandle nh_;
       // Dynamic reconfigure
       bool dynamic_reconfig_initialized_;
-      typedef dynamic_reconfigure::Server<bender_tf::tfParametersConfig> DynamicReconfigServer;                             
+      typedef dynamic_reconfigure::Server<uchile_tf::tfParametersConfig> DynamicReconfigServer;                             
       boost::shared_ptr<DynamicReconfigServer> param_reconfig_server_;
       DynamicReconfigServer::CallbackType param_reconfig_callback_;
 
@@ -48,7 +48,7 @@ namespace bender_tf {
     
   };
 
-  typedef boost::shared_ptr<bender_tf::DynamicTf> DynamicTfPtr;
-} // namespace bender_tf
+  typedef boost::shared_ptr<uchile_tf::DynamicTf> DynamicTfPtr;
+} // namespace uchile_tf
   
 #endif

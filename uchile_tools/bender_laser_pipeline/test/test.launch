@@ -13,7 +13,7 @@
 
 
     <!-- tf generation -->
-    <include file="$(find bender_tf)/launch/tf_model.launch"/>
+    <include file="$(find uchile_tf)/launch/tf_model.launch"/>
 
     <!-- laser pipeline -->
     <include file="$(find bender_laser_pipeline)/launch/laser_pipeline.launch">

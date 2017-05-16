@@ -16,7 +16,7 @@
   -->
 
   <!-- Launch robot model -->
-  <include file="$(find bender_tf)/launch/tf_model.launch"/>
+  <include file="$(find uchile_tf)/launch/tf_model.launch"/>
 
   <!-- Launch selected arm -->
   <include file="$(find bender_arm)/launch/$(arg use_arm).launch"/>

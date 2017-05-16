@@ -21,7 +21,7 @@
     </include>
 
     <!-- transforms -->
-    <include file="$(find bender_tf)/launch/tf.launch">
+    <include file="$(find uchile_tf)/launch/tf.launch">
         <arg name="joints_already_published" value="true" />
         <arg name="model_type" value="$(arg model_type)"/>
         <arg name="use_gui" value="false"/>

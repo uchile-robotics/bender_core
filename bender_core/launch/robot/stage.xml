@@ -8,7 +8,7 @@
 	<arg name="rqt_gui"    default="THIS-PARAM-SHOULD-NOT-BE-USED" />
 
 	<!-- transforms -->
-	<include file="$(find bender_tf)/launch/tf.launch">
+	<include file="$(find uchile_tf)/launch/tf.launch">
 		<arg name="use_gui"    value="false"/>
 		<arg name="model_type" value="$(arg model_type)"/>
 	</include>

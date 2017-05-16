@@ -29,11 +29,11 @@
 
   <group if="$(arg use_dynamic_tf)">
     <!-- Dynamic robot state publisher allows to modify fixed frames of the robot at runtime -->
-    <node name="dyn_state_publisher" pkg="bender_tf" type="dyn_state_publisher" ns="/bender/" output="screen">
+    <node name="dyn_state_publisher" pkg="uchile_tf" type="dyn_state_publisher" ns="/bender/" output="screen">
       <param name="publish_frequency" value="$(arg rate)" />
     </node>
     <!-- Load calibration file -->
-    <node name="load_calibration" pkg="bender_tf" type="load_calibration" output="screen" />
+    <node name="load_calibration" pkg="uchile_tf" type="load_calibration" output="screen" />
   </group>
   
 

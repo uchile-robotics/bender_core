@@ -3,9 +3,9 @@
  * Mayo 2015
  */
 
-#include <bender_tf/dynamic_tf.h>
+#include <uchile_tf/dynamic_tf.h>
  
-namespace bender_tf {
+namespace uchile_tf {
   
   // Constructor   
   DynamicTf::DynamicTf(const std::string& name, const std::string& name_space):
@@ -31,7 +31,7 @@ namespace bender_tf {
   }
   
   // Dynamic reconfigure callback
-  void DynamicTf::dynamicReconfigCallback(bender_tf::tfParametersConfig& config, uint32_t level){
+  void DynamicTf::dynamicReconfigCallback(uchile_tf::tfParametersConfig& config, uint32_t level){
     // Update translation
     t_ = KDL::Vector(config.x, config.y, config.z);
     // Update rotation
@@ -43,4 +43,4 @@ namespace bender_tf {
 
 
 
-} // namespace bender_tf
+} // namespace uchile_tf

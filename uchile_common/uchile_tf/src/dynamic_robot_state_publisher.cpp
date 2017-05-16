@@ -4,7 +4,7 @@
  * Basado en robot_state_publisher de Wim Meeussen
  */
 
-#include <bender_tf/dynamic_robot_state_publisher.h>
+#include <uchile_tf/dynamic_robot_state_publisher.h>
 #include <kdl/frames_io.hpp>
 #include <tf_conversions/tf_kdl.h>
 
@@ -34,7 +34,7 @@ namespace robot_state_publisher{
       SegmentPair s(GetTreeElementSegment(children[i]->second), root, child.getName());
       if (child.getJoint().getType() == KDL::Joint::None){
         // Add dynamic TF
-        bender_tf::DynamicTfPtr tf_ptr(new bender_tf::DynamicTf(child.getJoint().getName(), nh_.getNamespace()));
+        uchile_tf::DynamicTfPtr tf_ptr(new uchile_tf::DynamicTf(child.getJoint().getName(), nh_.getNamespace()));
         dynamic_tf_.insert(make_pair(child.getJoint().getName(), tf_ptr));
 
         segments_fixed_.insert(make_pair(child.getJoint().getName(), s));
@@ -83,7 +83,7 @@ namespace robot_state_publisher{
       // Get KDL Frame
       KDL::Frame frame = seg->second.segment.pose(0);
       // Apply dynamic TF
-      std::map<std::string,bender_tf::DynamicTfPtr>::const_iterator tf_config = dynamic_tf_.find(seg->first);
+      std::map<std::string,uchile_tf::DynamicTfPtr>::const_iterator tf_config = dynamic_tf_.find(seg->first);
       if (tf_config !=  dynamic_tf_.end())
       {
         tf_config->second->applyTransform(frame);
