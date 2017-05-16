@@ -1,5 +1,5 @@
 string info
 string[] label
 geometry_msgs/PoseStamped[] poses
-bender_msgs/Rect[] BBoxes 
+uchile_msgs/Rect[] BBoxes 
 

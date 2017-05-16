@@ -7,8 +7,8 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   std_srvs
-  bender_msgs
-  bender_srvs
+  uchile_msgs
+  uchile_srvs
 )
 
 ###################################

@@ -17,10 +17,10 @@
     <!-- PACKAGE INFORMATION -->
     <!-- - - - - - - - - - - -->
 
-    <name>bender_msgs</name>
+    <name>uchile_srvs</name>
     <version>2.0.0</version>
     
-    <description>ROS .msg definitions for robot Bender.</description>
+    <description>ROS srv definitions for robot Bender.</description>
     <maintainer email="bender.devel@gmail.com">
       Bender Team - UChile Homebreakers</maintainer>
     <author     email="bender.devel@gmail.com">
@@ -47,6 +47,7 @@
     <depend>std_srvs</depend>
     <depend>geometry_msgs</depend>
     <depend>sensor_msgs</depend>
+    <depend>uchile_msgs</depend>
 
 
     <!-- build dependencies -->

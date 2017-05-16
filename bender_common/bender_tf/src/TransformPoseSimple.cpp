@@ -7,7 +7,7 @@
 #include <ros/ros.h>
 #include <tf/transform_listener.h>
 #include <geometry_msgs/PoseStamped.h>
-#include <bender_srvs/Transformer.h>
+#include <uchile_srvs/Transformer.h>
 
 namespace bender_tf {
 
@@ -19,7 +19,7 @@ private:
     std::string _name;
 
 private:
-	bool transform(bender_srvs::Transformer::Request &req, bender_srvs::Transformer::Response &res);
+	bool transform(uchile_srvs::Transformer::Request &req, uchile_srvs::Transformer::Response &res);
 
 public:
 	TransformPoseSimple(std::string name);
@@ -39,7 +39,7 @@ TransformPoseSimple::TransformPoseSimple(std::string name): _name(name) {
 TransformPoseSimple::~TransformPoseSimple() {
 }
 
-bool TransformPoseSimple::transform(bender_srvs::Transformer::Request &req, bender_srvs::Transformer::Response &res) {
+bool TransformPoseSimple::transform(uchile_srvs::Transformer::Request &req, uchile_srvs::Transformer::Response &res) {
 
 	tf::StampedTransform transform;
 	int max_connectivity_exceptions = 5;

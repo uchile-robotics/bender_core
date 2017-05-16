@@ -8,7 +8,7 @@ import random
 from threading import Thread
 
 from std_msgs.msg import Bool, UInt8
-from bender_msgs.msg import FaceEmotion
+from uchile_msgs.msg import FaceEmotion
 
 # Use HW interface
 from bender_head.head_hw import HeadHW

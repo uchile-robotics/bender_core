@@ -17,7 +17,7 @@ import time
 
 # Messages
 from std_msgs.msg import Bool
-from bender_msgs.msg import Emotion
+from uchile_msgs.msg import Emotion
 
 rospy.init_node("test_head")
 head  = rospy.Publisher('/bender/hw/head/cmd', Emotion, queue_size=10)

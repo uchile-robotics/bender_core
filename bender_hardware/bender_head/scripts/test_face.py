@@ -10,7 +10,7 @@ __author__ = 'gdiaz'
 import rospy
 import time
     
-from bender_msgs.msg import FaceEmotion
+from uchile_msgs.msg import FaceEmotion
 
 class EmotionTest(object):
 

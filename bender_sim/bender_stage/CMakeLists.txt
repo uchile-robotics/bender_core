@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 2.8.3)
 project(bender_stage)
 
 find_package(catkin REQUIRED COMPONENTS
-  bender_msgs
-  bender_srvs
+  uchile_msgs
+  uchile_srvs
   roscpp
   rospy
   std_msgs

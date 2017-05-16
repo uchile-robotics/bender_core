@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bender_srvs)
+project(uchile_srvs)
 
 find_package(catkin REQUIRED COMPONENTS
-  bender_msgs
+  uchile_msgs
   geometry_msgs
   sensor_msgs
   std_msgs
@@ -67,7 +67,7 @@ add_service_files(
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-  bender_msgs
+  uchile_msgs
   geometry_msgs
   sensor_msgs
   std_msgs

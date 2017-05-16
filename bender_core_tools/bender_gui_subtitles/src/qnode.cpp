@@ -135,7 +135,7 @@ void QNode::text_callback(const std_msgs::String &msg) {
     displayText(text);
 }
 
-bool QNode::text_server(bender_srvs::String::Request &req,bender_srvs::String::Response &res) {
+bool QNode::text_server(uchile_srvs::String::Request &req,uchile_srvs::String::Response &res) {
 
     ROS_INFO_STREAM("Received text request: " << req.data);
     displayText(req.data);

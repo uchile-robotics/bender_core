@@ -14,7 +14,7 @@ from geometry_msgs.msg import Twist, PoseStamped
 from visualization_msgs.msg import Marker
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import LaserScan
-from bender_srvs.srv import Transformer
+from uchile_srvs.srv import Transformer
 
 
 class CmdVelSafety(object):

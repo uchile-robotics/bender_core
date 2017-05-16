@@ -16,19 +16,19 @@ bender-head_shutup()
 
 bender-head_emotion()
 {
-    rostopic pub --once /bender/hw/head/cmd bender_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}"
+    rostopic pub --once /bender/hw/head/cmd uchile_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}"
 }
 
 bender-head_mouth_state()
 {
-    rostopic pub --once /bender/hw/head/cmd bender_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}" 
+    rostopic pub --once /bender/hw/head/cmd uchile_msgs/Emotion "{Order: 'changeFace', Action: '$1', X: 0}" 
 }
 
 bender-head_neck_yaw()
 {
     local _angle
     _angle="$1"
-    rostopic pub --once /bender/hw/head/cmd bender_msgs/Emotion "{Order: 'MoveX', Action: '', X: $_angle}"
+    rostopic pub --once /bender/hw/head/cmd uchile_msgs/Emotion "{Order: 'MoveX', Action: '', X: $_angle}"
 }
 
 ##############################################################################################

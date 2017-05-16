@@ -7,7 +7,7 @@
 // ros
 #include <ros/package.h>
 #include <sound_play/sound_play.h>
-#include <bender_srvs/play_sound.h>
+#include <uchile_srvs/play_sound.h>
 
  
 // TODO: agregar funcionalidad para stop y rewind.
@@ -20,7 +20,7 @@ bool file_exists(const std::string &filename)
   return ifile;
 }
 
-bool playSound(bender_srvs::play_sound::Request  &req, bender_srvs::play_sound::Response &res){ 
+bool playSound(uchile_srvs::play_sound::Request  &req, uchile_srvs::play_sound::Response &res){ 
 
     sound_play::SoundClient sc; 
     std::string sound_path = _sound_path + req.sound_file + ".wav";

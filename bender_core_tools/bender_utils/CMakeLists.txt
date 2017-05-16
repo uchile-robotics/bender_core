@@ -4,8 +4,8 @@ project(bender_utils)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   roslib
-  bender_msgs
-  bender_srvs
+  uchile_msgs
+  uchile_srvs
   rospy
   std_msgs
   std_srvs
@@ -18,7 +18,7 @@ catkin_python_setup()
 ###################################
 catkin_package(
    INCLUDE_DIRS include
-   CATKIN_DEPENDS bender_msgs bender_srvs rospy std_msgs std_srvs
+   CATKIN_DEPENDS uchile_msgs uchile_srvs rospy std_msgs std_srvs
 )
 
 ###########

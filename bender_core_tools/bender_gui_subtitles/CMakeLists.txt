@@ -13,8 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
 	qt_build
 	roscpp
 	std_msgs
-	bender_msgs
-	bender_srvs
+	uchile_msgs
+	uchile_srvs
 )
 include_directories(${catkin_INCLUDE_DIRS})
 

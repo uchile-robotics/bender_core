@@ -28,7 +28,7 @@
 
 // ROS messages, services
 #include <std_msgs/String.h>
-#include <bender_srvs/String.h>
+#include <uchile_srvs/String.h>
 
 #endif
 
@@ -73,7 +73,7 @@ private:
 
     // ros callbacks
     void text_callback(const std_msgs::String &msg);
-	bool text_server(bender_srvs::String::Request &req, bender_srvs::String::Response &res);
+	bool text_server(uchile_srvs::String::Request &req, uchile_srvs::String::Response &res);
 
 	// methods
 	void displayText(std::string &text);

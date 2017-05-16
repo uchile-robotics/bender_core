@@ -44,8 +44,8 @@
 
     <!-- build, export, and execution dependencies -->
     <depend version_gte="1.3.0">orocos_kdl</depend>
-    <depend>bender_msgs</depend>
-    <depend>bender_srvs</depend>
+    <depend>uchile_msgs</depend>
+    <depend>uchile_srvs</depend>
     <depend>dynamic_reconfigure</depend>
     <depend>eigen</depend>
     <depend>geometry_msgs</depend>

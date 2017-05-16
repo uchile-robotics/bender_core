@@ -57,8 +57,8 @@
 
     <!-- === depends on all base_ws === -->
     <!-- common depends -->
-    <depend>bender_msgs</depend>
-    <depend>bender_srvs</depend>
+    <depend>uchile_msgs</depend>
+    <depend>uchile_srvs</depend>
     <depend>bender_tf</depend>
     <depend>bender_description</depend>
 

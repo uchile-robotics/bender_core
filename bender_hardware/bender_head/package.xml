@@ -50,8 +50,8 @@
 
 
     <!-- build, export, and execution dependencies -->
-    <depend>bender_msgs</depend>
-    <depend>bender_srvs</depend>
+    <depend>uchile_msgs</depend>
+    <depend>uchile_srvs</depend>
     <depend>roscpp</depend>
     <depend>rospy</depend>
     <depend>std_msgs</depend>

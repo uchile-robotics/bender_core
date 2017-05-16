@@ -5,8 +5,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   sensor_msgs
-  bender_msgs
-  bender_srvs
+  uchile_msgs
+  uchile_srvs
   cv_bridge
   image_transport
   bender_utils
@@ -22,7 +22,7 @@ find_package(OpenCV  REQUIRED)
 catkin_package(
   #INCLUDE_DIRS include
   LIBRARIES bender_sensors
-  CATKIN_DEPENDS bender_msgs bender_srvs cv_bridge image_transport roscpp sensor_msgs std_msgs bender_utils
+  CATKIN_DEPENDS uchile_msgs uchile_srvs cv_bridge image_transport roscpp sensor_msgs std_msgs bender_utils
   DEPENDS opencv2
 )
 

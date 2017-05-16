@@ -73,7 +73,7 @@ bool synthesizer::update_language(std::string desired_language) {
 	return false;
 }
 
-bool synthesizer::set_language_server(bender_srvs::String::Request &req, bender_srvs::String::Response &res) {
+bool synthesizer::set_language_server(uchile_srvs::String::Request &req, uchile_srvs::String::Response &res) {
 
 	std::string desired_language = req.data;
 	return update_language(desired_language);
@@ -107,7 +107,7 @@ std::string synthesizer::pronunciation_plugin(std::string input) {
 	return output;
 }
 
-bool synthesizer::synthesize_server(bender_srvs::String::Request &req,	bender_srvs::String::Response &res) {
+bool synthesizer::synthesize_server(uchile_srvs::String::Request &req,	uchile_srvs::String::Response &res) {
 
 	//ROS_WARN_STREAM("synthesize: " << req.data);
 	text_msg_.data = pronunciation_plugin(req.data);

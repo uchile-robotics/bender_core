@@ -7,7 +7,7 @@ import rospy
 import sys
 import math
 from sensor_msgs.msg import Joy
-from bender_srvs.srv import String as BenderString
+from uchile_srvs.srv import String as BenderString
 from bender_joy import xbox
 
 class JoystickTTS(object):
@@ -67,7 +67,7 @@ class JoystickTTS(object):
     def plugin(self):
         pass
         #     void  Joystick::synthesize(std::string text){
-        #     bender_srvs::String speech_text;
+        #     uchile_srvs::String speech_text;
         #     std::string talk = text;
         #     std::string text_evaluate = text;
         #

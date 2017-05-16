@@ -16,7 +16,7 @@
 #include <diagnostic_msgs/DiagnosticArray.h>
 
 // Bender
-#include <bender_srvs/String.h>
+#include <uchile_srvs/String.h>
 #include <bender_utils/ParameterServerWrapper.h>
 
 namespace bender_tts {
@@ -64,11 +64,11 @@ public:
 
 private:
 
-	bool synthesize_server(bender_srvs::String::Request &req, bender_srvs::String::Response &res);
+	bool synthesize_server(uchile_srvs::String::Request &req, uchile_srvs::String::Response &res);
 
 	bool stop_server(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
 
-	bool set_language_server(bender_srvs::String::Request &req, bender_srvs::String::Response &res);
+	bool set_language_server(uchile_srvs::String::Request &req, uchile_srvs::String::Response &res);
 
 	void status_calculation_callback(const diagnostic_msgs::DiagnosticArray &msg);
 

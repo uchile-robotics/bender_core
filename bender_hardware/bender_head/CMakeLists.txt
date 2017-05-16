@@ -5,8 +5,8 @@ find_package(catkin REQUIRED COMPONENTS
   bender_fieldbus
   dynamic_reconfigure
   message_generation
-  bender_msgs
-  bender_srvs
+  uchile_msgs
+  uchile_srvs
   roscpp
   rospy
   std_msgs
@@ -20,7 +20,7 @@ catkin_python_setup()
 ###################################
 
 catkin_package(
-  CATKIN_DEPENDS bender_msgs bender_srvs roscpp rospy std_msgs std_srvs
+  CATKIN_DEPENDS uchile_msgs uchile_srvs roscpp rospy std_msgs std_srvs
 )
 
 

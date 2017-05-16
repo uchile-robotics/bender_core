@@ -5,8 +5,8 @@ project(bender_tf)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  bender_msgs
-  bender_srvs
+  uchile_msgs
+  uchile_srvs
   cmake_modules
   dynamic_reconfigure
   geometry_msgs
@@ -34,8 +34,8 @@ catkin_package(
     dynamic_robot_state_publisher
   INCLUDE_DIRS include
   CATKIN_DEPENDS
-    bender_msgs
-    bender_srvs
+    uchile_msgs
+    uchile_srvs
     dynamic_reconfigure
     geometry_msgs
     roscpp

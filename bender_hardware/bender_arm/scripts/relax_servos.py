@@ -5,7 +5,7 @@
 """
 
 import rospy
-from bender_srvs.srv import Bool, BoolResponse
+from uchile_srvs.srv import Bool, BoolResponse
 from dynamixel_controllers.srv import TorqueEnable
 
 class Relax():
