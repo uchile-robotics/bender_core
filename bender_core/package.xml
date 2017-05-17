@@ -78,7 +78,6 @@
     <depend>bender_pose_server</depend>
 
     <!-- simulation depends -->
-    <depend>bender_mock</depend>
     <depend>bender_stage</depend>
     <depend>bender_gazebo</depend>
 
