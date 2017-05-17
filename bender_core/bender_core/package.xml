@@ -4,7 +4,7 @@
     <!-- PACKAGE INFORMATION -->
     <!-- - - - - - - - - - - -->
 
-    <name>bender_hardware</name>
+    <name>bender_core</name>
     <version>2.0.0</version>
 
     <description>Packages related to real hardware for Bender.</description>
