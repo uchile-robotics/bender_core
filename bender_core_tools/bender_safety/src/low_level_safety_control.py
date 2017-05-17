@@ -56,6 +56,7 @@ class CmdVelSafety(object):
         self.max_rad = .4
         self.laser_range = pi / 9
         self.stoping_acc = 0.2
+        self.epsilon = 0.001
         # Subscriber variables
         self.curr_vel = Twist()
         self.sent_vel = 0
@@ -103,7 +104,7 @@ class CmdVelSafety(object):
                                             trans_rear * sin(rot_rear), 
                                             0], 
                                             [0,0,0])
-                rospy.loginfo("dist front %f m, dist rear %f m" % (dist_front, dist_rear))
+                #rospy.loginfo("dist front %f m, dist rear %f m" % (dist_front, dist_rear))
 
                 # Chosing closest point between front and back
                 closest = min(dist_rear, dist_front)
@@ -116,7 +117,7 @@ class CmdVelSafety(object):
                 corr_factor = self.get_correction_factor(clos_ang)
                 self.marker.scale.x = self.max_rad + corr_factor
                 self.marker_pub.publish(self.marker)
-                #rospy.loginfo("Closer point at %f m from the center with a %f correction_factor" % (closest, corr_factor))
+                rospy.loginfo("Closer point at %f m from the center with a %f correction_factor" % (closest, corr_factor))
 
                 # Check if closest point is inside the safety area, in which case, stop movement if velocity moves the base in that direction
                 if closest <= self.max_rad + abs(corr_factor) and corr_factor * self.sent_vel > 0:
@@ -156,7 +157,7 @@ class CmdVelSafety(object):
         Returns:
             float: Correction factor, > 0 if closest point is in the front, < 0 if it's in the back
         """
-        vel_factor = mpow(max(abs(self.curr_vel.linear.x), abs(self.sent_vel)), 2) / (2 * self.stoping_acc * (0.4 / self.curr_vel.linear.x)) if self.curr_vel.linear.x != 0 else 0
+        vel_factor = mpow(max(abs(self.curr_vel.linear.x), abs(self.sent_vel)), 2) / (2 * self.stoping_acc * (0.5 / max(abs(self.curr_vel.linear.x), abs(self.sent_vel)))) if self.curr_vel.linear.x != 0 else 0
         ang_factor = 1 if cos(obj_rotation) > 0 else -1
         return vel_factor * ang_factor
 
@@ -243,20 +244,21 @@ class CmdVelSafety(object):
             if msg.range_min <= curr_mean and curr_mean <= msg.range_max:
                 curr_ang = msg.angle_min + i * msg.angle_increment
 
-                turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if self.curr_vel.angular.z != 0 else 0
+                turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if abs(self.curr_vel.angular.z) < self.epsilon else 0
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_front_base_dist + cos(curr_ang) * curr_mean)
 
-                curr_dist = sqrt(mpow(self.laser_front_base_dist, 2) + mpow(curr_mean, 2) - 2 * self.laser_front_base_dist * curr_mean * cos(pi - abs(curr_ang)))
+                curr_dist = sqrt(mpow(self.laser_front_base_dist, 2) + mpow(curr_mean, 2) - 2 * self.laser_front_base_dist * curr_mean * cos(pi - curr_ang))
 
-                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) - 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else curr_dist * abs(sin(base_ang))
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) - 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else 0
 
-                if curr_dist < min_dist and abs(curve_dist - turn_r) < self.max_rad and abs(base_ang) < self.laser_range:
+                if curr_dist < min_dist and abs(curve_dist - turn_r) < self.max_rad +.2 and abs(base_ang) < self.laser_range:
                     min_ang = base_ang
                     min_dist = curr_dist
         # Update closest point variable
         self.laser_front_closest_point = [min_dist, min_ang]
         #self.laser_front_cb_rate.sleep()
+
 
     def laser_rear_input_cb(self, msg):
         """
@@ -283,20 +285,22 @@ class CmdVelSafety(object):
             if msg.range_min <= curr_mean <= msg.range_max:
                 curr_ang = msg.angle_min + i * msg.angle_increment
 
-                turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if self.curr_vel.angular.z != 0 else 0
+                turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if abs(self.curr_vel.angular.z) < self.epsilon else 0
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_rear_base_dist + cos(curr_ang) * curr_mean)
 
-                curr_dist = sqrt(mpow(self.laser_rear_base_dist, 2) + mpow(curr_mean, 2) - 2 * self.laser_rear_base_dist * curr_mean * cos(pi - abs(curr_ang)))
+                curr_dist = sqrt(mpow(self.laser_rear_base_dist, 2) + mpow(curr_mean, 2) - 2 * self.laser_rear_base_dist * curr_mean * cos(pi - curr_ang))
 
-                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) - 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else curr_dist * abs(sin(base_ang))
+                curve_dist = sqrt(mpow(curr_dist, 2) + mpow(turn_r, 2) - 2 * curr_dist * turn_r * cos(pi/2 + base_ang)) if turn_r != 0 else 0
 
-                if curr_dist < min_dist and abs(curve_dist - turn_r) < self.max_rad and abs(base_ang) < self.laser_range:
+                if curr_dist < min_dist and abs(curve_dist - turn_r) < self.max_rad +.2 and abs(base_ang) < self.laser_range:
                     min_ang = base_ang
                     min_dist = curr_dist
         # Update closest point variable
         self.laser_rear_closest_point = [min_dist, min_ang]
         #self.laser_rear_cb_rate.sleep()
+        if min_dist == float("inf"):
+            rospy.loginfo(abs(curve_dist - turn_r))
 
     def odom_input_cb(self, msg):
         """
