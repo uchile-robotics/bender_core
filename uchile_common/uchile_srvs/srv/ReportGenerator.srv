@@ -1,5 +1,0 @@
-geometry_msgs/PoseStamped person
-sensor_msgs/Image[] imgs
-string[] img_captions
----
-string report_path

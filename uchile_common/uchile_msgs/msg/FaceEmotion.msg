@@ -1,1 +1,0 @@
-string emotion_name  #Emotion name to set face emotion

@@ -1,8 +1,0 @@
-sensor_msgs/Image image
-bool use_image
-int32 add_face_index
-string database_filename
-sensor_msgs/Image face
----
-int32 face_index
-float64 distance

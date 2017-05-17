@@ -1,9 +1,4 @@
 
-# ignore ROS toplevel CMakeLists.txt file
-/CMakeLists.txt
-
 *~
 *.pyc
 .idea
-.gitmodules_bkp
-uchile_knowledge

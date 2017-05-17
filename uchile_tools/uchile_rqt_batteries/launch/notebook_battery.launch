@@ -1,9 +1,0 @@
-<launch>
-    <!-- Computer name -->
-    <arg name="name" default="$(anon name)"/>
-    
-    <node name="$(anon batt_node)" pkg="uchile_rqt_batteries" type="notebook_battery_pub.py">
-        <param name="serial_number" value="$(arg name)" />
-    </node>
-    
-</launch>

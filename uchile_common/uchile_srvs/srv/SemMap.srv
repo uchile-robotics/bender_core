@@ -1,4 +1,0 @@
-string id
-uchile_msgs/SemanticObject new_data
----
-uchile_msgs/SemanticObject[] data

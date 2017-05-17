@@ -1,7 +1,0 @@
-geometry_msgs/PoseStamped[] pose
-sensor_msgs/Image[] imgs
-
----
-bool[] inf_bool
-string[] inf_label
-int32[] inf_int

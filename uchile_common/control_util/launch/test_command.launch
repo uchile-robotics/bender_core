@@ -1,8 +1,0 @@
-<launch>
-   <!-- Run a python source generator -->
-  <node name="source_generator" pkg="control_util" type="command_source.py" respawn="false" output="screen" />
-
-  <!-- RQT Control perspective -->
-  <node name="rqt_command" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find control_util)/config/pid_tune.perspective"/>
-  
-</launch>

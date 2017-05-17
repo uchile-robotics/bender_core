@@ -1,5 +1,0 @@
-string path # Image path
-string caption # Caption
----
-bool success 
-string message # Error message

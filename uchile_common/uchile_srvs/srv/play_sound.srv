@@ -1,4 +1,0 @@
-bool play
-string sound_file
----
-bool success

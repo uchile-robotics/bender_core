@@ -1,3 +1,0 @@
-# Regla udev para bendert turning base
-
-SUBSYSTEMS=="usb", KERNEL=="ttyACM[0-9]*", SUBSYSTEM=="tty", ATTRS{serial}=="A4139373630351C07182", MODE="0660", GROUP="dialout", SYMLINK+="bender/turning_base"

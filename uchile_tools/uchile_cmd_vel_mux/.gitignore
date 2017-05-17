@@ -1,4 +1,0 @@
-# .gitignore for auto-generated files
-cfg/cpp/*
-docs/
-src/uchile_cmd_vel_mux/
