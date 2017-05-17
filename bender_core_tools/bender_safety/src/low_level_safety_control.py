@@ -244,7 +244,7 @@ class CmdVelSafety(object):
             if msg.range_min <= curr_mean and curr_mean <= msg.range_max:
                 curr_ang = msg.angle_min + i * msg.angle_increment
 
-                turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if abs(self.curr_vel.angular.z) < self.epsilon else 0
+                turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if abs(self.curr_vel.angular.z) > self.epsilon else 0
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_front_base_dist + cos(curr_ang) * curr_mean)
 
@@ -285,7 +285,7 @@ class CmdVelSafety(object):
             if msg.range_min <= curr_mean <= msg.range_max:
                 curr_ang = msg.angle_min + i * msg.angle_increment
 
-                turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if abs(self.curr_vel.angular.z) < self.epsilon else 0
+                turn_r = abs(self.curr_vel.linear.x / self.curr_vel.angular.z) if abs(self.curr_vel.angular.z) > self.epsilon else 0
 
                 base_ang = atan2(sin(curr_ang) * curr_mean, self.laser_rear_base_dist + cos(curr_ang) * curr_mean)
 
@@ -299,8 +299,6 @@ class CmdVelSafety(object):
         # Update closest point variable
         self.laser_rear_closest_point = [min_dist, min_ang]
         #self.laser_rear_cb_rate.sleep()
-        if min_dist == float("inf"):
-            rospy.loginfo(abs(curve_dist - turn_r))
 
     def odom_input_cb(self, msg):
         """
