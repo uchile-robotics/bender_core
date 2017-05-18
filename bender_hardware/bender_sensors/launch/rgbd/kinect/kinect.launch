@@ -8,6 +8,8 @@
 	<!-- launch parameters -->
 	<arg name="kinect_name" default="kinect"/>
 	<arg name="device_id"   default="#1"    />
+	<!-- TODO: Cambiar modelo de camara -->
+	<arg name="model" default="PS1080_PrimeSense"/>
 
 	<!-- Openni for kinect -->
 	<include file="$(find openni_launch)/launch/openni.launch" ns="/bender/sensors/">
@@ -17,6 +19,10 @@
 
 		<!-- Use OpenNI's factory-calibrated depth->RGB registration? -->
   		<arg name="depth_registration" default="false" />
+
+  		<!-- Calibration yaml directory -->
+  		<arg name="rgb_camera_info_url" unless="$(arg calibrate)" value="file://${ROS_HOME}/camera_info/rgb_$(arg model).yaml"/>
+  		<arg name="depth_camera_info_url" unless="$(arg calibrate)" value="file://${ROS_HOME}/camera_info/depth_$(arg model).yaml" />
 
 		<!-- Processing Modules -->
 		<arg name="rgb_processing"                  default="true" />

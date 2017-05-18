@@ -1,0 +1,34 @@
+<launch>
+
+	<!-- Calibration for right eye camera calibration-->
+
+	<!-- ASUS head launch -->
+	<arg name="display" value="false"/>
+	<arg name="camera_name" default="camera_right_eye"/>
+	<arg name="video_device" default="/dev/video1"/>
+	<arg name="framerate" default="30"/>
+	<arg name="pixel_format" default="yuyv"/>
+	<arg name="calibrated" value="false"/>
+
+	<include file="$(find bender_sensors)/launch/camera/camera_right_eye.launch">
+		<arg name="calibrated" value="$(arg calibrated)"/>
+		<arg name="camera_name" value="$(arg camera_name)"/>
+		<arg name="video_device" value="$(arg video_device)"/>
+		<arg name="framerate" value="$(arg framerate)"/>
+		<arg name="pixel_format" value="$(arg pixel_format)"/>
+		<arg name="display" value="$(arg display)"/>
+	</include>
+
+	<arg name="image" value="bender/sensors/camera_right_eye/image_raw"/>
+	<arg name="camera" value="bender/sensors/camera_right_eye"/>
+	<arg name="square" default="0.2" />
+	<arg name="size" default="9x6" />
+
+	<include file="$(find bender_calibrate)/launch/calibrator.launch">
+		<arg name="image" default="$(arg image)"/>
+		<arg name="camera" default="$(arg camera)"/>
+		<arg name="square" default="$(arg square)"/>
+		<arg name="size" default="$(arg size)"/>
+	</include>
+
+</launch>

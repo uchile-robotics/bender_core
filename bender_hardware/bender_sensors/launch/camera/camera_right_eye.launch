@@ -2,12 +2,14 @@
 
 	<arg name="display" default="true"/>
 	<arg name="camera_name" default="camera_right_eye"/>
-	<arg name="video_device" default="/dev/video1"/>
+	<arg name="video_device" default="/dev/video0"/>
 	<arg name="framerate" default="30"/>
 	<arg name="pixel_format" default="yuyv"/>
+	<arg name="calibrated" default="true"/>
 
 	<!-- Camera Topic -->
 	<include file="$(find bender_sensors)/launch/camera/camera_topic.launch">
+		<arg name="calibrated" value="$(arg calibrated)"/>
 		<arg name="camera_name" value="$(arg camera_name)"/>
 		<arg name="video_device" value="$(arg video_device)"/>
 		<arg name="image_width" value="1280"/>
