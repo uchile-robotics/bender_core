@@ -10,8 +10,6 @@ from threading import Thread
 # ROS
 import rospy
 import actionlib
-# Dynamixel constants
-from dynamixel_driver.dynamixel_const import *
 # Msgs
 from sensor_msgs.msg import JointState
 from control_msgs.msg import (GripperCommand, GripperCommandAction,
@@ -19,9 +17,8 @@ from control_msgs.msg import (GripperCommand, GripperCommandAction,
 # Dynamic reconfigure
 from dynamic_reconfigure.server import Server as DynamicReconfServer
 from bender_gripper.cfg import GripperParamsConfig
-# PID
-from control_util.pid import PID
-from std_msgs.msg import Float64
+
+from dynamixel_driver.dynamixel_const import DXL_ALARM_SHUTDOWN, DXL_OVERLOAD_ERROR
 
 class GripperActionController():
     def __init__(self, controller_namespace, controllers):
@@ -60,11 +57,7 @@ class GripperActionController():
         self.joint_state.effort = [0.0]*self.num_joints
         # Current max effort
         self.current_goal = 0.0
-        self.current_effort = 0.9
-        # PID
-        self.pid = dict()
-        for joint in self.joint_names:
-            self.pid[joint] = PID(kp=1.3, ki=2.5, kd=0.0, i_clamp=1.1)
+        self.current_effort = 1.0
 
     def initialize(self):
         # Get controller parameters
@@ -92,6 +85,9 @@ class GripperActionController():
         # Dynamic reconfigure server, load dinamic parameters
         self.reconfig_server = DynamicReconfServer(GripperParamsConfig,
             self.update_params)
+        # Check motor parameters
+        if not self.set_motor_config():
+            return False
         return True
 
     def start(self):
@@ -108,7 +104,6 @@ class GripperActionController():
             execute_cb=self.process_action, auto_start=False)
         self.action_server.start()
         Thread(target=self.update_state).start()
-        Thread(target=self.pid_loop).start()
       
     def update_params(self, config, level):
         # Update velocity
@@ -126,33 +121,35 @@ class GripperActionController():
         # Get current position
         pos = list()
         for joint in self.joint_names:
-            pos.append(self.joint_states[joint].current_pos-0.05)
+            pos.append(self.joint_states[joint].current_pos)
         # Send command with effort + tolerance for avoid torque limit problem
         self.pos_torque_command(pos, effort + self.effort_tolerance)
 
-
-    def pid_loop(self):
-        rate = rospy.Rate(20)
-        for joint in self.pid:
-            self.pid[joint].initialize()
-        while self.running and not rospy.is_shutdown():
-            for joint in self.joint_names:
-                # Joint state msg
-                error = self.current_goal - self.joint_states[joint].current_pos
-                # Check effort
-                if (abs(self.joint_states[joint].load) > self.current_effort*1.2):
-                    error *= -1.0
-
-                command = Float64(min(max(self.pid[joint].compute_output(error), -0.1), 1.0))
-                # Send command
-                self.joint_to_controller[joint].process_command(command)
-            rate.sleep()
+    def set_motor_config(self):
+        # Check motor config
+        for joint, controller in self.joint_to_controller.iteritems():
+            motor_id = controller.motor_id
+            # Read alarm shutdown
+            try:
+                current_config = controller.dxl_io.read(motor_id, DXL_ALARM_SHUTDOWN, 1)[-2]
+            except:
+                return False
+            rospy.logdebug("Current motor config: {0:b}".format(current_config))
+            # Check config
+            if not current_config & DXL_OVERLOAD_ERROR:
+                rospy.loginfo("Updating current motor config")
+                updated_config = current_config | DXL_ALARM_SHUTDOWN
+                try:
+                    controller.dxl_io.write(motor_id, DXL_ALARM_SHUTDOWN, [updated_config])
+                except:
+                    return False
+        return True
 
     def pos_torque_command(self, position, effort):
         # Multipacket
         multi_packet_torque = dict()
         multi_packet_position = dict()
-
+        raw_effort = int(1024 * effort)
         # Set torque limit
         for port, joints in self.port_to_joints.items():
             vals_torque = list()
@@ -162,10 +159,10 @@ class GripperActionController():
                 # Get motor ID
                 motor_id = self.joint_to_controller[joint].motor_id
                 # Get the raw position (encoder ticks)
-                pos = self.joint_to_controller[joint].pos_rad_to_raw(position[i])
+                pos = self.joint_to_controller[joint].pos_rad_to_raw(position)
                 spd = self.joint_to_controller[joint].spd_rad_to_raw(self.velocity)
                 # Create effort command
-                vals_torque.append((motor_id, effort))
+                vals_torque.append((motor_id, raw_effort))
                 # Create position command
                 vals_position.append((motor_id, pos, spd))
                 i += 1
@@ -182,29 +179,22 @@ class GripperActionController():
 
 
     def process_action(self, goal):
-        # Reset PID
-        for joint in self.pid:
-            self.pid[joint].initialize()
-
         command = goal.command
-
         # @TODO Check limits of position using URDF info
         # Check max effort
         rospy.loginfo('Received new action with position={:.2f} effort={:.2f}'.format(
             command.position, command.max_effort))
-        effort = min(max(abs(command.max_effort), 0.1), 0.95)
-        
-        rospy.sleep(0.3)
-        # Send Dynamixel command @TODO Data race
+        # Effort saturation
+        effort = min(max(abs(command.max_effort), 0.1), 1.0)
+        # Send Dynamixel command
         self.current_goal = command.position
         self.current_effort = effort
-        #rospy.loginfo('EFFORT IN {:.2f}'.format(self.current_effort))
-
+        self.pos_torque_command(self.current_goal, command.max_effort)
         # Wait @TODO
-        rospy.sleep(1.0)
+        rospy.sleep(0.1)
         self.last_movement_time = rospy.Time.now()
         # Check for success action
-        rate = rospy.Rate(10) # 10hz
+        rate = rospy.Rate(30) # 30hz
         while not rospy.is_shutdown():
             # Check position
             reach_goal_tolerance = True
@@ -214,6 +204,7 @@ class GripperActionController():
                 mean_position += joint_state.current_pos
                 mean_effort += abs(joint_state.load)
                 #print 'goal tolerance %f' % abs(joint_state.current_pos - command.position)
+                # Check postion tolerance
                 if abs(joint_state.current_pos - command.position) > self.goal_tolerance:
                     reach_goal_tolerance = False
             mean_position /= self.num_joints
@@ -287,7 +278,7 @@ class GripperActionController():
                 self.joint_state.effort[i] = self.joint_states[joint_name].load
                 # Gripper feedback
                 self.feedback.position += self.joint_states[joint_name].current_pos
-                self.feedback.effort += self.joint_states[joint_name].load*DXL_MAX_TORQUE_TICK
+                self.feedback.effort += self.joint_states[joint_name].load
                 i += 1
 
             # Mean position and effort

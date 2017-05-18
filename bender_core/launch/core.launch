@@ -1,0 +1,67 @@
+<launch>
+
+	<!-- ================================================== -->
+	<!-- ==================== PARAMETERS ================== -->
+	<!-- ================================================== -->
+
+	<!-- robot configuration -->
+	<arg name="model_type"     default="standard"/>
+	<arg name="language"       default="spanish"/>
+
+	<!-- GUI -->
+	<arg name="rviz"           default="true"/>
+	<arg name="rqt_gui"        default="false"/>
+	<arg name="show_subtitles" default="true"/> <!-- { english , spanish } -->
+
+	<!-- robot simulation -->
+	<arg name="robot"      default="real"/> <!-- { real, gazebo, stage } -->
+	<arg name="worldname"  default="amtc"/>
+
+	<!-- simulator specific parameters -->
+	<arg name="gazebo_gui" default="true"/>
+
+
+
+	<!-- ================================================== -->
+	<!-- ==================== GREEN LAPTOP ================ -->
+	<!-- ================================================== -->	
+	<include file="$(find bender_core)/launch/core_green.launch">
+		<arg name="model_type"     value="$(arg model_type)"/>
+		<arg name="language"       value="$(arg language)"/>
+		<arg name="rviz"           value="$(arg rviz)"/>
+		<arg name="rqt_gui"        value="$(arg rqt_gui)"/>
+		<arg name="show_subtitles" value="$(arg show_subtitles)"/>
+		<arg name="robot"          value="$(arg robot)"/>
+		<arg name="worldname"      value="$(arg worldname)"/>
+		<arg name="gazebo_gui"     value="$(arg gazebo_gui)"/>
+	</include>
+
+	<!-- ================================================== -->
+	<!-- ==================== BLUE LAPTOP ================= -->
+	<!-- ================================================== -->
+	<include file="$(find bender_core)/launch/core_blue.launch">
+		<arg name="model_type"     value="$(arg model_type)"/>
+		<arg name="language"       value="$(arg language)"/>
+		<arg name="rviz"           value="$(arg rviz)"/>
+		<arg name="rqt_gui"        value="$(arg rqt_gui)"/>
+		<arg name="show_subtitles" value="$(arg show_subtitles)"/>
+		<arg name="robot"          value="$(arg robot)"/>
+		<arg name="worldname"      value="$(arg worldname)"/>
+		<arg name="gazebo_gui"     value="$(arg gazebo_gui)"/>
+	</include>
+
+	<!-- ================================================== -->
+	<!-- ==================== GRAY LAPTOP ================= -->
+	<!-- ================================================== -->
+	<include file="$(find bender_core)/launch/core_gray.launch">
+		<arg name="model_type"     value="$(arg model_type)"/>
+		<arg name="language"       value="$(arg language)"/>
+		<arg name="rviz"           value="$(arg rviz)"/>
+		<arg name="rqt_gui"        value="$(arg rqt_gui)"/>
+		<arg name="show_subtitles" value="$(arg show_subtitles)"/>
+		<arg name="robot"          value="$(arg robot)"/>
+		<arg name="worldname"      value="$(arg worldname)"/>
+		<arg name="gazebo_gui"     value="$(arg gazebo_gui)"/>
+	</include>
+
+</launch>

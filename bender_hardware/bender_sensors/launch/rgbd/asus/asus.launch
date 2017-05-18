@@ -11,6 +11,7 @@
 	<arg name="publish_tf"  default="false"/>
 	<arg name="model" 	default="PS1080_PrimeSense"/>
 	<arg name="calibrated" 	default="true"/>
+  	<arg name="color_depth_synchronization"     default="true" />
 
 	<!-- Openni2 for ASUS device -->
 	<include file="$(find openni2_launch)/launch/openni2.launch" ns="/bender/sensors/">
@@ -29,7 +30,8 @@
 
 			<!-- Hardware depth registration -->
 		<arg name="depth_registration"              default="true" />
-
+		<arg name="color_depth_synchronization"              value="$(arg color_depth_synchronization)"  />
+		
 		<!-- Processing Modules -->
 		<arg name="rgb_processing"                  default="true" />
 		<arg name="debayer_processing"              default="false" />

@@ -2,7 +2,7 @@
 
     <!-- available languages: { english , spanish } -->
     <arg name="language" default="english"/>
-    <arg name="show_subtitles" default="true"/>
+    <arg name="show_subtitles" default="false"/>
 
     <!-- sound_play node for tts -->
     <!--
@@ -26,7 +26,7 @@
         <remap from="~diagnostics" to="tts/$(arg soundplay_name)/diagnostics"/>
 
         <!-- hook for moving robot mouth -->
-        <remap from="~is_talking" to="head/move_mouth"/>
+        <remap from="~is_talking" to="/bender/face_controller/move_mouth"/>
     </node>
 
 

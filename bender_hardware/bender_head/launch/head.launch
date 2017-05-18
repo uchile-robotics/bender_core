@@ -1,11 +1,7 @@
 <launch>
 
-	<!-- hardware interface to the head: "serial", "ethernet" or "mock" -->
-	<arg name="interface" default="serial"/>
-
-	<!-- bender head -->
-	<node name="head" pkg="bender_head" type="head.py" ns="/bender/hw">
-		<param name="interface" value="$(arg interface)"/>
-	</node>
+  <!-- Launch both face and neck controllers -->
+  <include file="$(find bender_head)/launch/face.launch"/>
+  <include file="$(find bender_head)/launch/neck.launch"/>
 
 </launch>

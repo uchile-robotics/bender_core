@@ -10,6 +10,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
 )
 
+catkin_python_setup()
+
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -26,8 +28,3 @@ catkin_package(
 include_directories(
 	${catkin_INCLUDE_DIRS}
 )
-
-# Joystick Complete
-add_executable(joystick src/joystick.cpp)
-add_dependencies(joystick ${catkin_EXPORTED_TARGETS})
-target_link_libraries(joystick ${catkin_LIBRARIES})

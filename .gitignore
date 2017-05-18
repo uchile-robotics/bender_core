@@ -4,3 +4,5 @@
 
 *~
 *.pyc
+.idea
+.gitmodules_bkp

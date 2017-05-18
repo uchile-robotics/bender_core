@@ -1,8 +1,0 @@
-rgbd_head_controller:
-  controller:
-    package: bender_arm
-    module: head_controller
-    type: HeadController
-  head_controller_node:
-    state_update_rate: 30
-    joint_states_topic: 'head/joint_states' # Local namespace

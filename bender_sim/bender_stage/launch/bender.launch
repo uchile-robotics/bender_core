@@ -3,12 +3,14 @@
 	<!-- Parameters -->
 	<arg name="worldname" default="amtc"/>
 
+	<param name="/use_sim_time" value="true"/>
+
 	<!-- - - - - - - - - - - - - - - Run Stage - - - - - - - - - - - - - -->
 	<node pkg="stage_ros" type="stageros" name="stage" respawn="true" args="$(find bender_stage)/world/$(arg worldname)/world.world">
 
 		<!-- bender -->
-		<!-- <remap from="/base_scan" to="/bender/stage/laser_front_BAD/scan"/> -->
-		<remap from="/base_scan" to="/bender/sensors/laser_front/scan"/>
+		<remap from="/base_scan_0" to="/bender/stage/base_scan_0"/>
+		<remap from="/base_scan_1" to="/bender/stage/base_scan_1"/>
 		<remap from="/cmd_vel"   to="/bender/nav/base/cmd_vel"/>
 		<remap from="/odom"      to="/bender/nav/odom"/>
 
@@ -16,19 +18,33 @@
 		<remap from="/base_pose_ground_truth" to="/stage/base_pose_ground_truth"/>
 	</node>
 
+	<!-- - - - - Laser Proxy to chage LaserScan frame_id - - - - - - - -->
+	<node pkg="bender_stage" type="laser_scan_proxy.py" name="laser_scan_proxy_front" respawn="true" ns="/bender/stage/">
+		<remap from="input_scan"  to="/bender/stage/base_scan_0"/>
+		<remap from="output_scan" to="/bender/sensors/laser_front/scan"/>
+		<param name="frame_id" value="/bender/sensors/laser_front_link"/>
+	</node>
+
+	<node pkg="bender_stage" type="laser_scan_proxy.py" name="laser_scan_proxy_rear" respawn="true" ns="/bender/stage/">
+		<remap from="input_scan"  to="/bender/stage/base_scan_1"/>
+		<remap from="output_scan" to="/bender/sensors/laser_rear_BAD/scan"/>
+		<param name="frame_id" value="/bender/sensors/laser_rear_link"/>
+	</node>
+
 
 	<!-- hokuyo corrector -->
 	<!-- useful to mirror laser readings (ex: when using an inverted laser, which stage cant handle) -->
-	<!--node pkg="bender_sensors" type="laser_inverter" name="hokuyo_corrector" ns="/bender/stage/">
+	<node pkg="bender_sensors" type="laser_inverter" name="hokuyo_corrector" ns="/bender/stage/">
 
-		< ! - - original stage reading - - >
-		<remap from="hokuyo_corrector/scan_in"  to="/bender/stage/laser_front_BAD/scan"/>
+		<!-- original stage reading -->
+		<remap from="hokuyo_corrector/scan_in"  to="/bender/stage/laser_rear_BAD/scan"/>
 
-		< ! - - remapped stage reading - - > 
-		<remap from="hokuyo_corrector/scan_out" to="/bender/sensors/laser_front/scan"/>
-		<param name="scan_out_frame"         value="/bender/sensors/laser_front_link"/>
+		<!-- remapped stage reading --> 
+		<remap from="hokuyo_corrector/scan_out" to="/bender/sensors/laser_rear/scan"/>
+		<param name="scan_out_frame"         value="/bender/sensors/laser_rear_link"/>
 
-	</node-->
+	</node>
+
 
 
 	<!-- - - - - - - -  Create tf for a bender-stage tf merge - - - - - - - - -->

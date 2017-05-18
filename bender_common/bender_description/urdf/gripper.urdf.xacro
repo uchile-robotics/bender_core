@@ -7,35 +7,33 @@
   <xacro:property name="int_finger_joint_upper" value="0.69029" />
   <xacro:property name="int_finger_joint_lower" value="-0.02556" />
 
-  <xacro:property name="gripper_mass" value="1.0" />
-  <xacro:property name="gripper_effort" value="1.0" />
+  <xacro:property name="gripper_mass" value="0.160" />
+  <xacro:property name="gripper_effort" value="${rx28_torque}" />
 
   <xacro:macro name="gripper" params="side reflect prefix">
     <!-- Transmission -->
     <xacro:joint_transmission joint="${side}_int_finger_joint"/>
     <xacro:joint_transmission joint="${side}_ext_finger_joint"/>
 
-    <link
-      name="${prefix}${side}_base_int_finger_link" />
     <joint
       name="${side}_int_finger_joint"
       type="revolute">
       <xacro:if value="${(reflect+1)/2}">
         <origin
-          xyz="0.01775 0.00085 -0.0794"
-          rpy="${reflect * M_PI / 6} 0 0" />
+          xyz="0 0 0"
+          rpy="${M_PI/6} 0 0" />
       </xacro:if>
       <xacro:unless value="${(reflect+1)/2}">
         <origin
-          xyz="0.01775 -0.03555 -0.0794"
-          rpy="${reflect * M_PI / 6} 0 0" />
+          xyz="-0.0275 0 0"
+          rpy="${M_PI/6} 0 ${M_PI}" />
       </xacro:unless>
       <parent
-        link="${prefix}${side}_wrist_pitch_link" />
+        link="${prefix}${side}_int_finger_mount_link" />
       <child
-        link="${prefix}${side}_base_int_finger_link" />
+        link="${prefix}${side}_int_finger_link" />
       <axis
-        xyz="${reflect} 0 0" />
+        xyz="1 0 0" />
       <limit
         upper="${int_finger_joint_upper}"
         lower="${int_finger_joint_lower}"
@@ -44,27 +42,25 @@
       <dynamics damping="${damping}" friction="${friccion}" />
     </joint>
     
-    <link
-      name="${prefix}${side}_base_ext_finger_link" />
     <joint
       name="${side}_ext_finger_joint"
       type="revolute">
       <xacro:if value="${(reflect+1)/2}">
         <origin
-          xyz="0.01775 -0.03555 -0.0794"
-          rpy="${- reflect * M_PI / 6} 0 0" />
+          xyz="-0.0275 0 0"
+          rpy="${M_PI/6} 0 ${M_PI}" />
       </xacro:if>
       <xacro:unless value="${(reflect+1)/2}">
         <origin
-          xyz="0.01775 0.00085 -0.0794"
-          rpy="${- reflect * M_PI / 6} 0 0" />
+          xyz="0 0 0"
+          rpy="${M_PI/6} 0 0" />
       </xacro:unless>
       <parent
-        link="${prefix}${side}_wrist_pitch_link" />
+        link="${prefix}${side}_ext_finger_mount_link" />
       <child
-        link="${prefix}${side}_base_ext_finger_link" />
+        link="${prefix}${side}_ext_finger_link" />
       <axis
-        xyz="${-reflect} 0 0" />
+        xyz="1 0 0" />
       <limit
         upper="${ext_finger_joint_upper}"
         lower="${ext_finger_joint_lower}"
@@ -75,7 +71,7 @@
   </xacro:macro>
 
   <!-- Gripper type -->
-  <xacro:macro name="gripper_type" params="type">
+  <xacro:macro name="gripper_type" params="type ext">
     <xacro:if value="${type}">
       <inertial>
         <origin
@@ -85,9 +81,16 @@
         <cuboid_inertia_def x="0.05" y="0.035" z="0.16" mass="${gripper_mass}"/>
       </inertial>
       <visual>
+        <xacro:if value="${ext}">
         <origin
           xyz="0 0 0"
           rpy="0 0 0" />
+        </xacro:if>
+        <xacro:unless value="${ext}">
+        <origin
+          xyz="0.008 0 0"
+          rpy="0 0 0" />
+        </xacro:unless>
         <geometry>
           <mesh
             filename="package://bender_description/meshes/visual/one_finger.stl" />
@@ -95,12 +98,19 @@
         <material name="Grey1" />
       </visual>
       <collision>
+        <xacro:if value="${ext}">
         <origin
-          xyz="-0.03 0 0.011"
-          rpy="0 0 ${M_PI}" />
+          xyz="0 0 0.011"
+          rpy="0 0 0" />
+        </xacro:if>
+        <xacro:unless value="${ext}">
+        <origin
+          xyz="0.005 0 0.011"
+          rpy="0 0 0" />
+        </xacro:unless>
         <geometry>
           <mesh
-            filename="package://bender_description/meshes/collision/one_finger.stl" />
+            filename="package://bender_description/meshes/collision/finger.stl" scale="0.35 1.0 1.0"/>
         </geometry>
       </collision>
     </xacro:if>
@@ -113,9 +123,16 @@
         <cuboid_inertia_def x="0.05" y="0.035" z="0.16" mass="${gripper_mass}"/>
       </inertial>
       <visual>
+        <xacro:if value="${ext}">
+        <origin
+          xyz="0.008 0 0"
+          rpy="0 0 0" />
+        </xacro:if>
+        <xacro:unless value="${ext}">
         <origin
           xyz="0 0 0"
           rpy="0 0 0" />
+        </xacro:unless>
         <geometry>
           <mesh
             filename="package://bender_description/meshes/visual/two_finger.stl" />
@@ -123,12 +140,19 @@
         <material name="Grey1" />
       </visual>
       <collision>
+        <xacro:if value="${ext}">
         <origin
-          xyz="-0.065 0 0.011"
-          rpy="0 0 ${M_PI}" />
+          xyz="0.0355 0 0.011"
+          rpy="0 0 0" />
+        </xacro:if>
+        <xacro:unless value="${ext}">
+        <origin
+          xyz="0.0275 0 0.011"
+          rpy="0 0 0" />
+        </xacro:unless>
         <geometry>
           <mesh
-            filename="package://bender_description/meshes/collision/two_finger.stl" />
+            filename="package://bender_description/meshes/collision/finger.stl"/>
         </geometry>
       </collision>
     </xacro:unless>
@@ -138,58 +162,18 @@
   <xacro:macro name="gripper_int" params="side reflect type prefix">
     <link
     name="${prefix}${side}_int_finger_link">
-      <xacro:gripper_type type="${type}" />
+      <xacro:gripper_type type="${type}" ext="0"/>
     </link>
-    <xacro:gazebo_friction_link link="${side}_int_finger_link" color="DarkGrey" />
-    <joint
-      name="${side}_int_finger_fixed_joint"
-      type="fixed">
-      <xacro:if value="${(reflect+1)/2}">
-        <origin
-          xyz="0 0 0"
-          rpy="0 0 0" />
-      </xacro:if >
-      <xacro:unless value="${(reflect+1)/2}">
-        <origin
-          xyz="-0.035 0 0"
-          rpy="0 0 ${-M_PI}" />
-      </xacro:unless >
-      <parent
-        link="${prefix}${side}_base_int_finger_link" />
-      <child
-        link="${prefix}${side}_int_finger_link" />
-      <axis
-        xyz="0 0 0" />
-    </joint>
+    <xacro:gazebo_friction_link link="${prefix}${side}_int_finger_link" color="DarkGrey" />
   </xacro:macro>
 
   <!-- Gripper exterior, type 1 - 2 finger, type 0 - 1 finger -->
   <xacro:macro name="gripper_ext" params="side reflect type prefix">
     <link
     name="${prefix}${side}_ext_finger_link">
-      <xacro:gripper_type type="${type}" />
+      <xacro:gripper_type type="${type}" ext="1"/>
     </link>
-    <xacro:gazebo_friction_link link="${side}_ext_finger_link" color="DarkGrey" />
-    <joint
-      name="${side}_ext_finger_fixed_joint"
-      type="fixed">
-      <xacro:unless value="${(reflect+1)/2}">
-        <origin
-          xyz="0 0 0"
-          rpy="0 0 0" />
-      </xacro:unless >
-      <xacro:if value="${(reflect+1)/2}">
-        <origin
-          xyz="-0.035 0 0"
-          rpy="0 0 ${-M_PI}" />
-      </xacro:if >
-      <parent
-        link="${prefix}${side}_base_ext_finger_link" />
-      <child
-        link="${prefix}${side}_ext_finger_link" />
-      <axis
-        xyz="0 0 0" />
-    </joint>
+    <xacro:gazebo_friction_link link="${prefix}${side}_ext_finger_link" color="DarkGrey" />
   </xacro:macro>
 
 </robot>

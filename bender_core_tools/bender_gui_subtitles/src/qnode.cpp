@@ -10,6 +10,9 @@
 ** Includes
 *****************************************************************************/
 
+// Added this macro to support incompatible Boost 1.56.0 with QT 4.7.4
+#ifndef Q_MOC_RUN
+
 // NODE
 #include "../include/bender_gui_subtitles/qnode.hpp"
 
@@ -22,6 +25,7 @@
 #include <ros/ros.h>
 #include <ros/network.h>
 
+#endif
 
 /*****************************************************************************
 ** Namespaces
@@ -85,11 +89,9 @@ void QNode::text_callback(const std_msgs::String &msg) {
     ROS_INFO_STREAM("Received text message: " << msg.data);
     std::string text = msg.data;
 
-    int max_chars = 40;
-
     // cortar texto si tamaño es mayor a max_chars caracteres
+    int max_chars = 40;
     if (text.length() > max_chars) {
-        
         std::size_t found = text.find(" ");  
         std::string sentence="", complete="";
         int lineas=0;

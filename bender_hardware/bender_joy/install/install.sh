@@ -1,4 +1,17 @@
 #!/bin/bash
+#
+# Run me like this
+# > bash install.sh
+#
+# DO NOT USE ONE OF THIS:
+# > source install.sh
+# > . install.sh
+# > ./install.sh
+#
+
+# - - - - - - S E T U P - - - - - - - -
+# # # # # # # # # # # # # # # # # # # #
+source "$BENDER_WS"/bender_system/install/pkg_install.bash
 
 
 # - - - - - - I N S T A L L - - - - - -
@@ -17,12 +30,11 @@ if [ ! -c "/dev/input/js0" ]; then
   echo -e "\n\n\n"
 else 
   # Joystick is connected!
-  echo "- giving a+rw permissions to /dev/input/js{01234}!!"
+  echo "- giving a+rw permissions to /dev/input/js{0123}!!"
   sudo chmod a+rw /dev/input/js0
   sudo chmod a+rw /dev/input/js1
   sudo chmod a+rw /dev/input/js2
   sudo chmod a+rw /dev/input/js3
-  sudo chmod a+rw /dev/input/js4
 fi
 
 # Permisos para lectura de puertos

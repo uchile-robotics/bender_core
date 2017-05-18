@@ -31,7 +31,6 @@
     <!-- specific developers -->
     
 
-
     <!-- about bender and related repository -->
     <url type="website">bender.li2.uchile.cl</url>
     <url type="bugtracker">
@@ -39,8 +38,8 @@
     <url type="repository">
       https://bitbucket.org/uchile-robotics-die/bender_base_layer</url>
 
-
     <license>TODO</license>
+
 
 
     <!-- SYSTEM DEPENDENCIES -->
@@ -54,6 +53,7 @@
     <depend>rospy</depend>
     <depend>std_msgs</depend>
     <depend>std_srvs</depend>
+
 
     <!-- === depends on all base_ws === -->
     <!-- common depends -->
@@ -78,9 +78,13 @@
     <depend>bender_pose_server</depend>
 
     <!-- simulation depends -->
-    <depend>bender_mock</depend>
     <depend>bender_stage</depend>
     <depend>bender_gazebo</depend>
+
+
+    <!-- === depends for skills === -->
+    <depend>python-mock</depend>
+    <depend>python-termcolor</depend>
 
     <export>
     </export>

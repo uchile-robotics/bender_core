@@ -1,0 +1,43 @@
+# The proxy is a tool which remaps joy messages to desired
+# joystick tool topics.
+#
+# The proxy provides up to N remapping topics. You can only select one at a
+# time.
+#
+# USAGE:
+# - select channel n: <proxy_button_id> + <channel_n_button>
+#
+# Note: Any message in which the "proxy_button" is pressed, will not be
+# forwarded!.
+#
+# see available mappings on src/bender_joy/xbox.py
+
+
+## button to enable proxy methods
+# (default: BACK)
+b_proxy: 'BACK'
+
+
+## available channels
+# key: channel name
+# button: button to use for remapping to this channel
+# topic: output topic for this channel 
+channels:
+    base:
+        button: 'A'
+        topic: 'base'
+
+    tts:
+        button: 'B'
+        topic: 'tts'
+
+    head:
+        button: 'X'
+        topic: 'head'
+
+    arms:
+        button: 'Y'
+        topic: 'arms'
+
+# default channel name
+default_channel: 'base'
