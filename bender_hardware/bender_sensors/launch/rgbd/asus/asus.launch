@@ -28,7 +28,7 @@
   		<arg name="rgb_camera_info_url" if="$(arg calibrated)" value="file://${ROS_HOME}/camera_info/rgb_$(arg model).yaml"/>
   		<arg name="depth_camera_info_url" if="$(arg calibrated)" value="file://${ROS_HOME}/camera_info/depth_$(arg model).yaml" />
 
-			<!-- Hardware depth registration -->
+		<!-- Hardware depth registration -->
 		<arg name="depth_registration"              default="true" />
 		<arg name="color_depth_synchronization"              value="$(arg color_depth_synchronization)"  />
 		
