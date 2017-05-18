@@ -14,6 +14,5 @@
 
 	<node name="dynparam" pkg="dynamic_reconfigure" type="dynparam" args="set /bender/sensors/rgbd_head/driver color_mode 1 " />
 
-	<node name="dynparam" pkg="dynamic_reconfigure" type="dynparam" args="set /bender/sensors/rgbd_head/driver color_mode 1 " />
 
 </launch>
