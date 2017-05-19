@@ -65,7 +65,7 @@ bool TransformPoseSimple::transform(bender_srvs::Transformer::Request &req, bend
 		} catch (tf::TransformException &e) {
 
 			ROS_WARN_STREAM("Transform Exception: " << e.what());
-			continue;
+			return false;
 		}
 
 	}
