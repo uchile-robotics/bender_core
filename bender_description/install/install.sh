@@ -25,9 +25,9 @@ function cleanup {
 trap cleanup EXIT
 cd "$WORK_DIR"
 
-
+"$UCHILE_WS"/pkgs/base_ws/bender_core/bender_description/robots
 #  - - - - - - - - - Download files - - - - - - - - - - - 
-BACKUP_FOLDER="$BENDER_WS"/install/base/common/description
+BACKUP_FOLDER="$UCHILE_WS"/deps/bender/description
 BACKUP_FILE=bender_description.tar.gz
 BACKUP_FILE_FULL="$BACKUP_FOLDER/$BACKUP_FILE"
 if [ ! -r "$BACKUP_FILE_FULL" ]; then
@@ -55,7 +55,7 @@ fi
 #  - - - - - - - - - Extract files - - - - - - - - - - -
 # Extract files
 echo "$installer Extracting mesh files"
-tar -xzf "$BACKUP_FILE" --directory "$BENDER_WS"/base_ws/src/uchile_common/
+tar -xzf "$BACKUP_FILE" --directory "$UCHILE_WS"/pkgs/base_ws/bender_core/
 OUT=$?
 if [ $OUT -ne 0 ]; then
     echo "$installer ${red}Error extracting mesh files.${reset}"
