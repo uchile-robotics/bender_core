@@ -1,0 +1,11 @@
+<launch>
+
+	
+	<arg name="image" default="bender/sensors/rgbd_head/rgb/image_raw"/>
+	<arg name="camera" default="bender/sensors/rgbd_head/rgb"/>
+	<arg name="square" default="0.2" />
+	<arg name="size" default="9x6" />
+
+	<node name="cameracalibrator" pkg="bender_calibrate" type="cameracalibrator.py" args="--size $(arg size) --square $(arg square) image:=$(arg image) camera:=$(arg camera)"/>
+
+</launch>
