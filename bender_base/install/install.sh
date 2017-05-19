@@ -11,7 +11,7 @@
 
 # - - - - - - S E T U P - - - - - - - -
 # # # # # # # # # # # # # # # # # # # #
-source "$BENDER_WS"/bender_system/install/pkg_install.bash
+source "$UCHILE_WS"/system/install/util/pkg_install.bash
 
 # Useful Variables
 installer="[INSTALLER]:"
@@ -19,26 +19,10 @@ installer="[INSTALLER]:"
 # - - - - - - I N S T A L L - - - - - -
 # # # # # # # # # # # # # # # # # # # #
 
-# Rosaria install --> chequeo del fork y rama / tag  ok
-# TODO: unificar como metodo llamado desde bender_system 
-# (esto se usa en el instalador de bender)
-bender_cd forks
-if [ ! -d rosaria ]; then
-  echo "Cloning -rosaria- fork from github."
-  git clone https://github.com/uchile-robotics/rosaria.git
-  cd rosaria
-  git checkout master
-else
-  echo "-rosaria- fork already exists. updating"
-  cd rosaria
-  git checkout -- .
-  git pull origin master
-fi
-
 #  - - - - - - - - - Install Rules - - - - - - - - - - 
 
 echo -e "\n$installer Installing udev rules for the pionner\n"
-bender_cd bender_base
+uchile_cd bender_base
 sudo cp -f install/files/bender_pioneer.rules /etc/udev/rules.d/bender_pioneer.rules
 sudo udevadm control --reload
 
