@@ -11,14 +11,14 @@ pkg_name="bender_tts"
 pkg_path=$(rospack find "$pkg_name")
 
 # downloader script from mega
-megadown_exe="$BENDER_SYSTEM"/shell/megadown/megadown
+megadown_exe="$UCHILE_SYSTEM"/shell/megadown/megadown
 
 ## ----------------------------------------------------------------------------
 ## User Configuration 
 ## ----------------------------------------------------------------------------
 
 # where download and mantain the files
-install_space="$BENDER_WS"/install/base/hardware/tts
+install_space="$UCHILE_WS"/deps/bender/tts
 
 # mark as installed 
 install_token="$install_space"/INSTALLED

@@ -13,7 +13,7 @@
 ## ----------------------------------------------------------------------------
 ## SETUP
 ## ----------------------------------------------------------------------------
-source "$BENDER_WS"/bender_system/install/pkg_install.bash
+source "$UCHILE_WS"/system/install/util/pkg_install.bash
 THIS_SCRIPT=$(readlink -f "$0")
 THIS_FOLDER=$(dirname "$THIS_SCRIPT")
 source "$THIS_FOLDER"/settings.bash
@@ -67,7 +67,7 @@ echo " - ... OK"
 
 
 ## install synthesizer
-bender_cd bender_tts
+uchile_cd bender_tts
 source "$pkg_path"/install/install_synthesizer.bash
 rm -rf "$tarfolder" 
 
