@@ -13,7 +13,7 @@
 
 # - - - - - - S E T U P - - - - - - - -
 # # # # # # # # # # # # # # # # # # # #
-source "$BENDER_WS"/bender_system/install/pkg_install.bash
+source "$UCHILE_WS"/system/install/util/pkg_install.bash
 
 
 #  - - - - - - - - - Setup - - - - - - - - - - - 
@@ -29,7 +29,7 @@ installer="${bold}[bender_fieldbus]:${reset}"
 
 #  - - - - - - - - - Install Rules - - - - - - - - - - - 
 echo "$installer Installing udev rules"
-bender_cd bender_fieldbus
+uchile_cd bender_fieldbus
 sudo cp -f install/10-l_port.rules /etc/udev/rules.d/10-l_port.rules
 sudo cp -f install/10-r_port.rules /etc/udev/rules.d/10-r_port.rules
 sudo cp -f install/10-dxl_test.rules /etc/udev/rules.d/10-dxl_test.rules
