@@ -30,14 +30,14 @@ cd "$WORK_DIR"
 
 
 #  - - - - - - - - - Download files - - - - - - - - - - - 
-BACKUP_FOLDER="$BENDER_WS"/install/base/sim/gazebo
+BACKUP_FOLDER="$UCHILE_WS"/deps/sim/gazebo
 BACKUP_FILE=gazebo_models.zip
 BACKUP_FILE_FULL="$BACKUP_FOLDER/$BACKUP_FILE"
 if [ ! -r "$BACKUP_FILE_FULL" ]; then
 	
 	# Download bender_gazebo meshes
 	echo "$installer Backup file not found ($BACKUP_FILE_FULL), downloading models ..."
-	"$BENDER_SYSTEM"/shell/megadown/megadown 'https://mega.nz/#!G1MCEZIQ!u2UDNUMPPKODJ0u5-qs_OkA5hodXh3ilwSP8CoYSSD8'
+	"$UCHILE_SYSTEM"/shell/megadown/megadown 'https://mega.nz/#!G1MCEZIQ!u2UDNUMPPKODJ0u5-qs_OkA5hodXh3ilwSP8CoYSSD8'
 	if [ $? -ne 0 ]; then
 	    echo "$installer ${red}Error downloading mesh files.${reset}"
 	    exit 1 # Terminate and indicate error
