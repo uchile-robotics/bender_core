@@ -10,7 +10,7 @@
 #   - servicio para cambiar idioma del sintetizador
 #   - agregar parámetro "language" al servicio
 #   - agregar nuevos servicios para cada idioma
-
+return 0
 
 # Useful data
 export BENDER_TTS_SAY_LAST_RAND=-1
