@@ -25,7 +25,6 @@ function cleanup {
 trap cleanup EXIT
 cd "$WORK_DIR"
 
-"$UCHILE_WS"/pkgs/base_ws/bender_core/bender_description/robots
 #  - - - - - - - - - Download files - - - - - - - - - - - 
 BACKUP_FOLDER="$UCHILE_WS"/deps/bender/description
 BACKUP_FILE=bender_description.tar.gz
