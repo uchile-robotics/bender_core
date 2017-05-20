@@ -11,13 +11,13 @@
 
 # - - - - - - S E T U P - - - - - - - -
 # # # # # # # # # # # # # # # # # # # #
-source "$BENDER_WS"/bender_system/install/pkg_install.bash
+source "$UCHILE_WS"/system/install/util/pkg_install.bash
 
 # - - - - - - I N S T A L L - - - - - -
 # # # # # # # # # # # # # # # # # # # #
 
 # install head rules
-bender_cd bender_head
+uchile_cd bender_head
 sudo cp -f install/bender_head.rules /etc/udev/rules.d/bender_head.rules
 
 # Permisos para lectura de puertos

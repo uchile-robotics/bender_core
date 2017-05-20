@@ -1,7 +1,7 @@
 #!/bin/bash
 
-complete -F "_bendercomplete_str" "bender-say" "bender-say_eng" "bender-say_esp"
-complete -F "_bendercomplete_NOT_COMPLETE" "bender-say_random_eng" "bender-say_random_esp"
+complete -F "_uchilecomplete_str" "bender-say" "bender-say_eng" "bender-say_esp"
+complete -F "_uchilecomplete_NOT_COMPLETE" "bender-say_random_eng" "bender-say_random_esp"
 
 
 # NOTE:
@@ -12,7 +12,7 @@ complete -F "_bendercomplete_NOT_COMPLETE" "bender-say_random_eng" "bender-say_r
 # compgen -W "${opts}" -- ${cur}
 # returns the array of elements from "opts" matching the current word "${cur}"
 #
-_bendercomplete_bender_say_set_language()
+_uchilecomplete_bender_say_set_language()
 {
     local cur opts
 
@@ -32,5 +32,5 @@ _bendercomplete_bender_say_set_language()
         return 0
     fi
 }
-complete -F "_bendercomplete_bender_say_set_language" "bender-say_set_language"
+complete -F "_uchilecomplete_bender_say_set_language" "bender-say_set_language"
 

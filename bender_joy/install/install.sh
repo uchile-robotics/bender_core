@@ -11,7 +11,7 @@
 
 # - - - - - - S E T U P - - - - - - - -
 # # # # # # # # # # # # # # # # # # # #
-source "$BENDER_WS"/bender_system/install/pkg_install.bash
+source "$UCHILE_WS"/system/install/util/pkg_install.bash
 
 
 # - - - - - - I N S T A L L - - - - - -
