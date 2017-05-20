@@ -11,7 +11,7 @@ RULES_DIR="/etc/udev/rules.d"
 # usb_cam fork install
 # TODO: unificar como metodo llamado desde bender_system 
 # (esto se usa en el instalador de bender)
-bender_cd forks
+uchile_cd forks
 if [ ! -d usb_cam ]; then
   echo "Cloning -usb_cam- fork from github."
   git clone https://github.com/uchile-robotics/usb_cam.git
@@ -26,7 +26,7 @@ else
 fi
 
 
-bender_cd bender_sensors
+uchile_cd bender_sensors
 
 # -- udev rules --
 echo -e "\n$installer Installing udev rules for Logitech cameras"

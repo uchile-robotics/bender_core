@@ -11,12 +11,12 @@
 
 # - - - - - - S E T U P - - - - - - - -
 # # # # # # # # # # # # # # # # # # # #
-source "$BENDER_WS"/bender_system/install/pkg_install.bash
+source "$UCHILE_WS"/system/install/util/pkg_install.bash
 installer="[INSTALLER]:"
 
 # - - - - - - I N S T A L L - - - - - -
 # # # # # # # # # # # # # # # # # # # #
-bender_cd bender_sensors
+uchile_cd bender_sensors
 source install/cameras.sh
 source install/lasers.sh
 
