@@ -33,7 +33,7 @@ if [ ! -r "$BACKUP_FILE_FULL" ]; then
 	
 	# Download bender_description meshes
 	echo "$installer Backup file not found ($BACKUP_FILE_FULL), downloading mesh files ..."
-	"$BENDER_SYSTEM"/shell/megadown/megadown 'https://mega.nz/#!39sF0LSJ!HXo1Q1_KaqKwwVNsmUKfr_rV3vcZ_IiQpdUWs8F2IJQ'
+	"$UCHILE_SYSTEM"/shell/megadown/megadown 'https://mega.nz/#!39sF0LSJ!HXo1Q1_KaqKwwVNsmUKfr_rV3vcZ_IiQpdUWs8F2IJQ'
 	if [ $? -ne 0 ]; then
 	    echo "$installer ${red}Error downloading mesh files.${reset}"
 	    exit 1 # Terminate and indicate error
