@@ -1,0 +1,26 @@
+<launch>
+
+	<!-- Calibration for ASUS head depth camera-->
+
+	<!-- IMPORTANT: For a correct depth calibration, cover the laser with a post-it note or something similar before you start -->
+
+	<!-- ASUS head launch -->
+	<arg name="calibrated" value="false"/>
+
+	<include file="$(find bender_sensors)/launch/rgbd/rgbd_head.launch">
+		<arg name="calibrated" 	value="$(arg calibrated)"/>
+	</include>
+
+	<arg name="image" value="bender/sensors/rgbd_head/ir/image"/>
+	<arg name="camera" value="bender/sensors/rgbd_head/ir"/>
+	<arg name="square" default="0.2" />
+	<arg name="size" default="9x6" />
+
+	<include file="$(find bender_calibrate)/launch/calibrator.launch">
+		<arg name="image" default="$(arg image)"/>
+		<arg name="camera" default="$(arg camera)"/>
+		<arg name="square" default="$(arg square)"/>
+		<arg name="size" default="$(arg size)"/>
+	</include>
+
+</launch>
