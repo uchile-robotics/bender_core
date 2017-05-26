@@ -51,7 +51,7 @@ roslaunch bender_joy joy_interface.launch --screen
 Si es que sólo se utilizará un computador, es preferible optar por lo siguiente:
 ```sh
 # Por cada pc con un adaptador
-roslaunch bender_joy complete.launch --screen
+roslaunch bender_joy joysticks.launch --screen
 
 ```
 
