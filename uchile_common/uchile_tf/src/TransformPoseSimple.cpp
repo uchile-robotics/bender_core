@@ -65,7 +65,7 @@ bool TransformPoseSimple::transform(uchile_srvs::Transformer::Request &req, uchi
 		} catch (tf::TransformException &e) {
 
 			ROS_WARN_STREAM("Transform Exception: " << e.what());
-			continue;
+			return false;
 		}
 
 	}

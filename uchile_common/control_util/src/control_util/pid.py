@@ -39,7 +39,7 @@ class PID(object):
     the method compute_output will just return zero.
     """
 
-    def __init__(self, kp=0.0, ki=0.0, kd=0.0, i_clamp=1, error_order=10):
+    def __init__(self, kp=0.0, ki=0.0, kd=0.0, i_clamp=1, error_order=10, max_acc=None):
         # initialize gains
         self._kp = kp
         self._ki = ki
@@ -54,9 +54,13 @@ class PID(object):
         self._cd = 0.0
         self._cur_time = 0.0
         self._prev_time = 0.0
+        self._prev_output = 0.0
 
         # error moving average for check convergence
         self.error = CircularBuffer(error_order)
+
+        # max_acc to limit output
+        self.max_acc = max_acc
 
         self.initialize()
 
@@ -130,5 +134,17 @@ class PID(object):
         self._prev_err = error  # save t-1 error
 
         # sum the terms and return the result
-        return ((self._kp * self._cp) + (self._ki * self._ci) +
-                (self._kd * self._cd))
+        curr_output = ((self._kp * self._cp) + (self._ki * self._ci) +
+                    (self._kd * self._cd))
+
+        # check for maximum acceleration limit (if there is one)
+        if self.max_acc is not None:
+            if curr_output - self._prev_output > self.max_acc:
+                curr_output = self._prev_output + self.max_acc
+            elif self._prev_output - curr_output > self.max_acc:
+                curr_output = self._prev_output - self.max_acc
+
+        # save last output
+        self._prev_output = curr_output
+
+        return curr_output
