@@ -5,7 +5,7 @@
   <remap from="/head_camera/depth/camera_info" to="/bender/sensors/rgbd_head/rgb/camera_info"/>
   <!-- <rosparam command="delete" param="robot_calibration" /> -->
   <node pkg="robot_calibration" type="calibrate" name="calibrate"
-        args="$(find bender_calibration_arm)/bags/foo_poses.bag"
+        args="$(find bender_calibration_arm)/bags/test.bag"
         output="screen" required="true">
     <param name="velocity_factor" value="$(arg velocity_factor)" />
     <rosparam file="$(find bender_calibration_arm)/config/calibrate.yaml" command="load" />
@@ -20,6 +20,6 @@
         args="-l $(find bender_calibration_arm)/bags/tablero.bag" >
   </node> -->
 
-  <include file="$(find bender_moveit_config)/launch/move_group.launch" />
+  <!-- <include file="$(find bender_moveit_config)/launch/move_group.launch" /> -->
 
 </launch>

@@ -1,12 +1,12 @@
 verbose: true
 base_link: bender/base_link
 models:
- - name: bender/l_arm_mount
+ - name: bender/l_arm
    type: chain
    frame: /bender/l_wrist_pitch_link
- - name: bender/r_arm
-   type: chain
-   frame: /bender/r_wrist_pitch_link
+ # - name: bender/r_arm
+ #   type: chain
+ #   frame: /bender/r_wrist_pitch_link
  - name: camera
    type: camera3d
    frame: /bender/sensors/rgbd_head_rgb_optical_frame
@@ -58,7 +58,7 @@ error_blocks:
  - name: hand_eye
    type: camera3d_to_arm
    camera: camera
-   arm: arm
+   arm: l_arm
  - name: restrict_camera
    type: outrageous
    param: head_camera_rgb_joint
@@ -76,16 +76,16 @@ chains:
      - l_elbow_yaw_joint
      - l_wrist_pitch_joint
     planning_group: l_arm
-  - name: r_arm
-    topic: /bender/r_arm_controller/follow_joint_trajectory
-    joints:
-     - r_shoulder_pitch_joint
-     - r_shoulder_roll_joint
-     - r_shoulder_yaw_joint
-     - r_elbow_pitch_joint
-     - r_elbow_yaw_joint
-     - r_wrist_pitch_joint
-    planning_group: r_arm
+  # - name: r_arm
+  #   topic: /bender/r_arm_controller/follow_joint_trajectory
+  #   joints:
+  #    - r_shoulder_pitch_joint
+  #    - r_shoulder_roll_joint
+  #    - r_shoulder_yaw_joint
+  #    - r_elbow_pitch_joint
+  #    - r_elbow_yaw_joint
+  #    - r_wrist_pitch_joint
+  #   planning_group: r_arm
   - name: head
     topic: /bender/head_controller/follow_joint_trajectory
     joints:
@@ -97,6 +97,6 @@ features:
     type: robot_calibration/CheckerboardFinder
     topic: /bender/sensors/rgbd_head/depth/points
     camera_sensor_name: camera
-    chain_sensor_name: r_arm
+    chain_sensor_name: l_arm
     points_x: 4
     points_y: 5
