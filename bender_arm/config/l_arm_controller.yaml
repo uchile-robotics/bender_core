@@ -118,6 +118,6 @@ l_wrist_pitch_controller:
   i_clamp: 2.0
   motor:
     id: 6
-    init: 320
+    init: 350
     max: 110
     min: 560
