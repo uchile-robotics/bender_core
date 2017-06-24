@@ -84,7 +84,7 @@ class LocateSoundServer:
 					self.angles.append(np.arctan2(self.hark_data.src[0].x,self.hark_data.src[0].y))
 
 	def calcProm(self, x):
-		dv_permitido = 0.01
+		dv_permitido = 0.05
 		data = x
 		moda=stats.mode(data)[0][0]
 		dataNew = []
