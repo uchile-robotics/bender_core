@@ -47,4 +47,9 @@ class DynamixelCheck(SystemCheckTask):
             except:
                 SystemCheck.print_error("Motor id: {} not found".format(i), 2)
                 result = False
+        try:
+            dxl.close()
+        except:
+            SystemCheck.print_error("Error closing port.")
+            result = False
         return result
