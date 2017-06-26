@@ -3,7 +3,6 @@
 """This module implements Hardware check methods"""
 
 from __future__ import print_function
-from lib_robotis import USB2Dynamixel_Device, Robotis_Servo
 from uchile_util.syscheck import SystemCheck, SystemCheckTask, FileCheckTask
 from dynamixel_driver.dynamixel_io import DynamixelIO
 from time import sleep
@@ -25,11 +24,6 @@ class DynamixelCheck(SystemCheckTask):
         try:
             SystemCheck.print_info("Opening serial port... ", 1)
             dxl = DynamixelIO(self.device, self.baud)
-            # Send zeros for restart all state machines on servos
-            dxl.__write_serial([0]*20)
-            sleep(0.1)
-            dxl.__write_serial([0]*20)
-
         except:
             SystemCheck.print_error("Error opening: {} [baud {}]\t\t[FAIL]"
                 .format(self.device, self.baud))
@@ -37,19 +31,24 @@ class DynamixelCheck(SystemCheckTask):
 
         SystemCheck.print_info("Checking ids  : %s" % self.ids, 1)
         result = True
-        for i in self.ids:
-            try:
-                result = dxl.ping(i)
+        found_device = set()
+        required =set(self.ids)
+        for device_id in self.ids:
+            for trial in range(5):
+                try:
+                    result = dxl.ping(device_id)
+                except Exception as ex:
+                    SystemCheck.print_error("Exception thrown while pinging device id {}.\t\t[FAIL]"
+                        .format(device_id))
+                    SystemCheck.print_error(str(ex))
                 if result:
-                    SystemCheck.print_ok("Motor id: {}".format(i), 2)
-                else:
-                    raise RuntimeError("Motor id:{} not found".format(i))
-            except:
-                SystemCheck.print_error("Motor id: {} not found".format(i), 2)
-                result = False
-        try:
-            dxl.close()
-        except:
-            SystemCheck.print_error("Error closing port.")
-            result = False
+                    SystemCheck.print_ok("Motor id: {}".format(device_id), 2)
+                    found_device.add(device_id)
+                    break
+
+        if not required.issubset(found_device):
+            not_found = required.difference(found_device)
+            for device_id in not_found:
+                SystemCheck.print_error("Motor id: {} not found".format(device_id), 2)
+            result = False           
         return result

@@ -8,9 +8,9 @@ from uchile_util.syscheck import SystemCheck, SystemCheckTask, FileCheckTask
 from bender_fieldbus.check import DynamixelCheck
 
 def head_check():
-    head = SystemCheck("left arm")
-    head.add_child(FileCheckTask('/dev/bender/l_port'))
-    head.add_child(DynamixelCheck('/dev/bender/l_port', 200000, [9]))
+    head = SystemCheck("head")
+    head.add_child(FileCheckTask('/dev/bender/r_port'))
+    head.add_child(DynamixelCheck('/dev/bender/r_port', 200000, [30,31,35]))
     return head.check()
 
 if __name__ == "__main__":
