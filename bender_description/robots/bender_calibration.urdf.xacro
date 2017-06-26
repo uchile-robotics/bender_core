@@ -24,7 +24,7 @@
 
   <!-- Torso -->
   <xacro:include filename="$(find bender_description)/urdf/torso.urdf.xacro" />
-  <xacro:torso prefix="${prefix}" parent="${prefix}torso_base_link"/>
+  <xacro:torso prefix="${prefix}" parent="${prefix}torso_base_link" psu="0"/>
 
   <!-- Arm -->
   <xacro:include filename="$(find bender_description)/urdf/arm.urdf.xacro" />

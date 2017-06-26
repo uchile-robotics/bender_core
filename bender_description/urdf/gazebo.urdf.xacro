@@ -48,6 +48,7 @@
   <!-- Normal links -->
   <xacro:macro name="gazebo_link" params="link color">
     <gazebo reference="${link}">
+      <material>Gazebo/${color}</material>
       <mu1>0.2</mu1>
       <mu2>0.2</mu2>
     </gazebo>
