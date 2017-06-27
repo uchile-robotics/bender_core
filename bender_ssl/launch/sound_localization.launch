@@ -1,0 +1,8 @@
+<launch>
+
+	<include file="$(find hark_sound_source_localization)/launch/microcone.launch" />
+
+	<node pkg="bender_ssl" name="locate_sound" ns="/bender/speech/recognizer/"
+        type="locate_sound.py" output="screen"/>
+
+</launch>
