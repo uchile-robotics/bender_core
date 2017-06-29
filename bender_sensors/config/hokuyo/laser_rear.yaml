@@ -1,6 +1,6 @@
 # hokuyo laserscan configuration for urg_node ROS node
 #
-# on bender: rear laser
+# on bender: rear laser (Hokuyo URG-04LX-UG01)
 # 
 
 # connection
@@ -30,6 +30,7 @@ allow_unsafe_settings: false
 skip: 0
 cluster: 1
 time_offset: 0.0
+get_detailed_status: false
 publish_intensity: false
 publish_multiecho: false
 diagnostics_tolerance: 0.05
