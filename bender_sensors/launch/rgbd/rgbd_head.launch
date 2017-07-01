@@ -12,7 +12,10 @@
 		<arg name="calibrated" value="$(arg calibrated)"/>
 	</include>
 
-	<node name="dynparam" pkg="dynamic_reconfigure" type="dynparam" args="set /bender/sensors/rgbd_head/driver color_mode 1 " />
+	<!-- Turn on HD settings -->
+	<node name="dynparam_rgbd_hd" pkg="dynamic_reconfigure" type="dynparam" args="set /bender/sensors/rgbd_head/driver color_mode 1 " />
 
+	<!-- This reduces the frame rate from 30Hz to 10Hz (from 150MB/s to 50MB/s bandwidth) -->
+	<node name="dynparam_rgbd_hz" pkg="dynamic_reconfigure" type="dynparam" args="set /bender/sensors/rgbd_head/driver data_skip 2 " />
 
 </launch>
