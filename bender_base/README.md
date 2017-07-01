@@ -18,7 +18,7 @@
 
 The pioneer 3AT holds a lot of configuration parameters on the onboard microcontroller. This parameters can be modified with the ARCOS tool or through the Aria library.
 
-The ARCOS tool stores the modifications on the microcontroller EEPROM, so they are always available. This is the recommended configuration method by the Aria guys, but REQUIRES a SERIAL to SERIAL connection between the machine and the pioneer!!. Attempts to use a USB to serial converter are not adviced, as this can misconfigure the onboard memory.
+The ARCOS tool stores the modifications on the microcontroller EEPROM, so they are always available. This is the recommended configuration method by the Aria guys; they recommend to use a SERIAL to SERIAL connection between the machine and the pioneer, because any attempt to use a USB to serial converter can misconfigure the onboard memory. However, the USB to SERIAL mode was tested and works!.
 
 On the other hand, ROSARIA uses the Aria library to modify parameters on the fly. Only a small subset of parameters are provided.
 
@@ -36,14 +36,26 @@ See also: Operations Manual p.65
 
 ### Demo program
 
-Found under `/usr/share/doc/libaria-dev/examples`. Could not compile it!
+- The original source is found under `/usr/share/doc/libaria-dev/examples`. A little dificult to use, so was added to the *rosaria* fork under the name `AriaDemo`
+- The demo assumes a SERIAL to SERIAL connection!. You can set the port when using a USB to SERIAL converter. Run it by calling:
+
+```bash
+rosrun rosaria AriaDemo -rp /dev/bender/base
+```
 
 ### ARCOS
 
 Download from the mobilerobots wiki (see links above).
 
-- DOES NOT WORK on Laptop ASUS UX303L with USB to serial adapter.
 - Does work on a fixed pc with a SERIAL to SERIAL connection.
+- It also WORKS on a laptop using the same USB to serial adapter used to control the robot through rosaria. However, you must give it the port name:
+
+```bash
+# This assumes you have installed the pioneer udev rule. 
+# Otherwise, use something like /dev/ttyUSB0
+cd <arcos_folder>
+./ARCOScf -rp /dev/bender/base
+```
 
 ## Hardware Maintenance
 
