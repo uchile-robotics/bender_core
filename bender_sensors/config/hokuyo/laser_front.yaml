@@ -22,6 +22,10 @@ angle_min: -2.01  # ~ -115 [deg]
 # step is necessary to produce accurate timestamps on scans. 
 calibrate_time: true
 
+# output NaN values as inf.
+# PS. Obtained from a pull request. Not on the official doc.
+no_range_as_inf: true
+
 # enforce defaults
 ip_address: ""
 ip_port: 10940
