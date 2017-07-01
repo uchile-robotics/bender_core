@@ -83,7 +83,7 @@ For the following configuration you will need to create a custom configuration f
 #### Indoor Wheels
 
 By default, the P3-AT is configured to use the *all terrain* wheels. This can be modified by using ARCOS to change the robot subtype from `p3at-sh` to `p3atiw-sh`. Relevant diff is:
-- 
+ 
 ```
   Subclass       p3at      --> p3atiw-sh   ; specific type of robot
   RobotWidth     505.00000 --> 490.00000   ; width in mm
