@@ -82,16 +82,113 @@ For the following configuration you will need to create a custom configuration f
 
 #### Indoor Wheels
 
-By default, the P3-AT is configured to use the *all terrain* wheels. This can be modified by using ARCOS to change the robot subtype from `p3at-sh` to `p3atiw-sh`. Furthermore, it is recommended to create a new configuration file:
+By default, the P3-AT is configured to use the *all terrain* wheels. This can be modified by using ARCOS to change the robot subtype from `p3at-sh` to `p3atiw-sh`. Relevant diff is:
+- 
+```
+  Subclass       p3at      --> p3atiw-sh   ; specific type of robot
+  RobotWidth     505.00000 --> 490.00000   ; width in mm
+  DistConvFactor 0.46500   --> 1.00000     ; multiplier to mm from robot units
+```
 
-- Configuration files are located under `Aria/params` directory. On this installation, the full path is: `/usr/share/Aria/params/`
-- Make a copy of `p3atiw-sh.p` into `/usr/share/Aria/params/bender.p`
+Configuration files are found on the `Aria/params` directory. On this installation, the full path is: `/usr/share/Aria/params/`.
+
+Modify the FLASH parameters with ARCOS to set the `SubType` to `p3atiw-sh`. Then attempt a connection with rosaria to verify that the loaded Aria/param file is `p3atiw-sh.p`.
 
 
-### 3.- Tuning odometry
+#### Robot Geometry
+
+TODO.
+
+### Odometry calibration
 
 This is based on the Operations Manual p.54. Follow the operations manual procedure for both, Standard Calibrations and the Gyroscope calibrations.
 
+See the Op.Manual p.31 for a table with all ARCOS command numbers. They are very handy while tuning the base using the demo program.
+
+
+#### Configure Max Velocity and Acceleration
+
+First set the desired maximum accel and velocity. There are some *Top* maxes which cannot be modified:
+
+```
+TransVelTop 1500 TransAccelTop 2000
+RotVelTop 360 RotAccelTop 300
+```
+
+
+You can modify the following values. Note this are the default firmware configurations. Please reduce this values!:
+
+```
+item         |default| recommended | ARCOS cmd # | range      |  units
+------------------------------------------------------------------------------------------
+transVelMax  |  750  |     600     |       6     | [0, 65535] |  (mm/sec) 
+RotVelMax    |  100  |      40     |      10     | [0, 65535] |  (deg/sec)
+TransAcc     |  300  | default     |       5     | [0,  4000] |  (mm/sec/sec) 
+TransDecel   |  300  | default     |       5     | [0,  4000] |  (mm/sec/sec) 
+RotAcc       |  100  | default     |      23     | [0, 65535] |  (deg/sec/sec) 
+RotDecel     |  100  | default     |      23     | [0, 65535] |  (deg/sec/sec) 
+```
+
+
+#### Configure DriftFactor, TickMM and RevCount
+
+Follow the op.Manual procedure on page 54. Remember to disable the Gyroscope!!. The gyro can be disabled for the current session using the **p** mode on the demo program. Also, the gyro can be disabled by using the ARCOS command #58 (argument 0 to disable, 2 to enable)
+
+```
+item         | default | recommended | ARCOS cmd # | range
+------------------------------------------------------------------------------------------
+transVelMax  |   750   |     600     |       6     | [0, 65535]
+DriftFactor  |     0   |       0     |      89     | [0, 200]
+Ticks/mm     |   170   |     164     |      93     | [0, 200]
+RevCount     | 32550   |   29500     |      88     | [0, [-32768, 32767]]
+```
+
+When finished, remember to enable the Gyro!.
+
+#### Configure the PIDs
+
+The Operations Manual gives some descriptions on the PID effects and explains how to tune them. See pages 34 and 52. Consider that Bender has a payload of ~54Kg.
+
+```
+item      | def. | recom. | ARCOS cmd# | range
+------------------------------------------------------------------------------------------
+RotKp     |  40  |  50    |      82    | [0, 65535]
+RotKv     |  20  |  20    |      83    | [0, 65535]
+RotKi     |   0  |  10    |      84    | [0, 65535]
+TransKp   |  40  |  45    |      85    | [0, 65535]
+TransKv   |  30  |  25    |      86    | [0, 65535]
+TransKi   |   0  |   2    |      87    | [0, 65535]
+```
+
+
+#### Configure the onboard gyroscope
+
+See the Operations Manual p.55. Calibrate the `GyroCW` (Cmd #38) and `GyroCCW` (Cmd #39) values as you did for `revCount`.
+
+```
+item      | def. | recom.  | ARCOS cmd# | range
+------------------------------------------------------------------------------------------
+GyroCW    | 940  | default |      38    | [1, 2000]
+GyroCCW   | 950  | default |      39    | [1, 2000]
+```
+
 ### Finally ... record configuration
 
-Make sure there is a copy of `/usr/share/Aria/params/bender.p` and `bender.rop` into this package!. And update that configuration files to match the new parameters.
+Use ARCOS to load the new configuration into the robot FLASH memory:
+
+```bash
+# connect using ARCOS
+./ARCOScf -rp /dev/ttyUSB0
+
+# load updated configuration into ARCOS memory
+> r bender.rop
+
+# save to the FLASH
+> save
+
+# exit
+Ctrl+C
+```
+
+Finally, make sure there is a updated version of `bender.rop` into this package!.
+
