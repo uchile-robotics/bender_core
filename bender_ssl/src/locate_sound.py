@@ -13,7 +13,7 @@ class LocateSoundServer:
 	def __init__(self):
 		self.server = actionlib.SimpleActionServer('locate_sound', LocateAction, self.execute, False)
 		self.server.start()
-		self.sub = rospy.Subscriber('hark_source', HarkSource, self.hark_source_callback)
+		self.sub = rospy.Subscriber('/hark_source', HarkSource, self.hark_source_callback)
 		self.hark_data = HarkSource()
 		self.x_coordinates = []
 		self.y_coordinates = []
