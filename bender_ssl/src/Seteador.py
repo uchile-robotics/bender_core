@@ -3,7 +3,7 @@ import rospy
 import numpy as np
 from scipy import stats
 from std_msgs.msg import Float32
-from hark_msgs.msg import HarkSource, HarkSourceVal, promxy
+from hark_msgs.msg import HarkSource, HarkSourceVal
 
 class MicroconeMark(object):
 	def __init__(self):
@@ -26,16 +26,9 @@ class MicroconeMark(object):
 				self.primero = False
 				self.powermediciones = []
 		else:
-			if (len(self.powermediciones) < 50):
-				self.powermediciones.append(msg.src[0].power)
-				self.pub.publish(self.set)
-				self.primero = False
-			else:
-				data = self.powermediciones
-				self.set = np.mean(stats.mode(data)[0])
-				self.pub.publish(self.set)
-				self.primero = False
-				self.powermediciones = []
+			self.pub.publish(self.set)
+			self.primero = False
+			
 
 def main():
 	rospy.init_node('base_controller2')

@@ -17,15 +17,15 @@ interval_sim 50
 window
 ( 
   # windows size
-  size [ 442 428 ]       # pixels
+  size [ 442 428 ]   # pixels
 
   # camera options
-  center [ 0.848 -3.028 ]    # x,y [m]
-  rotate [  0.000  0.000 ]   # pitch, yaw [degrees]
-  scale 40.000               # pixels/m
+  center [ 0.0 0.0 ] # x,y [m]
+  rotate [ 0.0 0.0 ] # pitch, yaw [degrees]
+  scale 30.00        # pixels/m
   
   # GUI options
-  show_data 1              # 1=on 0=off
+  show_data 1        # 1=on 0=off
 )
 
 

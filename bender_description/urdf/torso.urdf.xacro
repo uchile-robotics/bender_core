@@ -3,7 +3,7 @@
   xmlns:xacro="http://www.ros.org/wiki/xacro"
   name="torso">
 
-  <xacro:macro name="torso" params="prefix parent">
+  <xacro:macro name="torso" params="prefix parent psu">
     <!-- Lower torso  -->
     <link
       name="${prefix}lower_torso_base">
@@ -78,6 +78,49 @@
         xyz="0 0 0" />
     </joint>
 
+    <!-- Power supply unit -->
+    <xacro:if value="${psu}">
+    <joint
+      name="psu_mount_fixed_joint"
+      type="fixed">
+      <origin
+        xyz="0 0 0" 
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}lower_torso_base" />
+      <child
+        link="${prefix}psu_base" />
+    </joint>
+    <link
+      name="${prefix}psu_base">
+      <inertial>
+        <origin
+          xyz="0.175 0 0.33"
+          rpy="0 0 0" />
+        <mass
+          value="1.5" />
+        <cuboid_inertia_def x="0.12" y="0.20" z="0.27" mass="1.5"/>
+      </inertial>
+      <visual>
+        <origin
+          xyz="0.175 0 0.33"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.12 0.20 0.27"/>
+        </geometry>
+        <material name="Grey3" />
+      </visual>
+      <collision>
+        <origin
+          xyz="0.175 0 0.33"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.12 0.20 0.27"/>
+        </geometry>
+      </collision>
+    </link>
+    <xacro:gazebo_link link="${prefix}psu_base" color="Grey" />
+    </xacro:if>
 
     <!-- Upper torso -->
     <link

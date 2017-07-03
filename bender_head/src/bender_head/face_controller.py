@@ -17,7 +17,7 @@ from bender_head.emotions_manager import EmotionsManager
 
 class FaceController(object):
 
-    DEV_ID = 16
+    DEV_ID = 35
     def __init__(self, dxl_io, controller_namespace, port_namespace):
         """
         Provides a high level interface over ROS to generate emotions on Bender Robot.

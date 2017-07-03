@@ -73,8 +73,8 @@ l_elbow_pitch_controller:
   motor:
     id: 4
     init: 2080
-    min: 1405
-    max: 3245
+    max: 3280
+    min: 1400
 
 l_elbow_yaw_controller:
   controller:
