@@ -1,6 +1,6 @@
 # hokuyo laserscan configuration for urg_node ROS node
 #
-# on bender: rear laser
+# on bender: rear laser (Hokuyo URG-04LX-UG01)
 # 
 
 # connection
@@ -16,20 +16,27 @@ frame_id: /bender/sensors/laser_rear_link
 angle_max:  1.40  #  80 [deg]
 angle_min: -1.40  # -80 [deg]
 
+# keep 10 Hz
+skip: 0
+
 # Whether the node should calibrate the device's time offset on startup.
 # If true, the node will exchange of series of messages with the device
 # in order to determine the time delay in the connection. This calibration
 # step is necessary to produce accurate timestamps on scans. 
 calibrate_time: true
 
+# output NaN values as inf.
+# PS. Obtained from a pull request. Not on the official doc.
+no_range_as_inf: true
+
 # enforce defaults
 ip_address: ""
 ip_port: 10940
 serial_baud: 115200
 allow_unsafe_settings: false
-skip: 0
 cluster: 1
 time_offset: 0.0
+get_detailed_status: false
 publish_intensity: false
 publish_multiecho: false
 diagnostics_tolerance: 0.05

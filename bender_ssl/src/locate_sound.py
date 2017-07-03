@@ -13,7 +13,7 @@ class LocateSoundServer:
 	def __init__(self):
 		self.server = actionlib.SimpleActionServer('locate_sound', LocateAction, self.execute, False)
 		self.server.start()
-		self.sub = rospy.Subscriber('hark_source', HarkSource, self.hark_source_callback)
+		self.sub = rospy.Subscriber('/hark_source', HarkSource, self.hark_source_callback)
 		self.hark_data = HarkSource()
 		self.x_coordinates = []
 		self.y_coordinates = []
@@ -84,7 +84,7 @@ class LocateSoundServer:
 					self.angles.append(np.arctan2(self.hark_data.src[0].x,self.hark_data.src[0].y))
 
 	def calcProm(self, x):
-		dv_permitido = 0.01
+		dv_permitido = 0.05
 		data = x
 		moda=stats.mode(data)[0][0]
 		dataNew = []

@@ -8,19 +8,19 @@ import actionlib
 
 # Brings in the messages used by the fibonacci action, including the
 # goal message and the result message.
-import barbie_rviz.msg
+import bender_ssl.msg
 
 def tester_client():
     # Creates the SimpleActionClient, passing the type of the action
     # (FibonacciAction) to the constructor.
-    client = actionlib.SimpleActionClient('locate_sound', barbie_rviz.msg.LocateAction)
+    client = actionlib.SimpleActionClient('locate_sound', bender_ssl.msg.LocateAction)
 
     # Waits until the action server has started up and started
     # listening for goals.
     client.wait_for_server()
 
     # Creates a goal to send to the action server.
-    goal = barbie_rviz.msg.LocateGoal()
+    goal = bender_ssl.msg.LocateGoal()
 
     # Sends the goal to the action server.
     client.send_goal(goal)

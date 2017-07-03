@@ -24,7 +24,7 @@
 
   <!-- Torso -->
   <xacro:include filename="$(find bender_description)/urdf/torso.urdf.xacro" />
-  <xacro:torso prefix="${prefix}" parent="${prefix}torso_base_link"/>
+  <xacro:torso prefix="${prefix}" parent="${prefix}torso_base_link" psu="0"/>
 
   <!-- Arm -->
   <xacro:include filename="$(find bender_description)/urdf/arm.urdf.xacro" />
@@ -39,10 +39,10 @@
   <xacro:gripper side="r" reflect="1" prefix="${prefix}" />
   <xacro:gripper side="l" reflect="-1" prefix="${prefix}" />
   <!-- Grippers Links -->
-  <xacro:gripper_int side="r" reflect="1" type="0" prefix="${prefix}"/>
-  <xacro:gripper_ext side="r" reflect="1" type="0" prefix="${prefix}"/>
-  <xacro:gripper_int side="l" reflect="-1" type="1" prefix="${prefix}"/>
-  <xacro:gripper_ext side="l" reflect="-1" type="1" prefix="${prefix}"/>
+  <xacro:gripper_int side="r" reflect="-1" type="1" prefix="${prefix}"/>
+  <xacro:gripper_ext side="r" reflect="-1" type="1" prefix="${prefix}"/>
+  <xacro:gripper_int side="l" reflect="1" type="0" prefix="${prefix}"/>
+  <xacro:gripper_ext side="l" reflect="1" type="0" prefix="${prefix}"/>
 
   <!-- Head with Asus depth camera -->
   <xacro:include filename="$(find bender_description)/urdf/head.urdf.xacro" />

@@ -14,7 +14,7 @@ base_link_frame: bender/base_link
 # trans_decel (float, default: none, use robot controller firmware configuration)
 
 # Set desired rotation acceleration in rad/s/s. May be set via dynamic_reconfigure 
-#rot_accel (float, default: none, use robot controller firmware configuration)
+# rot_accel (float, default: none, use robot controller firmware configuration)
 
 # Set desired rotation acceleration in rad/s/s. May be set via dynamic_reconfigure 
 # rot_decel (float, default: none, use robot controller firmware configuration)
@@ -37,5 +37,9 @@ base_link_frame: bender/base_link
 # RevCount (float, default: none, use robot controller firmware configuration)
 # 32550
 
-# If no cmd_vel command messages are received within this timeout period (in seconds), rosaria will command the robot to stop. If 0, this behavior is disabled and the robot will continue to use the last commanded velocity until a new cmd_vel command is received. Note that this is separate from the robot controller's own watchdog timeout, which protects against loss of communication between rosaria node and the robot controller. 
+# If no cmd_vel command messages are received within this timeout period (in seconds), rosaria will command the robot to stop.
+# If 0, this behavior is disabled and the robot will continue to use the last commanded velocity until a new cmd_vel command
+# is received. Note that this is separate from the robot controller's own watchdog timeout, which protects against loss of
+# communication between rosaria node and the robot controller. 
 # cmd_vel_timeout (float, default: 0.6 sec)
+cmd_vel_timeout: 0.6

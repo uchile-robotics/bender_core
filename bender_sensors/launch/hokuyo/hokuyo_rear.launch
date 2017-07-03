@@ -1,9 +1,11 @@
 <launch>
 
 	<!--  hokuyo -->
-	<node name="laser_rear" pkg="urg_node" type="urg_node" respawn="true" ns="/bender/sensors/">
+	<node name="laser_rear"  pkg="urg_node" type="urg_node" respawn="true" ns="/bender/sensors/">
 		<rosparam command="load" file="$(find bender_sensors)/config/hokuyo/laser_rear.yaml"/>
-		<remap from="scan" to="/bender/sensors/laser_rear/scan"/>
+		<remap from="scan"         to="/bender/sensors/laser_rear/scan"/>
+		<remap from="laser_status" to="/bender/sensors/laser_rear/status"/>
+		<remap from="update_laser_status" to="/bender/sensors/laser_rear/update_status"/>
 	</node>
 
 </launch>
