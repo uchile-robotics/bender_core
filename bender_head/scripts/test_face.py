@@ -51,7 +51,6 @@ class EmotionTest(object):
 
 if __name__ == '__main__':
     rospy.init_node('Test_Emotions')
-    time.sleep(7)
     emotions_test = EmotionTest()
     emotions_test.start()
     emotions_test.run_static()

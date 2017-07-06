@@ -11,8 +11,8 @@
 
     <!-- Head low lovel controller spawner -->
     <node name="face_controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
-        args="--manager=l_port_manager
-              --port=l_port
+        args="--manager=r_port_manager
+              --port=r_port
               face_controller"
         output="screen"/>
   </group>
