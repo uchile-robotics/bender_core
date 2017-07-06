@@ -8,8 +8,8 @@ r_shoulder_pitch_controller:
   joint_name: r_shoulder_pitch_joint
   joint_speed: 1.0
   p_gain: 15
-  i_gain: 5
-  d_gain: 0
+  i_gain: 10
+  d_gain: 5
   joint_torque_limit: 1.0
   torque_enable_init: False
   motor:
@@ -31,9 +31,9 @@ r_shoulder_roll_controller:
   joint_torque_limit: 1.0
   torque_enable_init: False
   enable_pid: True
-  p_gain: 0.8
-  i_gain: 0.5 
-  d_gain: 0.0
+  p_gain: 15.0
+  i_gain: 10.0 
+  d_gain: 5.0
   i_clamp: 1.0
   motor:
     id: 12
@@ -54,9 +54,9 @@ r_shoulder_yaw_controller:
   joint_torque_limit: 1.0
   torque_enable_init: False
   enable_pid: True
-  p_gain: 0.8
-  i_gain: 0.5 
-  d_gain: 0.0
+  p_gain: 1.3
+  i_gain: 1.0 
+  d_gain: 0.5
   i_clamp: 1.0
   motor:
     id: 13
@@ -71,9 +71,9 @@ r_elbow_pitch_controller:
     type: JointPositionMXController
   joint_name: r_elbow_pitch_joint
   joint_speed: 1.0
-  p_gain: 15
-  i_gain: 5
-  d_gain: 0
+  p_gain: 16
+  i_gain: 10
+  d_gain: 5
   joint_torque_limit: 1.0
   torque_enable_init: False
   motor:
@@ -95,9 +95,9 @@ r_elbow_yaw_controller:
   joint_torque_limit: 1.0
   torque_enable_init: False
   enable_pid: True
-  p_gain: 0.8
-  i_gain: 0.5 
-  d_gain: 0.0
+  p_gain: 1.3
+  i_gain: 1.0 
+  d_gain: 0.5
   i_clamp: 1.0
   motor:
     id: 15
@@ -118,9 +118,9 @@ r_wrist_pitch_controller:
   joint_torque_limit: 1.0
   torque_enable_init: False
   enable_pid: True
-  p_gain: 0.8
-  i_gain: 0.5 
-  d_gain: 0.0
+  p_gain: 1.3
+  i_gain: 1.0 
+  d_gain: 0.5
   i_clamp: 2.0
   motor:
     id: 16
