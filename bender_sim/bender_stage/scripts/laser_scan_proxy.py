@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+"""
+This node is just a proxy for LaserScan generated from stage.
+
+It just changes the 'header.frame_id' value of incoming scans
+"""
 import rospy
 import sys
 from sensor_msgs.msg import LaserScan
@@ -10,7 +15,8 @@ frame_id = None
 def callback(scan):
     global pub, frame_id
     scan.header.frame_id = frame_id
-    pub.publish(scan)    
+    pub.publish(scan)
+
 
 def proxy():
     global pub, frame_id

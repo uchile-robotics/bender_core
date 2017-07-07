@@ -18,7 +18,6 @@ std::string _frame_out;
 
 void callback(const sensor_msgs::LaserScan &in){
 
-	//ROS_WARN_STREAM("cb");
 	sensor_msgs::LaserScan out;
 	out.angle_increment = in.angle_increment;
 	out.angle_max = -in.angle_min;
@@ -54,13 +53,14 @@ int main(int argc, char **argv){
 		ROS_ERROR_STREAM("This node requires the parameter '~scan_out_frame' to be set");
 		exit(1);
 	}
+	ROS_INFO_STREAM("Using scan_out_frame: " << _frame_out);
+
+	// [important!] wait for timer initialization!
+	while (ros::ok() && ros::Time::now().isZero());
 
 	/* Topics */
 	pub = priv.advertise<sensor_msgs::LaserScan>("scan_out", 1);
 	sub = priv.subscribe("scan_in", 1, callback);
-
-	// [important!] wait for timer initialization!
-	//while (ros::ok() && ros::Time::now().isZero());
 
 	ROS_INFO("Config. Done");
 	ros::spin();
