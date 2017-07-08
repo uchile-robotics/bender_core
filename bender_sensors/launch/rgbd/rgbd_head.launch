@@ -16,7 +16,7 @@
 	<node name="dynparam_rgbd_hd" pkg="dynamic_reconfigure" type="dynparam" args="set /bender/sensors/rgbd_head/driver color_mode 1 " />
 
 	<!-- This reduces the frame rate from 30Hz to 10Hz (from 150MB/s to 50MB/s bandwidth) -->
-	<node name="dynparam_rgbd_hz" pkg="dynamic_reconfigure" type="dynparam" args="set /bender/sensors/rgbd_head/driver data_skip 2 " />
+	<!-- <node name="dynparam_rgbd_hz" pkg="dynamic_reconfigure" type="dynparam" args="set /bender/sensors/rgbd_head/driver data_skip 2 " /> -->
 
 	<node name="dynparam_rgbd_z_offset" pkg="dynamic_reconfigure" type="dynparam" args="set /bender/sensors/rgbd_head/driver z_offset_mm 81 " />
 
