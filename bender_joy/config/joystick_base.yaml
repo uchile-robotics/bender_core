@@ -2,7 +2,12 @@
 
 # pause button
 b_pause: 'START'
+
+# cancel goal button
 b_cancel: 'B'
+
+# high priority joystick button
+b_priority: 'LB'
 
 # movement axes
 a_angular: 'LS_HORZ'

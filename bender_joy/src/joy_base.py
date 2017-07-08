@@ -9,12 +9,14 @@ from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
 from bender_joy import xbox
 
+
 class JoystickBase(object):
-  
+
     def __init__(self):
         rospy.loginfo('Joystick base init ...')
 
         self.pub = rospy.Publisher('base/cmd_vel', Twist, queue_size=1)
+        self.pub_priority = rospy.Publisher('base/master_cmd_vel', Twist, queue_size=1)
         self.cancel_goal_client = rospy.ServiceProxy('/bender/nav/goal_server/cancel', Empty)
 
         # control
@@ -23,26 +25,25 @@ class JoystickBase(object):
         # load configuration
         self.b_pause    = rospy.get_param('~b_pause', 'START')
         self.b_cancel   = rospy.get_param('~b_cancel', 'B')
+        self.b_priority = rospy.get_param('~b_priority', 'LB')
         a_linear   = rospy.get_param('~a_linear', 'LS_VERT')
         a_angular  = rospy.get_param('~a_angular', 'LS_HORZ')
         self.max_linear_vel  = rospy.get_param('~max_linear_vel', 0.5)
         self.max_angular_vel = rospy.get_param('~max_angular_vel', 0.5)
-        
-        key_mapper = xbox.KeyMapper()
-        self.b_idx_pause   = key_mapper.get_button_id(self.b_pause)
-        self.b_idx_cancel  = key_mapper.get_button_id(self.b_cancel)
-        self.a_idx_linear  = key_mapper.get_axis_id(a_linear)
-        self.a_idx_angular = key_mapper.get_axis_id(a_angular)
 
+        key_mapper = xbox.KeyMapper()
+        self.b_idx_pause    = key_mapper.get_button_id(self.b_pause)
+        self.b_idx_cancel   = key_mapper.get_button_id(self.b_cancel)
+        self.b_idx_priority = key_mapper.get_button_id(self.b_priority)
+        self.a_idx_linear   = key_mapper.get_axis_id(a_linear)
+        self.a_idx_angular  = key_mapper.get_axis_id(a_angular)
 
         # check
         self.assert_params()
 
-
         # ready to work
         rospy.Subscriber('joy', Joy, self.callback, queue_size=1)
         rospy.loginfo('Joystick for base is ready')
-
 
     def assert_params(self):
         """
@@ -51,7 +52,6 @@ class JoystickBase(object):
         assert isinstance(self.b_idx_pause, int)
         assert isinstance(self.a_idx_angular, int)
         assert isinstance(self.a_idx_linear, int)
-
 
     # this method breaks the decoupling between base and soft ws!!!
     def cancel_goal(self):
@@ -64,14 +64,13 @@ class JoystickBase(object):
         except Exception:
             pass
 
-
     def callback(self, msg):
 
         # pause
         if msg.buttons[self.b_idx_pause]:
 
             self.is_paused = not self.is_paused
-            if self.is_paused:                
+            if self.is_paused:
 
                 # stop signal
                 cmd = Twist()
@@ -83,7 +82,7 @@ class JoystickBase(object):
 
             # very important sleep!
             # prevents multiple triggersfor the same button
-            rospy.sleep(1) # it should be >= 1;
+            rospy.sleep(1)  # it should be >= 1;
             return
 
         elif msg.buttons[self.b_idx_cancel]:
@@ -93,10 +92,14 @@ class JoystickBase(object):
         # work
         if not self.is_paused:
             cmd = Twist()
-            cmd.angular.z = self.max_angular_vel*msg.axes[self.a_idx_angular]
-            cmd.linear.x = self.max_linear_vel*msg.axes[self.a_idx_linear]
-            self.pub.publish(cmd)
-        
+            cmd.angular.z = self.max_angular_vel * msg.axes[self.a_idx_angular]
+            cmd.linear.x = self.max_linear_vel * msg.axes[self.a_idx_linear]
+
+            if msg.buttons[self.b_idx_priority]:
+                rospy.logwarn_throttle(2, "Drive with care. Using the high priority joystick topic.")
+                self.pub_priority.publish(cmd)
+            else:
+                self.pub.publish(cmd)
 
 
 if __name__ == '__main__':
