@@ -19,7 +19,7 @@ else
   cd urg_node
   git checkout -- .
   git fetch
-  git checkout 0.1.9
+  git checkout uchile-devel
 fi
 
 #  - - - - - - - - - Install Rules - - - - - - - - - - 
