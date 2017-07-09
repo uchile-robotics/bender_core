@@ -1,0 +1,15 @@
+<launch> 
+
+	<node pkg="bender_base" type="odometry_helper.py" name="odometry_helper" ns="/bender/nav/">
+		<param name="~odom_frame"      value="/bender/odom" />
+		<param name="~dtheta"          value="1"            />
+		<param name="~min_polar_range" value="0.4"          />
+		<param name="~max_polar_range" value="5.0"          />
+		<param name="~x_size"          value="10"           />
+		<param name="~y_size"          value="3"            />
+		<param name="~dx"              value="0.05"         />
+		<param name="~dy"              value="0.05"         />
+		<param name="~line_width"      value="0.0025"       />
+	</node>
+
+</launch>
