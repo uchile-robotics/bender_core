@@ -137,10 +137,9 @@ Follow the op.Manual procedure on page 54. Remember to disable the Gyroscope!!. 
 ```
 item         | default | recommended | ARCOS cmd # | range
 ------------------------------------------------------------------------------------------
-transVelMax  |   750   |     600     |       6     | [0, 65535]
 DriftFactor  |     0   |       0     |      89     | [0, 200]
 Ticks/mm     |   170   |     164     |      93     | [0, 200]
-RevCount     | 32550   |   29500     |      88     | [0, [-32768, 32767]]
+RevCount     | 32550   |   29500     |      88     | [-32768, 32767]
 ```
 
 When finished, remember to enable the Gyro!.
