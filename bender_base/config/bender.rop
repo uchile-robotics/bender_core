@@ -71,14 +71,14 @@ RotVelMax 40             ; range [0, 65535],  RotVelMax (deg/sec)
 transVelMax 600          ; range [0, 65535],  TransVelMax (mm/sec)
 RotAcc 100               ; range [0, 65535],  RotAcc (deg/sec/sec)
 RotDecel 100             ; range [0, 65535],  RotDecel (deg/sec/sec)
-RotKp 50                 ; range [0, 65535],  RotKp
+RotKp 40                 ; range [0, 65535],  RotKp
 RotKv 20                 ; range [0, 65535],  RotKv
-RotKi 10                 ; range [0, 65535],  RotKi
+RotKi 0                  ; range [0, 65535],  RotKi
 TransAcc 300             ; range [0, 4000],  TransAcc (mm/sec/sec)
 TransDecel 300           ; range [0, 4000],  TransDecel (mm/sec/sec)
-TransKp 45               ; range [0, 65535],  TransKp
-TransKv 25               ; range [0, 65535],  TransKv
-TransKi 2                ; range [0, 65535],  TransKi
+TransKp 40               ; range [0, 65535],  TransKp
+TransKv 30               ; range [0, 65535],  TransKv
+TransKi 0                ; range [0, 65535],  TransKi
 Joystick 1               ; range [0, 1],  JoyStick Type 0=analog, 1=inductive
 JoySafe 0                ; range [0, 1],  JoySafe 0=SAFE, 1=UNSAFE
 JoyVelMax 700            ; range [0, 2200],  JoyVelMax (mm/sec)
