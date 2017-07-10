@@ -1,0 +1,2934 @@
+<sdf version='1.6'>
+  <world name='default'>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose frame=''>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <physics name='default_physics' default='0' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name='table_clone_0'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='surface'>
+          <pose frame=''>0 0 1 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>1.5 0.8 0.03</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.6</mu>
+                <mu2>0.6</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual1'>
+          <pose frame=''>0 0 1 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>1.5 0.8 0.03</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Wood</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='front_left_leg'>
+          <pose frame=''>0.68 0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='front_left_leg'>
+          <pose frame=''>0.68 0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='front_right_leg'>
+          <pose frame=''>0.68 -0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='front_right_leg'>
+          <pose frame=''>0.68 -0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='back_right_leg'>
+          <pose frame=''>-0.68 -0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='back_right_leg'>
+          <pose frame=''>-0.68 -0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='back_left_leg'>
+          <pose frame=''>-0.68 0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='back_left_leg'>
+          <pose frame=''>-0.68 0.38 0.5 0 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.02</radius>
+              <length>1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>3.23306 0.062335 0 0 0 -1.58073</pose>
+    </model>
+    <model name='bookshelf'>
+      <static>1</static>
+      <link name='link'>
+        <inertial>
+          <mass>1</mass>
+        </inertial>
+        <collision name='back'>
+          <pose frame=''>0 0.005 0.6 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.9 0.01 1.2</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual1'>
+          <pose frame=''>0 0.005 0.6 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.9 0.01 1.2</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Wood</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='left_side'>
+          <pose frame=''>0.45 -0.195 0.6 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.02 0.4 1.2</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual2'>
+          <pose frame=''>0.45 -0.195 0.6 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.02 0.4 1.2</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Wood</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='right_side'>
+          <pose frame=''>-0.45 -0.195 0.6 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.02 0.4 1.2</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual3'>
+          <pose frame=''>-0.45 -0.195 0.6 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.02 0.4 1.2</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Wood</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='bottom'>
+          <pose frame=''>0 -0.195 0.03 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.88 0.4 0.06</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual4'>
+          <pose frame=''>0 -0.195 0.03 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.88 0.4 0.06</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Wood</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='top'>
+          <pose frame=''>0 -0.195 1.19 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.88 0.4 0.02</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual5'>
+          <pose frame=''>0 -0.195 1.19 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.88 0.4 0.02</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Wood</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='low_shelf'>
+          <pose frame=''>0 -0.195 0.43 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.88 0.4 0.02</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual6'>
+          <pose frame=''>0 -0.195 0.43 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.88 0.4 0.02</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Wood</name>
+            </script>
+          </material>
+        </visual>
+        <collision name='high_shelf'>
+          <pose frame=''>0 -0.195 0.8 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.88 0.4 0.02</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual7'>
+          <pose frame=''>0 -0.195 0.8 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.88 0.4 0.02</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Wood</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>2.09409 -1.27469 0 0 -0 0</pose>
+    </model>
+    <state world_name='default'>
+      <sim_time>217 939000000</sim_time>
+      <real_time>218 776929893</real_time>
+      <wall_time>1499415674 80130971</wall_time>
+      <iterations>123630</iterations>
+      <model name='bender_model'>
+        <pose frame=''>-8.4e-05 1e-05 0.06872 -1e-06 2.9e-05 -8e-06</pose>
+        <scale>1 1 1</scale>
+        <link name='bender/base_link'>
+          <pose frame=''>-8.4e-05 1e-05 0.06872 -1e-06 2.9e-05 -8e-06</pose>
+          <velocity>-0 -0 9.5e-05 5e-06 3e-06 -1e-06</velocity>
+          <acceleration>-0.001025 -0.000116 0.000265 0.000647 -0.002437 0.001417</acceleration>
+          <wrench>-0.027786 -0.003131 0.007173 0 -0 0</wrench>
+        </link>
+        <link name='bender/face_link'>
+          <pose frame=''>-0.036102 0.026811 1.45052 -1e-06 0.750029 -8e-06</pose>
+          <velocity>3e-06 -7e-06 9.4e-05 5e-06 0.000718 1e-05</velocity>
+          <acceleration>-0.003531 -0.001489 -0.000336 0.322137 0.003496 -0.056196</acceleration>
+          <wrench>-0.001172 -0.000494 -0.000111 0 -0 0</wrench>
+        </link>
+        <link name='bender/front_left_wheel'>
+          <pose frame=''>0.117898 0.157509 0.099717 -1e-06 0.000327 -8e-06</pose>
+          <velocity>0 -0 9.5e-05 4e-06 2e-06 -0</velocity>
+          <acceleration>-0.000269 3e-06 0.000714 -2.7e-05 -0.002689 9.3e-05</acceleration>
+          <wrench>-0.013453 0.000137 0.035693 0 -0 0</wrench>
+        </link>
+        <link name='bender/front_right_wheel'>
+          <pose frame=''>0.117896 -0.157491 0.099717 -1e-06 0.000327 -8e-06</pose>
+          <velocity>0 -0 9.4e-05 4e-06 2e-06 -0</velocity>
+          <acceleration>-0.000209 6e-05 0.000517 -0.000599 -0.002088 0.000174</acceleration>
+          <wrench>-0.01047 0.002995 0.025866 0 -0 0</wrench>
+        </link>
+        <link name='bender/head_link'>
+          <pose frame=''>-0.036104 0.000831 1.38262 -1e-06 2.9e-05 -8e-06</pose>
+          <velocity>3e-06 -6e-06 9.4e-05 3e-06 5e-06 8e-06</velocity>
+          <acceleration>-0.003549 -0.000442 -7.7e-05 0.002835 -0.002748 -0.01076</acceleration>
+          <wrench>-0.000638 -8e-05 -1.4e-05 0 -0 0</wrench>
+        </link>
+        <link name='bender/l_elbow_pitch_link'>
+          <pose frame=''>-0.010945 0.293906 0.84832 0.006235 -0.021786 -0.004821</pose>
+          <velocity>1.7e-05 0.000567 0.000127 0.001601 3.8e-05 -0.001151</velocity>
+          <acceleration>0.002508 -0.01252 -0.004094 -2.3859 0.610341 -2.12261</acceleration>
+          <wrench>0.000361 -0.001803 -0.000589 0 -0 0</wrench>
+        </link>
+        <link name='bender/l_elbow_yaw_link'>
+          <pose frame=''>-0.023514 0.271945 0.795997 0.006295 -0.021774 -0.007014</pose>
+          <velocity>-8e-06 0.000669 8.9e-05 0.001579 3.8e-05 -0.000439</velocity>
+          <acceleration>3e-05 0.020544 -0.006672 3.03828 -1.30539 1.81344</acceleration>
+          <wrench>5e-06 0.003441 -0.001118 0 -0 0</wrench>
+        </link>
+        <link name='bender/l_ext_finger_link'>
+          <pose frame=''>-0.014294 0.292449 0.414262 0.512989 -0.018416 -0.006993</pose>
+          <velocity>-3.6e-05 0.001262 0.000119 0.001827 0.000397 -0.00048</velocity>
+          <acceleration>-0.0108 -0.027406 -0.001353 -0.471179 1.52176 -0.394192</acceleration>
+          <wrench>-0.001728 -0.004385 -0.000216 0 -0 0</wrench>
+        </link>
+        <link name='bender/l_int_finger_link'>
+          <pose frame=''>-0.042039 0.256243 0.413527 0.491744 0.018416 3.13461</pose>
+          <velocity>-4.5e-05 0.001282 6.3e-05 0.001619 6e-05 -0.000541</velocity>
+          <acceleration>0.013755 -0.013824 0.000985 -1.35635 -1.21501 -1.28934</acceleration>
+          <wrench>0.002201 -0.002212 0.000158 0 -0 0</wrench>
+        </link>
+        <link name='bender/l_shoulder_pitch_link'>
+          <pose frame=''>-0.009107 0.23543 1.22432 -0.00012 -0.010767 -7e-06</pose>
+          <velocity>2e-06 -6e-06 9.2e-05 6e-06 0.00011 -0.000173</velocity>
+          <acceleration>0.00091 -0.000772 -0.003641 -1.50707 -0.435802 -0.913911</acceleration>
+          <wrench>0.000156 -0.000132 -0.000625 0 -0 0</wrench>
+        </link>
+        <link name='bender/l_shoulder_roll_link'>
+          <pose frame=''>-0.032802 0.269329 1.19406 0.006232 -0.010783 -7e-06</pose>
+          <velocity>-0 -4e-06 9e-05 0.001663 4.4e-05 -0.000309</velocity>
+          <acceleration>-0.003275 -0.022454 -0.005442 -0.570466 1.47343 -1.73002</acceleration>
+          <wrench>-0.000527 -0.003616 -0.000876 0 -0 0</wrench>
+        </link>
+        <link name='bender/l_shoulder_yaw_link'>
+          <pose frame=''>0.002583 0.270177 1.05834 0.006282 -0.010751 -0.004759</pose>
+          <velocity>-6e-06 0.000213 8.9e-05 0.001606 4.9e-05 -0.001313</velocity>
+          <acceleration>-0.001972 0.020503 -0.005431 -1.55183 -1.18409 2.33821</acceleration>
+          <wrench>-0.000341 0.003549 -0.00094 0 -0 0</wrench>
+        </link>
+        <link name='bender/l_wrist_pitch_link'>
+          <pose frame=''>-0.035012 0.291245 0.493287 0.006286 -0.018419 -0.006993</pose>
+          <velocity>-3e-06 0.001152 0.000119 0.001538 0.000476 -0.000446</velocity>
+          <acceleration>-0.003592 -0.004816 -0.005043 1.17085 0.572529 1.21713</acceleration>
+          <wrench>-0.000654 -0.000877 -0.000918 0 -0 0</wrench>
+        </link>
+        <link name='bender/r_elbow_pitch_link'>
+          <pose frame=''>-0.016742 -0.239053 0.848726 0.019497 -0.027464 0.027134</pose>
+          <velocity>-0.000159 1.6e-05 3.4e-05 0.000116 -0.002308 0.000535</velocity>
+          <acceleration>0.021732 -9.3e-05 -0.04071 1.32288 0.985623 0.225642</acceleration>
+          <wrench>0.003129 -1.3e-05 -0.005861 0 -0 0</wrench>
+        </link>
+        <link name='bender/r_elbow_yaw_link'>
+          <pose frame=''>-0.028318 -0.260704 0.796045 0.019504 -0.027402 0.025757</pose>
+          <velocity>-4.9e-05 1.9e-05 6e-06 0.000113 0.000354 0.000569</velocity>
+          <acceleration>0.045302 0.01183 -0.066055 0.956781 -0.787266 -2.29686</acceleration>
+          <wrench>0.007588 0.001982 -0.011064 0 -0 0</wrench>
+        </link>
+        <link name='bender/r_ext_finger_link'>
+          <pose frame=''>-0.052071 -0.272129 0.414305 0.507029 -0.074252 -3.11386</pose>
+          <velocity>-0.00017 7e-05 2e-05 -0.000184 -8.2e-05 0.000405</velocity>
+          <acceleration>0.063694 -0.029342 -0.079627 -2.47203 1.34166 2.77751</acceleration>
+          <wrench>0.010191 -0.004695 -0.01274 0 -0 0</wrench>
+        </link>
+        <link name='bender/r_int_finger_link'>
+          <pose frame=''>-0.025613 -0.234986 0.412975 0.54001 0.074234 0.02775</pose>
+          <velocity>-0.000233 0 7.2e-05 0.000168 -0.000868 -0.003813</velocity>
+          <acceleration>0.037169 0.07385 -0.039381 0.604283 -0.924091 -1.27607</acceleration>
+          <wrench>0.005947 0.011816 -0.006301 0 -0 0</wrench>
+        </link>
+        <link name='bender/r_shoulder_pitch_link'>
+          <pose frame=''>-0.00911 -0.233768 1.22432 -2.6e-05 0.002842 -1.7e-05</pose>
+          <velocity>0.000109 5.2e-05 0.000164 -0.000496 0.008181 -0.000237</velocity>
+          <acceleration>-0.008827 0.009328 0.012889 -0.298729 0.505173 0.252343</acceleration>
+          <wrench>-0.001514 0.0016 0.002211 0 -0 0</wrench>
+        </link>
+        <link name='bender/r_shoulder_roll_link'>
+          <pose frame=''>-0.033209 -0.267669 1.19439 0.019437 0.002724 2.7e-05</pose>
+          <velocity>0.000164 -2.5e-05 0.000178 -0.00022 0.001234 0.00148</velocity>
+          <acceleration>0.016437 0.011872 -0.010422 1.26749 1.06291 2.80061</acceleration>
+          <wrench>0.002647 0.001912 -0.001678 0 -0 0</wrench>
+        </link>
+        <link name='bender/r_shoulder_yaw_link'>
+          <pose frame=''>0.00034 -0.265023 1.05822 0.019499 0.002169 0.027718</pose>
+          <velocity>6.5e-05 2e-05 8.4e-05 4.2e-05 0.000366 0.00123</velocity>
+          <acceleration>0.018679 -0.01217 -0.018518 -0.443821 -0.188938 -2.94638</acceleration>
+          <wrench>0.003234 -0.002107 -0.003206 0 -0 0</wrench>
+        </link>
+        <link name='bender/r_wrist_pitch_link'>
+          <pose frame=''>-0.038853 -0.237757 0.493553 0.019545 0.074223 0.027735</pose>
+          <velocity>-0.00023 5.5e-05 2.6e-05 0.000119 -0.000867 0.000529</velocity>
+          <acceleration>0.052446 0.039318 -0.080368 0.133505 -0.479924 -1.56317</acceleration>
+          <wrench>0.009549 0.007159 -0.014633 0 -0 0</wrench>
+        </link>
+        <link name='bender/rear_left_wheel'>
+          <pose frame=''>-0.132102 0.157511 0.099724 -1e-06 0.000322 -8e-06</pose>
+          <velocity>0 -0 9.6e-05 4e-06 1e-06 0</velocity>
+          <acceleration>-0.000311 -5e-06 7.2e-05 5.1e-05 -0.003099 0.000301</acceleration>
+          <wrench>-0.015566 -0.000253 0.003608 0 -0 0</wrench>
+        </link>
+        <link name='bender/rear_right_wheel'>
+          <pose frame=''>-0.132104 -0.157489 0.099724 -1e-06 0.000326 -8e-06</pose>
+          <velocity>0 -0 9.4e-05 3e-06 2e-06 1e-06</velocity>
+          <acceleration>-0.000147 2.7e-05 -0.000149 -0.000271 -0.001445 0.000492</acceleration>
+          <wrench>-0.007337 0.001355 -0.007434 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='bookshelf'>
+        <pose frame=''>1.21889 1.19547 0 0 0 -1.58933</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>1.21889 1.19547 0 0 0 -1.58933</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='ground_plane'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='pringles_red'>
+        <pose frame=''>0.602501 0.057462 0.751115 4e-06 2.9e-05 1.48604</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>0.602501 0.057462 0.751115 4e-06 2.9e-05 1.48604</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>-0 0 -0 -0 -0 -0</acceleration>
+          <wrench>-0 0 -0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='table_clone_0'>
+        <pose frame=''>1.21506 -0.017962 -0.376387 0 0 -3.13587</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>1.21506 -0.017962 -0.376387 0 0 -3.13587</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <light name='sun'>
+        <pose frame=''>0 0 10 0 -0 0</pose>
+      </light>
+    </state>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>-0.345042 2.80868 2.6504 -0 0.707054 -1.25435</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+    <model name='bender_model'>
+      <link name='bender/base_link'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0.007251 0.000236 0.470984 0 -0 0</pose>
+          <mass>27.0994</mass>
+          <inertia>
+            <ixx>4.83643</ixx>
+            <ixy>-0.00016498</ixy>
+            <ixz>0.015279</ixz>
+            <iyy>4.92345</iyy>
+            <iyz>0.000346575</iyz>
+            <izz>0.718139</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/base_link_fixed_joint_lump__bender/sensors/laser_front_link_collision'>
+          <pose frame=''>0.22 0 0.22 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.08</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/sensors/laser_rear_link_collision_1'>
+          <pose frame=''>-0.22 0 0.09 -3.14159 -0 3.14159</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.08</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode/>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/mobile_base_link_collision_2'>
+          <pose frame=''>0 0 0.075 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.4 0.3 0.15</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/mobile_base_link_collision_3'>
+          <pose frame=''>0 0 0.17 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.54 0.38 0.05</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/lower_torso_base_collision_4'>
+          <pose frame=''>-0.004058 0.000819 0.52 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.25 0.2 0.25</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/lower_torso_base_collision_5'>
+          <pose frame=''>-0.004058 0.000819 0.295 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.25 0.4 0.2</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/psu_base_collision_6'>
+          <pose frame=''>0.170942 0.000819 0.525 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.12 0.2 0.27</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.2</mu>
+                <mu2>0.2</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/upper_torso_base_collision_7'>
+          <pose frame=''>-0.004058 0.000819 0.678 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.25 0.2 0.3</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/upper_torso_base_collision_8'>
+          <pose frame=''>-0.004058 0.000819 1.048 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.25 0.3 0.44</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/upper_torso_base_collision_9'>
+          <pose frame=''>-0.004058 -0.179181 1.148 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.2 0.08 0.2</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/upper_torso_base_collision_10'>
+          <pose frame=''>-0.004058 0.180819 1.148 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.2 0.08 0.2</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/l_arm_base_link_collision_11'>
+          <pose frame=''>-0.009058 0.200819 1.138 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.07 0.06 0.17</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/neck_link_collision_12'>
+          <pose frame=''>-0.039058 0.000819 1.281 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.08 0.1 0.08</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='bender/base_link_fixed_joint_lump__bender/r_arm_base_link_collision_13'>
+          <pose frame=''>-0.009058 -0.199181 1.138 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.07 0.06 0.17</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/base_link_fixed_joint_lump__bender/sensors/laser_front_link_visual'>
+          <pose frame=''>0.22 0 0.22 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/sensors/hokuyo.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <visual name='bender/base_link_fixed_joint_lump__bender/sensors/laser_rear_link_visual_1'>
+          <pose frame=''>-0.22 0 0.09 -3.14159 -0 3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/sensors/hokuyo.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <visual name='bender/base_link_fixed_joint_lump__bender/mobile_base_link_visual_2'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/base.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='bender/base_link_fixed_joint_lump__bender/lower_torso_base_visual_3'>
+          <pose frame=''>-0.004058 0.000819 0.195 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/lower_torso.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='bender/base_link_fixed_joint_lump__bender/psu_base_visual_4'>
+          <pose frame=''>0.170942 0.000819 0.525 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.12 0.2 0.27</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grey</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='bender/base_link_fixed_joint_lump__bender/upper_torso_base_visual_5'>
+          <pose frame=''>-0.004058 0.000819 0.528 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/upper_torso.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='bender/base_link_fixed_joint_lump__bender/l_arm_base_link_visual_6'>
+          <pose frame=''>-0.009058 0.230819 1.138 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/shoulder_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='bender/base_link_fixed_joint_lump__bender/neck_link_visual_7'>
+          <pose frame=''>-0.009058 0.000819 1.261 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/neck.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='bender/base_link_fixed_joint_lump__bender/r_arm_base_link_visual_8'>
+          <pose frame=''>-0.009058 -0.229181 1.138 -1.5708 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/shoulder_base_link.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <velocity_decay/>
+        <sensor name='laser_front' type='ray'>
+          <visualize>0</visualize>
+          <update_rate>40</update_rate>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>1080</samples>
+                <resolution>1</resolution>
+                <min_angle>-2.01</min_angle>
+                <max_angle>2.01</max_angle>
+              </horizontal>
+              <vertical>
+                <samples>1</samples>
+                <min_angle>0</min_angle>
+                <max_angle>0</max_angle>
+              </vertical>
+            </scan>
+            <range>
+              <min>0.1</min>
+              <max>30</max>
+              <resolution>0.01</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </ray>
+          <plugin name='gazebo_ros_laser_front_hokuyo_controller' filename='libgazebo_ros_laser.so'>
+            <topicName>bender/sensors/laser_front/scan</topicName>
+            <frameName>bender/sensors/laser_front_link</frameName>
+            <robotNamespace>/</robotNamespace>
+          </plugin>
+          <pose frame=''>0.22 0 0.22 0 -0 0</pose>
+        </sensor>
+        <velocity_decay/>
+        <sensor name='laser_rear' type='ray'>
+          <visualize>0</visualize>
+          <update_rate>10</update_rate>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>445</samples>
+                <resolution>1</resolution>
+                <min_angle>-1.4</min_angle>
+                <max_angle>1.4</max_angle>
+              </horizontal>
+              <vertical>
+                <samples>1</samples>
+                <min_angle>0</min_angle>
+                <max_angle>0</max_angle>
+              </vertical>
+            </scan>
+            <range>
+              <min>0.1</min>
+              <max>4</max>
+              <resolution>0.01</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </ray>
+          <plugin name='gazebo_ros_laser_rear_hokuyo_controller' filename='libgazebo_ros_laser.so'>
+            <topicName>bender/sensors/laser_rear/scan</topicName>
+            <frameName>bender/sensors/laser_rear_link</frameName>
+            <robotNamespace>/</robotNamespace>
+          </plugin>
+          <pose frame=''>-0.22 0 0.09 -3.14159 -0 3.14159</pose>
+        </sensor>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='bender/front_left_wheel'>
+        <pose frame=''>0.11798 0.1575 0.031 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0.025 0 1.5708 -0 0</pose>
+          <mass>50</mass>
+          <inertia>
+            <ixx>0.135417</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.135417</iyy>
+            <iyz>0</iyz>
+            <izz>0.25</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/front_left_wheel_collision'>
+          <pose frame=''>0 0.025 0 -1.5708 0 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.05</length>
+              <radius>0.1</radius>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+06</kp>
+                <kd>100</kd>
+                <max_vel>1</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.8</mu2>
+                <fdir1>1 0 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='bender/front_left_wheel_visual'>
+          <pose frame=''>0 0 0 -3.14159 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/wheel.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='front_left_wheel_joint' type='revolute'>
+        <child>bender/front_left_wheel</child>
+        <parent>bender/base_link</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1e+16</lower>
+            <upper>1e+16</upper>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/front_right_wheel'>
+        <pose frame=''>0.11798 -0.1575 0.031 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 -0.025 0 1.5708 -0 0</pose>
+          <mass>50</mass>
+          <inertia>
+            <ixx>0.135417</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.135417</iyy>
+            <iyz>0</iyz>
+            <izz>0.25</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/front_right_wheel_collision'>
+          <pose frame=''>0 -0.025 0 -1.5708 0 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.05</length>
+              <radius>0.1</radius>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+06</kp>
+                <kd>100</kd>
+                <max_vel>1</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.8</mu2>
+                <fdir1>1 0 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='bender/front_right_wheel_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/wheel.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='front_right_wheel_joint' type='revolute'>
+        <child>bender/front_right_wheel</child>
+        <parent>bender/base_link</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1e+16</lower>
+            <upper>1e+16</upper>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/rear_left_wheel'>
+        <pose frame=''>-0.13202 0.1575 0.031 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 0.025 0 1.5708 -0 0</pose>
+          <mass>50</mass>
+          <inertia>
+            <ixx>0.135417</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.135417</iyy>
+            <iyz>0</iyz>
+            <izz>0.25</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/rear_left_wheel_collision'>
+          <pose frame=''>0 0.025 0 -1.5708 0 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.05</length>
+              <radius>0.1</radius>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+06</kp>
+                <kd>100</kd>
+                <max_vel>1</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.8</mu2>
+                <fdir1>1 0 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='bender/rear_left_wheel_visual'>
+          <pose frame=''>0 0 0 -3.14159 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/wheel.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='rear_left_wheel_joint' type='revolute'>
+        <child>bender/rear_left_wheel</child>
+        <parent>bender/base_link</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1e+16</lower>
+            <upper>1e+16</upper>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/rear_right_wheel'>
+        <pose frame=''>-0.13202 -0.1575 0.031 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0 -0.025 0 1.5708 -0 0</pose>
+          <mass>50</mass>
+          <inertia>
+            <ixx>0.135417</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.135417</iyy>
+            <iyz>0</iyz>
+            <izz>0.25</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/rear_right_wheel_collision'>
+          <pose frame=''>0 -0.025 0 -1.5708 0 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.05</length>
+              <radius>0.1</radius>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+06</kp>
+                <kd>100</kd>
+                <max_vel>1</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.8</mu2>
+                <fdir1>1 0 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='bender/rear_right_wheel_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/wheel.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>__default__</uri>
+              <name>__default__</name>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='rear_right_wheel_joint' type='revolute'>
+        <child>bender/rear_right_wheel</child>
+        <parent>bender/base_link</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1e+16</lower>
+            <upper>1e+16</upper>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/l_shoulder_pitch_link'>
+        <pose frame=''>-0.009058 0.235419 1.1556 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0.000233 0.019812 -0.013482 0 -0 0</pose>
+          <mass>0.17152</mass>
+          <inertia>
+            <ixx>0.00010991</ixx>
+            <ixy>-5.6413e-07</ixy>
+            <ixz>1.0935e-06</ixz>
+            <iyy>0.00010993</iyy>
+            <iyz>1.8807e-06</iyz>
+            <izz>8.8167e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/l_shoulder_pitch_link_collision'>
+          <pose frame=''>0 0.025 -0.01 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.07</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/l_shoulder_pitch_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/shoulder_pitch.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_shoulder_pitch_joint' type='revolute'>
+        <child>bender/l_shoulder_pitch_link</child>
+        <parent>bender/base_link</parent>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-1.53397</lower>
+            <upper>1.94815</upper>
+            <effort>10.85</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/l_shoulder_roll_link'>
+        <pose frame=''>-0.033078 0.269319 1.1256 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0.046779 -9e-06 -0.11466 0 -0 0</pose>
+          <mass>0.16104</mass>
+          <inertia>
+            <ixx>0.00050901</ixx>
+            <ixy>6.2439e-09</ixy>
+            <ixz>0.00010534</ixz>
+            <iyy>0.00055051</iyy>
+            <iyz>-6.7534e-08</iyz>
+            <izz>0.00011428</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/l_shoulder_roll_link_collision'>
+          <pose frame=''>0.04 0 -0.075 0 -0.25 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.035 0.18</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/l_shoulder_roll_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/shoulder_roll.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_shoulder_roll_joint' type='revolute'>
+        <child>bender/l_shoulder_roll_link</child>
+        <parent>bender/l_shoulder_pitch_link</parent>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-0.23776</lower>
+            <upper>1.51096</upper>
+            <effort>10.85</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/l_shoulder_yaw_link'>
+        <pose frame=''>0.000842 0.269319 0.9895 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.017828 -0.000166 -0.14148 0 -0 0</pose>
+          <mass>0.17312</mass>
+          <inertia>
+            <ixx>0.0008473</ixx>
+            <ixy>7.9313e-08</ixy>
+            <ixz>3.4804e-05</ixz>
+            <iyy>0.00084882</iyy>
+            <iyz>-3.1674e-06</iyz>
+            <izz>6.5527e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/l_shoulder_yaw_link_collision'>
+          <pose frame=''>-0.015 0 -0.115 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.035 0.23</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/l_shoulder_yaw_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/shoulder_yaw.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_shoulder_yaw_joint' type='revolute'>
+        <child>bender/l_shoulder_yaw_link</child>
+        <parent>bender/l_shoulder_roll_link</parent>
+        <axis>
+          <xyz>0 0 -1</xyz>
+          <limit>
+            <lower>-1.48284</lower>
+            <upper>1.38057</upper>
+            <effort>4.44054</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/l_elbow_pitch_link'>
+        <pose frame=''>-0.015056 0.291664 0.7795 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0.006745 -0.022124 -0.059507 0 -0 0</pose>
+          <mass>0.14398</mass>
+          <inertia>
+            <ixx>0.00012531</ixx>
+            <ixy>1.5127e-07</ixy>
+            <ixz>3.5125e-06</ixz>
+            <iyy>0.00011254</iyy>
+            <iyz>-1.3346e-06</iyz>
+            <izz>8.6928e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/l_elbow_pitch_link_collision'>
+          <pose frame=''>0.015 -0.025 -0.05 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.07 0.1</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/l_elbow_pitch_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/elbow_pitch.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_elbow_pitch_joint' type='revolute'>
+        <child>bender/l_elbow_pitch_link</child>
+        <parent>bender/l_shoulder_yaw_link</parent>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-1.0431</lower>
+            <upper>1.90213</upper>
+            <effort>10.85</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/l_elbow_yaw_link'>
+        <pose frame=''>-0.028656 0.269319 0.7276 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.0196 8.5e-05 -0.17771 0 -0 0</pose>
+          <mass>0.1675</mass>
+          <inertia>
+            <ixx>0.0017359</ixx>
+            <ixy>-4.8507e-09</ixy>
+            <ixz>3.1814e-05</ixz>
+            <iyy>0.0017441</iyy>
+            <iyz>2.1946e-07</iyz>
+            <izz>5.881e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/l_elbow_yaw_link_collision'>
+          <pose frame=''>-0.015 0 -0.15 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.035 0.32</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/l_elbow_yaw_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/elbow_yaw.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_elbow_yaw_joint' type='revolute'>
+        <child>bender/l_elbow_yaw_link</child>
+        <parent>bender/l_elbow_pitch_link</parent>
+        <axis>
+          <xyz>0 0 -1</xyz>
+          <limit>
+            <lower>-1.20161</lower>
+            <upper>1.30387</upper>
+            <effort>4.44054</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/l_wrist_pitch_link'>
+        <pose frame=''>-0.046877 0.286634 0.4251 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>3.9e-05 -0.017418 -0.05204 0 -0 0</pose>
+          <mass>0.18207</mass>
+          <inertia>
+            <ixx>0.000168472</ixx>
+            <ixy>-2.80655e-11</ixy>
+            <ixz>-2.03417e-07</ixz>
+            <iyy>0.000108722</iyy>
+            <iyz>6.41597e-07</iyz>
+            <izz>0.000117584</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/l_wrist_pitch_link_collision'>
+          <pose frame=''>0 -0.02 -0.05 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.04 0.08 0.07</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/l_wrist_pitch_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/wrist_pitch.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_wrist_pitch_joint' type='revolute'>
+        <child>bender/l_wrist_pitch_link</child>
+        <parent>bender/l_elbow_yaw_link</parent>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-1.07378</lower>
+            <upper>1.22717</upper>
+            <effort>3.1</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/l_ext_finger_link'>
+        <pose frame=''>-0.027627 0.287484 0.3457 0.523599 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.018 -0.03 -0.07 -0.523599 0 0</pose>
+          <mass>0.16</mass>
+          <inertia>
+            <ixx>0.000357667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.000374667</iyy>
+            <iyz>0</iyz>
+            <izz>4.96667e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/l_ext_finger_link_collision'>
+          <pose frame=''>0 0 0.011 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/collision/finger.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+06</kp>
+                <kd>1</kd>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='bender/l_ext_finger_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/one_finger.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/DarkGrey</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>1</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_ext_finger_joint' type='revolute'>
+        <child>bender/l_ext_finger_link</child>
+        <parent>bender/l_wrist_pitch_link</parent>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-0.02556</lower>
+            <upper>0.69029</upper>
+            <effort>3.1</effort>
+            <velocity>10</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.2</damping>
+            <friction>1</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/l_int_finger_link'>
+        <pose frame=''>-0.055127 0.251084 0.3457 0.523599 0 -3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.018 -0.03 -0.07 -0.523599 0 0</pose>
+          <mass>0.16</mass>
+          <inertia>
+            <ixx>0.000357667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.000374667</iyy>
+            <iyz>0</iyz>
+            <izz>4.96667e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/l_int_finger_link_collision'>
+          <pose frame=''>0.005 0 0.011 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/collision/finger.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+06</kp>
+                <kd>1</kd>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='bender/l_int_finger_link_visual'>
+          <pose frame=''>0.008 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/one_finger.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/DarkGrey</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>1</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='l_int_finger_joint' type='revolute'>
+        <child>bender/l_int_finger_link</child>
+        <parent>bender/l_wrist_pitch_link</parent>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-0.02556</lower>
+            <upper>0.69029</upper>
+            <effort>3.1</effort>
+            <velocity>10</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.2</damping>
+            <friction>1</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/head_link'>
+        <pose frame=''>-0.036058 0.000819 1.3139 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.012141 -1.8e-05 0.041401 0 -0 0</pose>
+          <mass>0.17983</mass>
+          <inertia>
+            <ixx>0.00015925</ixx>
+            <ixy>4.0867e-07</ixy>
+            <ixz>-7.9102e-06</ixz>
+            <iyy>0.0001892</iyy>
+            <iyz>-6.1427e-08</iyz>
+            <izz>8.7881e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/head_link_collision'>
+          <pose frame=''>-0.01 0 0.05 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.08 0.06 0.1</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/head_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/head.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='head_yaw_joint' type='revolute'>
+        <child>bender/head_link</child>
+        <parent>bender/base_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-1.8919</lower>
+            <upper>1.8919</upper>
+            <effort>4.44054</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/face_link'>
+        <pose frame=''>-0.036058 0.026799 1.3818 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0.046115 -0.026111 0.10189 0 -0 0</pose>
+          <mass>0.33187</mass>
+          <inertia>
+            <ixx>0.0013461</ixx>
+            <ixy>-2.8029e-07</ixy>
+            <ixz>-9.224e-05</ixz>
+            <iyy>0.00080978</iyy>
+            <iyz>-6.6351e-07</iyz>
+            <izz>0.00074443</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/face_link_collision'>
+          <pose frame=''>0.05 -0.03 0.08 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.18 0.18</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/face_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/face.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <sensor name='rgbd_head' type='depth'>
+          <always_on>1</always_on>
+          <update_rate>5</update_rate>
+          <camera name='__default__'>
+            <horizontal_fov>0.994838</horizontal_fov>
+            <image>
+              <format>B8G8R8</format>
+              <width>640</width>
+              <height>480</height>
+            </image>
+            <clip>
+              <near>0.01</near>
+              <far>5</far>
+            </clip>
+          </camera>
+          <plugin name='rgbd_head_controller' filename='libgazebo_ros_openni_kinect.so'>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>5.0</updateRate>
+            <cameraName>rgbd_head</cameraName>
+            <imageTopicName>/bender/sensors/rgbd_head/rgb/image_raw</imageTopicName>
+            <cameraInfoTopicName>/bender/sensors/rgbd_head/rgb/camera_info</cameraInfoTopicName>
+            <depthImageTopicName>/bender/sensors/rgbd_head/depth/image_raw</depthImageTopicName>
+            <depthImageCameraInfoTopicName>/bender/sensors/rgbd_head/depth/camera_info</depthImageCameraInfoTopicName>
+            <pointCloudTopicName>/bender/sensors/rgbd_head/depth/points</pointCloudTopicName>
+            <frameName>bender/sensors/rgbd_head_depth_optical_frame</frameName>
+            <baseline>0.1</baseline>
+            <distortion_k1>0.0</distortion_k1>
+            <distortion_k2>0.0</distortion_k2>
+            <distortion_k3>0.0</distortion_k3>
+            <distortion_t1>0.0</distortion_t1>
+            <distortion_t2>0.0</distortion_t2>
+            <pointCloudCutoff>0.35</pointCloudCutoff>
+            <pointCloudCutoffMax>2.0</pointCloudCutoffMax>
+            <robotNamespace>/</robotNamespace>
+          </plugin>
+          <pose frame=''>0.05332 0.0208 0.14105 0 0.031904 0</pose>
+        </sensor>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='head_pitch_joint' type='revolute'>
+        <child>bender/face_link</child>
+        <parent>bender/head_link</parent>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-0.39372</lower>
+            <upper>0.88459</upper>
+            <effort>4.44054</effort>
+            <velocity>1</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/r_shoulder_pitch_link'>
+        <pose frame=''>-0.009058 -0.233781 1.1556 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0.000233 0.019812 -0.013482 0 -0 0</pose>
+          <mass>0.17152</mass>
+          <inertia>
+            <ixx>0.00010991</ixx>
+            <ixy>-5.6413e-07</ixy>
+            <ixz>1.0935e-06</ixz>
+            <iyy>0.00010993</iyy>
+            <iyz>1.8807e-06</iyz>
+            <izz>8.8167e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/r_shoulder_pitch_link_collision'>
+          <pose frame=''>0 -0.025 -0.01 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.07</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/r_shoulder_pitch_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 -0 -3.14159</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/shoulder_pitch.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_shoulder_pitch_joint' type='revolute'>
+        <child>bender/r_shoulder_pitch_link</child>
+        <parent>bender/base_link</parent>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-1.53397</lower>
+            <upper>1.94815</upper>
+            <effort>10.85</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/r_shoulder_roll_link'>
+        <pose frame=''>-0.033078 -0.267681 1.1256 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0.046779 -9e-06 -0.11466 0 -0 0</pose>
+          <mass>0.16104</mass>
+          <inertia>
+            <ixx>0.00050901</ixx>
+            <ixy>6.2439e-09</ixy>
+            <ixz>0.00010534</ixz>
+            <iyy>0.00055051</iyy>
+            <iyz>-6.7534e-08</iyz>
+            <izz>0.00011428</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/r_shoulder_roll_link_collision'>
+          <pose frame=''>0.04 0 -0.075 0 -0.25 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.035 0.18</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/r_shoulder_roll_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/shoulder_roll.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_shoulder_roll_joint' type='revolute'>
+        <child>bender/r_shoulder_roll_link</child>
+        <parent>bender/r_shoulder_pitch_link</parent>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-0.23776</lower>
+            <upper>1.51096</upper>
+            <effort>10.85</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/r_shoulder_yaw_link'>
+        <pose frame=''>0.000842 -0.267681 0.9895 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.017828 -0.000166 -0.14148 0 -0 0</pose>
+          <mass>0.17312</mass>
+          <inertia>
+            <ixx>0.0008473</ixx>
+            <ixy>7.9313e-08</ixy>
+            <ixz>3.4804e-05</ixz>
+            <iyy>0.00084882</iyy>
+            <iyz>-3.1674e-06</iyz>
+            <izz>6.5527e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/r_shoulder_yaw_link_collision'>
+          <pose frame=''>-0.015 0 -0.115 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.035 0.23</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/r_shoulder_yaw_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/shoulder_yaw.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_shoulder_yaw_joint' type='revolute'>
+        <child>bender/r_shoulder_yaw_link</child>
+        <parent>bender/r_shoulder_roll_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-1.48284</lower>
+            <upper>1.38057</upper>
+            <effort>4.44054</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/r_elbow_pitch_link'>
+        <pose frame=''>-0.015056 -0.245336 0.7795 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>0.006745 -0.022124 -0.059507 0 -0 0</pose>
+          <mass>0.14398</mass>
+          <inertia>
+            <ixx>0.00012531</ixx>
+            <ixy>1.5127e-07</ixy>
+            <ixz>3.5125e-06</ixz>
+            <iyy>0.00011254</iyy>
+            <iyz>-1.3346e-06</iyz>
+            <izz>8.6928e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/r_elbow_pitch_link_collision'>
+          <pose frame=''>0.015 -0.025 -0.05 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.07 0.1</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/r_elbow_pitch_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/elbow_pitch.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_elbow_pitch_joint' type='revolute'>
+        <child>bender/r_elbow_pitch_link</child>
+        <parent>bender/r_shoulder_yaw_link</parent>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-1.0431</lower>
+            <upper>1.90213</upper>
+            <effort>10.85</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/r_elbow_yaw_link'>
+        <pose frame=''>-0.028656 -0.267681 0.7276 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.0196 8.5e-05 -0.17771 0 -0 0</pose>
+          <mass>0.1675</mass>
+          <inertia>
+            <ixx>0.0017359</ixx>
+            <ixy>-4.8507e-09</ixy>
+            <ixz>3.1814e-05</ixz>
+            <iyy>0.0017441</iyy>
+            <iyz>2.1946e-07</iyz>
+            <izz>5.881e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/r_elbow_yaw_link_collision'>
+          <pose frame=''>-0.015 0 -0.15 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.05 0.035 0.32</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/r_elbow_yaw_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/elbow_yaw.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_elbow_yaw_joint' type='revolute'>
+        <child>bender/r_elbow_yaw_link</child>
+        <parent>bender/r_elbow_pitch_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-1.20161</lower>
+            <upper>1.30387</upper>
+            <effort>4.44054</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/r_wrist_pitch_link'>
+        <pose frame=''>-0.046877 -0.250366 0.4251 0 -0 0</pose>
+        <inertial>
+          <pose frame=''>3.9e-05 -0.017418 -0.05204 0 -0 0</pose>
+          <mass>0.18207</mass>
+          <inertia>
+            <ixx>0.000168472</ixx>
+            <ixy>-2.80655e-11</ixy>
+            <ixz>-2.03417e-07</ixz>
+            <iyy>0.000108722</iyy>
+            <iyz>6.41597e-07</iyz>
+            <izz>0.000117584</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/r_wrist_pitch_link_collision'>
+          <pose frame=''>0 -0.02 -0.05 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.04 0.08 0.07</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='bender/r_wrist_pitch_link_visual'>
+          <pose frame=''>0 0 0 -1.5708 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/wrist_pitch.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_wrist_pitch_joint' type='revolute'>
+        <child>bender/r_wrist_pitch_link</child>
+        <parent>bender/r_elbow_yaw_link</parent>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-1.07378</lower>
+            <upper>1.22717</upper>
+            <effort>3.1</effort>
+            <velocity>5.23599</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.15</damping>
+            <friction>0.3</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/r_ext_finger_link'>
+        <pose frame=''>-0.055127 -0.285916 0.3457 0.523599 0 -3.14159</pose>
+        <inertial>
+          <pose frame=''>-0.018 -0.03 -0.07 -0.523599 0 0</pose>
+          <mass>0.16</mass>
+          <inertia>
+            <ixx>0.000357667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.000374667</iyy>
+            <iyz>0</iyz>
+            <izz>4.96667e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/r_ext_finger_link_collision'>
+          <pose frame=''>0.0355 0 0.011 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/collision/finger.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+06</kp>
+                <kd>1</kd>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='bender/r_ext_finger_link_visual'>
+          <pose frame=''>0.008 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/two_finger.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/DarkGrey</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>1</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_ext_finger_joint' type='revolute'>
+        <child>bender/r_ext_finger_link</child>
+        <parent>bender/r_wrist_pitch_link</parent>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-0.02556</lower>
+            <upper>0.69029</upper>
+            <effort>3.1</effort>
+            <velocity>10</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.2</damping>
+            <friction>1</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <link name='bender/r_int_finger_link'>
+        <pose frame=''>-0.027627 -0.249516 0.3457 0.523599 -0 0</pose>
+        <inertial>
+          <pose frame=''>-0.018 -0.03 -0.07 -0.523599 0 0</pose>
+          <mass>0.16</mass>
+          <inertia>
+            <ixx>0.000357667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.000374667</iyy>
+            <iyz>0</iyz>
+            <izz>4.96667e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='bender/r_int_finger_link_collision'>
+          <pose frame=''>0.0275 0 0.011 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/collision/finger.stl</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>1e+06</kp>
+                <kd>1</kd>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='bender/r_int_finger_link_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/giovanni/uchile_ws/ros/bender/base_ws/src/bender_core/bender_description/meshes/visual/two_finger.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/DarkGrey</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <gravity>1</gravity>
+        <velocity_decay/>
+        <self_collide>1</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='r_int_finger_joint' type='revolute'>
+        <child>bender/r_int_finger_link</child>
+        <parent>bender/r_wrist_pitch_link</parent>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-0.02556</lower>
+            <upper>0.69029</upper>
+            <effort>3.1</effort>
+            <velocity>10</velocity>
+          </limit>
+          <dynamics>
+            <damping>0.2</damping>
+            <friction>1</friction>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+      </joint>
+      <plugin name='skid_steer_drive_controller' filename='libgazebo_ros_skid_steer_drive.so'>
+        <robotNamespace>bender/nav</robotNamespace>
+        <updateRate>50.0</updateRate>
+        <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
+        <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
+        <leftRearJoint>rear_left_wheel_joint</leftRearJoint>
+        <rightRearJoint>rear_right_wheel_joint</rightRearJoint>
+        <wheelSeparation>0.4</wheelSeparation>
+        <wheelDiameter>0.215</wheelDiameter>
+        <robotBaseFrame>bender/base_link</robotBaseFrame>
+        <torque>400</torque>
+        <MaxForce>10.0</MaxForce>
+        <commandTopic>base/cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>bender/odom</odometryFrame>
+        <broadcastTF>1</broadcastTF>
+      </plugin>
+      <static>0</static>
+      <plugin name='ros_control' filename='libgazebo_ros_control.so'>
+        <robotNamespace>bender/</robotNamespace>
+      </plugin>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+    </model>
+    <model name='pringles_red'>
+      <pose frame=''>0.72043 0.057439 0.11525 0 -0 0</pose>
+      <link name='link'>
+        <inertial>
+          <mass>0.2</mass>
+          <inertia>
+            <ixx>0.000908</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.000908</iyy>
+            <iyz>0</iyz>
+            <izz>0.0002025</izz>
+          </inertia>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <cylinder>
+              <radius>0.04</radius>
+              <length>0.235</length>
+            </cylinder>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <min_depth>0.005</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.9</mu>
+                <mu2>0.9</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <pose frame=''>0 0 0 3.1415 -0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.04</radius>
+              <length>0.235</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://pringles_red/material/scripts</uri>
+              <uri>model://pringles_red/material/textures</uri>
+              <name>Custom/PringlesRed</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+  </world>
+</sdf>
