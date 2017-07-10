@@ -16,7 +16,7 @@ r_arm_controller:
         params: [ [15, 5, 0],[15, 5, 0], [15, 5, 0]]
       manipulation:
         joint_names: [ 'r_shoulder_pitch_joint','r_shoulder_roll_joint', 'r_elbow_pitch_joint']
-        state: [0.0,0.0,0.0,1.5,0.0,0.0]
+        state: [0.0,0.0,0.0,1.2,0.0,0.0]
         params: [ [15, 18, 5], [15, 10, 5], [ 16, 12, 5]]
     checkpoint_list:
       home:
