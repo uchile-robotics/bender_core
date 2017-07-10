@@ -88,20 +88,20 @@ class ArmController(JointTrajectoryActionController):
             rate.sleep()
 
     def gain_scheduling_loop(self):
-        #rate = rospy.Rate(1.0)
+        rate = rospy.Rate(1.0)
         rospy.sleep(1.0) # sleep for get a valid joint state msg
         # set initial operation point
         self.gain_scheduling.init(self.msg.actual.positions) # TODO Data race!
-        # while self.running and not rospy.is_shutdown():
-        #   # check update
-        #   if self.gain_scheduling.update(self.msg.actual.positions): # TODO Data race!
-        #     control_params = self.gain_scheduling.get_params()
-        #     for motor_name, motor_params in control_params.params.items():
-        #       # update motor params
-        #       rospy.loginfo('Setting {} with params {}'.format(motor_name, motor_params))
-        #       self.joint_to_controller[motor_name].update_control_params(motor_params)
+        while self.running and not rospy.is_shutdown():
+            # check update
+            if self.gain_scheduling.update(self.msg.actual.positions): # TODO Data race!
+                control_params = self.gain_scheduling.get_params()
+                for motor_name, motor_params in control_params.params.items():
+                    # update motor params
+                    rospy.loginfo('Setting {} with params {}'.format(motor_name, motor_params))
+                    self.joint_to_controller[motor_name].update_control_params(motor_params)
 
-        #   rate.sleep()
+            rate.sleep()
 
     def update_gains(self, positions):
         if self.gain_scheduling.update(positions):
