@@ -48,7 +48,7 @@ r_shoulder_yaw_controller:
     type: JointPositionController
   joint_name: r_shoulder_yaw_joint
   joint_speed: 1.0
-  joint_compliance_slope: 32
+  joint_compliance_slope: 52
   joint_compliance_margin: 0
   joint_compliance_punch: 0
   joint_torque_limit: 1.0
