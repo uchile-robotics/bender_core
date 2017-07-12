@@ -34,7 +34,7 @@ ip_address: ""
 ip_port: 10940
 serial_baud: 115200
 allow_unsafe_settings: false
-cluster: 1
+cluster: 2
 time_offset: 0.0
 get_detailed_status: false
 publish_intensity: false
