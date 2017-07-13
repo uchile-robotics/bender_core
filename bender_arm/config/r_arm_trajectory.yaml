@@ -14,6 +14,10 @@ r_arm_controller:
         joint_names: [ 'r_shoulder_pitch_joint', 'r_shoulder_roll_joint' , 'r_elbow_pitch_joint']
         state: [0.0,0.0,0.0,0.0,0.0,0.0]
         params: [ [15, 5, 0],[15, 5, 0], [15, 5, 0]]
+      pre_manipulation:
+        joint_names: [ 'r_shoulder_pitch_joint', 'r_shoulder_roll_joint','r_elbow_pitch_joint']
+        state: [0.0,0.0,0.0,1.2,0.0,0.0]
+        params: [ [15, 10, 2], [15, 8, 2], [ 15, 10, 2]]
       manipulation:
         joint_names: [ 'r_shoulder_pitch_joint','r_shoulder_roll_joint', 'r_elbow_pitch_joint']
         state: [0.0,0.0,0.0,1.2,0.0,0.0]
