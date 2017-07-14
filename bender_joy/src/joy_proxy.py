@@ -137,7 +137,7 @@ class JoystickProxy(object):
 
     def callback(self, msg):
         # forward if msg is not proxy related
-        if len(msg.buttons) < len(msg.buttons) and not msg.buttons[self.proxy_button_id]:
+        if self.proxy_button_id < len(msg.buttons) and not msg.buttons[self.proxy_button_id]:
             self.forward(msg)
             return
 
