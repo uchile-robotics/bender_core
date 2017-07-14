@@ -119,7 +119,7 @@ class JoystickProxy(object):
         # list queried channels
         queried_channels = []
         for channel_name, channel in self.channels.items():
-            if msg.buttons[channel['id']]:
+            if channel['id'] < len(msg.buttons) and msg.buttons[channel['id']]:
                 queried_channels.append(channel_name)
 
         # no channel
@@ -136,9 +136,8 @@ class JoystickProxy(object):
 
 
     def callback(self, msg):
-        
         # forward if msg is not proxy related
-        if not msg.buttons[self.proxy_button_id]:
+        if len(msg.buttons) < len(msg.buttons) and not msg.buttons[self.proxy_button_id]:
             self.forward(msg)
             return
 
