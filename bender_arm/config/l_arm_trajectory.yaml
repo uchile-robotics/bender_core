@@ -14,10 +14,14 @@ l_arm_controller:
         joint_names: [ 'l_shoulder_pitch_joint', 'l_shoulder_roll_joint','l_elbow_pitch_joint']
         state: [0.0,0.0,0.0,0.0,0.0,0.0]
         params: [ [15, 5, 0], [15, 5, 0], [15, 5, 0]]
+      pre_manipulation:
+        joint_names: [ 'l_shoulder_pitch_joint', 'l_shoulder_roll_joint','l_elbow_pitch_joint']
+        state: [0.0,0.0,0.0,0.9,0.0,0.0]
+        params: [ [15, 10, 5], [15, 8, 5], [ 16, 8, 5]]
       manipulation:
         joint_names: [ 'l_shoulder_pitch_joint', 'l_shoulder_roll_joint','l_elbow_pitch_joint']
         state: [0.0,0.0,0.0,1.2,0.0,0.0]
-        params: [ [15, 18, 5], [15, 10, 5], [ 16, 12, 5]]
+        params: [ [16, 15, 5], [16, 10, 5], [ 16, 12, 5]]
     checkpoint_list:
       home:
         state: [0.0,0.0,0.0,0.0,0.0,0.0]
