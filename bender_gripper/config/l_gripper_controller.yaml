@@ -5,9 +5,9 @@ l_ext_finger_controller:
     type: JointPositionController
   joint_name: l_ext_finger_joint
   joint_speed: 1.0
-  joint_compliance_slope: 128
+  joint_compliance_slope: 35
   joint_compliance_margin: 0
-  joint_compliance_punch: 0
+  joint_compliance_punch: 10
   joint_torque_limit: 1.0
   torque_enable_init: False
   enable_pid: True
@@ -28,9 +28,9 @@ l_int_finger_controller:
     type: JointPositionController
   joint_name: l_int_finger_joint
   joint_speed: 1.0
-  joint_compliance_slope: 128
+  joint_compliance_slope: 35
   joint_compliance_margin: 0
-  joint_compliance_punch: 0
+  joint_compliance_punch: 10
   joint_torque_limit: 1.0
   torque_enable_init: False
   enable_pid: True
