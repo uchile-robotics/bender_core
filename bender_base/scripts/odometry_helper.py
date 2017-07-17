@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = 'Diego Baño, Matías Pavez'
-__email__ = 'diego.bano@ug.uchile.cl, matias.pavez@ing.uchile.cl'
+__author__ = 'Matías Pavez'
+__email__ = 'matias.pavez@ing.uchile.cl'
 
 import rospy
 import math
