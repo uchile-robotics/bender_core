@@ -205,18 +205,22 @@ class GainSched():
     def update(self, actual_positions,joint_names):
         # get current state
         current_state = np.array(actual_positions)
-        rospy.loginfo('Actual positions: {0}'.format(actual_positions))
-
+        
         self.updated=False
 
         gain_params= ControlParams()
-
+        rospy.loginfo('joint_names: {0}'.format(joint_names))
         for jop_name, jop in self.joint_gain.items():
-
+            #rospy.loginfo('STAGE1')
+            rospy.loginfo('jop_name: {0}'.format(jop_name))
+            rospy.loginfo('jop: {0}'.format(jop.name))
             for idx in range(len(joint_names)):
+                rospy.loginfo('STAGE2')
                 if joint_names[idx]==jop_name:
+                    rospy.loginfo('STAGE3')
                     gain=self.joint_gain[jop_name].get_gain(actual_positions[idx])
                     if (gain!=[0,0,0]):
+                        rospy.loginfo('STAGE4')
                         self.motor_params.params[jop_name]=gain
                         self.updated=True
 
@@ -326,9 +330,12 @@ class JointGain():
         self.states = states # numpy array
         self.gains = gains # numpy array
     def get_gain(self,actual_state):
+        rospy.loginfo('joint gain {0}'.format(self.name))
+        rospy.loginfo('joint gain {0}'.format(self.states))
+        rospy.loginfo('joint gain {0}'.format(self.gains))
         for i in range(len(self.states)):
-            dist=np.linalg.norm(self.states[i] - actual_state)
-            if(dist<2.0):
+            dist=abs(self.states[i] - actual_state)
+            if(dist<0.2):
                 return self.gains[i]
         return [0,0,0]
 

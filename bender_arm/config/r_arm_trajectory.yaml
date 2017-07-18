@@ -31,4 +31,18 @@ r_arm_controller:
         state: [0.0,0.0,0.0,1.5,0.0,0.0]
       carry:
         state: [0.0,0.0,0.0,1.5,0.0,0.0]
+    joint_ops:
+      shou_pitch:
+        name: 'r_shoulder_pitch_joint'
+        states: [-0.5,0.0,0.5,1.0]
+        params: [[15, 8, 0],[15, 5, 0],[15, 8, 0],[17, 15, 0]]
+      shou_roll:
+        name: 'r_shoulder_roll_joint'
+        states: [0.0,0.3,0.6,1.0]
+        params: [[15, 5, 0],[15, 5, 0],[15, 5, 0],[15, 5, 0]]
+      elb_pitch:
+        name: 'r_elbow_pitch_joint'
+        states: [0.0,0.5,1.0,1.5]
+        params: [[15, 5, 0],[15, 5, 0],[15, 5, 0],[15, 5, 0]]
+
 
