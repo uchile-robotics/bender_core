@@ -27,6 +27,7 @@ class ArmController(JointTrajectoryActionController):
         self.sensor_joint_state.effort = [0.0]*self.num_joints
         # Gain scheduling
         self.gain_scheduling = GainScheduling(threshold = 0.5)
+        self.gain_sched = GainSched(threshold = 0.2)
         #self.checkpoint = Checkpoint(controller_namespace=controller_namespace)
       
     def initialize(self):
@@ -43,6 +44,14 @@ class ArmController(JointTrajectoryActionController):
             #print control.params
             op = OperationPoint(op_name, np.array(params['state']), control)
             self.gain_scheduling.add_operation_point(op)
+
+        joint_gains = rospy.get_param(self.controller_namespace + '/joint_trajectory_action_node/joint_ops')
+        for jop_name, jop in joint_gains.items():
+            joint_gain = JointGain(jop_name,np.array(jop['states']),np.array(jop['params']))
+            rospy.loginfo('New joint gain loaded: {0}'.format(joint_gain))
+            self.gain_sched.add_joint_gain(joint_gain)
+
+
 
         # Checkpoint manager params
         # chp_params = rospy.get_param(self.controller_namespace + '/joint_trajectory_action_node/checkpoint_list')
@@ -92,14 +101,17 @@ class ArmController(JointTrajectoryActionController):
         rospy.sleep(1.0) # sleep for get a valid joint state msg
         # set initial operation point
         self.gain_scheduling.init(self.msg.actual.positions) # TODO Data race!
+        self.gain_sched.init(self.gain_scheduling.get_params())
         while self.running and not rospy.is_shutdown():
             # check update
             if self.gain_scheduling.update(self.msg.actual.positions): # TODO Data race!
                 control_params = self.gain_scheduling.get_params()
                 for motor_name, motor_params in control_params.params.items():
                     # update motor params
-                    rospy.loginfo('Setting {} with params {}'.format(motor_name, motor_params))
+                    #rospy.loginfo('Setting {} with params {}'.format(motor_name, motor_params))
                     self.joint_to_controller[motor_name].update_control_params(motor_params)
+            if self.gain_sched.update(self.msg.actual.positions,self.joint_names):
+                rospy.loginfo("CAMBIO EL PUNTO!!!!!!!!!!!!!")
 
             rate.sleep()
 
@@ -108,7 +120,7 @@ class ArmController(JointTrajectoryActionController):
             control_params = self.gain_scheduling.get_params()
             for motor_name, motor_params in control_params.params.items():
                 # update motor params
-                rospy.loginfo('Setting {} with params {}'.format(motor_name, motor_params))
+                #rospy.loginfo('Setting {} with params {}'.format(motor_name, motor_params))
                 self.joint_to_controller[motor_name].update_control_params(motor_params)
 
     # def checkpoint_loop(self):
@@ -175,6 +187,75 @@ class GainScheduling():
         rospy.loginfo('Init operation point in {0}'.format(current_op.name))
         self.current_op = current_op
 
+
+class GainSched():
+    """
+    Gain Scheduling
+    @param threshold: Joint distance (norm) threshold for operation point change
+    """
+    def __init__(self, threshold = 0.3):
+        self.joint_gain = dict()
+        self.threshold = threshold
+        self.motor_params = dict()
+        self.updated=False
+
+    def add_joint_gain(self, joint):
+        self.joint_gain[joint.name] = joint
+
+    def update(self, actual_positions,joint_names):
+        # get current state
+        current_state = np.array(actual_positions)
+        rospy.loginfo('Actual positions: {0}'.format(actual_positions))
+
+        self.updated=False
+
+        gain_params= ControlParams()
+
+        for jop_name, jop in self.joint_gain.items():
+
+            for idx in range(len(joint_names)):
+                if joint_names[idx]==jop_name:
+                    gain=self.joint_gain[jop_name].get_gain(actual_positions[idx])
+                    if (gain!=[0,0,0]):
+                        self.motor_params.params[jop_name]=gain
+                        self.updated=True
+
+
+
+
+        # #shou_pitch
+        # sp_gain=self.joint_gain['l_shoulder_pitch_joint'].get_gain(current_state[0])
+        # if(sp_gain!=[0,0,0]):
+        #     motor_params.params['l_shoulder_pitch_joint']=sp_gain
+        #     self.updated=True
+        # #shou_roll
+        # sr_gain=self.joint_gain['l_shoulder_roll_joint'].get_gain(current_state[1])
+        # if(sr_gain!=[0,0,0]):
+        #     motor_params.params['l_shoulder_roll_joint']=sr_gain
+        #     self.updated=True
+        # #elb_pitch
+        # ep_gain=self.joint_gain['l_elbow_pitch_joint'].get_gain(current_state[3])
+        # if(ep_gain!=[0,0,0]):
+        #     motor_params.params['l_elbow_pitch_joint']=ep_gain
+        #     self.updated=True
+
+        if(self.updated):
+            rospy.loginfo('Change operation point to {0}'.format(self.motor_params.params))
+        return self.updated
+
+
+
+    # def get_params(self):
+    #     return self.current_op.params
+          
+
+    """
+    Update current operation point, use only on start
+    @param actual_positions: List of actual joint positions
+    """
+    def init(self, params):
+        self.motor_params = params
+
 # class Checkpoint():
 #   """
 #   Checkpoint
@@ -235,6 +316,22 @@ class OperationPoint():
         self.name = name
         self.state = state # numpy array
         self.params = ctrl_params
+
+    def set_param(self,ctrl_params):
+        self.params=ctrl_params
+
+class JointGain():
+    def __init__(self,name,states,gains):
+        self.name = name
+        self.states = states # numpy array
+        self.gains = gains # numpy array
+    def get_gain(self,actual_state):
+        for i in range(len(self.states)):
+            dist=np.linalg.norm(self.states[i] - actual_state)
+            if(dist<2.0):
+                return self.gains[i]
+        return [0,0,0]
+
 
 class ControlParams():
     def __init__(self):
