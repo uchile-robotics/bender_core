@@ -13,8 +13,8 @@ serial_port: /dev/bender/sensors/hokuyo_H1311689   # orange
 frame_id: /bender/sensors/laser_front_link
 
 # angles in radians
-angle_max:  2.01  # ~  115 [deg]
-angle_min: -2.01  # ~ -115 [deg]
+angle_max:  1.92  # ~  110 [deg]
+angle_min: -1.92  # ~ -110 [deg]
 
 # force 20 Hz
 skip: 1
