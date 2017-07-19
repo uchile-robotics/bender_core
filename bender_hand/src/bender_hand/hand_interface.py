@@ -75,11 +75,10 @@ class HandInterface(object):
 
 if __name__ == '__main__':
     DEV_ID = 36
-    dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 200000)
+    dxl = DynamixelIO('/dev/ttyUSB0', baudrate = 1000000)
     hand = HandInterface(dxl, dev_id = DEV_ID)
-    print dxl.ping(DEV_ID)
+    # print dxl.ping(DEV_ID)
     # hand.change_id(36)
-    # hand.write_addr(4,9)
 
     while True:
         t1 = hand.read_tactil_sensor(1)

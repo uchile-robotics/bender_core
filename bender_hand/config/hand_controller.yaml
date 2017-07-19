@@ -1,7 +1,7 @@
 hand_controller:
   controller:
     module: hand_controller
-    package: bender_hand
+    package: uchile_soft_hand
     type: HandController
-  rate: 30
+  rate: 5
   id: 36
