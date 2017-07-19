@@ -25,6 +25,9 @@ from bender_hand.hand_interface import HandInterface
 from control_util.pid import PID
 
 class GripperActionController():
+
+    SENSOR_IDLE_VALUE = 80.0
+
     def __init__(self, controller_namespace, controllers):
         self.update_rate = 1000
         self.controller_namespace = controller_namespace
@@ -61,10 +64,11 @@ class GripperActionController():
         self.joint_state.effort = [0.0]*self.num_joints
         # Current max effort
         self.current_goal = 0.0
-        self.current_effort = 1.0
+        self.current_effort = 0.5
         # Soft sensor
         self.left_side_pressure = UInt16()
         self.right_side_pressure = UInt16()
+        self.sensor_effort = 0.0
 
     def initialize(self):
         # Get controller parameters
@@ -112,8 +116,7 @@ class GripperActionController():
         self.soft_sensor = HandInterface(self.soft_sensor_io, self.soft_sensor_id)
         self.left_side_pressure_pub = rospy.Publisher(self.controller_namespace + '/left_side_pressure', UInt16, queue_size=50)
         self.right_side_pressure_pub = rospy.Publisher(self.controller_namespace + '/right_side_pressure', UInt16, queue_size=50)
-        self.left_pid = PID(kp=0.5)
-        self.right_pid = PID(kp=0.5)
+        self.pid = PID(kp=0.5)
         # Joint state publisher
         self.joint_states_pub = rospy.Publisher(self.joint_states_topic,
             JointState, queue_size=20)
@@ -322,6 +325,15 @@ class GripperActionController():
             # Soft sensors
             self.left_side_pressure.data = self.soft_sensor.read_tactil_sensor(1)
             self.right_side_pressure.data = self.soft_sensor.read_tactil_sensor(2)
+            self.sensor_effort = ((self.left_side_pressure.data + self.right_side_pressure.data)/2.0 -
+                                 GripperActionController.SENSOR_IDLE_VALUE)/1024.0
+
+            # Sensor control loop
+            error = self.current_effort - self.sensor_effort
+            out = self.pid.compute_output(error)
+            rospy.loginfo("pid out: {}".format(out))
+            self.pos_torque_command(self.current_goal, out)
+
 
             # Publish soft sensor data
             self.left_side_pressure_pub.publish(self.left_side_pressure)
