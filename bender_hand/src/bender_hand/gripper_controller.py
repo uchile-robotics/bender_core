@@ -116,7 +116,7 @@ class GripperActionController():
         self.soft_sensor = HandInterface(self.soft_sensor_io, self.soft_sensor_id)
         self.left_side_pressure_pub = rospy.Publisher(self.controller_namespace + '/left_side_pressure', UInt16, queue_size=50)
         self.right_side_pressure_pub = rospy.Publisher(self.controller_namespace + '/right_side_pressure', UInt16, queue_size=50)
-        self.pid = PID(kp=0.5)
+        self.pid = PID(kp=1.0)
         # Joint state publisher
         self.joint_states_pub = rospy.Publisher(self.joint_states_topic,
             JointState, queue_size=20)
@@ -325,11 +325,11 @@ class GripperActionController():
             # Soft sensors
             self.left_side_pressure.data = self.soft_sensor.read_tactil_sensor(1)
             self.right_side_pressure.data = self.soft_sensor.read_tactil_sensor(2)
-            self.sensor_effort = ((self.left_side_pressure.data + self.right_side_pressure.data)/2.0 -
+            self.sensor_effort = ((self.left_side_pressure.data)/2.0 -
                                  GripperActionController.SENSOR_IDLE_VALUE)/1024.0
 
             # Sensor control loop
-            error = self.current_effort - self.sensor_effort
+            error = abs(self.current_effort - self.sensor_effort)
             out = self.pid.compute_output(error)
             rospy.loginfo("pid out: {}".format(out))
             self.pos_torque_command(self.current_goal, out)
