@@ -17,9 +17,9 @@ r_ext_finger_controller:
   i_clamp: 1.0
   motor:
     id: 17
-    init: 815
-    max: 950
-    min: 810
+    init: 900
+    max: 1000
+    min: 870
 
 r_int_finger_controller:
   controller:
@@ -40,6 +40,6 @@ r_int_finger_controller:
   i_clamp: 1.0
   motor:
     id: 18
-    init: 490
-    max: 355
-    min: 495
+    init: 550
+    max: 450
+    min: 580
