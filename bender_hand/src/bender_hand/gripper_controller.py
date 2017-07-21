@@ -331,8 +331,8 @@ class GripperActionController():
             # Sensor control loop
             error = abs(self.current_effort - self.sensor_effort)
             out = self.pid.compute_output(error)
-            rospy.loginfo("pid out: {}".format(out))
-            self.pos_torque_command(self.current_goal, out)
+            #rospy.loginfo("pid out: {}".format(out))
+            #self.pos_torque_command(self.current_goal, out)
 
 
             # Publish soft sensor data
