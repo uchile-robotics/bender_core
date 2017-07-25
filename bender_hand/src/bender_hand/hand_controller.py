@@ -10,7 +10,7 @@ from threading import Thread
 from std_msgs.msg import UInt16, String
 
 # Use HW interface
-from uchile_soft_hand.hand_interface import HandInterface
+from bender_hand.hand_interface import HandInterface
 
 class HandController(object):
 
