@@ -3,8 +3,6 @@ project(bender_base)
 
 find_package(catkin REQUIRED)
 
-catkin_package(
-  #CATKIN_DEPENDS uchile_msgs uchile_srvs roscpp rospy std_msgs std_srvs
-)
+catkin_package()
 
 

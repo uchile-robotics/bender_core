@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 2.8.3)
 project(bender_tts)
 
 find_package(catkin REQUIRED COMPONENTS
+  diagnostic_msgs
   roscpp
   rospy
+  sound_play
   std_msgs
   std_srvs
   uchile_msgs
   uchile_srvs
-  diagnostic_msgs
-  sound_play
   uchile_util
 )
 
@@ -20,7 +20,15 @@ find_package(catkin REQUIRED COMPONENTS
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS uchile_msgs uchile_srvs diagnostic_msgs roscpp rospy sound_play std_msgs std_srvs
+  CATKIN_DEPENDS
+    diagnostic_msgs
+    roscpp
+    rospy
+    sound_play
+    std_msgs
+    std_srvs
+    uchile_msgs
+    uchile_srvs
 )
 
 
@@ -30,7 +38,6 @@ catkin_package(
 
 include_directories(include
   ${catkin_INCLUDE_DIRS}
-  ${uchile_util_INCLUDE_DIRS}
 )
 
 # - - - tts - - -

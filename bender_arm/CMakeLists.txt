@@ -94,8 +94,14 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES bender_arm
   CATKIN_DEPENDS
+    dynamic_reconfigure
+    geometry_msgs
     interactive_markers
     message_runtime
+    roscpp
+    rospy
+    std_msgs
+    visualization_msgs
 #  DEPENDS system_lib
 )
 

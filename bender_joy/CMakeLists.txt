@@ -2,12 +2,13 @@ cmake_minimum_required(VERSION 2.8.3)
 project(bender_joy)
 
 find_package(catkin REQUIRED COMPONENTS
-  uchile_msgs
-  uchile_srvs
+  geometry_msgs
   joy
   roscpp
   sensor_msgs
   std_msgs
+  uchile_msgs
+  uchile_srvs
 )
 
 catkin_python_setup()
@@ -18,7 +19,14 @@ catkin_python_setup()
 
 catkin_package(
   LIBRARIES bender_joy
-  CATKIN_DEPENDS uchile_msgs uchile_srvs joy roscpp sensor_msgs std_msgs
+  CATKIN_DEPENDS
+    geometry_msgs
+    joy
+    roscpp
+    sensor_msgs
+    std_msgs
+    uchile_msgs
+    uchile_srvs
 )
 
 ###########
@@ -26,5 +34,5 @@ catkin_package(
 ###########
 
 include_directories(
-	${catkin_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
 )

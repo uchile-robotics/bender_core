@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 2.8.3)
 project(bender_sensors)
 
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  std_msgs
-  sensor_msgs
-  uchile_msgs
-  uchile_srvs
   cv_bridge
   image_transport
+  roscpp
+  rospy
+  sensor_msgs
+  std_msgs
+  uchile_msgs
+  uchile_srvs
   uchile_util
 )
 
@@ -22,7 +23,15 @@ find_package(OpenCV  REQUIRED)
 catkin_package(
   #INCLUDE_DIRS include
   LIBRARIES bender_sensors
-  CATKIN_DEPENDS uchile_msgs uchile_srvs cv_bridge image_transport roscpp sensor_msgs std_msgs uchile_util
+  CATKIN_DEPENDS
+    cv_bridge
+    image_transport
+    roscpp
+    sensor_msgs
+    std_msgs
+    uchile_msgs
+    uchile_srvs
+    uchile_util
   DEPENDS opencv2
 )
 

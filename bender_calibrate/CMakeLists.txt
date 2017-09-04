@@ -4,10 +4,8 @@ project(bender_calibrate)
 include($ENV{ROS_ROOT}/core/rosbuild/FindPkgConfig.cmake)
 
 find_package(catkin REQUIRED COMPONENTS
-  uchile_msgs
-  uchile_srvs
-  cv_bridge
   camera_calibration
+  cv_bridge
   geometry_msgs
   image_transport
   roscpp
@@ -15,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   std_srvs
+  uchile_msgs
+  uchile_srvs
 )
 find_package(OpenCV  REQUIRED)
 
@@ -28,7 +28,14 @@ set (CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fpermissive")
 catkin_package(
 #  INCLUDE_DIRS include
   LIBRARIES bender_fun
-  CATKIN_DEPENDS uchile_msgs uchile_srvs roscpp roslib std_msgs
+  CATKIN_DEPENDS
+    geometry_msgs
+    roscpp
+    roslib
+    sensor_msgs
+    std_msgs
+    uchile_msgs
+    uchile_srvs
   DEPENDS opencv2
 )
 

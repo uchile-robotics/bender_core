@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 2.8.3)
 project(bender_sound)
 
 find_package(catkin REQUIRED COMPONENTS
-  uchile_msgs
-  uchile_srvs
   roscpp
-  rospy
   roslib
+  rospy
+  sound_play
   std_msgs
   std_srvs
-  sound_play
+  uchile_msgs
+  uchile_srvs
 )
 
 
@@ -17,7 +17,15 @@ find_package(catkin REQUIRED COMPONENTS
 ## catkin specific configuration ##
 ###################################
 catkin_package(
-  CATKIN_DEPENDS uchile_msgs uchile_srvs roscpp rospy roslib std_msgs std_srvs sound_play
+  CATKIN_DEPENDS
+    roscpp
+    roslib
+    rospy
+    sound_play
+    std_msgs
+    std_srvs
+    uchile_msgs
+    uchile_srvs
 )
 
 ###########
