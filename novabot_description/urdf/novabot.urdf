@@ -1,0 +1,444 @@
+<robot
+  name="novabot">
+  <link
+    name="r_arm_support_link">
+    <inertial>
+      <origin
+        xyz="0.00050731 2.9935E-16 0.42706"
+        rpy="0 0 0" />
+      <mass
+        value="190.24" />
+      <inertia
+        ixx="10.201"
+        ixy="7.4784E-18"
+        ixz="-0.0033473"
+        iyy="10.2018"
+        iyz="-6.4473E-16"
+        izz="10.0726" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_arm_support_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="9 9 9 7" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_arm_support_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="r_arm_base_link">
+    <inertial>
+      <origin
+        xyz="0.034906 4.3504E-05 -4.3497E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.31728" />
+      <inertia
+        ixx="0.00071241"
+        ixy="2.8714E-07"
+        ixz="-2.8716E-07"
+        iyy="0.00055948"
+        iyz="-5.0011E-07"
+        izz="0.0007237" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_arm_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0.46275 0.84314 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_arm_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r_arm_base_joint"
+    type="fixed">
+    <origin
+      xyz="0.075 0 0.77"
+      rpy="-5.0567E-16 1.9472E-16 4.7993E-18" />
+    <parent
+      link="r_arm_support_link" />
+    <child
+      link="r_arm_base_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="r_shoulder_roll_link">
+    <inertial>
+      <origin
+        xyz="0.000726275132389667 -0.00455327233711046 -0.023184570248"
+        rpy="0 0 0" />
+      <mass
+        value="0.194509447979601" />
+      <inertia
+        ixx="0.000343425264363404"
+        ixy="-4.26270303404943E-07"
+        ixz="7.092923365159E-06"
+        iyy="0.000316135899681422"
+        iyz="-2.2225218993042E-05"
+        izz="7.8980858902031E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_shoulder_roll_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.294117647058824 0.294117647058824 0.294117647058824 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_shoulder_roll_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r_shoulder_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0.092 0 0"
+      rpy="-1.1514E-16 0 0" />
+    <parent
+      link="r_arm_base_link" />
+    <child
+      link="r_shoulder_roll_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-5.2359"
+      upper="0"
+      effort="4"
+      velocity="0.3" />
+  </joint>
+  <link
+    name="r_shoulder_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.0909691159364422 -1.03489559753339E-05 -1.35246841495252E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.463141674924622" />
+      <inertia
+        ixx="0.000729467490222115"
+        ixy="-2.0550657375634E-08"
+        ixz="-1.62844349476667E-08"
+        iyy="0.00193429440143831"
+        iyz="1.4503439147593E-06"
+        izz="0.00215742722233584" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_shoulder_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0.462745098039216 0.843137254901961 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_shoulder_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r_shoulder_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0.0023141 0.007 -0.060904"
+      rpy="-1.4263 1.5509 0.14457" />
+    <parent
+      link="r_shoulder_roll_link" />
+    <child
+      link="r_shoulder_pitch_link" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-2.7925"
+      upper="2.7925"
+      effort="4"
+      velocity="0.3" />
+  </joint>
+  <link
+    name="r_elbow_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.0320079929910746 -0.000191671387928222 -0.0110919075063264"
+        rpy="0 0 0" />
+      <mass
+        value="0.180208990151367" />
+      <inertia
+        ixx="7.08249190994544E-05"
+        ixy="-7.57914337427284E-06"
+        ixz="-2.36772398440246E-05"
+        iyy="0.000259906028820996"
+        iyz="-2.09101771275271E-06"
+        izz="0.000238496507683939" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_elbow_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.294117647058824 0.294117647058824 0.294117647058824 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_elbow_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r_elbow_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0.18738 0 0"
+      rpy="-2.5682E-18 -3.348E-16 -1.0408E-17" />
+    <parent
+      link="r_shoulder_pitch_link" />
+    <child
+      link="r_elbow_pitch_link" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-2.0943"
+      upper="2.0943"
+      effort="4"
+      velocity="0.3" />
+  </joint>
+  <link
+    name="r_elbow_roll_link">
+    <inertial>
+      <origin
+        xyz="0.134001529341099 4.79161137395961E-05 3.84540840135582E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.555810004142081" />
+      <inertia
+        ixx="0.000892237493611082"
+        ixy="1.17277998856847E-09"
+        ixz="-4.63557149962635E-10"
+        iyy="0.00465687873322724"
+        iyz="8.77184365114042E-07"
+        izz="0.00431999560013036" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_elbow_roll_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0.462745098039216 0.843137254901961 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_elbow_roll_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r_elbow_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0.048815 0.00115 -0.006228"
+      rpy="7.2906E-05 0.0028725 0.025375" />
+    <parent
+      link="r_elbow_pitch_link" />
+    <child
+      link="r_elbow_roll_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.3962"
+      upper="1.3962"
+      effort="4"
+      velocity="0.3" />
+  </joint>
+  <link
+    name="r_wrist_roll_link">
+    <inertial>
+      <origin
+        xyz="0.0229033776506447 0.000220612186742644 -0.00398448056872729"
+        rpy="0 0 0" />
+      <mass
+        value="0.161788526961591" />
+      <inertia
+        ixx="5.76158508044698E-05"
+        ixy="3.886730958216E-06"
+        ixz="2.31840971044729E-05"
+        iyy="0.000267672206311455"
+        iyz="2.77751071793474E-08"
+        izz="0.000247279622374917" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_wrist_roll_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.101960784313725 0.101960784313725 0.101960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_wrist_roll_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r_wrist_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0.268 0 0"
+      rpy="-1.2482E-16 -1.7076E-16 -4.0701E-16" />
+    <parent
+      link="r_elbow_roll_link" />
+    <child
+      link="r_wrist_roll_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.3962"
+      upper="1.3962"
+      effort="4"
+      velocity="0.3" />
+  </joint>
+  <link
+    name="r_wrist_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.0319486375258071 -4.49792877131941E-05 1.38163972554506E-07"
+        rpy="0 0 0" />
+      <mass
+        value="0.199916587242823" />
+      <inertia
+        ixx="0.000314195961763808"
+        ixy="-5.7511599769964E-08"
+        ixz="7.40792144069458E-10"
+        iyy="0.000210274056009957"
+        iyz="5.24430510111456E-10"
+        izz="0.000323209593070797" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_wrist_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://novabot_description/meshes/novabot/r_wrist_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r_wrist_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0.060005 0.00066175 0.0065"
+      rpy="-9.5102E-16 3.7405E-17 -0.0056373" />
+    <parent
+      link="r_wrist_roll_link" />
+    <child
+      link="r_wrist_pitch_link" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-1.3962"
+      upper="1.3962"
+      effort="4"
+      velocity="0.3" />
+  </joint>
+</robot>
