@@ -1,0 +1,9 @@
+controller_list:
+  - name: fake_nova_arm_controller
+    joints:
+      - r_shoulder_roll_joint
+      - r_shoulder_pitch_joint
+      - r_elbow_pitch_joint
+      - r_elbow_roll_joint
+      - r_wrist_roll_joint
+      - r_wrist_pitch_joint
