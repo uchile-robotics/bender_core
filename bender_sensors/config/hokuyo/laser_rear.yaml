@@ -10,7 +10,7 @@ serial_port: /dev/bender/sensors/hokuyo_H0903381   # black
 #serial_port: /dev/ttyACM0 # if the udev rule is not working properly anymore
 
 # frame
-frame_id: /bender/sensors/laser_rear_link
+frame_id: /bender/sensors/laser_front_link
 
 # angles in radians
 angle_max:  1.40  #  80 [deg]
