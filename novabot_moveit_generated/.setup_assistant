@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: bender_description
+    relative_path: urdf/novabot.urdf
+  SRDF:
+    relative_path: config/novabot.srdf
+  CONFIG:
+    author_name: sparra
+    author_email: sebastian.parra.flores@gmail.com
+    generated_timestamp: 1507914341

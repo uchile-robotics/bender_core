@@ -1,0 +1,1 @@
+controller_joint_names: ['r_shoulder_roll_joint', 'r_shoulder_pitch_joint', 'r_elbow_pitch_joint', 'r_elbow_roll_joint', 'r_wrist_roll_joint', 'r_wrist_pitch_joint']
