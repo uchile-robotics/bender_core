@@ -1,0 +1,19 @@
+<launch>
+
+  <!-- Load robot model -->
+  <param name="robot_description" textfile="$(find bender_description)/urdf/novabot.urdf"/>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find bender_description)/config/novabot_control.yaml" command="load"/>
+
+  <!-- load the controllers -->
+  <node name="novabot_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/novabot" args="joint_state_controller"/>
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/novabot/joint_states" />
+  </node> -->
+
+</launch>

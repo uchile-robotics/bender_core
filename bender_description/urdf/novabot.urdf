@@ -441,4 +441,70 @@
       effort="4"
       velocity="0.3" />
   </joint>
+  <!-- Control -->
+  <gazebo>
+  <plugin name='ros_control' filename='libgazebo_ros_control.so'>
+    <robotNamespace>/novabot</robotNamespace>
+  </plugin>
+  </gazebo>
+  <transmission name="r_tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="r_shoulder_roll_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="r_shoulder_roll_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="r_tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="r_shoulder_pitch_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="r_shoulder_pitch_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="r_tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="r_elbow_pitch_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="r_elbow_pitch_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="r_tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="r_elbow_roll_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="r_elbow_roll_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="r_tran5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="r_wrist_roll_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="r_wrist_roll_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="r_tran6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="r_wrist_pitch_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="r_wrist_pitch_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
 </robot>
