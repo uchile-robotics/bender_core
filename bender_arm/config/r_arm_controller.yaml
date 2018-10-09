@@ -36,7 +36,7 @@ r_shoulder_roll_controller:
   i_clamp: 1.0
   motor:
     id: 12
-    init: 2090
+    init: 1900
     max: 3505
     min: 1866
 
@@ -59,9 +59,9 @@ r_shoulder_yaw_controller:
   i_clamp: 1.0
   motor:
     id: 13
-    init: 310
+    init: 637
     max: 40
-    min: 600
+    min: 1200
 
 r_elbow_pitch_controller:
   controller:
@@ -77,8 +77,8 @@ r_elbow_pitch_controller:
   torque_enable_init: False
   motor:
     id: 14
-    init: 2100
-    max: 3245
+    init: 3140
+    max: 4000
     min: 1405
 
 r_elbow_yaw_controller:
@@ -100,7 +100,7 @@ r_elbow_yaw_controller:
   i_clamp: 1.0
   motor:
     id: 15
-    init: 590
+    init: 580
     max: 825
     min: 375
 
@@ -123,6 +123,6 @@ r_wrist_pitch_controller:
   i_clamp: 2.0
   motor:
     id: 16
-    init: 599
+    init: 1020
     max: 345
-    min: 795
+    min: 2000
