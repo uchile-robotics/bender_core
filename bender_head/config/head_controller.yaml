@@ -19,6 +19,6 @@ head_pitch_joint_controller:
   joint_speed: 0.8
   motor:
     id: 31
-    init: 682
-    max: 855
+    init: 830
+    max: 1000
     min: 605
