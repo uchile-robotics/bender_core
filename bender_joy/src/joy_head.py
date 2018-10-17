@@ -17,7 +17,7 @@ class JoystickHead(object):
 
         # connections
         self.head_pub   = rospy.Publisher('head/cmd', Emotion, queue_size=1)
-
+        
 
         # load head configuration
         self.b_pause = rospy.get_param('~b_pause', 'START')
@@ -108,6 +108,7 @@ class JoystickHead(object):
 
     def callback(self, msg):
 
+        rospy.loginfo("Debug message: Callback for head is working")
         # pause
         if msg.buttons[self.b_idx_pause]:
 
