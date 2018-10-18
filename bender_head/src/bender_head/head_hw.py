@@ -121,7 +121,7 @@ class HeadHW(object):
             self.write_addr(LED_CMD, SHOW_R1)           #This command call "show" method for each led in left eye on Arduino
         elif (eye == "right"):
             self.write_addr(LED_CMD, SHOW_R2)       #This command call "show" method for each led in right eye on Arduino
-        time.sleep(0.1)
+        #time.sleep(0.1)
 
     def changeLedColor(self, numLed, rgb_color):
         self.updateLedColor(numLed, rgb_color[0], rgb_color[1], rgb_color[2])
@@ -146,7 +146,7 @@ class HeadHW(object):
                 g_color = color[1]
                 b_color = color[2]
                 self.updateLedColor(i_led, r_color, g_color, b_color)
-            self.showColors(eye)
+            #self.showColors(eye)
         elif (eye=="right"):
             #print "right"
             """
@@ -174,7 +174,7 @@ class HeadHW(object):
                 g_color = color[1]
                 b_color = color[2]
                 self.updateLedColor(i_led, r_color, g_color, b_color)
-            self.showColors(eye)
+            #self.showColors(eye)
 
 if __name__ == '__main__':
     DEV_ID = 35

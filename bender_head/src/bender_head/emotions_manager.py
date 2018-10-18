@@ -49,6 +49,7 @@ class EmotionsManager(object):
         # Send command, for some reason cheeks are inverted
         self.hw_controller.set_eye_colors('left', self.get_rgb_colors(self.led_colors['eyes']['left'] + self.led_colors['cheeks']['right']))
         self.hw_controller.set_eye_colors('right', self.get_rgb_colors(self.led_colors['eyes']['right'] + self.led_colors['cheeks']['left']))
+        self.hw_controller.set_brightness(50)
         if 'servos' in emo:
             self.servos_hw.left_ear(emo['servos']['left_ear'])
             self.servos_hw.right_ear(emo['servos']['right_ear'])
@@ -79,22 +80,6 @@ class EmotionsManager(object):
 
 
         for i in range(max_iter):
-            if 'servos' in emo:
-                servos = emo['servos']
-                if 'left_ear' in servos and i < len(servos['left_ear']):
-                    self.servos_hw.left_ear(servos['left_ear'][i])
-
-                if 'right_ear' in servos and i < len(servos['right_ear']):
-                    self.servos_hw.right_ear(servos['right_ear'][i])
-
-                if 'left_eyebrow' in servos and i < len(servos['left_eyebrow']):
-                    self.servos_hw.left_eyebrow(servos['left_eyebrow'][i])
-
-                if 'right_eyebrow' in servos and i < len(servos['right_eyebrow']):
-                    self.servos_hw.right_eyebrow(servos['right_eyebrow'][i])
-
-                if 'mouth' in servos and i < len(servos['mouth']):
-                    self.servos_hw.mouth(servos['mouth'][i])
 
             # Only publish when cmd change with respect to current configuration
             left_eyes_cmd = self._get_update_color_config(emo, 'eyes', 'left', i)
@@ -113,7 +98,25 @@ class EmotionsManager(object):
                 self.led_colors['cheeks']['left'] = left_cheek_cmd
                 # Send command, for some reason cheeks are inverted
                 self.hw_controller.set_eye_colors('right', self.get_rgb_colors(self.led_colors['eyes']['right'] + self.led_colors['cheeks']['left']))
+            self.hw_controller.set_brightness(50)
 
+            if 'servos' in emo:
+                servos = emo['servos']
+                if 'left_ear' in servos and i < len(servos['left_ear']):
+                    self.servos_hw.left_ear(servos['left_ear'][i])
+
+                if 'right_ear' in servos and i < len(servos['right_ear']):
+                    self.servos_hw.right_ear(servos['right_ear'][i])
+
+                if 'left_eyebrow' in servos and i < len(servos['left_eyebrow']):
+                    self.servos_hw.left_eyebrow(servos['left_eyebrow'][i])
+
+                if 'right_eyebrow' in servos and i < len(servos['right_eyebrow']):
+                    self.servos_hw.right_eyebrow(servos['right_eyebrow'][i])
+
+                if 'mouth' in servos and i < len(servos['mouth']):
+                    self.servos_hw.mouth(servos['mouth'][i])
+                    
             time.sleep(int(emo['time'])/1000.0)
 
     def get_state(self):
