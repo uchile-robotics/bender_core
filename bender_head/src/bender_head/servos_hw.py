@@ -31,7 +31,7 @@ class ServosHW(object):
 
 	def left_ear(self, lifting_percentage):
 		if (lifting_percentage != -1):
-			angle = self.remapRange(lifting_percentage, 160, 50)
+			angle = self.remapRange(lifting_percentage, 55, 110)
 			self.hw_controller.moveServoTo(SERVO0_POS, angle)
 
 	def right_ear(self, lifting_percentage):
