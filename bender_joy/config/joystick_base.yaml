@@ -1,13 +1,17 @@
 # see available mappings on src/bender_joy/xbox.py
 
+# ===== base parameters =====
 # pause button
 b_pause: 'START'
 
 # cancel goal button
-b_cancel: 'B'
+b_cancel: 'LS'   # Changed from 'B' to 'LS'
 
 # high priority joystick button
 b_priority: 'LB'
+
+# arm
+b_arm: 'RB'
 
 # movement axes
 a_angular: 'LS_HORZ'
@@ -16,3 +20,17 @@ a_linear:  'LS_VERT'
 # cmd velocities
 max_linear_vel: 0.7   # caution: do not use values higher than 0.7 
 max_angular_vel: 0.8  # caution: do not use values higher than 0.8
+
+# ===== head parameters =====
+# neck axes
+a_neck_x: 'RS_HORZ'
+a_neck_y: 'RS_VERT'
+
+# confirm neck movement
+b_neck_home: 'RS'
+
+# emotion buttons
+b_happy: 'A'
+b_angry: 'B'
+b_sad: 'X'
+b_surprise: 'Y'
