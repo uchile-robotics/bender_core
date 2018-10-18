@@ -22,6 +22,7 @@ class JoystickBase(object):
         self.robot = robot_factory.build(["neck","face"],core=False)
         self.neck = self.robot.get("neck")
         self.face = self.robot.get("face")
+        self.tts=self.robot.get("tts")
 
         rospy.loginfo('Joystick base init ...')
 
@@ -148,6 +149,10 @@ class JoystickBase(object):
 
             bender_arm      = msg.buttons[self.b_idx_arm] == 1.0
 
+            tts1            = msg.axes[6]== 1.0
+            tts2            = msg.axes[6]== -1.0
+            tts3            = msg.axes[7]== 1.0
+            tts4            = msg.axes[7]== -1.0
 
 
             if neck_to_left:
@@ -162,6 +167,22 @@ class JoystickBase(object):
             if neck_to_home:
                 self.neck.home()
                 rospy.loginfo("Moving to home position")
+
+            if bender_arm:
+                rospy.logwarn_throttle(2, "Moving Arm")
+                if bender_happy:
+                    self.face.set_emotion("happy1")
+                    rospy.loginfo("Moving to home...")
+                if bender_angry:
+                    self.face.set_emotion("angry1")
+                    rospy.loginfo("Moving to pre_1...")
+                if bender_sad:
+                    self.face.set_emotion("sad1")
+                    rospy.loginfo("Moving to pre_2...")
+                if bender_surprise:
+                    self.face.set_emotion("surprise")
+                    rospy.loginfo("Moving to home...")
+                return
 
             if bender_happy:
                 self.face.set_emotion("happy1")
@@ -182,21 +203,11 @@ class JoystickBase(object):
             else:
                 self.pub.publish(cmd)
 
-            if bender_arm:
-                rospy.logwarn_throttle(2, "Moving Arm")
-                if bender_happy:
-                    self.face.set_emotion("happy1")
-                    rospy.loginfo("Moving to home...")
-                if bender_angry:
-                    self.face.set_emotion("angry1")
-                    rospy.loginfo("Moving to pre_1...")
-                if bender_sad:
-                    self.face.set_emotion("sad1")
-                    rospy.loginfo("Moving to pre_2...")
-                if bender_surprise:
-                    self.face.set_emotion("surprise")
-                    rospy.loginfo("Moving to home...")
+            
 
+            if tts1:
+                self.tts.say()
+                rospy.loginfo("Speaking")
 
 
 
