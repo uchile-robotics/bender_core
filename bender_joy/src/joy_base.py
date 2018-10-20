@@ -11,18 +11,21 @@ from geometry_msgs.msg import Twist
 from geometry_msgs.msg import Pose, PoseStamped, Point  # added
 from bender_joy import xbox
 from moveit_python import MoveGroupInterface            # added
+from std_msgs.msg import Float64
 
 from bender_skills import robot_factory
 
 class JoystickBase(object):
 
+
     def __init__(self):
 
         # loading robot
-        self.robot = robot_factory.build(["neck","face"],core=False)
+        self.robot = robot_factory.build(["neck","face","tts","r_arm"],core=False)
         self.neck = self.robot.get("neck")
         self.face = self.robot.get("face")
         self.tts=self.robot.get("tts")
+        self.arm=self.robot.get("r_arm")
 
         rospy.loginfo('Joystick base init ...')
 
@@ -31,6 +34,13 @@ class JoystickBase(object):
         #self.pub_priority = rospy.Publisher('base/master_cmd_vel', Twist, queue_size=1)
         self.pub_priority = rospy.Publisher('/bender/nav/base/cmd_vel', Twist, queue_size=1)
         self.cancel_goal_client = rospy.ServiceProxy('/bender/nav/goal_server/cancel', Empty)
+        #R_Arm publishers
+        self.rElbowPitch = rospy.Publisher('/bender/r_elbow_pitch_controller/command',Float64, queue_size=1)
+        self.rElbowYaw = rospy.Publisher('/bender/r_elbow_yaw_controller/command',Float64, queue_size=1)
+        self.rShoulderPitch = rospy.Publisher('/bender/r_shoulder_pitch_controller/command',Float64, queue_size=1)
+        self.rShoulderYaw = rospy.Publisher('/bender/r_shoulder_yaw_controller/command',Float64, queue_size=1)
+        self.rShoulderRoll = rospy.Publisher('/bender/r_shoulder_roll_controller/command',Float64, queue_size=1)
+        self.rWristPitch = rospy.Publisher('/bender/r_wrist_pitch_controller/command',Float64, queue_size=1)
 
         # control
         self.is_paused = False
@@ -104,6 +114,24 @@ class JoystickBase(object):
         except Exception:
             pass
 
+    def armHome(self):
+        comm=Float64(0.0)
+        self.rElbowYaw.publish(comm)
+        self.rElbowPitch.publish(comm)
+        self.rShoulderYaw.publish(comm)
+        self.rShoulderPitch.publish(comm)
+        self.rShoulderRoll.publish(comm)
+        self.rWristPitch.publish(comm)
+
+    def moveArm(self, angle):
+        self.rElbowYaw.publish(angle[0])
+        self.rElbowPitch.publish(angle[1])
+        self.rShoulderYaw.publish(angle[2])
+        self.rShoulderPitch.publish(angle[3])
+        self.rShoulderRoll.publish(angle[4])
+        self.rWristPitch.publish(angle[5])
+
+
     def callback(self, msg):
 
         # pause
@@ -168,19 +196,22 @@ class JoystickBase(object):
                 self.neck.home()
                 rospy.loginfo("Moving to home position")
 
-            if bender_arm:
+            if bender_arm :
+                
                 rospy.logwarn_throttle(2, "Moving Arm")
                 if bender_happy:
-                    self.face.set_emotion("happy1")
+                    self.arm.send_joint_goal([0.0]*6)
                     rospy.loginfo("Moving to home...")
                 if bender_angry:
-                    self.face.set_emotion("angry1")
+                    pos_1=[-0.5, 0.0, 0.0, 1.5, 0.0, 0.8]
+                    self.arm.send_joint_goal(pos_1)
                     rospy.loginfo("Moving to pre_1...")
                 if bender_sad:
-                    self.face.set_emotion("sad1")
+
                     rospy.loginfo("Moving to pre_2...")
                 if bender_surprise:
-                    self.face.set_emotion("surprise")
+                    pos_2=[0.1, 0.0, 0.0, 1.1624, 0.0, 0.2565]
+                    self.arm.send_joint_goal(pos_2)
                     rospy.loginfo("Moving to home...")
                 return
 
@@ -206,7 +237,23 @@ class JoystickBase(object):
             
 
             if tts1:
-                self.tts.say()
+                self.tts.say("Hola Amigos")
+                rospy.loginfo("Speaking")
+
+            if tts2:
+                self.tts.say("omae wa mou chindeiru")
+                rospy.loginfo("Speaking")
+
+            if tts3:
+                self.tts.say("Los voy a destruir a todos")
+                rospy.loginfo("Speaking")
+
+            if tts4:
+                self.tts.say("Bienvenidos al festival")
+                rospy.loginfo("Speaking")
+
+            if neck_to_up:
+                self.tts.say("Hola mi nombre es Bender")
                 rospy.loginfo("Speaking")
 
 
