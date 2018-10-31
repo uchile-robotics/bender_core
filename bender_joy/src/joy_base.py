@@ -85,7 +85,6 @@ class JoystickBase(object):
         self.b_idx_pause    = key_mapper.get_button_id(self.b_pause)
         self.b_idx_cancel   = key_mapper.get_button_id(self.b_cancel)
         self.b_idx_priority = key_mapper.get_button_id(self.b_priority)
-        self.b_idx_movetest = key_mapper.get_button_id(self.b_movetest)
         self.a_idx_linear   = key_mapper.get_axis_id(a_linear)
         self.a_idx_angular  = key_mapper.get_axis_id(a_angular)
 
