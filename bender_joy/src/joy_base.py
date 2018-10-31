@@ -19,13 +19,14 @@ class JoystickBase(object):
     def __init__(self):
 
         # loading robot
-        self.robot  = robot_factory.build(["neck","face","tts"],core=False)
+        self.robot  = robot_factory.build(["neck","face"],core=False)
+        # self.robot  = robot_factory.build(["neck","face","tts"],core=False)
         self.neck   = self.robot.get("neck")
         self.face   = self.robot.get("face")
-        self.tts    = self.robot.get("tts")
+        # self.tts    = self.robot.get("tts")
 
         # tts config
-        self.tts.set_language("spanish")
+        # self.tts.set_language("spanish")
 
         self.text_tts1 = "Frase de TTS 1"
         self.text_tts2 = "Frase de TTS 2"
@@ -201,10 +202,10 @@ class JoystickBase(object):
 
             if debugging: rospy.loginfo("Debugging the debugger")
 
-            if speak_tts1: self.tts.say(self.text_tts1)
-            if speak_tts2: self.tts.say(self.text_tts2)
-            if speak_tts3: self.tts.say(self.text_tts3)
-            if speak_tts4: self.tts.say(self.text_tts4)
+            if speak_tts1: rospy.loginfo("TTS1 pressed") # self.tts.say(self.text_tts1)
+            if speak_tts2: rospy.loginfo("TTS2 pressed") # self.tts.say(self.text_tts2)
+            if speak_tts3: rospy.loginfo("TTS3 pressed") # self.tts.say(self.text_tts3)
+            if speak_tts4: rospy.loginfo("TTS4 pressed") # self.tts.say(self.text_tts4)
 
             if bender_happy:
                 self.face.set_emotion("happy1")
