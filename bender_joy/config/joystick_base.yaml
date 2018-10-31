@@ -24,10 +24,28 @@ a_neck_x: 'RS_HORZ'
 a_neck_y: 'RS_VERT'
 
 # confirm neck movement
-b_neck_home: 'RS'
+b_neck_send: 'RS'
 
 # emotion buttons
 b_happy: 'A'
 b_angry: 'B'
 b_sad: 'X'
 b_surprise: 'Y'
+
+# neck limits
+min_yaw_pos: -1.8
+max_yaw_pos: 1.8
+home_yaw_pos: 0.0
+min_pitch_pos: -0.39
+max_pitch_pos: 0.88
+home_pitch_pos: 0.0
+
+# ===== tts parameters =====
+b_tts1: 'UP'
+b_tts2: 'LEFT'
+b_tts3: 'DOWN'
+b_tts4: 'RIGHT'
+
+# ===== debug parameters =====
+a_debug_l: 'LT'
+a_debug_r: 'RT'
