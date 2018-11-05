@@ -210,13 +210,25 @@ class JoystickBase(object):
             r_arm_inst      = left_triggered  and not debugging
             no_trigger      = not left_triggered and not right_triggered
 
-            if right_triggered:
-                #if y_is_pressed:
-                #    rospy.loginfo("Opening gripper")
-                #    self.r_gripper.open()
-                #if a_is_pressed:
-                #    rospy.loginfo("Closing gripper")
-                #    self.r_gripper.close()
+            if debugging:
+            	rospy.logwarn("Debugging commands")
+            	rospy.loginfo("Demonstration commands mode")
+            	if y_is_pressed:
+            		rospy.loginfo("Demonstration 1 executed...")
+            	if x_is_pressed:
+            		rospy.loginfo("Demonstration 2 executed...")
+            	if a_is_pressed:
+            		rospy.loginfo("Demonstration 3 executed...")
+            	if b_is_pressed:
+            		rospy.loginfo("Demonstration 4 executed...")
+
+            if r_arm_inst:
+                if y_is_pressed:
+                    rospy.loginfo("Opening gripper")
+                    self.r_gripper.open()
+                if a_is_pressed:
+                    rospy.loginfo("Closing gripper")
+                    self.r_gripper.close()
                 #if x_is_pressed:
                 #    rospy.loginfo("Moving right arm to home position")
                 #    self.r_arm.send_joint_goal(self.r_arm_home_angles)
