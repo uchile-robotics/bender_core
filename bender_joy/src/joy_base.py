@@ -5,12 +5,11 @@ __author__ = 'Matias Pavez'
 __email__ = 'matias.pavez.b@gmail.com'
 
 import rospy
+from std_msgs.msg import Float64
 from std_srvs.srv import Empty
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
-from geometry_msgs.msg import Pose, PoseStamped, Point  # added
 from bender_joy import xbox
-from moveit_python import MoveGroupInterface            # added
 
 from bender_skills import robot_factory
 
@@ -19,19 +18,27 @@ class JoystickBase(object):
     def __init__(self):
 
         # loading robot
-        self.robot  = robot_factory.build(["neck","face"],core=False)
-        # self.robot  = robot_factory.build(["neck","face","tts"],core=False)
-        self.neck   = self.robot.get("neck")
-        self.face   = self.robot.get("face")
-        # self.tts    = self.robot.get("tts")
+        rospy.logwarn("Attemping to build Bender")
+        self.robot 		= robot_factory.build(["neck","face","l_gripper","r_gripper"],core=False)
+        # self.robot      = robot_factory.build(["neck","face","tts",""l_arm","r_arm","l_gripper","r_gripper"],core=False)
+        self.neck       = self.robot.get("neck")
+        self.face       = self.robot.get("face")
+        # self.l_arm      = self.robot.get("l_arm")
+        # self.r_arm      = self.robot.get("r_arm")
+        self.l_gripper  = self.robot.get("l_gripper")
+        self.r_gripper  = self.robot.get("r_gripper")
+        # self.tts        = self.robot.get("tts")
 
         # tts config
         # self.tts.set_language("spanish")
 
-        self.text_tts1 = "Frase de TTS 1"
-        self.text_tts2 = "Frase de TTS 2"
-        self.text_tts3 = "Frase de TTS 3"
-        self.text_tts4 = "Frase de TTS 4"
+        self.text_tts1 = "Frase de T T S 1"
+        self.text_tts2 = "Frase de T T S 2"
+        self.text_tts3 = "Frase de T T S 3"
+        self.text_tts4 = "Frase de T T S 4"
+
+        self.r_arm_home_angles = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        self.r_arm_posUp_angles = [0.1, 0.0, 0.0, 1.1624, 0.0, 0.2565]
 
         rospy.loginfo('Joystick base init ...')
 
@@ -45,21 +52,23 @@ class JoystickBase(object):
 
         # load configuration
         self.b_pause    = rospy.get_param('~b_pause', 'START')
-        self.b_cancel   = rospy.get_param('~b_cancel', 'LS')  # modified
+        self.b_cancel   = rospy.get_param('~b_cancel', 'LS')
         self.b_priority = rospy.get_param('~b_priority', 'LB')
+
         # head buttons
         self.b_neck_send    = rospy.get_param('~b_neck_send','RS')
-        self.b_happy        = rospy.get_param('~b_happy','A')
-        self.b_angry        = rospy.get_param('~b_angry','B')
-        self.b_sad          = rospy.get_param('~b_sad','X')
-        self.b_surprise     = rospy.get_param('~b_surprise','Y')
+        self.b_a            = rospy.get_param('~b_a','A')
+        self.b_b            = rospy.get_param('~b_b','B')
+        self.b_x            = rospy.get_param('~b_x','X')
+        self.b_y            = rospy.get_param('~b_y','Y')
 
-        a_linear   = rospy.get_param('~a_linear', 'LS_VERT')
-        a_angular  = rospy.get_param('~a_angular', 'LS_HORZ')
+        # base analogs
+        self.a_linear   = rospy.get_param('~a_linear', 'LS_VERT')
+        self.a_angular  = rospy.get_param('~a_angular', 'LS_HORZ')
 
         # debug triggers
-        self.a_debug_l = rospy.get_param('~a_debug_l', 'LT')
-        self.a_debug_r = rospy.get_param('~a_debug_r', 'RT')
+        self.a_trigger_l = rospy.get_param('~a_trigger_l', 'LT')
+        self.a_trigger_r = rospy.get_param('~a_trigger_r', 'RT')
 
         # head analogs
         self.a_neck_x   = rospy.get_param('~a_neck_x', 'RS_HORZ')
@@ -67,11 +76,11 @@ class JoystickBase(object):
 
         # tts buttons
         self.b_tts1 = rospy.get_param('~b_tts1', 'UP')
-        self.b_tts2 = rospy.get_param('~b_tts1', 'LEFT')
-        self.b_tts3 = rospy.get_param('~b_tts1', 'DOWN')
-        self.b_tts4 = rospy.get_param('~b_tts1', 'RIGHT')
+        self.b_tts2 = rospy.get_param('~b_tts2', 'LEFT')
+        self.b_tts3 = rospy.get_param('~b_tts3', 'DOWN')
+        self.b_tts4 = rospy.get_param('~b_tts4', 'RIGHT')
 
-        # limit parameters
+        # hardware limit parameters
         self.max_yaw_pos        = rospy.get_param('~max_yaw_pos', 1.8)
         self.min_yaw_pos        = rospy.get_param('~min_yaw_pos', -1.8)
         self.home_yaw_pos       = rospy.get_param('~home_yaw_pos', 0.0)
@@ -81,12 +90,18 @@ class JoystickBase(object):
         self.max_linear_vel     = rospy.get_param('~max_linear_vel', 0.5)
         self.max_angular_vel    = rospy.get_param('~max_angular_vel', 0.5)
 
+        # demonstration limit parameters
+        self.min_yaw_demo   = self.min_yaw_pos * 0.85 / 2
+        self.max_yaw_demo   = self.max_yaw_pos * 0.85 / 2
+        self.min_pitch_demo = self.min_pitch_pos * 0.80
+        self.max_pitch_demo = self.max_pitch_pos * 0.90
+
         key_mapper = xbox.KeyMapper()
         self.b_idx_pause    = key_mapper.get_button_id(self.b_pause)
         self.b_idx_cancel   = key_mapper.get_button_id(self.b_cancel)
         self.b_idx_priority = key_mapper.get_button_id(self.b_priority)
-        self.a_idx_linear   = key_mapper.get_axis_id(a_linear)
-        self.a_idx_angular  = key_mapper.get_axis_id(a_angular)
+        self.a_idx_linear   = key_mapper.get_axis_id(self.a_linear)
+        self.a_idx_angular  = key_mapper.get_axis_id(self.a_angular)
 
         # head mappings
         self.b_idx_neck_send    = key_mapper.get_button_id(self.b_neck_send)
@@ -94,14 +109,14 @@ class JoystickBase(object):
         self.a_idx_neck_y       = key_mapper.get_axis_id(self.a_neck_y)
 
         # emotion mapping
-        self.b_idx_happy        = key_mapper.get_button_id(self.b_happy)
-        self.b_idx_angry        = key_mapper.get_button_id(self.b_angry)
-        self.b_idx_sad          = key_mapper.get_button_id(self.b_sad)
-        self.b_idx_surprise     = key_mapper.get_button_id(self.b_surprise)
+        self.b_idx_a        = key_mapper.get_button_id(self.b_a)
+        self.b_idx_b        = key_mapper.get_button_id(self.b_b)
+        self.b_idx_x        = key_mapper.get_button_id(self.b_x)
+        self.b_idx_y        = key_mapper.get_button_id(self.b_y)
 
-        # debug mapping
-        self.a_idx_debug_l  = key_mapper.get_axis_id(self.a_debug_l)
-        self.a_idx_debug_r  = key_mapper.get_axis_id(self.a_debug_r)
+        # trigger mapping
+        self.a_idx_trigger_l  = key_mapper.get_axis_id(self.a_trigger_l)
+        self.a_idx_trigger_r  = key_mapper.get_axis_id(self.a_trigger_r)
 
         # tts mapping
         self.b_idx_tts1 = key_mapper.get_button_id(self.b_tts1)
@@ -182,49 +197,65 @@ class JoystickBase(object):
             speak_tts3      = msg.buttons[self.b_idx_tts3] == 1.0
             speak_tts4      = msg.buttons[self.b_idx_tts4] == 1.0
 
-            bender_happy    = msg.buttons[self.b_idx_happy] == 1.0
-            bender_angry    = msg.buttons[self.b_idx_angry] == 1.0
-            bender_sad      = msg.buttons[self.b_idx_sad] == 1.0
-            bender_surprise = msg.buttons[self.b_idx_surprise] == 1.0
+            a_is_pressed    = msg.buttons[self.b_idx_a] == 1.0
+            b_is_pressed    = msg.buttons[self.b_idx_b] == 1.0
+            x_is_pressed    = msg.buttons[self.b_idx_x] == 1.0
+            y_is_pressed    = msg.buttons[self.b_idx_y] == 1.0
 
-            left_triggered  = msg.axes[self.a_idx_debug_l] == -1.0
-            right_triggered = msg.axes[self.a_idx_debug_r] == -1.0
-            debugging       = left_triggered and right_triggered
+            left_triggered  = msg.axes[self.a_idx_trigger_l] == -1.0
+            right_triggered = msg.axes[self.a_idx_trigger_r] == -1.0
 
-            if neck_confirmed:
-                if neck_to_left:    yaw_neck = msg.axes[self.a_idx_neck_x] * abs(self.max_yaw_pos)
-                if neck_to_right:   yaw_neck = msg.axes[self.a_idx_neck_x] * abs(self.min_yaw_pos)
-                if neck_to_up:      pitch_neck = - msg.axes[self.a_idx_neck_y] * abs(self.min_pitch_pos)
-                if neck_to_down:    pitch_neck = - msg.axes[self.a_idx_neck_y] * abs(self.max_pitch_pos)
-                self.neck.stop
-                self.neck.send_joint_goal(yaw_neck,pitch_neck)
+            debugging       = left_triggered  and right_triggered
+            r_arm_inst      = right_triggered and not debugging
+            r_arm_inst      = left_triggered  and not debugging
+            no_trigger      = not left_triggered and not right_triggered
 
-            if debugging: rospy.loginfo("Debugging the debugger")
+            if right_triggered:
+                #if y_is_pressed:
+                #    rospy.loginfo("Opening gripper")
+                #    self.r_gripper.open()
+                #if a_is_pressed:
+                #    rospy.loginfo("Closing gripper")
+                #    self.r_gripper.close()
+                #if x_is_pressed:
+                #    rospy.loginfo("Moving right arm to home position")
+                #    self.r_arm.send_joint_goal(self.r_arm_home_angles)
+                #if b_is_pressed:
+                #    rospy.loginfo("Moving right arm to manipulation position")
+                #    self.r_arm.send_joint_goal(self.r_arm_posUp_angles)
 
-            if speak_tts1: rospy.loginfo("TTS1 pressed") # self.tts.say(self.text_tts1)
-            if speak_tts2: rospy.loginfo("TTS2 pressed") # self.tts.say(self.text_tts2)
-            if speak_tts3: rospy.loginfo("TTS3 pressed") # self.tts.say(self.text_tts3)
-            if speak_tts4: rospy.loginfo("TTS4 pressed") # self.tts.say(self.text_tts4)
+            if no_trigger:
+                if neck_confirmed:
+                    if neck_to_left:    yaw_neck = msg.axes[self.a_idx_neck_x] * abs(self.max_yaw_demo)
+                    if neck_to_right:   yaw_neck = msg.axes[self.a_idx_neck_x] * abs(self.min_yaw_demo)
+                    if neck_to_up:      pitch_neck = - msg.axes[self.a_idx_neck_y] * abs(self.min_pitch_demo)
+                    if neck_to_down:    pitch_neck = - msg.axes[self.a_idx_neck_y] * abs(self.max_pitch_demo)
+                    self.neck.stop
+                    self.neck.send_joint_goal(yaw_neck,pitch_neck)
 
-            if bender_happy:
-                self.face.set_emotion("happy1")
-                rospy.loginfo("Bender is happy :D")
-            if bender_angry:
-                self.face.set_emotion("angry1")
-                rospy.loginfo("Bender is angry >:(")
-            if bender_sad:
-                self.face.set_emotion("sad1")
-                rospy.loginfo("Bender is sad :c")
-            if bender_surprise:
-                self.face.set_emotion("surprise")
-                rospy.loginfo("Bender is surprised :O")
+                if speak_tts1: rospy.loginfo("TTS1 pressed") # self.tts.say(self.text_tts1)
+                if speak_tts2: rospy.loginfo("TTS2 pressed") # self.tts.say(self.text_tts2)
+                if speak_tts3: rospy.loginfo("TTS3 pressed") # self.tts.say(self.text_tts3)
+                if speak_tts4: rospy.loginfo("TTS4 pressed") # self.tts.say(self.text_tts4)
+
+                if a_is_pressed:
+                    self.face.set_emotion("happy1")
+                    rospy.loginfo("Bender is happy :D")
+                if b_is_pressed:
+                    self.face.set_emotion("angry1")
+                    rospy.loginfo("Bender is angry >:(")
+                if x_is_pressed:
+                    self.face.set_emotion("sad1")
+                    rospy.loginfo("Bender is sad :c")
+                if y_is_pressed:
+                    self.face.set_emotion("surprise")
+                    rospy.loginfo("Bender is surprised :O")
 
             if msg.buttons[self.b_idx_priority]:
                 rospy.logwarn_throttle(2, "Drive with care. Using the high priority joystick topic.")
                 self.pub_priority.publish(cmd)
             else:
                 self.pub.publish(cmd)
-
 
 if __name__ == '__main__':
     rospy.init_node('joy_base')
