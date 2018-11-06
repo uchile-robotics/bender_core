@@ -69,6 +69,10 @@ class JoystickBase(object):
         self.a_trigger_l = rospy.get_param('~a_trigger_l', 'LT')
         self.a_trigger_r = rospy.get_param('~a_trigger_r', 'RT')
 
+        # debug buttons
+        self.b_trig_l = rospy.get_param('~b_trig_l', 'LB')
+        self.b_trig_r = rospy.get_param('~b_trig_r', 'RB')
+
         # head analogs
         self.a_neck_x   = rospy.get_param('~a_neck_x', 'RS_HORZ')
         self.a_neck_y   = rospy.get_param('~a_neck_y', 'RS_VERT')
@@ -116,6 +120,8 @@ class JoystickBase(object):
         # trigger mapping
         self.a_idx_trigger_l  = key_mapper.get_axis_id(self.a_trigger_l)
         self.a_idx_trigger_r  = key_mapper.get_axis_id(self.a_trigger_r)
+        self.b_idx_trig_l	  = key_mapper.get_button_id(self.b_trig_l)
+        self.b_idx_trig_r	  = key_mapper.get_button_id(self.b_trig_r)
 
         # tts mapping
         self.b_idx_tts1 = key_mapper.get_button_id(self.b_tts1)
@@ -201,8 +207,11 @@ class JoystickBase(object):
             x_is_pressed    = msg.buttons[self.b_idx_x] == 1.0
             y_is_pressed    = msg.buttons[self.b_idx_y] == 1.0
 
-            left_triggered  = msg.axes[self.a_idx_trigger_l] < -0.9
-            right_triggered = msg.axes[self.a_idx_trigger_r] < -0.9
+            # left_triggered  = msg.axes[self.a_idx_trigger_l] < -0.9
+            # right_triggered = msg.axes[self.a_idx_trigger_r] < -0.9
+
+            left_triggered  = msg.buttons[self.b_idx_trig_l] == 1.0
+            right_triggered = msg.buttons[self.b_idx_trig_r] == 1.0
 
             debugging       = left_triggered  and right_triggered
             r_arm_inst      = right_triggered and not debugging

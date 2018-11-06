@@ -49,3 +49,6 @@ b_tts4: 'RIGHT'
 # ===== debug parameters =====
 a_trigger_l: 'LT'
 a_trigger_r: 'RT'
+
+b_trig_l: 'LB'
+b_trig_r: 'RB'
