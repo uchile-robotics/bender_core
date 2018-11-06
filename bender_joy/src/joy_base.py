@@ -19,7 +19,6 @@ class JoystickBase(object):
 
         # loading robot
         rospy.logwarn("Attemping to build Bender")
-        # self.robot 		= robot_factory.build(["neck","face","tts","l_gripper","r_gripper"],core=False)
         self.robot      = robot_factory.build(["neck","face","tts","l_arm","r_arm","l_gripper","r_gripper"],core=False)
         self.neck       = self.robot.get("neck")
         self.face       = self.robot.get("face")
