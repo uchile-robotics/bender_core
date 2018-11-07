@@ -10,9 +10,6 @@ b_cancel: 'LS'   # Changed from 'B' to 'LS'
 # high priority joystick button
 b_priority: 'LB'
 
-# arm
-b_arm: 'RB'
-
 # movement axes
 a_angular: 'LS_HORZ'
 a_linear:  'LS_VERT'
@@ -21,16 +18,37 @@ a_linear:  'LS_VERT'
 max_linear_vel: 0.7   # caution: do not use values higher than 0.7 
 max_angular_vel: 0.8  # caution: do not use values higher than 0.8
 
+# ===== generic buttons =====
+b_a: 'A'
+b_b: 'B'
+b_x: 'X'
+b_y: 'Y'
+
 # ===== head parameters =====
 # neck axes
 a_neck_x: 'RS_HORZ'
 a_neck_y: 'RS_VERT'
 
 # confirm neck movement
-b_neck_home: 'RS'
+b_neck_send: 'RS'
 
-# emotion buttons
-b_happy: 'A'
-b_angry: 'B'
-b_sad: 'X'
-b_surprise: 'Y'
+# neck limits
+min_yaw_pos: -1.8
+max_yaw_pos: 1.8
+home_yaw_pos: 0.0
+min_pitch_pos: -0.39
+max_pitch_pos: 0.88
+home_pitch_pos: 0.0
+
+# ===== tts parameters =====
+b_tts1: 'UP'
+b_tts2: 'LEFT'
+b_tts3: 'DOWN'
+b_tts4: 'RIGHT'
+
+# ===== debug parameters =====
+a_trigger_l: 'LT'
+a_trigger_r: 'RT'
+
+b_trig_l: 'LB'
+b_trig_r: 'RB'

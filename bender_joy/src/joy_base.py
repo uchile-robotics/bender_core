@@ -5,260 +5,383 @@ __author__ = 'Matias Pavez'
 __email__ = 'matias.pavez.b@gmail.com'
 
 import rospy
+from std_msgs.msg import Float64
 from std_srvs.srv import Empty
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
-from geometry_msgs.msg import Pose, PoseStamped, Point  # added
 from bender_joy import xbox
-from moveit_python import MoveGroupInterface            # added
-from std_msgs.msg import Float64
 
 from bender_skills import robot_factory
 
 class JoystickBase(object):
 
+	def __init__(self):
 
-    def __init__(self):
+		# loading robot
+		rospy.logwarn("Attemping to build Bender")
+		#self.robot      = robot_factory.build(["neck","face","tts","l_arm","r_arm","l_gripper","r_gripper"],core=False)
+		self.robot=robot_factory.build(["neck","face","tts","r_arm","r_gripper"],core=False)
+		self.neck       = self.robot.get("neck")
+		self.face       = self.robot.get("face")
+		#self.l_arm      = self.robot.get("l_arm")
+		self.r_arm      = self.robot.get("r_arm")
+		#self.l_gripper  = self.robot.get("l_gripper")
+		self.r_gripper  = self.robot.get("r_gripper")
+		self.tts        = self.robot.get("tts")
 
-        # loading robot
-        self.robot = robot_factory.build(["neck","face","tts","r_arm"],core=False)
-        self.neck = self.robot.get("neck")
-        self.face = self.robot.get("face")
-        self.tts=self.robot.get("tts")
-        self.arm=self.robot.get("r_arm")
+		# tts config
+		self.tts.set_language("spanish")
 
-        rospy.loginfo('Joystick base init ...')
+		self.text_tts1 = "Frase de T T S 1"
+		self.text_tts2 = "Frase de T T S 2"
+		self.text_tts3 = "Frase de T T S 3"
+		self.text_tts4 = "Frase de T T S 4"
 
-        # connections
-        self.pub = rospy.Publisher('base/cmd_vel', Twist, queue_size=1)
-        #self.pub_priority = rospy.Publisher('base/master_cmd_vel', Twist, queue_size=1)
-        self.pub_priority = rospy.Publisher('/bender/nav/base/cmd_vel', Twist, queue_size=1)
-        self.cancel_goal_client = rospy.ServiceProxy('/bender/nav/goal_server/cancel', Empty)
-        #R_Arm publishers
-        self.rElbowPitch = rospy.Publisher('/bender/r_elbow_pitch_controller/command',Float64, queue_size=1)
-        self.rElbowYaw = rospy.Publisher('/bender/r_elbow_yaw_controller/command',Float64, queue_size=1)
-        self.rShoulderPitch = rospy.Publisher('/bender/r_shoulder_pitch_controller/command',Float64, queue_size=1)
-        self.rShoulderYaw = rospy.Publisher('/bender/r_shoulder_yaw_controller/command',Float64, queue_size=1)
-        self.rShoulderRoll = rospy.Publisher('/bender/r_shoulder_roll_controller/command',Float64, queue_size=1)
-        self.rWristPitch = rospy.Publisher('/bender/r_wrist_pitch_controller/command',Float64, queue_size=1)
+		self.r_arm_home_angles = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+		self.r_arm_posUp_angles = [0.1, 0.0, 0.0, 1.1624, 0.0, 0.2565]
 
-        # control
-        self.is_paused = False
+		rospy.loginfo('Joystick base init ...')
 
-        # load configuration
-        self.b_pause    = rospy.get_param('~b_pause', 'START')
-        self.b_cancel   = rospy.get_param('~b_cancel', 'LS')  # modified
-        self.b_priority = rospy.get_param('~b_priority', 'LB')
-        self.b_arm = rospy.get_param('~b_arm', 'RB')
-        self.b_movetest = rospy.get_param('~b_movetest', 'A') # test
-        # head buttons
-        self.b_neck_home = rospy.get_param('~b_neck_home','RS')
-        self.b_happy = rospy.get_param('~b_happy','A')
-        self.b_angry = rospy.get_param('~b_angry','B')
-        self.b_sad = rospy.get_param('~b_sad','X')
-        self.b_surprise = rospy.get_param('~b_surprise','Y')
+		# connections
+		self.pub = rospy.Publisher('base/cmd_vel', Twist, queue_size=1)
+		self.pub_priority = rospy.Publisher('base/master_cmd_vel', Twist, queue_size=1)
+		self.cancel_goal_client = rospy.ServiceProxy('/bender/nav/goal_server/cancel', Empty)
 
-        a_linear   = rospy.get_param('~a_linear', 'LS_VERT')
-        a_angular  = rospy.get_param('~a_angular', 'LS_HORZ')
+		# control
+		self.is_paused = False
 
-        # head analogs
-        a_neck_x   = rospy.get_param('~a_neck_x', 'RS_HORZ')
-        a_neck_y   = rospy.get_param('~a_neck_y', 'RS_VERT')
+		# load configuration
+		self.b_pause    = rospy.get_param('~b_pause', 'START')
+		self.b_cancel   = rospy.get_param('~b_cancel', 'LS')
+		self.b_priority = rospy.get_param('~b_priority', 'LB')
 
-        self.max_linear_vel  = rospy.get_param('~max_linear_vel', 0.5)
-        self.max_angular_vel = rospy.get_param('~max_angular_vel', 0.5)
+		# head buttons
+		self.b_neck_send    = rospy.get_param('~b_neck_send','RS')
+		self.b_a            = rospy.get_param('~b_a','A')
+		self.b_b            = rospy.get_param('~b_b','B')
+		self.b_x            = rospy.get_param('~b_x','X')
+		self.b_y            = rospy.get_param('~b_y','Y')
 
-        key_mapper = xbox.KeyMapper()
-        self.b_idx_pause    = key_mapper.get_button_id(self.b_pause)
-        self.b_idx_cancel   = key_mapper.get_button_id(self.b_cancel)
-        self.b_idx_priority = key_mapper.get_button_id(self.b_priority)
-        self.b_idx_arm = key_mapper.get_button_id(self.b_arm)
-        self.b_idx_movetest = key_mapper.get_button_id(self.b_movetest)
-        self.a_idx_linear   = key_mapper.get_axis_id(a_linear)
-        self.a_idx_angular  = key_mapper.get_axis_id(a_angular)
+		# base analogs
+		self.a_linear   = rospy.get_param('~a_linear', 'LS_VERT')
+		self.a_angular  = rospy.get_param('~a_angular', 'LS_HORZ')
 
-        # head mappings
-        self.b_idx_neck_home    = key_mapper.get_button_id(self.b_neck_home)
-        self.a_idx_neck_x       = key_mapper.get_axis_id(a_neck_x)
-        self.a_idx_neck_y       = key_mapper.get_axis_id(a_neck_y)
+		# debug triggers
+		self.a_trigger_l = rospy.get_param('~a_trigger_l', 'LT')
+		self.a_trigger_r = rospy.get_param('~a_trigger_r', 'RT')
 
-        # emotion mapping
-        self.b_idx_happy        = key_mapper.get_button_id(self.b_happy)
-        self.b_idx_angry        = key_mapper.get_button_id(self.b_angry)
-        self.b_idx_sad          = key_mapper.get_button_id(self.b_sad)
-        self.b_idx_surprise     = key_mapper.get_button_id(self.b_surprise)
+		# debug buttons
+		self.b_trig_l = rospy.get_param('~b_trig_l', 'LB')
+		self.b_trig_r = rospy.get_param('~b_trig_r', 'RB')
 
-        # check
-        self.assert_params()
+		# head analogs
+		self.a_neck_x   = rospy.get_param('~a_neck_x', 'RS_HORZ')
+		self.a_neck_y   = rospy.get_param('~a_neck_y', 'RS_VERT')
 
-        # ready to work
-        rospy.Subscriber('joy', Joy, self.callback, queue_size=1)
-        rospy.loginfo('Joystick for base is ready')
+		# tts buttons
+		self.b_tts1 = rospy.get_param('~b_tts1', 'UP')
+		self.b_tts2 = rospy.get_param('~b_tts2', 'LEFT')
+		self.b_tts3 = rospy.get_param('~b_tts3', 'DOWN')
+		self.b_tts4 = rospy.get_param('~b_tts4', 'RIGHT')
 
-    def assert_params(self):
-        """
-        checks whether the user parameters are valid or no.
-        """
-        assert isinstance(self.b_idx_pause, int)
-        assert isinstance(self.a_idx_angular, int)
-        assert isinstance(self.a_idx_linear, int)
+		# hardware limit parameters
+		self.max_yaw_pos        = rospy.get_param('~max_yaw_pos', 1.8)
+		self.min_yaw_pos        = rospy.get_param('~min_yaw_pos', -1.8)
+		self.home_yaw_pos       = rospy.get_param('~home_yaw_pos', 0.0)
+		self.max_pitch_pos      = rospy.get_param('~max_pitch_pos', 0.88)
+		self.min_pitch_pos      = rospy.get_param('~min_pitch_pos', -0.39)
+		self.home_pitch_pos     = rospy.get_param('~home_pitch_pos', 0.0)
+		self.max_linear_vel     = rospy.get_param('~max_linear_vel', 0.5)
+		self.max_angular_vel    = rospy.get_param('~max_angular_vel', 0.5)
 
-    # this method breaks the decoupling between base and soft ws!!!
-    def cancel_goal(self):
-        try:
-            self.cancel_goal_client.wait_for_service(0.5)
-            self.cancel_goal_client()
-            rospy.loginfo("Goal cancelled")
-        except rospy.ServiceException:
-            rospy.loginfo("There is no goal to cancel")
-        except Exception:
-            pass
+		# demonstration limit parameters
+		self.min_yaw_demo   = self.min_yaw_pos * 0.85 / 2
+		self.max_yaw_demo   = self.max_yaw_pos * 0.85 / 2
+		self.min_pitch_demo = self.min_pitch_pos * 0.80
+		self.max_pitch_demo = self.max_pitch_pos * 0.90
 
-    def armHome(self):
-        comm=Float64(0.0)
-        self.rElbowYaw.publish(comm)
-        self.rElbowPitch.publish(comm)
-        self.rShoulderYaw.publish(comm)
-        self.rShoulderPitch.publish(comm)
-        self.rShoulderRoll.publish(comm)
-        self.rWristPitch.publish(comm)
+		key_mapper = xbox.KeyMapper()
+		self.b_idx_pause    = key_mapper.get_button_id(self.b_pause)
+		self.b_idx_cancel   = key_mapper.get_button_id(self.b_cancel)
+		self.b_idx_priority = key_mapper.get_button_id(self.b_priority)
+		self.a_idx_linear   = key_mapper.get_axis_id(self.a_linear)
+		self.a_idx_angular  = key_mapper.get_axis_id(self.a_angular)
 
-    def moveArm(self, angle):
-        self.rElbowYaw.publish(angle[0])
-        self.rElbowPitch.publish(angle[1])
-        self.rShoulderYaw.publish(angle[2])
-        self.rShoulderPitch.publish(angle[3])
-        self.rShoulderRoll.publish(angle[4])
-        self.rWristPitch.publish(angle[5])
+		# head mappings
+		self.b_idx_neck_send    = key_mapper.get_button_id(self.b_neck_send)
+		self.a_idx_neck_x       = key_mapper.get_axis_id(self.a_neck_x)
+		self.a_idx_neck_y       = key_mapper.get_axis_id(self.a_neck_y)
 
+		# emotion mapping
+		self.b_idx_a        = key_mapper.get_button_id(self.b_a)
+		self.b_idx_b        = key_mapper.get_button_id(self.b_b)
+		self.b_idx_x        = key_mapper.get_button_id(self.b_x)
+		self.b_idx_y        = key_mapper.get_button_id(self.b_y)
 
-    def callback(self, msg):
+		# trigger mapping
+		self.a_idx_trigger_l  = key_mapper.get_axis_id(self.a_trigger_l)
+		self.a_idx_trigger_r  = key_mapper.get_axis_id(self.a_trigger_r)
+		self.b_idx_trig_l	  = key_mapper.get_button_id(self.b_trig_l)
+		self.b_idx_trig_r	  = key_mapper.get_button_id(self.b_trig_r)
 
-        # pause
-        if msg.buttons[self.b_idx_pause]:
+		# tts mapping
+		self.b_idx_tts1 = key_mapper.get_button_id(self.b_tts1)
+		self.b_idx_tts2 = key_mapper.get_button_id(self.b_tts2)
+		self.b_idx_tts3 = key_mapper.get_button_id(self.b_tts3)
+		self.b_idx_tts4 = key_mapper.get_button_id(self.b_tts4)
 
-            self.is_paused = not self.is_paused
-            if self.is_paused:
+		# check
+		self.assert_params()
 
-                # stop signal
-                cmd = Twist()
-                self.pub.publish(cmd)
+		# ready to work
+		rospy.Subscriber('joy', Joy, self.callback, queue_size=1)
+		rospy.loginfo('Joystick for base is ready')
 
-                rospy.logwarn("\nControlling PAUSED!, press the " + self.b_pause + " button to resume it\n")
-            else:
-                rospy.logwarn("Controlling RESUMED, press " + self.b_pause + " button to pause it")
+	def assert_params(self):
+		"""
+		checks whether the user parameters are valid or no.
+		"""
+		assert isinstance(self.b_idx_pause, int)
+		assert isinstance(self.a_idx_angular, int)
+		assert isinstance(self.a_idx_linear, int)
 
-            # very important sleep!
-            # prevents multiple triggersfor the same button
-            rospy.sleep(1)  # it should be >= 1;
-            return
+	# this method breaks the decoupling between base and soft ws!!!
+	def cancel_goal(self):
+		try:
+			self.cancel_goal_client.wait_for_service(0.5)
+			self.cancel_goal_client()
+			rospy.loginfo("Goal cancelled")
+		except rospy.ServiceException:
+			rospy.loginfo("There is no goal to cancel")
+		except Exception:
+			pass
 
-        elif msg.buttons[self.b_idx_cancel]:
-            self.cancel_goal()
-            return
+	def callback(self, msg):
 
-        # work
-        if not self.is_paused:
+		# pause
+		if msg.buttons[self.b_idx_pause]:
 
-            cmd = Twist()
-            cmd.angular.z = self.max_angular_vel * msg.axes[self.a_idx_angular]
-            cmd.linear.x = self.max_linear_vel * msg.axes[self.a_idx_linear]
+			self.is_paused = not self.is_paused
+			if self.is_paused:
 
-            neck_to_left    = msg.axes[self.a_idx_neck_x] > 0.9
-            neck_to_right   = msg.axes[self.a_idx_neck_x] < -0.9
-            neck_to_up      = msg.axes[self.a_idx_neck_y] > 0.9
-            neck_to_down    = msg.axes[self.a_idx_neck_y] < -0.9
-            neck_to_home    = msg.buttons[self.b_idx_neck_home] == 1.0
+				# stop signal
+				cmd = Twist()
+				self.pub.publish(cmd)
 
-            bender_happy    = msg.buttons[self.b_idx_happy] == 1.0
-            bender_angry    = msg.buttons[self.b_idx_angry] == 1.0
-            bender_sad      = msg.buttons[self.b_idx_sad] == 1.0
-            bender_surprise = msg.buttons[self.b_idx_surprise] == 1.0
+				rospy.logwarn("\nControlling PAUSED!, press the " + self.b_pause + " button to resume it\n")
+			else:
+				rospy.logwarn("Controlling RESUMED, press " + self.b_pause + " button to pause it")
 
-            bender_arm      = msg.buttons[self.b_idx_arm] == 1.0
+			# very important sleep!
+			# prevents multiple triggersfor the same button
+			rospy.sleep(1)  # it should be >= 1;
+			return
 
-            tts1            = msg.axes[6]== 1.0
-            tts2            = msg.axes[6]== -1.0
-            tts3            = msg.axes[7]== 1.0
-            tts4            = msg.axes[7]== -1.0
+		elif msg.buttons[self.b_idx_cancel]:
+			self.cancel_goal()
+			return
 
+		# work
+		if not self.is_paused:
 
-            if neck_to_left:
-                self.neck.look_left()
-                rospy.loginfo("Moving neck to left <---")
-            if neck_to_right:
-                self.neck.look_right()
-                rospy.loginfo("Moving neck to right --->")
-            if neck_to_down:
-                self.neck.look_at_ground()
-                rospy.loginfo("Moving neck to ground ___")
-            if neck_to_home:
-                self.neck.home()
-                rospy.loginfo("Moving to home position")
+			cmd = Twist()
+			cmd.angular.z = self.max_angular_vel * msg.axes[self.a_idx_angular]
+			cmd.linear.x = self.max_linear_vel * msg.axes[self.a_idx_linear]
 
-            if bender_arm :
-                
-                rospy.logwarn_throttle(2, "Moving Arm")
-                if bender_happy:
-                    self.arm.send_joint_goal([0.0]*6)
-                    rospy.loginfo("Moving to home...")
-                if bender_angry:
-                    pos_1=[-0.5, 0.0, 0.0, 1.5, 0.0, 0.8]
-                    self.arm.send_joint_goal(pos_1)
-                    rospy.loginfo("Moving to pre_1...")
-                if bender_sad:
+			yaw_neck    = 0.0
+			pitch_neck  = 0.0
 
-                    rospy.loginfo("Moving to pre_2...")
-                if bender_surprise:
-                    pos_2=[0.1, 0.0, 0.0, 1.1624, 0.0, 0.2565]
-                    self.arm.send_joint_goal(pos_2)
-                    rospy.loginfo("Moving to home...")
-                return
+			neck_to_left    = msg.axes[self.a_idx_neck_x] > 0.0
+			neck_to_right   = msg.axes[self.a_idx_neck_x] < 0.0
+			neck_to_up      = msg.axes[self.a_idx_neck_y] > 0.0
+			neck_to_down    = msg.axes[self.a_idx_neck_y] < 0.0
 
-            if bender_happy:
-                self.face.set_emotion("happy1")
-                rospy.loginfo("Bender is happy :D")
-            if bender_angry:
-                self.face.set_emotion("angry1")
-                rospy.loginfo("Bender is angry >:(")
-            if bender_sad:
-                self.face.set_emotion("sad1")
-                rospy.loginfo("Bender is sad :c")
-            if bender_surprise:
-                self.face.set_emotion("fear")
-                rospy.loginfo("Bender is frightened :O")
+			neck_confirmed  = msg.buttons[self.b_idx_neck_send] == 1.0
 
-            if msg.buttons[self.b_idx_priority]:
-                rospy.logwarn_throttle(2, "Drive with care. Using the high priority joystick topic.")
-                self.pub_priority.publish(cmd)
-            else:
-                self.pub.publish(cmd)
+			speak_tts1      = msg.buttons[self.b_idx_tts1] == 1.0
+			speak_tts2      = msg.buttons[self.b_idx_tts2] == 1.0
+			speak_tts3      = msg.buttons[self.b_idx_tts3] == 1.0
+			speak_tts4      = msg.buttons[self.b_idx_tts4] == 1.0
 
-            
+			a_is_pressed    = msg.buttons[self.b_idx_a] == 1.0
+			b_is_pressed    = msg.buttons[self.b_idx_b] == 1.0
+			x_is_pressed    = msg.buttons[self.b_idx_x] == 1.0
+			y_is_pressed    = msg.buttons[self.b_idx_y] == 1.0
 
-            if tts1:
-                self.tts.say("Hola Amigos")
-                rospy.loginfo("Speaking")
+			# left_triggered  = msg.axes[self.a_idx_trigger_l] < -0.9
+			# right_triggered = msg.axes[self.a_idx_trigger_r] < -0.9
 
-            if tts2:
-                self.tts.say("omae wa mou chindeiru")
-                rospy.loginfo("Speaking")
+			left_triggered  = msg.buttons[self.b_idx_trig_l] == 1.0
+			right_triggered = msg.buttons[self.b_idx_trig_r] == 1.0
 
-            if tts3:
-                self.tts.say("Los voy a destruir a todos")
-                rospy.loginfo("Speaking")
+			debugging       = left_triggered  and right_triggered
+			l_arm_inst      = left_triggered  and not debugging
+			r_arm_inst      = right_triggered and not debugging
+			no_trigger      = not left_triggered and not right_triggered
 
-            if tts4:
-                self.tts.say("Bienvenidos al festival")
-                rospy.loginfo("Speaking")
+			# TIMING PERFECTO MODIFICANDO tts.py linea time_to_sleep = letters/50.0
+			if debugging:
+				rospy.logwarn("Debugging commands")
+				rospy.loginfo("Demonstration commands mode")
+				if y_is_pressed:
+					rospy.loginfo("Demonstration 1 executed...")
+					self.tts.say("Hola")
+					rospy.sleep(0.3)
+					self.tts.wait_until_done()
+					self.tts.say("Mi nombre es Bender")
+					rospy.sleep(0.5)
+					self.tts.wait_until_done()
+					self.tts.say("Soy desarrollado en la Universidad de Chile")
+					self.tts.wait_until_done()
+					self.tts.say("Por el equipo Jom Breikers")
+					rospy.sleep(0.2)
+					self.tts.wait_until_done()
+					self.tts.say("Me estan desarrollando desde el dos mil siete")
+					self.tts.wait_until_done()
+					self.tts.say("Soy un robot de servicio")
+					rospy.sleep(0.2)
+					self.tts.wait_until_done()
+					self.tts.say("Mi principal funcion es servir e interactuar con las personas")
+					self.tts.wait_until_done()
+					self.face.set_emotion("happy1")
+					self.tts.say("Para lograr mi cometido puedo emular emociones humanas")
+					self.tts.wait_until_done()
+					self.tts.say("Como la alegria")
+					rospy.sleep(0.5)
+					self.tts.wait_until_done()
+					self.face.set_emotion("angry1")
+					self.tts.say("Es mi estado basal y como me gusta estar")
+					self.tts.wait_until_done()
+					rospy.sleep(0.5)
+					self.face.set_emotion("sad1")
+					self.tts.say("Aunque si algo me molesta puedo hacerlo notar")
+					self.tts.wait_until_done()
+					self.face.set_emotion("fear")
+					self.tts.say("Si me tratan mal me siento muy triste")
+					rospy.sleep(0.5)
+					self.tts.wait_until_done()
+					self.tts.say("Y si noto que algo es peligroso para mi es muy facil asustarme")
+					rospy.sleep(0.5)
+					self.tts.wait_until_done()
+					self.tts.say("Todo esto para ayudar a los humanos a comunicarse conmigo")
+					self.tts.wait_until_done()
+					self.face.set_emotion("happy1")
 
-            if neck_to_up:
-                self.tts.say("Hola mi nombre es Bender")
-                rospy.loginfo("Speaking")
+				if x_is_pressed:
+					rospy.loginfo("Demonstration 2 executed...")
+					self.tts.say("Existen diversas cosas que puedo hacer")
+					rospy.sleep(0.2)
+					self.tts.wait_until_done()
+					self.tts.say("Dentro de mi movilidad se encuentra mi cabeza")
+					self.tts.wait_until_done()
+					self.neck.look_left()
+					self.neck.wait_for_motion_done()
+					self.neck.send_joint_goal(0.0,-abs(self.min_pitch_demo))
+					self.neck.wait_for_motion_done()
+					self.neck.look_right()
+					self.neck.wait_for_motion_done()
+					self.neck.look_at_ground()
+					self.neck.wait_for_motion_done()
+					self.neck.home()
+					self.tts.say("Ademas de poder mover mis brazos")
+					self.tts.wait_until_done()
+					self.tts.say("Y con mis pinzas puedo hacer una manipulacion simple de objetos")
+					self.tts.wait_until_done()
+					self.tts.say("Finalmente me puedo mover con dos grados de libertad")
+					self.tts.wait_until_done()
+					self.tts.say("Una es la rotacion y la otra es el movimiento de adelante y atras")
+					self.tts.wait_until_done()
 
+				if a_is_pressed:
+					rospy.loginfo("Demonstration 3 executed...")
+					self.tts.say("El equipo humano que me desarrolla es voluntario")
+					self.tts.wait_until_done()
+					self.tts.say("Ellos, mis amigos, son estudiantes de la F C F M")
+					rospy.sleep(0.3)
+					self.tts.wait_until_done()
+					self.tts.say("Entre sus carreras se encuentran Ingenieria civil electrica, mecanica, en computacion")
+					self.tts.wait_until_done()
+					self.neck.look_left()
+					self.tts.say("Los integrantes del equipo van rotando en el tiempo")
+					self.tts.wait_until_done()
+					self.tts.say("Esto ya que ergesan e ingresan constantemente")
+					self.tts.wait_until_done()
+					self.neck.look_right()
+					self.tts.say("Yo me actualizo y mejoro constantemente gracias a ellos")
+					self.tts.wait_until_done()
+					self.tts.say("Y ellos aprenden robotica gracias a mi")
+					self.tts.wait_until_done()
+					self.neck.home()
+					self.tts.say("La plataforma en la que me desarrollan se llama ROS")
+					rospy.sleep(0.2)
+					self.tts.wait_until_done()
+					self.tts.say("Es un entorno de trabajo que integra mis componentes en forma de nodos que se comunican entre ellos")
+					self.tts.wait_until_done()
 
+				if b_is_pressed:
+					rospy.loginfo("Demonstration 4 executed...")
+
+			if r_arm_inst:
+				rospy.logwarn("Right arm commands mode")
+				if y_is_pressed:
+					rospy.loginfo("Opening gripper")
+					self.r_gripper.open()
+				if a_is_pressed:
+					rospy.loginfo("Closing gripper")
+					self.r_gripper.close()
+				if x_is_pressed:
+					rospy.loginfo("Moving right arm to home position")
+					self.r_arm.send_joint_goal(self.r_arm_home_angles)
+				if b_is_pressed:
+					rospy.loginfo("Moving right arm to manipulation position")
+					self.r_arm.send_joint_goal(self.r_arm_posUp_angles)
+
+			if no_trigger:
+				if neck_confirmed:
+					if neck_to_left:
+						yaw_neck = msg.axes[self.a_idx_neck_x] * abs(self.max_yaw_demo)
+					if neck_to_right:
+						yaw_neck = msg.axes[self.a_idx_neck_x] * abs(self.min_yaw_demo)
+					if neck_to_up:
+						pitch_neck = - msg.axes[self.a_idx_neck_y] * abs(self.min_pitch_demo)
+					if neck_to_down:
+						pitch_neck = - msg.axes[self.a_idx_neck_y] * abs(self.max_pitch_demo)
+					self.neck.stop
+					self.neck.send_joint_goal(yaw_neck,pitch_neck)
+
+				if speak_tts1:
+					rospy.loginfo("TTS1 pressed")
+					self.tts.say(self.text_tts1)
+				if speak_tts2:
+					rospy.loginfo("TTS2 pressed")
+					self.tts.say(self.text_tts2)
+				if speak_tts3:
+					rospy.loginfo("TTS3 pressed")
+					self.tts.say(self.text_tts3)
+				if speak_tts4:
+					rospy.loginfo("TTS4 pressed")
+					self.tts.say(self.text_tts4)
+
+				if a_is_pressed:
+					self.face.set_emotion("happy1")
+					rospy.loginfo("Bender is happy :D")
+				if b_is_pressed:
+					self.face.set_emotion("angry1")
+					rospy.loginfo("Bender is angry >:(")
+				if x_is_pressed:
+					self.face.set_emotion("sad1")
+					rospy.loginfo("Bender is sad :c")
+				if y_is_pressed:
+					self.face.set_emotion("fear")
+					rospy.loginfo("Bender is frightened D:")
+
+			if msg.buttons[self.b_idx_priority]:
+				rospy.logwarn_throttle(2, "Drive with care. Using the high priority joystick topic.")
+				self.pub_priority.publish(cmd)
+			else:
+				self.pub.publish(cmd)
 
 if __name__ == '__main__':
-    rospy.init_node('joy_base')
-    JoystickBase()
-    rospy.spin()
+	rospy.init_node('joy_base')
+	JoystickBase()
+	rospy.spin()
