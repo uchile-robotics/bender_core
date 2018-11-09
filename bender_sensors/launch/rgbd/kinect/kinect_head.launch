@@ -4,11 +4,14 @@
 	  You can see the list with the available device id's on
 	'install/depth_devices.sh' (in this pkg).
 	 -->
+	<arg name="calibrated" 	default="true"/>
 
 	<!-- Openni for head kinect -->
 	<include file="$(find bender_sensors)/launch/rgbd/kinect/kinect.launch">
 		<arg name="kinect_name" value="rgbd_head"                   />
-		<arg name="device_id"   value="$(env BENDER_KINECT_HEAD_ID)"/>
+		<arg name="device_id"   value="$(env BENDER_RGBD_HEAD_ID)"/>
+		<arg name="publish_tf"  value="true"/>
+		<arg name="calibrated" 	value="$(arg calibrated)"/>
 	</include>
 
 </launch>
