@@ -66,7 +66,7 @@ class BaseCheckTask(SystemCheckTask):
 
             # create symlink
             SystemCheck.print_high(
-                "Devpath {} matches target id {}. Creating symlink to {} ...".format(devpath, self.id, symlink), 3)
+                "Devpath {} matches target id {}. Creating symlink to {} ...".format(devpath, self.vendor_id, symlink), 3)
 
             if not sh.mkdir_p(self.symlink_base, level=3, use_sudo=True):
                 SystemCheck.print_error("Failed to create directory: {}".format(self.symlink_base), 3)
