@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import division
+
+__author__ = 'Giovanni Pais'
+__email__ = 'giom.pais@gmail.com'
+
+import rospy
+from moveit_python import MoveGroupInterface
+
+from geometry_msgs.msg import Pose, PoseStamped, Point
+
+
+
+
+
+def main():
+    
+    
+    g = MoveGroupInterface("l_arm", "benderbase_link",None,False)  #"bender/l_shoulder_pitch_link"
+
+    joint_names=['l_shoulder_pitch_joint', 'l_shoulder_roll_joint',
+      'l_shoulder_yaw_joint', 'l_elbow_pitch_joint', 'l_elbow_yaw_joint',
+      'l_wrist_pitch_joint']
+    
+    rospy.loginfo('INICIA TEST')
+    home =[0.0,0.0,0.0,0.0,0.0,0.0]
+    #----------------------------------------------------------------
+
+    spos=PoseStamped()
+    #Position 
+    spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = -0.000332274, -0.261155, 0.665898
+
+    #simple_orientation = Quaternion(0.0,-0.70710678,0.0,0.70710678)
+    #Orientation
+    spos.pose.orientation.x, spos.pose.orientation.y, spos.pose.orientation.z, spos.pose.orientation.w = 0.0, -1.0, 0.0, 1.0
+
+    spos.header.frame_id="benderbase_link"
+
+
+    #Movimiento en espacio de joint
+    rospy.loginfo('MOVING: home')
+    g.moveToJointPosition(joint_names,home)
+
+    rospy.sleep(3.0)
+    rospy.loginfo('POSITION: home')
+
+    #Movimiento en espacio cartesiano
+    rospy.loginfo('MOVING: -0.000332274, -0.261155, 0.665898')
+    g.moveToPose(spos,"benderl_wrist_pitch_link")
+
+    rospy.sleep(3.0)
+    rospy.loginfo('POSITION: (-0.000332274, -0.261155, 0.665898)')
+    
+    rospy.sleep(1.0)
+    rospy.loginfo('TERMINA TEST')
+    ################################
+
+
+if __name__ == '__main__':
+    rospy.init_node('planning_tester')
+    main()

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot
+  xmlns:xacro="http://www.ros.org/wiki/xacro"
+  name="juan">
+  
+  <xacro:property name="prefix" value="Bender" />
+
+  <!-- Parameters -->
+  <xacro:include filename="$(find bender_description)/urdf/common.xacro" />
+  <!-- URDF Materials -->
+  <xacro:include filename="$(find bender_description)/urdf/materials.urdf.xacro" />
+  <!-- Gazebo macros -->
+  <xacro:include filename="$(find bender_description)/urdf/gazebo.urdf.xacro" />
+  <!-- Calibration parameters, used for arms in body.urdf.xacro -->
+  <xacro:include filename="$(find bender_description)/urdf/calibration.xacro" />
+  <!-- Dynamixel parameters -->
+  <xacro:include filename="$(find bender_description)/urdf/dynamixel.xacro" />
+
+<link name="world"/>
+  <!-- ******** Bender Parts ******** -->
+  <!-- Arm -->
+  <xacro:include filename="$(find prueba_bender)/urdf/arm.urdf.xacro" />
+  <!-- Left Arm -->
+  <xacro:arm side="l" parent="world" reflect="-1" prefix="${prefix}"/>
+  <!-- Right Arm -->
+  <!--xacro:arm side="r" parent="${prefix}right_shoulder" reflect="1" prefix="${prefix}"/-->
+</robot>

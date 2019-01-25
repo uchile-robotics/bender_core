@@ -1,0 +1,9 @@
+controller_list:
+  - name: fake_l_arm_controller
+    joints:
+      - l_shoulder_pitch_joint
+      - l_shoulder_roll_joint
+      - l_shoulder_yaw_joint
+      - l_elbow_pitch_joint
+      - l_elbow_yaw_joint
+      - l_wrist_pitch_joint

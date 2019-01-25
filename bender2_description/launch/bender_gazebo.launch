@@ -1,0 +1,38 @@
+<launch>
+<include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+ <!-- Gazebo GUI -->
+  <arg name="gui" default="True"/>
+
+  <!-- RQT GUI for control base and arms -->
+  <arg name="rqt_gui" default="True" />
+<arg name="prefix" default="bender/" />
+  <!-- Nombre del parametro para cargar modelo URDF, por defecto robot_description -->
+  <arg name="description_name" default="robot_description" />
+  <!-- Tipo de modelo standard|base -->
+  <arg name="model_type" default="standard" />
+  <param name="$(arg description_name)" command="$(find xacro)/xacro.py $(find prueba_bender)/urdf/bender_standart.urdf.xacro" />
+  <node
+    name="spawn_modelC"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-urdf -param robot_description -model body"
+    output="screen" />
+
+    
+<!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <!--node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model bender_model -param robot_description">
+  </node-->
+
+  <!-- Effort Trajectory controllers, launch in another console -->
+  <!--include file="$(find bender_gazebo)/launch/bender_control.launch.xml">
+    <arg name="model_type" value="$(arg model_type)" />
+  </include-->
+  
+  <!-- RQT Control perspective -->
+  <node if="$(arg rqt_gui)" name="rqt_command" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find bender_gazebo)/config/control.perspective"/>
+
+  <!-- Laser limiter pipeline -->
+  <!--include file="$(find bender_gazebo)/launch/laser_limiters.launch.xml"/-->
+
+    
+</launch>
