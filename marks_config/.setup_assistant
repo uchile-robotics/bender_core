@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: brazo_mark_x
+    relative_path: robots/brazo_mark_x.urdf
+  SRDF:
+    relative_path: config/brazo_mark_x.srdf
+  CONFIG:
+    author_name: GP
+    author_email: giom.pais@gmail.com
+    generated_timestamp: 1541803286

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arm">
-  <xacro:property name="prefix" value="bender" />
+  <xacro:property name="prefix" value="bender/" />
 	<xacro:macro name="left_arm" params="side prefix parent reflect">
 		<link 
     name="${prefix}${side}_arm_base_link">

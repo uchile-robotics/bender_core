@@ -1,0 +1,422 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arm">
+  <xacro:property name="prefix" value="bender" />
+	<xacro:macro name="left_arm" params="side prefix parent reflect">
+		<link
+    name="${prefix}${side}_arm_base_link ">
+    <inertial>
+      <origin
+        xyz="0.0339059249220753 ${reflect*0.0346573513549069} -0.0793288246357902"
+        rpy="0 0 0" />
+      <mass
+        value="0.324615512393576" />
+      <inertia
+        ixx="0.00094969466163847"
+        ixy="3.03268200003588E-08"
+        ixz="-1.68045404581414E-09"
+        iyy="0.00102886083053475"
+        iyz="2.95215412733647E-06"
+        izz="0.000216458880037149" />
+    </inertial>
+    <visual>
+        <origin
+        xyz="0 0 0"
+        rpy="0 0 -3.14" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_arm_base_link .STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 -3.14" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_arm_base_link .STL" />
+      </geometry>
+    </collision>
+  </link>
+
+
+  <link
+    name="${prefix}${side}_shoulder_pitch_link">
+    <inertial>
+      <origin
+        xyz="-0.000221371017997962 ${reflect*0.0215149739448069} -0.0138464644250362"
+        rpy="0 0 0" />
+      <mass
+        value="0.118005125822399" />
+      <inertia
+        ixx="6.71552220838397E-05"
+        ixy="-2.93566896160789E-07"
+        ixz="1.02730316391641E-06"
+        iyy="6.67648208042396E-05"
+        iyz="1.04550036931575E-06"
+        izz="5.29945450856649E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 3.14" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_shoulder_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 3.14" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_shoulder_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="${side}_shoulder_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="-0.0339 -0.0594 -0.0618"
+      rpy="4.5542E-05 5.6528E-07 -0.02481" />
+    <parent
+      link="${prefix}${side}_arm_base_link " />
+    <child
+      link="${prefix}${side}_shoulder_pitch_link" />
+    <axis
+      xyz="-0.024808 0.99969 -4.5542E-05" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="5"
+      velocity="5" />
+      <xacro:joint_transmission joint="${side}_shoulder_pitch_joint" />
+  </joint>
+
+  <link
+    name="${prefix}${side}_shoulder_roll_link">
+    <inertial>
+      <origin
+        xyz="-0.0127881033931593 ${reflect*-0.00116689875426995} -0.0732629777499247"
+        rpy="0 0 0" />
+      <mass
+        value="0.129672533071992" />
+      <inertia
+        ixx="0.000106058562030565"
+        ixy="-2.00812092058978E-07"
+        ixz="1.4889560969923E-05"
+        iyy="0.000121640210228128"
+        iyz="-1.18206261114108E-07"
+        izz="7.10184582455892E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_shoulder_roll_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_shoulder_roll_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="${side}_shoulder_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0.030013 -0.029852 -0.030058"
+      rpy="0 0 0" />
+    <parent
+      link="${prefix}${side}_shoulder_pitch_link" />
+    <child
+      link="${prefix}${side}_shoulder_roll_link" />
+    <axis
+      xyz="0.99969 0.024807 -0.0018441" />
+    <limit
+      lower="-1.57"
+      upper="0.1"
+      effort="5"
+      velocity="5" />
+      <xacro:joint_transmission joint="${side}_shoulder_roll_joint" />
+  </joint>
+
+  <link
+    name="${prefix}${side}_shoulder_yaw_link">
+    <inertial>
+      <origin
+        xyz="-0.0042741524333052 ${reflect*-0.00147100758699417} -0.125094329141736"
+        rpy="0 0 0" />
+      <mass
+        value="0.193031535918604" />
+      <inertia
+        ixx="0.000638890655282308"
+        ixy="7.46808129045532E-07"
+        ixz="6.43023973460341E-05"
+        iyy="0.00063979193548822"
+        iyz="-7.99651206771933E-06"
+        izz="7.9269769463747E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_shoulder_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_shoulder_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="${side}_shoulder_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="-0.030926 0.0014463 -0.061069"
+      rpy="0 0 0" />
+    <parent
+      link="${prefix}${side}_shoulder_roll_link" />
+    <child
+      link="${prefix}${side}_shoulder_yaw_link" />
+    <axis
+      xyz="0.001568 0.011145 0.99994" />
+    <limit
+      lower="-1.37"
+      upper="1.37"
+      effort="5"
+      velocity="5" />
+      <xacro:joint_transmission joint="${side}_shoulder_yaw_joint" />
+  </joint>
+
+  <link
+    name="${prefix}${side}_elbow_pitch_link">
+    <inertial>
+      <origin
+        xyz="-0.0205546644536709 ${reflect*-0.0301741743081646} -0.0621442193179244"
+        rpy="0 0 0" />
+      <mass
+        value="0.129181389472737" />
+      <inertia
+        ixx="0.000115532355980425"
+        ixy="-1.36144419821721E-07"
+        ixz="3.27716548999973E-06"
+        iyy="0.000103173310386321"
+        iyz="-8.00426740669056E-07"
+        izz="7.79747801198953E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_elbow_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_elbow_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="${side}_elbow_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="-0.00086942 -0.032609 -0.18837"
+      rpy="0 0 0" />
+    <parent
+      link="${prefix}${side}_shoulder_yaw_link" />
+    <child
+      link="${prefix}${side}_elbow_pitch_link" />
+    <axis
+      xyz="0 0.99994 -0.011145" />
+    <limit
+      lower="-1.57"
+      upper="0"
+      effort="5"
+      velocity="5" />
+      <xacro:joint_transmission joint="${side}_elbow_pitch_joint" />
+  </joint>
+
+  <link
+    name="${prefix}${side}_elbow_yaw_link">
+    <inertial>
+      <origin
+        xyz="0.00350640702176266 ${reflect*-0.00173363568000982} -0.172601672590221"
+        rpy="0 0 0" />
+      <mass
+        value="0.155262882498321" />
+      <inertia
+        ixx="0.00163142852685609"
+        ixy="-8.6800076732075E-07"
+        ixz="-7.92260626771847E-05"
+        iyy="0.00163324433834166"
+        iyz="-1.77335791004885E-05"
+        izz="5.36208143914715E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_elbow_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_elbow_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="${side}_elbow_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0.00091833 0.030253 -0.049238"
+      rpy="0 0 0" />
+    <parent
+      link="${prefix}${side}_elbow_pitch_link" />
+    <child
+      link="${prefix}${side}_elbow_yaw_link" />
+    <axis
+      xyz="-6.9045E-05 0.011145 0.99994" />
+    <limit
+      lower="-1.2"
+      upper="1.2"
+      effort="5"
+      velocity="5" />
+        <xacro:joint_transmission joint="${side}_elbow_yaw_joint" />
+  </joint>
+
+  <link
+    name="${prefix}${side}_wrist_pitch_link">
+    <inertial>
+      <origin
+        xyz="-0.000553462649978603 ${reflect*0.0167424085522638} -0.0540051282198145"
+        rpy="0 0 0" />
+      <mass
+        value="0.173798825796448" />
+      <inertia
+        ixx="0.000150181197524477"
+        ixy="1.42925638605822E-06"
+        ixz="1.5108541448373E-07"
+        iyy="9.27339297169167E-05"
+        iyz="2.0947431248222E-07"
+        izz="0.000112444049132553" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_wrist_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mark_xi_urdf/meshes/l_wrist_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="${side}_wrist_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0.00020829 -0.019843 -0.29049"
+      rpy="0 0 0" />
+    <parent
+      link="${prefix}${side}_elbow_yaw_link" />
+    <child
+      link="${prefix}${side}_wrist_pitch_link" />
+    <axis
+      xyz="-0.024817 0.99963 -0.011143" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="5"
+      velocity="5" />
+      <xacro:joint_transmission joint="${side}_wrist_pitch_joint" />
+  </joint>
+
+  <!--****Union Arms and shoulders*****-->
+  <joint name="${prefix}${side}_arm_to_${parent}_joint" type="fixed">
+    <origin xyz="${reflect*-0.03} ${reflect*0.15} 0.017" rpy="0 0 0" />
+    <parent link="${parent}" />
+    <child link="${prefix}${side}_arm_base_link " />
+  </joint>
+		
+	</xacro:macro>
+
+</robot>	

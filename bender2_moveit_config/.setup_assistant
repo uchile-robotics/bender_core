@@ -1,10 +1,10 @@
 moveit_setup_assistant_config:
   URDF:
-    package: prueba_bender
-    relative_path: urdf/bender_std.urdf
+    package: bender2_description
+    relative_path: urdf/bender_standart.urdf
   SRDF:
     relative_path: config/bender.srdf
   CONFIG:
     author_name: f
     author_email: f@gmail.com
-    generated_timestamp: 1547742462
+    generated_timestamp: 1553188495

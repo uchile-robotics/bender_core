@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="torso">
+  <xacro:property name="prefix" value="bender" />
+  <xacro:property name="M_PI" value="3.14" />
+    <!-- Lower torso  -->
+    <link
+      name="${prefix}torso_base">
+      <inertial>
+        <origin
+          xyz="0 0 0.22393"
+          rpy="0 0 0" />
+        <mass
+          value="2.7078"/>
+        <inertia
+          ixx="1.11781"
+          ixy="-0.21512"
+          ixz="-0.22598"
+          iyy="0.58134"
+          iyz="0.4495"
+          izz="0.75427"/>
+      </inertial>
+
+      <!--visual>
+        <origin
+          xyz="0 0 0"
+          rpy="${-M_PI/2} 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/lower_torso.dae" />
+        </geometry>
+        <material name="Grey3" />
+      </visual!-->
+
+      <collision>
+        <origin
+          xyz="0 0 0.428"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.045 0.045 0.857"/>
+        </geometry>
+      </collision>
+      <collision>
+        <origin
+          xyz="0 0 0.0215"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.131 0.131 0.043"/>
+        </geometry>
+      </collision>
+    </link>
+    
+    <joint
+      name="torso_mount_fixed_joint"
+      type="fixed">
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <parent
+        link="${parent}" />
+      <child
+        link="${prefix}torso_base" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+    -------
+    <link
+      name="${prefix}lower_torso_cal" />
+    <joint
+      name="lower_torso_cal_fixed_joint"
+      type="fixed">
+      <origin
+        xyz="0.12 0 0.45"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}lower_torso_base" />
+      <child
+        link="${prefix}lower_torso_cal" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+
+    
+
+    <!-- Upper torso check-->
+    <!-- Torso derecha -->
+    <link
+      name="${prefix}upper_torso_base_r">
+      <inertial>
+        <origin
+          xyz="0 0 0.45737"
+          rpy="0 0 0" />
+        <mass
+          value="0.78738" />
+        <inertia
+          ixx="0.70513"
+          ixy="-0.0047659"
+          ixz="0.13698"
+          iyy="0.73319"
+          iyz="0.0244186"
+          izz="0.029934" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="${-M_PI/2} 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/upper_torso.dae" />
+        </geometry>
+        <material name="Grey3" />
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0.15"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.2 0.035 0.15"/>
+        </geometry>
+      </collision>
+
+      <!-- Torso izquierda -->
+      <link
+      name="${prefix}upper_torso_base_l">
+      <inertial>
+        <origin
+          xyz="0 0 0.45737"
+          rpy="0 0 0" />
+        <mass
+          value="0.78738" />
+        <inertia
+          ixx="0.70513"
+          ixy="-0.0047659"
+          ixz="0.13698"
+          iyy="0.73319"
+          iyz="0.0244186"
+          izz="0.029934" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="${-M_PI/2} 0 0" />
+        <geometry>
+          <mesh
+            filename="package://bender_description/meshes/visual/upper_torso.dae" />
+        </geometry>
+        <material name="Grey3" />
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0.15"
+          rpy="0 0 0" />
+        <geometry>
+          <box size="0.2 0.035 0.15"/>
+        </geometry>
+      </collision>
+
+
+    </link>
+
+    <!-- link para hombro derecho -->
+    <joint
+      name="upper_torso_r_mount_fixed_joint"
+      type="fixed">
+      <!-- CALIBRATION Z 0.45 => 33.3 -->
+      <origin
+        xyz="0 0.0225 1.01893" 
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}torso_base" />
+      <child
+        link="${prefix}upper_torso_base_r" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+    <!-- link para hombro izquierdo -->
+
+    <joint
+      name="upper_torso_l_mount_fixed_joint"
+      type="fixed">
+      <!-- CALIBRATION Z 0.45 => 33.3 -->
+      <origin
+        xyz="0 -0.0225 1.01893" 
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}torso_base" />
+      <child
+        link="${prefix}upper_torso_base_l" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+    
+    <link
+      name="${prefix}r_arm_mount" />
+    <joint
+      name="r_arm_mount_fixed_joint"
+      type="fixed">
+      <!-- CALIBRATION Y -0.225 => -0.23 -->
+      <!-- CALIBRATION Z 0.619 => 0.610 -->
+      <origin
+        xyz="-0.005 -0.23 0.610"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}upper_torso_base_r" />
+      <child
+        link="${prefix}r_arm_mount" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+
+    <link
+      name="${prefix}l_arm_mount" />
+    <joint
+      name="l_arm_mount_fixed_joint"
+      type="fixed">
+      <!-- CALIBRATION Y 0.225 => 0.23 -->
+      <!-- CALIBRATION Z 0.619 => 0.610 -->
+      <origin
+        xyz="-0.005 0.23 0.610"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}upper_torso_base_l" />
+      <child
+        link="${prefix}l_arm_mount" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+    
+    <link
+      name="${prefix}neck_base" />
+    <joint
+      name="neck_base_fixed_joint"
+      type="fixed">
+      <!-- CALIBRATION Z 0.724 => 0.733 -->
+      <origin
+        xyz="-0.005 0 0.733"
+        rpy="0 0 0" />
+
+      <parent
+        link="${prefix}upper_torso_base" />
+      <child
+        link="${prefix}neck_base" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+    
+    <link
+      name="${prefix}waist_base" />
+    <joint
+      name="waist_base_fixed_joint"
+      type="fixed">
+      <origin
+        xyz="0.15 0 0.304"
+        rpy="0 0 0" />
+      <parent
+        link="${prefix}upper_torso_base" />
+      <child
+        link="${prefix}waist_base" />
+      <axis
+        xyz="0 0 0" />
+    </joint>
+</robot>

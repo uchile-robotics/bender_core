@@ -41,7 +41,7 @@
   <xacro:head parent="${prefix}neck_base" prefix="${prefix}" ns="/${prefix}sensors/rgbd_head" />
 
 <gazebo>
-      <plugin filename="libgazebo_ros_control.so" name="ros_control">
+      <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
         <robotNamespace>${prefix}</robotNamespace>
       </plugin>
     </gazebo>

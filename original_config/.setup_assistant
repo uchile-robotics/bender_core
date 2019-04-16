@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: original_arm
+    relative_path: robots/original_arm.urdf
+  SRDF:
+    relative_path: config/original_arm.srdf
+  CONFIG:
+    author_name: Giovanni Pais
+    author_email: giom.pais@gmail.com
+    generated_timestamp: 1516319828

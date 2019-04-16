@@ -1,0 +1,24 @@
+  controller_manager_ns: ''
+  controller_list:
+    - name: bender/l_arm_controller
+      action_ns: follow_joint_trajectory
+      type: FollowJointTrajectory
+      default: true
+      joints:
+        - l_shoulder_pitch_joint
+        - l_shoulder_roll_joint
+        - l_shoulder_yaw_joint
+        - l_elbow_pitch_joint
+        - l_elbow_yaw_joint
+        - l_wrist_pitch_joint
+    - name: bender/r_arm_controller
+      action_ns: follow_joint_trajectory
+      type: FollowJointTrajectory
+      default: true
+      joints:
+        - r_shoulder_pitch_joint
+        - r_shoulder_roll_joint
+        - r_shoulder_yaw_joint
+        - r_elbow_pitch_joint
+        - r_elbow_yaw_joint
+        - r_wrist_pitch_joint

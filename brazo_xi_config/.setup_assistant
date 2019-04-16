@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: brazo_v11_block_urdf
+    relative_path: robots/brazo_v11_block_urdf.urdf
+  SRDF:
+    relative_path: config/brazo_v11_block_urdf.srdf
+  CONFIG:
+    author_name: Giovanni
+    author_email: giom.pais@gmail.com
+    generated_timestamp: 1543596842

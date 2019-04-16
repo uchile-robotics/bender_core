@@ -1,0 +1,16 @@
+<launch>
+	<!-- Prefix param para links -->
+  <arg name="prefix" default="bender/" />
+  <!-- Tipo de modelo standard|base -->
+  <arg name="model_type" default="standard" />
+
+
+  <!-- Cargar y generar modelo usando xacro -->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find prueba_bender)/urdf/bender_torso.urdf.xacro' prefix:=$(arg prefix)"/>
+  	<node
+    name="spawn_modelC"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-urdf -param robot_description -model body"
+    output="screen" />
+</launch>

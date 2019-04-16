@@ -1,0 +1,6 @@
+<package>
+  <description brief="original_arm">original_arm</description>
+  <depend package="gazebo" />
+  <author>me</author>
+  <license>BSD</license>
+</package>
