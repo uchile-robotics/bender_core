@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="mask_head" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="mask_head" xmlns:xacro="http://www.ros.org/wiki/xacro">
     
     <xacro:property name="head_pitch_joint_lower" value="-0.39372" />
     <xacro:property name="head_pitch_joint_upper" value="0.88459" />

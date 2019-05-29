@@ -1,0 +1,280 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Torso">
+	<xacro:property name="prefix" value="$(arg prefix)" />
+	<xacro:property name="altura" value="0.2" />
+	<xacro:macro name="Torso" params="prefix parent">
+		<!-- Body Base link (Parent of all future links)-->
+		<link name="${prefix}torso">
+		    <inertial>
+		      <origin
+		        xyz="-0.000124342717756221 0.400487766454633 -0.000124342717754612"
+		        rpy="0 0 0" />
+		      <mass
+		        value="2.6839966623691" />
+		      <inertia
+		        ixx="0.215476685026517"
+		        ixy="-0.000126615345980391"
+		        ixz="4.14975715549634E-08"
+		        iyy="0.00132668550681761"
+		        iyz="-0.000126615345980623"
+		        izz="0.215476685026517" />
+		    </inertial>
+		    <visual>
+		      <origin
+		        xyz="0 0 ${altura}"
+		        rpy="0 0 0" />
+		      <geometry>
+		        <mesh
+		          filename="package://bender_description/meshes/visual/torso.STL" />
+		      </geometry>
+		      <material
+		        name="">
+		        <color
+		          rgba="0.650980392156863 0.619607843137255 0.588235294117647 1" />
+		      </material>
+		    </visual>
+		    <collision>
+		      <origin
+        		xyz="0 0 0.645"
+        		rpy="0 0 0" />
+		      <geometry>
+		        <box size="0.05 0.05 0.9" />
+		      </geometry>
+		    </collision>
+  		</link>
+  			<!--Base of the PC-->
+		  <link name="${prefix}PC_Base">
+		    <inertial>
+		      <origin
+		        xyz="-0.047995 -0.034202 -0.7282" rpy="0 0 1.57" />
+		      <mass
+		        value="0.30233" />
+		      <inertia
+		        ixx="0.005103"
+		        ixy="0.0004073"
+		        ixz="-0.00044025"
+		        iyy="0.0027955"
+		        iyz="-7.5418E-05"
+		        izz="0.0027419" />
+		     </inertial>
+		    <visual>
+		      <origin
+        		xyz="0 0 0"
+        		rpy="0 0 1.57" />
+		      <geometry>
+		        <mesh
+		          filename="package://bender_description/meshes/visual/PC_Base.STL" />
+		      </geometry>
+		      <material
+		        name="">
+		        <color
+		          rgba="0.79216 0.81961 0.93333 1" />
+		      </material>
+		    </visual>
+		    <collision>
+		      <origin
+        		xyz="0 0 0"
+        		rpy="0 0 1.57" />
+		      <geometry>
+		        <mesh
+		          filename="package://bender_description/meshes/visual/PC_Base.STL" />
+		      </geometry>
+		    </collision>
+		  </link>
+		  <!--joining the PCBASE LINK to the TORSO LINK-->
+		  <joint name="PC_Base_torso_joint" type="fixed">
+		    <origin
+		       xyz="0 0 ${altura}"
+		        rpy="0 0 0" />
+		    <parent
+		      link="${prefix}torso" />
+		    <child
+		      link="${prefix}PC_Base" />
+		    <axis
+		      xyz="0 0 1" />
+		  </joint>
+		  <!--Router Box Link-->
+		  <link name="${prefix}router">
+		    <inertial>
+		      <origin
+		        xyz="0.1305 0.0071427 -0.10701"
+		        rpy="0 0 0" />
+		      <mass
+		        value="0.22663" />
+		      <inertia
+		        ixx="0.00094829"
+		        ixy="-3.2425E-10"
+		        ixz="-1.2029E-09"
+		        iyy="0.0026031"
+		        iyz="-3.6199E-05"
+		        izz="0.0017029" />
+		    </inertial>
+		    <visual>
+		      <origin
+        		xyz="0 -0.1305 0"
+        		rpy="3.14 0 1.57" />
+		      <geometry>
+		        <mesh
+		          filename="package://bender_description/meshes/visual/router.STL" />
+		      </geometry>
+		      <material
+		        name="">
+		        <color
+		          rgba="0.75294 0.75294 0.75294 1" />
+		      </material>
+		    </visual>
+		    <collision>
+		      <origin
+        		xyz="0 -0.1305 0"
+        		rpy="3.14 0 1.57" />
+		      <geometry>
+		        <mesh
+		          filename="package://bender_description/meshes/visual/router.STL" />
+		      </geometry>
+		    </collision>
+		  </link>
+		  <!--Joint Between the Router and the BOdy-->
+		  <joint name="router_to_torso_joint" type="fixed">
+		    <origin
+      			xyz="0.02305 0 0.44504"
+      			rpy="0 0 0" />
+		    <parent
+		      link="${prefix}torso" />
+		    <child
+		      link="${prefix}router" />
+		    <axis
+		      xyz="0 0 -1" />
+		  </joint>
+		  <!--Bender Left shoulder, here we will later fixe the left arm-->
+		  <link name="${prefix}left_shoulder">
+		    <inertial>
+		      <origin
+		        xyz="0.0575 -2.6795E-06 0.09625"
+		        rpy="0 0 0" />
+		      <mass
+		        value="0.78738" />
+		      <inertia
+		        ixx="0.0023474"
+		        ixy="-4.2942E-18"
+		        ixz="2.2768E-18"
+		        iyy="0.0045718"
+		        iyz="-1.7258E-18"
+		        izz="0.0024042" />
+		    </inertial>
+		    <visual>
+		     <origin
+        		xyz="0 0 0"
+        		rpy="1.57 1.57 0" />
+		      <geometry>
+		        <mesh
+		          filename="package://bender_description/meshes/visual/left_shoulder.STL" />
+		      </geometry>
+		      <material
+		        name="">
+		        <color
+		          rgba="0.650980392156863 0.619607843137255 0.588235294117647 1" />
+		      </material>
+		    </visual>
+		    <collision>
+		      <origin
+        		xyz="0 -0.105 -0.0575"
+        		rpy="1.57 1.57 0" />
+		      <geometry>
+		        <box size="0.15 0.04 0.19" />
+		      </geometry>
+		    </collision>
+		  </link>
+
+		 <!-- Here we join the left shoulder with the Body with the--> 
+		  <joint
+		    name="left_shoulder_to_torso_joint"
+		    type="fixed">
+		    <origin
+		      xyz="0 0 ${0.8575+altura}"
+		      rpy="0 0 0" />
+		    <parent
+		      link="${prefix}torso" />
+		    <child
+		      link="${prefix}left_shoulder" />
+		  </joint>
+
+		  <!--Bender right shoulder, here we will later fixe the right arm-->
+		  <link
+		    name="${prefix}right_shoulder">
+		    <inertial>
+		      <origin
+		        xyz="-0.0575 -2.6795E-06 0.09625"
+		        rpy="0 0 0" />
+		      <mass
+		        value="0.78738" />
+		      <inertia
+		        ixx="0.0023474"
+		        ixy="3.0862E-19"
+		        ixz="1.8431E-18"
+		        iyy="0.0045718"
+		        iyz="-4.9816E-19"
+		        izz="0.0024042" />
+		    </inertial>
+		    <visual>
+		       <origin
+        			xyz="0 0 0"
+        			rpy="-1.57 -1.57 0" />
+		      <geometry>
+		        <mesh
+		          filename="package://bender_description/meshes/visual/right_shoulder.STL" />
+		      </geometry>
+		      <material
+		        name="">
+		        <color
+		          rgba="0.650980392156863 0.619607843137255 0.588235294117647 1" />
+		      </material>
+		    </visual>
+		    <collision>
+		      <origin
+        		xyz="0 0.105 -0.0575"
+        		rpy="-1.57 -1.57 0" />
+		      <geometry>
+		        <box size="0.15 0.04 0.19" />
+		      </geometry>
+		    </collision>
+		  </link>
+		  <!-- Here we join the left shoulder with the Body with the--> 
+		  <joint
+		    name="right_shoulder_to_torso_joint"
+		    type="fixed">
+		    <origin
+		      xyz="0 0 ${0.8575+altura}"
+		      rpy="0 0 0" />
+		    <parent
+		      link="${prefix}torso" />
+		    <child
+		      link="${prefix}right_shoulder" />
+		  </joint>
+		  <!-- here we have already created the Torso of Bender, so now we will create the joint with the other bender base-->
+
+		  <!-- Torso joint to the Base-->
+		  <joint name="lower_torso_mount_fixed_joint" type="fixed">
+		      <origin
+		        xyz="0 0 0"
+		        rpy="0 0 0" />
+		      <parent
+		        link="${parent}" />
+		      <child
+		        link="${prefix}torso" />
+	    </joint>
+
+		 <!--Neck base link -->
+		 <link name="${prefix}neck_base"/>
+
+		 <joint name="neck_base_to_body" type="fixed">
+		 	<origin xyz="0.03 0 1.1" rpy="0 0 0"/>
+		 	<parent link="${prefix}torso" />
+		 	<child link="${prefix}neck_base" />
+		 </joint>
+
+
+	</xacro:macro>
+
+  
+
+</robot>		
