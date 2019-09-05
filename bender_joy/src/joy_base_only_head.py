@@ -19,8 +19,8 @@ class JoystickBase(object):
 
         # loading robot
         rospy.logwarn("Attemping to build Bender")
-        self.robot      = robot_factory.build(["face","tts"],core=False)
-        #self.neck       = self.robot.get("neck")
+        self.robot      = robot_factory.build(["face","neck","tts"],core=False)
+        self.neck       = self.robot.get("neck")
         self.face       = self.robot.get("face")
         #self.l_arm      = self.robot.get("l_arm")
         #self.r_arm      = self.robot.get("r_arm")
@@ -335,13 +335,13 @@ class JoystickBase(object):
             #        self.r_arm.send_joint_goal(self.r_arm_posUp_angles)
 
             if no_trigger:
-                #if neck_confirmed:
-                #    if neck_to_left:    yaw_neck = msg.axes[self.a_idx_neck_x] * abs(self.max_yaw_demo)
-                #    if neck_to_right:   yaw_neck = msg.axes[self.a_idx_neck_x] * abs(self.min_yaw_demo)
-                #    if neck_to_up:      pitch_neck = - msg.axes[self.a_idx_neck_y] * abs(self.min_pitch_demo)
-                #    if neck_to_down:    pitch_neck = - msg.axes[self.a_idx_neck_y] * abs(self.max_pitch_demo)
-                #    self.neck.stop
-                #    self.neck.send_joint_goal(yaw_neck,pitch_neck)
+                if neck_confirmed:
+                    if neck_to_left:    yaw_neck = msg.axes[self.a_idx_neck_x] * abs(self.max_yaw_demo)
+                    if neck_to_right:   yaw_neck = msg.axes[self.a_idx_neck_x] * abs(self.min_yaw_demo)
+                    if neck_to_up:      pitch_neck = - msg.axes[self.a_idx_neck_y] * abs(self.min_pitch_demo)
+                    if neck_to_down:    pitch_neck = - msg.axes[self.a_idx_neck_y] * abs(self.max_pitch_demo)
+                    self.neck.stop
+                    self.neck.send_joint_goal(yaw_neck,pitch_neck)
 
                 if speak_tts1: rospy.loginfo("TTS1 pressed"); self.tts.say(self.text_tts1)
                 if speak_tts2: rospy.loginfo("TTS2 pressed"); self.tts.say(self.text_tts2)
