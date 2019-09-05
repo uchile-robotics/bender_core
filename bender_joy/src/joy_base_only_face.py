@@ -31,10 +31,10 @@ class JoystickBase(object):
         # tts config
         #self.tts.set_language("spanish")
 
-        #self.text_tts1 = "Frase de T T S 1"
-        #self.text_tts2 = "Frase de T T S 2"
-        #self.text_tts3 = "Frase de T T S 3"
-        #self.text_tts4 = "Frase de T T S 4"
+        self.text_tts1 = "Hola amigos, mi nombre es Bender"
+        self.text_tts2 = "Soy un robot desarrollado por el equipo Jom Breikers"
+        self.text_tts3 = "Soy un robot de servicio, mi proposito es ayudarte"
+        self.text_tts4 = "Soy receptivo a lo que me dices y puedo mostrar emociones"
 
         #self.r_arm_home_angles = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         #self.r_arm_posUp_angles = [0.1, 0.0, 0.0, 1.1624, 0.0, 0.2565]
