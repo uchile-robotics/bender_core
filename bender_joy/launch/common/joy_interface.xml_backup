@@ -3,7 +3,7 @@
     <arg name="ns" default="joy"/>
 
     <!-- base -->
-    <node pkg="bender_joy" type="joy_base_only_face.py" name="joy_base" output="screen" ns="$(arg ns)">
+    <node pkg="bender_joy" type="joy_base.py" name="joy_base" output="screen" ns="$(arg ns)">
         <rosparam file="$(find bender_joy)/config/joystick_base.yaml" command="load"/>
         <remap from="joy" to="base"/>
     </node>

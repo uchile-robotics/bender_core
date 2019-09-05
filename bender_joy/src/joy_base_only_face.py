@@ -19,25 +19,25 @@ class JoystickBase(object):
 
         # loading robot
         rospy.logwarn("Attemping to build Bender")
-        self.robot      = robot_factory.build(["neck","face","tts","l_arm","r_arm","l_gripper","r_gripper"],core=False)
+        self.robot      = robot_factory.build(["face","neck","tts"],core=False)
         self.neck       = self.robot.get("neck")
         self.face       = self.robot.get("face")
-        self.l_arm      = self.robot.get("l_arm")
-        self.r_arm      = self.robot.get("r_arm")
-        self.l_gripper  = self.robot.get("l_gripper")
-        self.r_gripper  = self.robot.get("r_gripper")
+        #self.l_arm      = self.robot.get("l_arm")
+        #self.r_arm      = self.robot.get("r_arm")
+        #self.l_gripper  = self.robot.get("l_gripper")
+        #self.r_gripper  = self.robot.get("r_gripper")
         self.tts        = self.robot.get("tts")
 
         # tts config
-        self.tts.set_language("spanish")
+        #self.tts.set_language("spanish")
 
-        self.text_tts1 = "Frase de T T S 1"
-        self.text_tts2 = "Frase de T T S 2"
-        self.text_tts3 = "Frase de T T S 3"
-        self.text_tts4 = "Frase de T T S 4"
+        #self.text_tts1 = "Frase de T T S 1"
+        #self.text_tts2 = "Frase de T T S 2"
+        #self.text_tts3 = "Frase de T T S 3"
+        #self.text_tts4 = "Frase de T T S 4"
 
-        self.r_arm_home_angles = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        self.r_arm_posUp_angles = [0.1, 0.0, 0.0, 1.1624, 0.0, 0.2565]
+        #self.r_arm_home_angles = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        #self.r_arm_posUp_angles = [0.1, 0.0, 0.0, 1.1624, 0.0, 0.2565]
 
         rospy.loginfo('Joystick base init ...')
 
@@ -221,118 +221,118 @@ class JoystickBase(object):
             if debugging:
             	rospy.logwarn("Debugging commands")
             	rospy.loginfo("Demonstration commands mode")
-            	if y_is_pressed:
-            		rospy.loginfo("Demonstration 1 executed...")
-            		self.tts.say("Hola")
-            		rospy.sleep(0.3)
-            		self.tts.wait_until_done()
-            		self.tts.say("Mi nombre es Bender")
-            		rospy.sleep(0.5)
-            		self.tts.wait_until_done()
-            		self.tts.say("Soy desarrollado en la Universidad de Chile")
-            		self.tts.wait_until_done()
-            		self.tts.say("Por el equipo Jom Breikers")
-            		rospy.sleep(0.2)
-            		self.tts.wait_until_done()
-            		self.tts.say("Me estan desarrollando desde el dos mil siete")
-            		self.tts.wait_until_done()
-            		self.tts.say("Soy un robot de servicio")
-            		rospy.sleep(0.2)
-            		self.tts.wait_until_done()
-            		self.tts.say("Mi principal funcion es servir e interactuar con las personas")
-            		self.tts.wait_until_done()
-            		self.tts.say("Para lograr mi cometido puedo emular emociones humanas")
-            		self.face.set_emotion("happy1")
-            		self.tts.wait_until_done()
-            		self.tts.say("Como la alegria")
-            		rospy.sleep(0.5)
-            		self.tts.wait_until_done()
-            		self.tts.say("Es mi estado basal y como me gusta estar")
-            		self.tts.wait_until_done()
-            		rospy.sleep(0.5)
-            		self.face.set_emotion("angry1")
-            		self.tts.say("Aunque si algo me molesta puedo hacerlo notar")
-            		self.tts.wait_until_done()
-            		self.face.set_emotion("sad1")
-            		self.tts.say("Si me tratan mal me siento muy triste")
-            		rospy.sleep(0.5)
-            		self.tts.wait_until_done()
-            		self.face.set_emotion("fear")
-            		self.tts.say("Y si noto que algo es peligroso para mi es muy facil asustarme")
-            		rospy.sleep(0.5)
-            		self.tts.wait_until_done()
-            		self.tts.say("Todo esto para ayudar a los humanos a comunicarse conmigo")
-            		self.tts.wait_until_done()
-            		self.face.set_emotion("happy1")
+            	#if y_is_pressed:
+            	#	rospy.loginfo("Demonstration 1 executed...")
+            	#	self.tts.say("Hola")
+            	#	rospy.sleep(0.3)
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Mi nombre es Bender")
+            	#	rospy.sleep(0.5)
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Soy desarrollado en la Universidad de Chile")
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Por el equipo Jom Breikers")
+            	#	rospy.sleep(0.2)
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Me estan desarrollando desde el dos mil siete")
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Soy un robot de servicio")
+            	#	rospy.sleep(0.2)
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Mi principal funcion es servir e interactuar con las personas")
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Para lograr mi cometido puedo emular emociones humanas")
+            	#	self.face.set_emotion("happy1")
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Como la alegria")
+            	#	rospy.sleep(0.5)
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Es mi estado basal y como me gusta estar")
+            	#	self.tts.wait_until_done()
+            	#	rospy.sleep(0.5)
+            	#	self.face.set_emotion("angry1")
+            	#	self.tts.say("Aunque si algo me molesta puedo hacerlo notar")
+            	#	self.tts.wait_until_done()
+            	#	self.face.set_emotion("sad1")
+            	#	self.tts.say("Si me tratan mal me siento muy triste")
+            	#	rospy.sleep(0.5)
+            	#	self.tts.wait_until_done()
+            	#	self.face.set_emotion("fear")
+            	#	self.tts.say("Y si noto que algo es peligroso para mi es muy facil asustarme")
+            	#	rospy.sleep(0.5)
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Todo esto para ayudar a los humanos a comunicarse conmigo")
+            	#	self.tts.wait_until_done()
+            	#	self.face.set_emotion("happy1")
 
-            	if x_is_pressed:
-            		rospy.loginfo("Demonstration 2 executed...")
-            		self.tts.say("Existen diversas cosas que puedo hacer")
-            		rospy.sleep(0.2)
-            		self.tts.wait_until_done()
-            		self.tts.say("Dentro de mi movilidad se encuentra mi cabeza")
-            		self.tts.wait_until_done()
-            		self.neck.look_left()
-            		self.neck.wait_for_motion_done()
-            		self.neck.send_joint_goal(0.0,-abs(self.min_pitch_demo))
-            		self.neck.wait_for_motion_done()
-            		self.neck.look_right()
-            		self.neck.wait_for_motion_done()
-            		self.neck.look_at_ground()
-            		self.neck.wait_for_motion_done()
-            		self.neck.home()
-            		self.tts.say("Ademas de poder mover mis brazos")
-            		self.tts.wait_until_done()
-            		self.tts.say("Y con mis pinzas puedo hacer una manipulacion simple de objetos")
-            		self.tts.wait_until_done()
-            		self.tts.say("Finalmente me puedo mover con dos grados de libertad")
-            		self.tts.wait_until_done()
-            		self.tts.say("Una es la rotacion y la otra es el movimiento de adelante y atras")
-            		self.tts.wait_until_done()
+            	#if x_is_pressed:
+            	#	rospy.loginfo("Demonstration 2 executed...")
+            	#	self.tts.say("Existen diversas cosas que puedo hacer")
+            	#	rospy.sleep(0.2)
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Dentro de mi movilidad se encuentra mi cabeza")
+            	#	self.tts.wait_until_done()
+            	#	self.neck.look_left()
+            	#	self.neck.wait_for_motion_done()
+            	#	self.neck.send_joint_goal(0.0,-abs(self.min_pitch_demo))
+            	#	self.neck.wait_for_motion_done()
+            	#	self.neck.look_right()
+            	#	self.neck.wait_for_motion_done()
+            	#	self.neck.look_at_ground()
+            	#	self.neck.wait_for_motion_done()
+            	#	self.neck.home()
+            	#	self.tts.say("Ademas de poder mover mis brazos")
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Y con mis pinzas puedo hacer una manipulacion simple de objetos")
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Finalmente me puedo mover con dos grados de libertad")
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Una es la rotacion y la otra es el movimiento de adelante y atras")
+            	#	self.tts.wait_until_done()
 
-            	if a_is_pressed:
-            		rospy.loginfo("Demonstration 3 executed...")
-            		self.tts.say("El equipo humano que me desarrolla es voluntario")
-            		self.tts.wait_until_done()
-            		self.tts.say("Ellos, mis amigos, son estudiantes de la F C F M")
-            		rospy.sleep(0.3)
-            		self.tts.wait_until_done()
-            		self.tts.say("Entre sus carreras se encuentran Ingenieria civil electrica, mecanica, en computacion")
-            		self.tts.wait_until_done()
-            		self.neck.look_left()
-            		self.tts.say("Los integrantes del equipo van rotando en el tiempo")
-            		self.tts.wait_until_done()
-            		self.tts.say("Esto ya que ergesan e ingresan constantemente")
-            		self.tts.wait_until_done()
-            		self.neck.look_right()
-            		self.tts.say("Yo me actualizo y mejoro constantemente gracias a ellos")
-            		self.tts.wait_until_done()
-            		self.tts.say("Y ellos aprenden robotica gracias a mi")
-            		self.tts.wait_until_done()
-            		self.neck.home()
-            		self.tts.say("La plataforma en la que me desarrollan se llama ROS")
-            		rospy.sleep(0.2)
-            		self.tts.wait_until_done()
-            		self.tts.say("Es un entorno de trabajo que integra mis componentes en forma de nodos que se comunican entre ellos")
-            		self.tts.wait_until_done()
+            	#if a_is_pressed:
+            	#	rospy.loginfo("Demonstration 3 executed...")
+            	#	self.tts.say("El equipo humano que me desarrolla es voluntario")
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Ellos, mis amigos, son estudiantes de la F C F M")
+            	#	rospy.sleep(0.3)
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Entre sus carreras se encuentran Ingenieria civil electrica, mecanica, en computacion")
+            	#	self.tts.wait_until_done()
+            	#	self.neck.look_left()
+            	#	self.tts.say("Los integrantes del equipo van rotando en el tiempo")
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Esto ya que ergesan e ingresan constantemente")
+            	#	self.tts.wait_until_done()
+            	#	self.neck.look_right()
+            	#	self.tts.say("Yo me actualizo y mejoro constantemente gracias a ellos")
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Y ellos aprenden robotica gracias a mi")
+            	#	self.tts.wait_until_done()
+            	#	self.neck.home()
+            	#	self.tts.say("La plataforma en la que me desarrollan se llama ROS")
+            	#	rospy.sleep(0.2)
+            	#	self.tts.wait_until_done()
+            	#	self.tts.say("Es un entorno de trabajo que integra mis componentes en forma de nodos que se comunican entre ellos")
+            	#	self.tts.wait_until_done()
 
-            	if b_is_pressed:
-            		rospy.loginfo("Demonstration 4 executed...")
+            	#if b_is_pressed:
+            	#	rospy.loginfo("Demonstration 4 executed...")
 
-            if r_arm_inst:
-                rospy.logwarn("Right arm commands mode")
-                if y_is_pressed:
-                    rospy.loginfo("Opening gripper")
-                    self.r_gripper.open()
-                if a_is_pressed:
-                    rospy.loginfo("Closing gripper")
-                    self.r_gripper.close()
-                if x_is_pressed:
-                    rospy.loginfo("Moving right arm to home position")
-                    self.r_arm.send_joint_goal(self.r_arm_home_angles)
-                if b_is_pressed:
-                    rospy.loginfo("Moving right arm to manipulation position")
-                    self.r_arm.send_joint_goal(self.r_arm_posUp_angles)
+            #if r_arm_inst:
+            #    rospy.logwarn("Right arm commands mode")
+            #    if y_is_pressed:
+            #        rospy.loginfo("Opening gripper")
+            #        self.r_gripper.open()
+            #    if a_is_pressed:
+            #        rospy.loginfo("Closing gripper")
+            #        self.r_gripper.close()
+            #    if x_is_pressed:
+            #        rospy.loginfo("Moving right arm to home position")
+            #        self.r_arm.send_joint_goal(self.r_arm_home_angles)
+            #    if b_is_pressed:
+            #        rospy.loginfo("Moving right arm to manipulation position")
+            #        self.r_arm.send_joint_goal(self.r_arm_posUp_angles)
 
             if no_trigger:
                 if neck_confirmed:
@@ -361,11 +361,11 @@ class JoystickBase(object):
                     self.face.set_emotion("fear")
                     rospy.loginfo("Bender is frightened D:")
 
-            if msg.buttons[self.b_idx_priority]:
-                rospy.logwarn_throttle(2, "Drive with care. Using the high priority joystick topic.")
-                self.pub_priority.publish(cmd)
-            else:
-                self.pub.publish(cmd)
+            #if msg.buttons[self.b_idx_priority]:
+            #    rospy.logwarn_throttle(2, "Drive with care. Using the high priority joystick topic.")
+            #    self.pub_priority.publish(cmd)
+            #else:
+            #    self.pub.publish(cmd)
 
 if __name__ == '__main__':
     rospy.init_node('joy_base')
