@@ -8,31 +8,39 @@
 	<!-- launch parameters -->
 	<arg name="kinect_name" default="kinect"/>
 	<arg name="device_id"   default="#1"    />
+	<arg name="publish_tf"  default="false"/>
+	<arg name="model"       default="PS1080_PrimeSense"/>
+	<arg name="calibrated" 	default="true"/>
 	<!-- TODO: Cambiar modelo de camara -->
-	<arg name="model" default="PS1080_PrimeSense"/>
 
 	<!-- Openni for kinect -->
 	<include file="$(find openni_launch)/launch/openni.launch" ns="/bender/sensors/">
 		<arg name="camera"    value="$(arg kinect_name)"/>
 		<arg name="device_id" value="$(arg device_id)"  />
-		<arg name="tf_prefix" value="bender/sensors"    />
 
+		<!-- tf's -->
+		<arg name="publish_tf" value="$(arg publish_tf)" />
+		<arg name="rgb_frame_id" unless="$(arg publish_tf)" value="bender/sensors/$(arg kinect_name)_rgb_optical_frame" />
+  		<arg name="depth_frame_id" unless="$(arg publish_tf)" value="bender/sensors/$(arg kinect_name)_depth_optical_frame" />
+
+  		<!-- Calibration yaml directory -->
+  		<arg name="rgb_camera_info_url" if="$(arg calibrated)" value="file://${ROS_HOME}/camera_info/rgb_$(arg model).yaml"/>
+  		<arg name="depth_camera_info_url" if="$(arg calibrated)" value="file://${ROS_HOME}/camera_info/depth_$(arg model).yaml" />
+
+  		<!-- Hardware depth registration -->
 		<!-- Use OpenNI's factory-calibrated depth->RGB registration? -->
   		<arg name="depth_registration" default="false" />
 
-  		<!-- Calibration yaml directory -->
-  		<arg name="rgb_camera_info_url" unless="$(arg calibrate)" value="file://${ROS_HOME}/camera_info/rgb_$(arg model).yaml"/>
-  		<arg name="depth_camera_info_url" unless="$(arg calibrate)" value="file://${ROS_HOME}/camera_info/depth_$(arg model).yaml" />
-
 		<!-- Processing Modules -->
-		<arg name="rgb_processing"                  default="true" />
-		<arg name="ir_processing"                   default="false" />
-		<arg name="depth_processing"                default="true"  />
-		<arg name="depth_registered_processing"     default="false" />
-		<arg name="disparity_processing"            default="false" />
-		<arg name="disparity_registered_processing" default="false" />
-		<arg name="hw_registered_processing"        default="false" />
-		<arg name="sw_registered_processing"        default="false" />
+		<arg name="rgb_processing"                  value="true" />
+		<arg name="ir_processing"                   value="false" />
+		<arg name="depth_processing"                value="true"  />
+		<arg name="depth_registered_processing"     value="false" />
+		<arg name="disparity_processing"            value="false" />
+		<arg name="disparity_registered_processing" value="false" />
+		<arg name="hw_registered_processing"        value="false" />
+		<arg name="sw_registered_processing"        value="false" />
+		
 
 	</include>
 

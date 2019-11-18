@@ -10,19 +10,19 @@ from bender_joy import xbox
 
 
 class JoystickProxy(object):
-  
+
     def __init__(self):
         rospy.loginfo('Joystick proxy init ...')
-    
+
         # control
         # default: active on channel 0
         self.current_channel_name = 'base'
-        
+
         # load params
         self.proxy_button    = rospy.get_param('~b_proxy', 'BACK')
         self.channels        = rospy.get_param('~channels', { 'base': {'button': 'A', 'topic': 'base'}})
         self.default_channel = rospy.get_param('~default_channel', 'base')
-        
+
         # check params
         if not self.params_are_valid():
             sys.exit(1)
@@ -35,14 +35,13 @@ class JoystickProxy(object):
             topic  = self.channels[channel_name]['topic']
             self.channels[channel_name]["id"] = key_mapper.get_button_id(button)
             self.channels[channel_name]["publisher"] = rospy.Publisher(topic, Joy, queue_size=10)
-        
+
         # enable channel
         self.enable_channel(self.default_channel)
 
         # ready to work
         rospy.Subscriber('joy', Joy, self.callback)
         rospy.loginfo('Joystick proxy is ready')
-        
 
     def params_are_valid(self):
         """
@@ -85,20 +84,18 @@ class JoystickProxy(object):
         if self.default_channel not in self.channels:
             rospy.logerr("proxy: default channel '%s' is not into the available options" % self.default_channel)
             return False
-        
+
         if len(button_set) != len(self.channels) + 1:
             rospy.logerr("proxy: all buttons must be different!")
             return False
 
         return True
-        
 
     def forward(self, msg):
         """
         forwards Joy messages to the configured topic
         """
         self.channels[self.current_channel_name]['publisher'].publish(msg)
-
 
     def enable_channel(self, channel_name):
         """
@@ -108,7 +105,6 @@ class JoystickProxy(object):
             return
         self.current_channel_name = channel_name
         rospy.logwarn("proxy: configured joy to channel named '%s'" % channel_name)
-
 
     def parse_channel_name(self, msg):
         """
@@ -134,7 +130,6 @@ class JoystickProxy(object):
 
         return queried_channels[0]
 
-
     def callback(self, msg):
         # forward if msg is not proxy related
         if self.proxy_button_id < len(msg.buttons) and not msg.buttons[self.proxy_button_id]:
@@ -146,7 +141,7 @@ class JoystickProxy(object):
         if channel_name is not None:
             self.enable_channel(channel_name)
         return
-        
+
 
 if __name__ == '__main__':
     rospy.init_node('joy_proxy')

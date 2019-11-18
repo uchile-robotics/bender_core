@@ -9,32 +9,30 @@
 	<arg name="asus_name"   default="asus" />
 	<arg name="device_id"   default="#1"   />
 	<arg name="publish_tf"  default="false"/>
-	<arg name="model" 	default="PS1080_PrimeSense"/>
+	<arg name="model" 	    default="PS1080_PrimeSense"/>
 	<arg name="calibrated" 	default="true"/>
-  	<arg name="color_depth_synchronization"     default="true" />
+	<arg name="color_depth_synchronization"     default="true" />
 
 	<!-- Openni2 for ASUS device -->
 	<include file="$(find openni2_launch)/launch/openni2.launch" ns="/bender/sensors/">
-
 		<arg name="camera"    value="$(arg asus_name)"/>
 		<arg name="device_id" value="$(arg device_id)"  />
 		
+		<!-- tf's -->
 		<arg name="publish_tf" value="$(arg publish_tf)" />
-
 		<arg name="rgb_frame_id" unless="$(arg publish_tf)" value="bender/sensors/$(arg asus_name)_rgb_optical_frame" />
-  		<arg name="depth_frame_id" unless="$(arg publish_tf)" value="bender/sensors/$(arg asus_name)_depth_optical_frame" />
+		<arg name="depth_frame_id" unless="$(arg publish_tf)" value="bender/sensors/$(arg asus_name)_depth_optical_frame" />
 
-  		<!-- Calibration yaml directory -->
-  		<arg name="rgb_camera_info_url" if="$(arg calibrated)" value="file://${ROS_HOME}/camera_info/rgb_$(arg model).yaml"/>
-  		<arg name="depth_camera_info_url" if="$(arg calibrated)" value="file://${ROS_HOME}/camera_info/depth_$(arg model).yaml" />
+		<!-- Calibration yaml directory -->
+		<arg name="rgb_camera_info_url" if="$(arg calibrated)" value="file://${ROS_HOME}/camera_info/rgb_$(arg model).yaml"/>
+		<arg name="depth_camera_info_url" if="$(arg calibrated)" value="file://${ROS_HOME}/camera_info/depth_$(arg model).yaml" />
 
 		<!-- Hardware depth registration -->
-		<arg name="depth_registration"              default="true" />
-		<arg name="color_depth_synchronization"              value="$(arg color_depth_synchronization)"  />
+		<arg name="depth_registration" value="true" />
+		<arg name="color_depth_synchronization" value="$(arg color_depth_synchronization)"  />
 		
 		<!-- Processing Modules -->
 		<arg name="rgb_processing"                  value="true" />
-		<arg name="debayer_processing"              value="false" />
 		<arg name="ir_processing"                   value="false" />
 		<arg name="depth_processing"                value="true"  />
 		<arg name="depth_registered_processing"     value="false" />
@@ -42,6 +40,7 @@
 		<arg name="disparity_registered_processing" value="false" />
 		<arg name="hw_registered_processing"        value="false" />
 		<arg name="sw_registered_processing"        value="false" />
+		<arg name="debayer_processing"              value="false" />
 
 	</include>
 

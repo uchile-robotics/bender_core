@@ -39,5 +39,9 @@ channels:
         button: 'Y'
         topic: 'arms'
 
+    general:
+        button: 'RS'
+        topic: 'general'
+
 # default channel name
 default_channel: 'base'

@@ -5,7 +5,7 @@
 	'install/depth_devices.sh' (in this pkg).
 	 -->
 
-	<arg name="device" value="$(env BENDER_RGBD_DEVICE_HEAD)"/>
+	<arg name="device" default="$(env BENDER_RGBD_DEVICE_HEAD)"/>
 	<arg name="calibrated" default="true"/>
 	
 	<include file="$(find bender_sensors)/launch/rgbd/$(arg device)/$(arg device)_head.launch">
