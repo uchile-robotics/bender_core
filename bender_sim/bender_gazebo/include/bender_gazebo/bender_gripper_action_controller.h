@@ -95,7 +95,7 @@ public:
 private:
   // Typedefs
   typedef actionlib::ActionServer<control_msgs::GripperCommandAction>                   ActionServer;
-  typedef boost::shared_ptr<ActionServer>                                               ActionServerPtr;
+  typedef std::shared_ptr<ActionServer>                                               ActionServerPtr;
   typedef ActionServer::GoalHandle                                                      GoalHandle;
   typedef realtime_tools::RealtimeServerGoalHandle<control_msgs::GripperCommandAction>  RealtimeGoalHandle;
   typedef boost::shared_ptr<RealtimeGoalHandle>                                         RealtimeGoalHandlePtr;
