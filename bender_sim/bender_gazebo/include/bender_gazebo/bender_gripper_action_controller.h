@@ -12,6 +12,7 @@
 // Boost
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/algorithm/string/join.hpp>
 
 // ROS
 #include <ros/node_handle.h>
