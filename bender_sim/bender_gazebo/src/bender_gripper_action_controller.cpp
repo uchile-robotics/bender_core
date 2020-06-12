@@ -1,5 +1,5 @@
 // Pluginlib
-#include <pluginlib/class_list_macros.h>
+#include <pluginlib/class_list_macros.hpp>
 
 // Controller
 #include <bender_gazebo/bender_gripper_action_controller.h>

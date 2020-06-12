@@ -102,7 +102,7 @@ public:
   }
 
 private:
-  typedef boost::shared_ptr<control_toolbox::Pid> PidPtr;
+  typedef std::shared_ptr<control_toolbox::Pid> PidPtr;
   std::vector<PidPtr> pids_;
   std::vector<hardware_interface::JointHandle>* joint_handles_ptr_;
   unsigned int num_joints_;

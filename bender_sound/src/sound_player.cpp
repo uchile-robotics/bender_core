@@ -14,7 +14,7 @@
 
 std::string _sound_path;
 
-bool file_exists(const std::string &filename)
+std::ifstream file_exists(const std::string &filename)
 {
   std::ifstream ifile(filename.c_str());
   return ifile;

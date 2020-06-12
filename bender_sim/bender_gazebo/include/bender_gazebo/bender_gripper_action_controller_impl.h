@@ -15,9 +15,9 @@ std::string getLeafNamespace(const ros::NodeHandle& nh)
   return complete_ns.substr(id + 1);
 }  
 
-boost::shared_ptr<urdf::Model> getUrdf(const ros::NodeHandle& nh, const std::string& param_name)
+std::shared_ptr<urdf::Model> getUrdf(const ros::NodeHandle& nh, const std::string& param_name)
 {
-  boost::shared_ptr<urdf::Model> urdf(new urdf::Model);
+  std::shared_ptr<urdf::Model> urdf(new urdf::Model);
 
   std::string urdf_str;
   // Check for robot_description in proper namespace
@@ -27,19 +27,19 @@ boost::shared_ptr<urdf::Model> getUrdf(const ros::NodeHandle& nh, const std::str
     {
       ROS_ERROR_STREAM("Failed to parse URDF contained in '" << param_name << "' parameter (namespace: " <<
         nh.getNamespace() << ").");
-      return boost::shared_ptr<urdf::Model>();
+      return std::shared_ptr<urdf::Model>();
     }
   }
   // Check for robot_description in root
   else if (!urdf->initParam("robot_description"))
   {
     ROS_ERROR_STREAM("Failed to parse URDF contained in '" << param_name << "' parameter");
-    return boost::shared_ptr<urdf::Model>();
+    return std::shared_ptr<urdf::Model>();
   }
   return urdf;
 }
 
-typedef boost::shared_ptr<const urdf::Joint> UrdfJointConstPtr;
+typedef std::shared_ptr<const urdf::Joint> UrdfJointConstPtr;
 std::vector<UrdfJointConstPtr> getUrdfJoints(const urdf::Model& urdf, const std::vector<std::string>& joint_names)
 {
   std::vector<UrdfJointConstPtr> out;
@@ -136,7 +136,7 @@ bool MultiGripperActionController::init(hardware_interface::EffortJointInterface
   num_joints_ = joint_names_.size();
 
   // Get URDF
-  boost::shared_ptr<urdf::Model> urdf = getUrdf(root_nh, "robot_description");
+  std::shared_ptr<urdf::Model> urdf = getUrdf(root_nh, "robot_description");
   if (!urdf) 
   {
     ROS_ERROR_NAMED(name_, "Error getting URDF");
