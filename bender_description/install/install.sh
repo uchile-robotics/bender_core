@@ -33,7 +33,7 @@ if [ ! -r "$BACKUP_FILE_FULL" ]; then
 	
 	# Download bender_description meshes
 	echo "$installer Backup file not found ($BACKUP_FILE_FULL), downloading mesh files ..."
-	"$UCHILE_SYSTEM"/shell/megadown/megadown 'https://mega.nz/#!39sF0LSJ!HXo1Q1_KaqKwwVNsmUKfr_rV3vcZ_IiQpdUWs8F2IJQ'
+	wget --no-check-certificate -nd 'https://docs.google.com/uc?export=download&id=10yvD1vou4cNHtSf1SiyTVXoBeVPrB0gj' -O $BACKUP_FILE
 	if [ $? -ne 0 ]; then
 	    echo "$installer ${red}Error downloading mesh files.${reset}"
 	    exit 1 # Terminate and indicate error
@@ -54,7 +54,7 @@ fi
 #  - - - - - - - - - Extract files - - - - - - - - - - -
 # Extract files
 echo "$installer Extracting mesh files"
-tar -xzf "$BACKUP_FILE" --directory "$UCHILE_WS"/pkgs/base_ws/bender_core/
+tar -xzf "$BACKUP_FILE_FULL" --directory "$UCHILE_WS"/pkgs/base_ws/bender_core/
 OUT=$?
 if [ $OUT -ne 0 ]; then
     echo "$installer ${red}Error extracting mesh files.${reset}"
