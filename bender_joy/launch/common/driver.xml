@@ -20,4 +20,9 @@
 		<arg name="ns"         value="$(arg ns)"/>
 	</include>
 
+	<include file="$(find bender_joy)/launch/common/driver_item.xml">
+                <arg name="joy_number" value="4"/>
+                <arg name="ns"         value="$(arg ns)"/>
+        </include>
+
 </launch>
