@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot
+  xmlns:xacro="http://www.ros.org/wiki/xacro"
+  name="bender">
+  
+  <xacro:property name="prefix" value="$(arg prefix)" />
+
+  <!-- Parameters -->
+  <xacro:include filename="$(find bender_description)/urdf/common.xacro" />
+  <!-- URDF Materials -->
+  <xacro:include filename="$(find bender_description)/urdf/materials.urdf.xacro" />
+  <!-- Gazebo macros -->
+  <xacro:include filename="$(find bender_description)/urdf/gazebo.urdf.xacro" />
+  <!-- Calibration parameters, used for arms in body.urdf.xacro -->
+  <xacro:include filename="$(find bender_description)/urdf/calibration.xacro" />
+  <!-- Dynamixel parameters -->
+  <xacro:include filename="$(find bender_description)/urdf/dynamixel.xacro" />
+
+
+  <!-- ******** Bender Parts ******** -->
+
+  <!-- Base -->
+  <xacro:include filename="$(find bender_description)/urdf/base.urdf.xacro" />
+  <xacro:base prefix="${prefix}" />
+
+  <!-- Torso -->
+  <xacro:include filename="$(find prueba_bender)/urdf/bender_torso.xacro" />
+
+  <xacro:Torso prefix="${prefix}" parent="${prefix}mobile_base_link"/>
+
+  <!-- Arm -->
+  <xacro:include filename="$(find prueba_bender)/urdf/right_arm.urdf.xacro" />
+  <xacro:include filename="$(find prueba_bender)/urdf/left_arm.urdf.xacro" />
+  <!-- Left Arm -->
+  <xacro:left_arm side="l" parent="${prefix}left_shoulder" reflect="-1" prefix="${prefix}"/>
+  <!-- Right Arm -->
+  <xacro:right_arm side="r" parent="${prefix}right_shoulder" reflect="1" prefix="${prefix}"/>
+
+   <!-- Head with Asus depth camera -->
+  <xacro:include filename="$(find bender_description)/urdf/head.urdf.xacro" />
+  <xacro:head parent="${prefix}neck_base" prefix="${prefix}" ns="/${prefix}sensors/rgbd_head" />
+
+<gazebo>
+      <plugin filename="libgazebo_ros_control.so" name="ros_control">
+        <robotNamespace>/bender</robotNamespace>
+      </plugin>
+    </gazebo>
+</robot>

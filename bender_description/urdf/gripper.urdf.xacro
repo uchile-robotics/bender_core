@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="gripper" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="gripper" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:property name="ext_finger_joint_upper" value="0.69029" />
   <xacro:property name="ext_finger_joint_lower" value="-0.02556" />

@@ -14,6 +14,7 @@
   <!-- Bender model type -->
   <arg name="model_type" default="standard" />
 
+  <rosparam file="$(find bender_moveit_config)/config/both_controllers.yaml" command="load"/>
 
   <!-- - - - - - - -  USEFUL Parameters - - - - - - - -->
 
@@ -45,11 +46,14 @@
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model bender_model -param robot_description">
   </node>
-
+  
   <!-- Effort Trajectory controllers, launch in another console -->
-  <include file="$(find bender_gazebo)/launch/bender_control.launch.xml">
+  <!-- <include file="$(find bender_gazebo)/launch/bender_control.launch.xml">
     <arg name="model_type" value="$(arg model_type)" />
-  </include>
+  </include> -->
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+    args="test_controller" />
   
   <!-- RQT Control perspective -->
   <node if="$(arg rqt_gui)" name="rqt_command" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find bender_gazebo)/config/control.perspective"/>
