@@ -14,8 +14,8 @@ l_shoulder_pitch_controller:
   motor:
     id: 1
     init: 2055
-    max: 785
-    min: 3055
+    max: 3060
+    min: 780
 
 l_shoulder_roll_controller:
   controller:
@@ -31,9 +31,9 @@ l_shoulder_roll_controller:
   torque_enable_init: False
   motor:
     id: 2
-    init: 2590
-    max: 1605
-    min: 2745
+    init: 450
+    max: 7634
+    min: 795
 
 l_shoulder_yaw_controller:
   controller:
@@ -55,8 +55,8 @@ l_shoulder_yaw_controller:
   motor:
     id: 3
     init: 435
-    max: 165
-    min: 725
+    max: 725
+    min: 165
 
 l_elbow_pitch_controller:
   controller:
@@ -73,8 +73,8 @@ l_elbow_pitch_controller:
   motor:
     id: 4
     init: 2080
-    max: 3280
-    min: 1400
+    max: 1400
+    min: 3280
 
 l_elbow_yaw_controller:
   controller:
@@ -96,8 +96,8 @@ l_elbow_yaw_controller:
   motor:
     id: 5
     init: 430
-    max: 195
-    min: 645
+    max: 645
+    min: 195
 
 l_wrist_pitch_controller:
   controller:
@@ -119,5 +119,5 @@ l_wrist_pitch_controller:
   motor:
     id: 6
     init: 340
-    max: 110
-    min: 560
+    max: 560
+    min: 110

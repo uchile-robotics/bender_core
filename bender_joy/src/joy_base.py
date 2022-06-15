@@ -15,7 +15,7 @@ class JoystickBase(object):
     def __init__(self):
         rospy.loginfo('Joystick base init ...')
 
-        self.pub = rospy.Publisher('base/cmd_vel', Twist, queue_size=1)
+        self.pub = rospy.Publisher('/bender/nav/base/cmd_vel', Twist, queue_size=1)
         self.pub_priority = rospy.Publisher('base/master_cmd_vel', Twist, queue_size=1)
         self.cancel_goal_client = rospy.ServiceProxy('/bender/nav/goal_server/cancel', Empty)
 

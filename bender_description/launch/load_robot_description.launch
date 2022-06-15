@@ -6,5 +6,5 @@
   <!-- Tipo de modelo standard|base -->
   <arg name="model_type" default="standard" />
   <!-- Cargar y generar modelo usando xacro -->
-  <param name="$(arg description_name)" command="$(find xacro)/xacro.py '$(find bender_description)/robots/bender_$(arg model_type).urdf.xacro' prefix:=$(arg prefix)" />
+  <param name="$(arg description_name)" command="$(find xacro)/xacro '$(find bender_description)/robots/bender_$(arg model_type).urdf.xacro' prefix:=$(arg prefix)" />
 </launch>

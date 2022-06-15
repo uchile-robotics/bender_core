@@ -1,7 +1,7 @@
 <launch>
 
     <!-- available languages: { english , spanish } -->
-    <arg name="language" default="english"/>
+    <arg name="language" default="spanish"/>
     <arg name="show_subtitles" default="false"/>
 
     <!-- sound_play node for tts -->

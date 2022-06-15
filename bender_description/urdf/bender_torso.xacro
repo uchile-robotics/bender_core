@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Torso">
 	<xacro:property name="prefix" value="$(arg prefix)" />
-	<xacro:property name="altura" value="0.2" />
+	<xacro:property name="altura" value="0.19" />
 	<xacro:macro name="Torso" params="prefix parent">
 		<!-- Body Base link (Parent of all future links)-->
 		<link name="${prefix}torso">
@@ -68,16 +68,15 @@
 		      <material
 		        name="">
 		        <color
-		          rgba="0.79216 0.81961 0.93333 1" />
+		          rgba="0.650980392156863 0.619607843137255 0.588235294117647 1" />
 		      </material>
 		    </visual>
 		    <collision>
 		      <origin
-        		xyz="0 0 0"
-        		rpy="0 0 1.57" />
+        		xyz="-0.08 0 0.25"
+        		rpy="0 0.15 0" />
 		      <geometry>
-		        <mesh
-		          filename="package://bender_description/meshes/visual/PC_Base.STL" />
+		        <box size="0.09 0.4 0.28" />
 		      </geometry>
 		    </collision>
 		  </link>
@@ -120,16 +119,15 @@
 		      <material
 		        name="">
 		        <color
-		          rgba="0.75294 0.75294 0.75294 1" />
+		          rgba="0.650980392156863 0.619607843137255 0.588235294117647 1" />
 		      </material>
 		    </visual>
 		    <collision>
 		      <origin
-        		xyz="0 -0.1305 0"
-        		rpy="3.14 0 1.57" />
+        		xyz="0.02 0 0.12"
+        		rpy="0 0 0" />
 		      <geometry>
-		        <mesh
-		          filename="package://bender_description/meshes/visual/router.STL" />
+		        <box size="0.05 0.27 0.22" />
 		      </geometry>
 		    </collision>
 		  </link>
@@ -146,7 +144,7 @@
 		      xyz="0 0 -1" />
 		  </joint>
 		  <!--Bender Left shoulder, here we will later fixe the left arm-->
-		  <link name="${prefix}left_shoulder">
+		  <link name="${prefix}right_shoulder">
 		    <inertial>
 		      <origin
 		        xyz="0.0575 -2.6795E-06 0.09625"
@@ -163,11 +161,11 @@
 		    </inertial>
 		    <visual>
 		     <origin
-        		xyz="0 0 0"
+        		xyz="0 0 -0.12"
         		rpy="1.57 1.57 0" />
 		      <geometry>
 		        <mesh
-		          filename="package://bender_description/meshes/visual/left_shoulder.STL" />
+		          filename="package://bender_description/meshes/visual/right_shoulder.STL" />
 		      </geometry>
 		      <material
 		        name="">
@@ -187,7 +185,7 @@
 
 		 <!-- Here we join the left shoulder with the Body with the--> 
 		  <joint
-		    name="left_shoulder_to_torso_joint"
+		    name="right_shoulder_to_torso_joint"
 		    type="fixed">
 		    <origin
 		      xyz="0 0 ${0.8575+altura}"
@@ -195,12 +193,12 @@
 		    <parent
 		      link="${prefix}torso" />
 		    <child
-		      link="${prefix}left_shoulder" />
+		      link="${prefix}right_shoulder" />
 		  </joint>
 
 		  <!--Bender right shoulder, here we will later fixe the right arm-->
 		  <link
-		    name="${prefix}right_shoulder">
+		    name="${prefix}left_shoulder">
 		    <inertial>
 		      <origin
 		        xyz="-0.0575 -2.6795E-06 0.09625"
@@ -217,11 +215,11 @@
 		    </inertial>
 		    <visual>
 		       <origin
-        			xyz="0 0 0"
+        			xyz="0 0 -0.12"
         			rpy="-1.57 -1.57 0" />
 		      <geometry>
 		        <mesh
-		          filename="package://bender_description/meshes/visual/right_shoulder.STL" />
+		          filename="package://bender_description/meshes/visual/left_shoulder.STL" />
 		      </geometry>
 		      <material
 		        name="">
@@ -240,7 +238,7 @@
 		  </link>
 		  <!-- Here we join the left shoulder with the Body with the--> 
 		  <joint
-		    name="right_shoulder_to_torso_joint"
+		    name="left_shoulder_to_torso_joint"
 		    type="fixed">
 		    <origin
 		      xyz="0 0 ${0.8575+altura}"
@@ -248,7 +246,7 @@
 		    <parent
 		      link="${prefix}torso" />
 		    <child
-		      link="${prefix}right_shoulder" />
+		      link="${prefix}left_shoulder" />
 		  </joint>
 		  <!-- here we have already created the Torso of Bender, so now we will create the joint with the other bender base-->
 
@@ -267,7 +265,7 @@
 		 <link name="${prefix}neck_base"/>
 
 		 <joint name="neck_base_to_body" type="fixed">
-		 	<origin xyz="0.03 0 1.1" rpy="0 0 0"/>
+		 	<origin xyz="0.03 0 1.085" rpy="0 0 0"/>
 		 	<parent link="${prefix}torso" />
 		 	<child link="${prefix}neck_base" />
 		 </joint>

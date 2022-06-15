@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="use_arm" default="both" />
+  <arg name="use_arm" default="l_arm" />
   
   <!-- Joy node -->
   <node respawn="true" pkg="joy" type="joy_node" name="arm_teleop_joy" >

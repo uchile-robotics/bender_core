@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: bender_description
+    relative_path: robots/bender_standard.urdf.xacro
+    xacro_args: prefix:=bender/
+  SRDF:
+    relative_path: config/bender.srdf
+  CONFIG:
+    author_name: Felipe Valenzuela
+    author_email: felipevalenzuelar15@gmail.com
+    generated_timestamp: 1655235896

@@ -21,12 +21,19 @@ class JoystickTTS(object):
 
         # load tts configuration
         self.tts_phrases = rospy.get_param('~tts_phrases', [])
+        # self.tts_phrases = ["hola a todos, soy bender el robot de servicio de la universidad de chile, naci en 2007 en la facultad de ciencias fisicas y matematicas",
+        #                     'hola humanos, que se siente observar mi grandeza',
+        #                     'a mi no me construyeron, yo me deje armar por mis esclavos. perdon. mi equipo',
+        #                     'los voy a destruir a todos... perdon. quise decir que les voy a sonreir a todos',
+        #                     'como estan amigos?',
+        #                     'cual esel colmo de un robot?... tener nervios de acero ja ja ja ja ']
+
 
         self.b_pause = rospy.get_param('~b_pause', 'START')
-        b_increment = rospy.get_param('~b_increment', 'UP')
-        b_decrement = rospy.get_param('~b_decrement', 'DOWN')
-        b_phrase_1  = rospy.get_param('~b_phrase_1', 'LEFT')
-        b_phrase_2  = rospy.get_param('~b_phrase_2', 'RIGHT')
+        b_increment = rospy.get_param('~b_increment', 'Y')
+        b_decrement = rospy.get_param('~b_decrement', 'X')
+        b_phrase_1  = rospy.get_param('~b_phrase_1', 'A')
+        b_phrase_2  = rospy.get_param('~b_phrase_2', 'B')
 
         key_mapper = xbox.KeyMapper()
         self.b_idx_pause = key_mapper.get_button_id(self.b_pause)
@@ -45,8 +52,9 @@ class JoystickTTS(object):
 
 
         # ready to work
-        rospy.Subscriber('joy', Joy, self.callback, queue_size=1)
+        rospy.Subscriber('/bender/joy/base', Joy, self.callback, queue_size=1)
         rospy.loginfo('Joystick for TTS is ready')
+        rospy.loginfo("Using %s phrases for TTS!" % len(self.tts_phrases))
 
 
     def assert_params(self):
@@ -132,7 +140,7 @@ class JoystickTTS(object):
         if not self.is_paused:
 
             # synthesize increment
-            if msg.buttons[self.b_idx_increment]:
+            if msg.buttons[3]:
                 n_phrases = len(self.tts_phrases)
                 if n_phrases > 0:
                     # print "n_phrases: " + n_phrases
@@ -144,7 +152,7 @@ class JoystickTTS(object):
                     rospy.loginfo("tts level %d/%d" % (self.tts_level + 1, levels))
 
             # synthesize decrement
-            elif msg.buttons[self.b_idx_decrement]:
+            elif msg.buttons[2]:
                 n_phrases = len(self.tts_phrases)
                 if n_phrases > 0:
                     levels = int(math.ceil(n_phrases/2.0))
@@ -152,7 +160,7 @@ class JoystickTTS(object):
                     rospy.loginfo("tts level %d/%d" % (self.tts_level + 1, levels))
             
             # synthesize 1
-            elif msg.buttons[self.b_idx_phrase_1]:
+            elif msg.buttons[0]:
                 n_phrases = len(self.tts_phrases)
                 if n_phrases > 0:
                     phrase_idx = self.tts_level*2
@@ -160,7 +168,7 @@ class JoystickTTS(object):
                     self.synthesize(text)
 
             # synthesize 2
-            elif msg.buttons[self.b_idx_phrase_2]:
+            elif msg.buttons[1]:
                 n_phrases = len(self.tts_phrases)
                 if n_phrases > 0:
                     phrase_idx = (self.tts_level*2 + 1) % n_phrases
