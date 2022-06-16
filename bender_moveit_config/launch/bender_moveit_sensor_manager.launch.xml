@@ -1,3 +1,6 @@
 <launch>
-
+  <rosparam command="load" file="$(find bender_moveit_config)/config/asus_xtion.yaml" />
+  <param name="octomap_frame" type="string" value="odom" />
+  <param name="octomap_resolution" type="double" value="0.012" />
+  <param name="max_range" type="double" value="2.0" />
 </launch>

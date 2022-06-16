@@ -1,0 +1,20 @@
+controller_list:
+  - name: /bender/r_arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - r_shoulder_pitch_joint
+      - r_shoulder_roll_joint
+      - r_shoulder_yaw_joint
+      - r_elbow_pitch_joint
+      - r_elbow_yaw_joint
+      - r_wrist_pitch_joint
+
+  - name: /bender/r_gripper_controller
+    type: GripperCommand
+    action_ns: gripper_action
+    default: true
+    joints:
+      - r_ext_finger_joint
+      - r_int_finger_joint

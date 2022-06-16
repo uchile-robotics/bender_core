@@ -1,0 +1,29 @@
+<launch>
+  <!-- By default, we are not in debug mode -->
+  <arg name="debug" default="false" />
+
+  <arg name="use_gui" default="false" />
+
+  <!-- both, r_arm, l_arm-->
+  <arg name="use_arm" default="both" />
+  <!-- Model type -->
+  <arg name="model_type" default="standard" />
+
+  <include file="$(find bender_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="use_arm" value="$(arg use_arm)" />
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="model_type" value="$(arg model_type)" />
+  </include>
+
+  <group if="$(arg use_gui)">
+    <!--
+    <node pkg="bender_arm_control" type="octomap_pub" name="octomap_pub" />
+    -->
+    <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bender_moveit_config)/config/bender_moveit.rviz"/>
+
+  </group>
+
+</launch>
