@@ -10,6 +10,7 @@ controller_list:
       - r_elbow_pitch_joint
       - r_elbow_yaw_joint
       - r_wrist_pitch_joint
+      - l_grasp_joint
 
   - name: /bender/r_gripper_controller
     type: GripperCommand

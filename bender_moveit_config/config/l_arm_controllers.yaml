@@ -10,10 +10,10 @@ controller_list:
       - l_elbow_pitch_joint
       - l_elbow_yaw_joint
       - l_wrist_pitch_joint
+      - l_grasp_joint
 
   - name: /bender/l_gripper_controller
-    type: GripperCommand
-    action_ns: gripper_action
+    type: position_controllers/JointTrajectoryController
     default: true
     joints:
       - l_ext_finger_joint

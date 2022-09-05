@@ -1,6 +1,6 @@
 # rosaria configuration
 
-port: /dev/bender/base
+port: /dev/ttyUSB0
 odom_frame: bender/odom
 base_link_frame: bender/base_link
 

@@ -174,6 +174,6 @@
       <xacro:gripper_type type="${type}" ext="1"/>
     </link>
     <xacro:gazebo_friction_link link="${prefix}${side}_ext_finger_link" color="DarkGrey" />
-  </xacro:macro>
+  </xacro:macro>   
 
 </robot>

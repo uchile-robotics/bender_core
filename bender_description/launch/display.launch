@@ -3,7 +3,7 @@
   <arg name="model_type" default="standard" />
 
   <!-- Cargar modelo con TF-->
-  <include file="$(find uchile_tf)/launch/tf_model.launch">
+  <include file="$(find uchile_tf)/launch/tf.launch">
     <arg name="use_gui" value="$(arg use_gui)" />
     <arg name="model_type" value="$(arg model_type)" />
   </include>

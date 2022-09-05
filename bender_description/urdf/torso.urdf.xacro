@@ -223,7 +223,7 @@
       <!-- CALIBRATION Y 0.225 => 0.23 -->
       <!-- CALIBRATION Z 0.619 => 0.610 -->
       <origin
-        xyz="-0.005 0.23 0.610"
+        xyz="0 0 0"
         rpy="0 0 0" />
       <parent
         link="${prefix}upper_torso_base" />

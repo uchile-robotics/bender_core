@@ -16,7 +16,6 @@
         <joint name="l_elbow_pitch_joint" />
         <joint name="l_elbow_yaw_joint" />
         <joint name="l_wrist_pitch_joint" />
-        <joint name="l_grasp_joint" />
     </group>
     <group name="l_gripper">
         <joint name="l_ext_finger_joint" />
@@ -29,7 +28,6 @@
         <joint name="r_elbow_pitch_joint" />
         <joint name="r_elbow_yaw_joint" />
         <joint name="r_wrist_pitch_joint" />
-        <joint name="r_grasp_joint" />
     </group>
     <group name="r_gripper">
         <joint name="r_ext_finger_joint" />

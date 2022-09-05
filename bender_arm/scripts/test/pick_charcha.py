@@ -62,6 +62,29 @@ def get_quaternion_from_euler(roll, pitch, yaw):
  
   return [qx, qy, qz, qw]
 
+def wait_for_update(box_name):
+  start = rospy.get_time()
+  seconds = rospy.get_time()
+  while (seconds - start < timeout) and not rospy.is_shutdown():
+    # Test if the box is in attached objects
+    attached_objects = scene.get_attached_objects([box_name])
+    is_attached = len(attached_objects.keys()) > 0
+
+    # Test if the box is in the scene.
+    # Note that attaching the box will remove it from known_objects
+    is_known = box_name in scene.get_known_object_names()
+
+    # Test if we are in the expected state
+    if (box_is_attached == is_attached) and (box_is_known == is_known):
+      return True
+
+    # Sleep so that we give other threads time on the processor
+    rospy.sleep(0.1)
+    seconds = rospy.get_time()
+
+  # If we exited the while loop without returning then we timed out
+  return False
+
 def main():
     
     pub = rospy.Publisher('obj_pose', PoseStamped, queue_size=10)
@@ -80,7 +103,7 @@ def main():
 
     spos.header.frame_id="bender/base_link"
     #Position 
-    spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.5, 0.0, 3.0
+    spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.35, 0.0, 0.8
 
     #Z min = 0.75
     #Z max = 1.23
@@ -98,12 +121,15 @@ def main():
 
     
     robot = RobotCommander()
-    robot.l_arm.set_goal_position_tolerance(0.05)
-    #robot.l_arm.set_goal_orientation_tolerance(0.05)
     #g = MoveGroupInterface("l_arm", "bender/base_link",None,False)  #"bender/l_shoulder_pitch_link"
+    grasping_group = 'l_gripper'
+    touch_links = robot.get_link_names(group=grasping_group)
     gripper = MoveGroupInterface("l_gripper", "bender/base_link", None, False)
+        
     scene = PlanningSceneInterface()
+    scene.remove_attached_object("bender/l_grasp_link", name="part")
     scene.remove_world_object("part")
+    rospy.sleep(1.0)
     p = PoseStamped()
     p.header.frame_id = robot.get_planning_frame()
     p.pose.position.x = 0.5
@@ -111,7 +137,7 @@ def main():
     p.pose.position.z = 0.8
     p.pose.orientation.w = 1.0
     scene.add_box("part", p, (0.05, 0.05, 0.3))
-    
+
     # joint_names=['l_shoulder_pitch_joint', 'l_shoulder_roll_joint',
       # 'l_shoulder_yaw_joint', 'l_elbow_pitch_joint', 'l_elbow_yaw_joint',
       # 'l_wrist_pitch_joint']
@@ -121,7 +147,7 @@ def main():
     # rospy.loginfo(robot.l_arm.get_end_effector_link())
     # rospy.loginfo(robot.l_arm.get_pose_reference_frame())
     # rospy.loginfo(robot.l_arm.get_current_pose())
-    rospy.sleep(1)
+    rospy.sleep(3)
 
     #robot.l_arm.set_goal
 
@@ -134,17 +160,41 @@ def main():
     #Movimiento en espacio cartesiano
     pub.publish(spos)
     robot.l_arm.set_pose_target(spos)
-    print(robot.l_arm.plan())
-    #robot.l_arm.go()
+    robot.l_arm.go()
     # g.moveToPose(spos,"bender/l_grasp_link")
 
-    rospy.sleep(1.0)
-    rospy.loginfo('POSITION: {}'.format(robot.l_arm.get_current_pose().pose))
+    rospy.sleep(3.0)
+    rospy.loginfo('POSITION: {}'.format(spos))
 
-    #gripper.moveToJointPosition(["l_int_finger_joint","l_ext_finger_joint"],[0.6, 0.6])
-    #rospy.sleep(3.0)
-    #spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.5, 0.0, 1.0
-    #pub.publish(spos)
+    gripper.moveToJointPosition(["l_int_finger_joint","l_ext_finger_joint"],[0.6, 0.6])
+    rospy.sleep(3.0)
+
+    spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.5, 0.0, 0.8
+    pub.publish(spos)
+    robot.l_arm.set_pose_target(spos)
+    robot.l_arm.go()
+    rospy.sleep(1.0)
+    rospy.loginfo('POSITION: {}'.format(spos))
+
+    scene.attach_box("bender/l_grasp_link", "part", touch_links=touch_links)
+
+    gripper.moveToJointPosition(["l_int_finger_joint","l_ext_finger_joint"],[0.0, 0.0])
+    rospy.sleep(3.0)
+
+    spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.5, 0.0, 0.9
+    pub.publish(spos)
+    robot.l_arm.set_pose_target(spos)
+    robot.l_arm.go()
+    rospy.sleep(3.0)
+    rospy.loginfo('POSITION: {}'.format(spos))
+
+    spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.35, 0.0, 0.8
+    pub.publish(spos)
+    robot.l_arm.set_pose_target(spos)
+    robot.l_arm.go()
+    rospy.sleep(3.0)
+    rospy.loginfo('POSITION: {}'.format(spos))
+
 
 
     #g.moveToPose(spos,"bender/l_wrist_pitch_link")

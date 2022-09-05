@@ -1,7 +1,7 @@
 <launch>
 
   <!-- Selected arm -->
-  <arg name="use_arm" default="l_arm" />
+  <arg name="use_arm" default="both" />
   <arg name="model_type" default="standard" />
 
   <include file="$(find bender_moveit_config)/launch/planning_context.launch">

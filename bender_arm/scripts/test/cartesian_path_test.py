@@ -8,6 +8,7 @@ __email__ = 'giom.pais@gmail.com'
 import sys
 import rospy
 import math
+import copy
 import numpy as np
 from moveit_python import MoveGroupInterface
 from moveit_commander import (
@@ -80,7 +81,7 @@ def main():
 
     spos.header.frame_id="bender/base_link"
     #Position 
-    spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.5, 0.0, 3.0
+    spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.45, 0.0, 1.0
 
     #Z min = 0.75
     #Z max = 1.23
@@ -98,8 +99,7 @@ def main():
 
     
     robot = RobotCommander()
-    robot.l_arm.set_goal_position_tolerance(0.05)
-    #robot.l_arm.set_goal_orientation_tolerance(0.05)
+    robot.l_arm.set_goal_tolerance(0.005)
     #g = MoveGroupInterface("l_arm", "bender/base_link",None,False)  #"bender/l_shoulder_pitch_link"
     gripper = MoveGroupInterface("l_gripper", "bender/base_link", None, False)
     scene = PlanningSceneInterface()
@@ -110,7 +110,7 @@ def main():
     p.pose.position.y = 0.0
     p.pose.position.z = 0.8
     p.pose.orientation.w = 1.0
-    scene.add_box("part", p, (0.05, 0.05, 0.3))
+    #scene.add_box("part", p, (0.05, 0.05, 0.3))
     
     # joint_names=['l_shoulder_pitch_joint', 'l_shoulder_roll_joint',
       # 'l_shoulder_yaw_joint', 'l_elbow_pitch_joint', 'l_elbow_yaw_joint',
@@ -134,12 +134,11 @@ def main():
     #Movimiento en espacio cartesiano
     pub.publish(spos)
     robot.l_arm.set_pose_target(spos)
-    print(robot.l_arm.plan())
-    #robot.l_arm.go()
+    robot.l_arm.go()
     # g.moveToPose(spos,"bender/l_grasp_link")
 
     rospy.sleep(1.0)
-    rospy.loginfo('POSITION: {}'.format(robot.l_arm.get_current_pose().pose))
+    rospy.loginfo('POSITION: {}'.format(spos))
 
     #gripper.moveToJointPosition(["l_int_finger_joint","l_ext_finger_joint"],[0.6, 0.6])
     #rospy.sleep(3.0)
@@ -154,6 +153,19 @@ def main():
     #rospy.loginfo('POSITION: (0.4, 0.0, 1.1)')
     
     #rospy.sleep(1.0)
+    scale = 1
+    waypoints = []
+    wpose = robot.l_arm.get_current_pose().pose
+    wpose.position.x += scale * 0.2
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z += scale * 0.1
+    waypoints.append(copy.deepcopy(wpose))
+
+    (plan, fraction) = robot.l_arm.compute_cartesian_path(waypoints, 0.01, 0.0)
+
+    robot.l_arm.execute(plan, wait=True)
+
     #rospy.loginfo('TERMINA TEST')
     ################################
 

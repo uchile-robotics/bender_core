@@ -10,6 +10,7 @@ controller_list:
       - l_elbow_pitch_joint
       - l_elbow_yaw_joint
       - l_wrist_pitch_joint
+      - l_grasp_joint
 
   - name: /bender/r_arm_controller
     action_ns: follow_joint_trajectory
@@ -22,18 +23,19 @@ controller_list:
       - r_elbow_pitch_joint
       - r_elbow_yaw_joint
       - r_wrist_pitch_joint
+      - l_grasp_joint
 
   - name: /bender/r_gripper_controller
-    type: GripperCommand
-    action_ns: gripper_action
+    type: FollowJointTrajectory
+    action_ns: follow_joint_trajectory
     default: true
     joints:
       - r_ext_finger_joint
       - r_int_finger_joint
 
   - name: /bender/l_gripper_controller
-    type: GripperCommand
-    action_ns: gripper_action
+    type: FollowJointTrajectory
+    action_ns: follow_joint_trajectory
     default: true
     joints:
       - l_ext_finger_joint

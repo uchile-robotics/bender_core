@@ -105,8 +105,8 @@
     <axis
       xyz="-0.024808 0.99969 -4.5542E-05" />
     <limit
-      lower="-1.57"
-      upper="1.57"
+      lower="-3"
+      upper="3"
       effort="5"
       velocity="5" />
       <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
@@ -191,10 +191,10 @@
     <visual>
       <origin
         xyz="0 0 0"
-        rpy="0 0 0" />
+        rpy="0 0 ${M_PI/2}" />
       <geometry>
         <mesh
-          filename="package://bender_description/meshes/visual/l_shoulder_yaw_link.STL" />
+          filename="package://bender_description/meshes/visual/bicep_reoriented.stl" scale="0.001 0.001 0.001" />
       </geometry>
       <material
         name="">
@@ -217,7 +217,7 @@
     type="revolute">
     <origin
       xyz="-0.030926 -0.0014463 -0.061069"
-      rpy="0 0 0" />
+      rpy="0 0 ${-M_PI/2}" />
     <parent
       link="${prefix}${side}_shoulder_roll_link" />
     <child
@@ -374,7 +374,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://bender_description/meshes/visual/l_wrist_pitch_link.STL" />
+          filename="package://bender_description/meshes/visual/wrist_reoriented.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material
         name="">
@@ -397,7 +397,7 @@
     type="revolute">
     <origin
       xyz="0.00020829 -0.019843 -0.29049"
-      rpy="0 0 0" />
+      rpy="0 0 ${M_PI}" />
     <parent
       link="${prefix}${side}_elbow_yaw_link" />
     <child
@@ -429,8 +429,8 @@
       type="fixed">
       <xacro:if value="${(reflect+1)/2}">
         <origin
-          xyz="0.01925 0.04 -0.0794"
-          rpy="0 0 0" />
+          xyz="${0.03555-0.017} -0.0365 -0.0794"
+          rpy="0 0 ${-M_PI/2}" />
       </xacro:if >
       <xacro:unless value="${(reflect+1)/2}">
         <origin
@@ -453,8 +453,8 @@
       type="fixed">
       <xacro:if value="${(reflect+1)/2}">
         <origin
-          xyz="0.01925 -0.0008 -0.0794"
-          rpy="0 0 0" />
+          xyz="${-0.00085-0.017} -0.0365 -0.0794"
+          rpy="0 0 ${-M_PI/2}" />
       </xacro:if >
       <xacro:unless value="${(reflect+1)/2}">
         <origin
@@ -468,6 +468,31 @@
       <axis
         xyz="0 0 0" />
     </joint>
+
+    <!-- Gripper Grasp -->
+    <link
+        name="${prefix}${side}_grasp_link">
+        <xacro:dummy_inertial/>
+      </link>
+
+    <joint
+        name="${side}_grasp_joint"
+        type="fixed">
+        <xacro:if value="${(reflect+1)/2}">
+          <origin
+            xyz="0.0 -0.02 -0.18"
+            rpy="0 ${M_PI/2} ${-M_PI/2}" />
+        </xacro:if>
+        <xacro:unless value="${(reflect+1)/2}">
+          <origin
+            xyz="0.0 0.02 -0.18"
+            rpy="0 ${M_PI/2} ${-M_PI/2}" />
+        </xacro:unless>
+        <parent
+          link="${prefix}${side}_wrist_pitch_link" />
+        <child
+          link="${prefix}${side}_grasp_link" />
+      </joint>
     
 	</xacro:macro>
 
