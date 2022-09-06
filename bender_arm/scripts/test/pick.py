@@ -87,7 +87,22 @@ def pick(scene, move_group, gripper_interface, finger_links, obj_name, grasps):
         pre_grasp_pose.pose.position.y = grasp_pose.pose.position.y - approach_y*desired_d
         pre_grasp_pose.pose.position.z = grasp_pose.pose.position.z - approach_z*desired_d
 
-        #Get the pre-grasp posture
+        #Get post-grasp pose from retreat vector
+
+        post_grasp_pose = PoseStamped()
+        post_grasp_pose.pose.orientation = grasp.grasp_pose.pose.orientation
+        retreat_x = g.post_grasp_retreat.direction.vector.x
+        retreat_y = g.post_grasp_retreat.direction.vector.y
+        retreat_z = g.post_grasp_retreat.direction.vector.z
+        post_min_d = grasp.post_grasp_retreat.min_distance
+        post_desired_d = grasp.post_grasp_retreat.desired_distance
+
+        post_grasp_pose.header.frame_id = pg_frame
+        post_grasp_pose.pose.position.x = grasp_pose.pose.position.x + retreat_x*post_desired_d
+        post_grasp_pose.pose.position.y = grasp_pose.pose.position.y + retreat_y*post_desired_d
+        post_grasp_pose.pose.position.z = grasp_pose.pose.position.z + retreat_z*post_desired_d
+
+        #Get the pre-grasp and grasp posture
         gripper_frame_id = g.pre_grasp_posture.header.frame_id
         gripper_joint_names = g.pre_grasp_posture.joint_names
         gripper_pg_positions = grasp.pre_grasp_posture.points[0].positions
@@ -110,6 +125,12 @@ def pick(scene, move_group, gripper_interface, finger_links, obj_name, grasps):
         rospy.sleep(1)
         gripper_interface.moveToJointPosition(gripper_joint_names,gripper_g_positions)
         rospy.sleep(1)
+        move_group.set_pose_target(post_grasp_pose) #Go to Post Grasp 
+        move_group.go()
+        rospy.sleep(1)
+        move_group.set_pose_target(pre_grasp_pose)
+        move_group.go() #Move Gripper to Pre-Grasp Again
+        rospy.sleep(1)
 
 
 
@@ -131,6 +152,7 @@ if __name__ == "__main__":
     # create the scene and the robot commander
     scene = PlanningSceneInterface()
     robot = RobotCommander()
+    eef_link = robot.l_arm.get_end_effector_link()
     l_gripper = MoveGroupInterface("l_gripper", "bender/base_link", None, False)
     grasping_group = 'l_gripper'
     touch_links = robot.get_link_names(group=grasping_group)
@@ -138,9 +160,13 @@ if __name__ == "__main__":
     rospy.loginfo(robot.l_arm.get_current_pose())   # just to get an idea of the pose
     rospy.sleep(1)
 
+
     # clean the scene
+    scene.remove_attached_object(eef_link, name="part")
+    wait_for_update("part", scene, box_is_known=True, box_is_attached=False)
+
     #scene.remove_world_object("pole")
-    #scene.remove_world_object("table")
+    scene.remove_world_object("table")
     scene.remove_world_object("part")
 
     wait_for_update("part", scene, box_is_known=False, box_is_attached=False)
@@ -154,8 +180,8 @@ if __name__ == "__main__":
     #scene.add_box("pole", p, (0.3, 0.1, 1.0))
 
     p.pose.position.y = -0.2
-    p.pose.position.z = 0.275
-    #scene.add_box("table", p, (0.5, 1.5, 0.75))
+    p.pose.position.z = 0.425
+    scene.add_box("table", p, (0.5, 1.5, 0.85))
 
     p.pose.position.x = 0.6
     p.pose.position.y = 0.0
@@ -215,7 +241,7 @@ if __name__ == "__main__":
     g.post_grasp_retreat.direction.vector.x = 0.0
     g.post_grasp_retreat.direction.vector.y = 0.0
     g.post_grasp_retreat.direction.vector.z = 1.0
-    g.post_grasp_retreat.desired_distance = 0.1
+    g.post_grasp_retreat.desired_distance = 0.05
     g.post_grasp_retreat.min_distance = 0.01
 
     #g.allowed_touch_objects = ["part"]
@@ -227,11 +253,11 @@ if __name__ == "__main__":
     # scene.attach_box("bender/l_grasp_link", "part", touch_links=touch_links)
     #robot.l_arm.set_support_surface_name("table")
     robot.l_arm.set_num_planning_attempts(10)
-    print(robot.l_arm.plan(g.grasp_pose))
-    #robot.l_arm.pick("part",grasps)
+    # print(robot.l_arm.plan(g.grasp_pose))
+    # robot.l_arm.pick("part",grasps)
     # robot.l_arm.pick("part")
 
-    #pick(scene,robot.l_arm,l_gripper,touch_links,"part",grasps)
+    pick(scene,robot.l_arm,l_gripper,touch_links,"part",grasps)
 
     rospy.spin()
     roscpp_shutdown()

@@ -80,7 +80,7 @@ def main():
 
     spos.header.frame_id="bender/base_link"
     #Position 
-    spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.5, 0.0, 3.0
+    spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.3, 0.0, 0.75
 
     #Z min = 0.75
     #Z max = 1.23
@@ -135,7 +135,7 @@ def main():
     pub.publish(spos)
     robot.l_arm.set_pose_target(spos)
     print(robot.l_arm.plan())
-    #robot.l_arm.go()
+    robot.l_arm.go()
     # g.moveToPose(spos,"bender/l_grasp_link")
 
     rospy.sleep(1.0)
