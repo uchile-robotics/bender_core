@@ -32,30 +32,27 @@ class PostGPD():
         self.scene = PlanningSceneInterface()
         self.robot = RobotCommander()
         #self.grasp_sub = rospy.Subscriber('/detect_grasps/clustered_grasps', GraspConfigList, self.grasp)
-        self.pose_pub = rospy.Publisher('grasp_pose', PoseStamped, queue_size=10)
-        self.grasp_pub = rospy.Publisher('grasp', GraspConfigList, queue_size=10)
+        self.pose_pub = rospy.Publisher('new_grasp_pose', PoseStamped, queue_size=10)
+        #self.grasp_pub = rospy.Publisher('grasp', GraspConfig, queue_size=10)
         self.rate = rospy.Rate(10) # 10 hz
 
     def grasp(self):
         rospy.loginfo("Robot ready. Waiting for GPD output...")
         msg = rospy.wait_for_message(
-            "/detect_grasps/clustered_grasps", GraspConfigList)
+            "grasp", GraspConfigList)
 
         grasps = self.GPDtoMoveItGrasp(msg)
 
-        #for grasp in grasps:
-        ##
-        #    gg = grasp.grasp_pose
-        #     self.pose_pub.publish(gg)
-        #   self.robot.l_arm.set_pose_target(grasp.grasp_pose)
-        #   self.robot.l_arm.plan()
-            #while not rospy.is_shutdown():
-            #   self.pose_pub.publish(gg)self.pose_pub.publish(gg)
-            #    self.grasp_pub.publish(msg)
-            #    self.rate.sleep()
+        for i, grasp in enumerate(grasps):
+            gg = grasp.grasp_pose
+            #self.robot.l_arm.set_pose_target(grasp.grasp_pose)
+            #self.robot.l_arm.plan()
+            while not rospy.is_shutdown():
+                self.pose_pub.publish(gg)
+                #self.grasp_pub.publish(msg.grasps[i])
+                self.rate.sleep()
 
-        self.robot.l_arm.pick("part",grasps)
-        rospy.loginfo("Grasp Finished")
+        #self.robot.l_arm.pick("part",grasps)
 
     def GPDtoMoveItGrasp(self, GraspCfgList, N=None):
         
@@ -148,9 +145,8 @@ if __name__ == "__main__":
     roscpp_initialize(sys.argv)
     rate = rospy.Rate(10) # 10hz
 
-    while not rospy.is_shutdown():
-        g = PostGPD()
-        g.grasp()
+    g = PostGPD()
+    g.grasp()
 
     rospy.spin()
     roscpp_shutdown()

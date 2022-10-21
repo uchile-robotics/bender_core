@@ -91,9 +91,9 @@ def pick(scene, move_group, gripper_interface, finger_links, obj_name, grasps):
 
         post_grasp_pose = PoseStamped()
         post_grasp_pose.pose.orientation = grasp.grasp_pose.pose.orientation
-        retreat_x = g.post_grasp_retreat.direction.vector.x
-        retreat_y = g.post_grasp_retreat.direction.vector.y
-        retreat_z = g.post_grasp_retreat.direction.vector.z
+        retreat_x = grasp.post_grasp_retreat.direction.vector.x
+        retreat_y = grasp.post_grasp_retreat.direction.vector.y
+        retreat_z = grasp.post_grasp_retreat.direction.vector.z
         post_min_d = grasp.post_grasp_retreat.min_distance
         post_desired_d = grasp.post_grasp_retreat.desired_distance
 
@@ -114,10 +114,10 @@ def pick(scene, move_group, gripper_interface, finger_links, obj_name, grasps):
         rospy.sleep(1)
         gripper_interface.moveToJointPosition(gripper_joint_names,gripper_pg_positions)
         rospy.sleep(1)
-        #(plan, fraction) = move_group.compute_cartesian_path([grasp_pose.pose], 0.01, 0.0)
-        #move_group.execute(plan, wait=True)
-        move_group.set_pose_target(grasp_pose) #Set Grasp 
-        move_group.go() #Move Gripper to Grasp
+        (plan, fraction) = move_group.compute_cartesian_path([grasp_pose.pose], 0.01, 0.0)
+        move_group.execute(plan, wait=True)
+        #move_group.set_pose_target(grasp_pose) #Set Grasp 
+        #move_group.go() #Move Gripper to Grasp
         rospy.sleep(1)
         #ATTACH OBJECT
         scene.attach_box(eef_link, obj_name, touch_links=finger_links)
@@ -125,8 +125,11 @@ def pick(scene, move_group, gripper_interface, finger_links, obj_name, grasps):
         rospy.sleep(1)
         gripper_interface.moveToJointPosition(gripper_joint_names,gripper_g_positions)
         rospy.sleep(1)
-        move_group.set_pose_target(post_grasp_pose) #Go to Post Grasp 
-        move_group.go()
+        #POST GRASP
+        #move_group.set_pose_target(post_grasp_pose) #Go to Post Grasp 
+        #move_group.go()
+        (plan, fraction) = move_group.compute_cartesian_path([post_grasp_pose.pose], 0.01, 0.0)
+        move_group.execute(plan, wait=True)
         rospy.sleep(1)
         move_group.set_pose_target(pre_grasp_pose)
         move_group.go() #Move Gripper to Pre-Grasp Again

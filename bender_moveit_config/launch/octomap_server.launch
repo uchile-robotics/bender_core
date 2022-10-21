@@ -1,0 +1,17 @@
+<launch>
+
+    <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+            <param name="resolution" value="0.01" />
+            <param name="frame_id" type="string" value="bender/odom" />
+            <param name="base_frame_id" type="string" value="bender/base_link" />
+            <param name="sensor_model/hit" value="0.8" />
+            <param name="sensor_model/miss" value="0.3" />
+            <param name="sensor_model/max_range" value="20.0" />
+            <param name="occupancy_min_z" value="0.8" />
+            <param name="occupancy_max_z" value="1.0" />
+            <param name="pointcloud_min_z" value="0.8" />
+            <param name="pointcloud_max_z" value="10.0" />
+            <remap from="cloud_in" to="/bender/sensors/rgbd_head/depth/env_masked" />
+    </node>
+
+</launch>
