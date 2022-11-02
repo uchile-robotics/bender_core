@@ -31,6 +31,9 @@ class PostGPD():
     def __init__(self):
         self.scene = PlanningSceneInterface()
         self.robot = RobotCommander()
+        #self.eef_link = self.robot.l_arm.get_end_effector_link()
+        self.robot.l_arm.set_end_effector_link("bender/l_grasp_link")
+        self.eef_link = "bender/l_grasp_link"
         #self.grasp_sub = rospy.Subscriber('/detect_grasps/clustered_grasps', GraspConfigList, self.grasp)
         self.pose_pub = rospy.Publisher('grasp_pose', PoseStamped, queue_size=10)
         self.grasp_pub = rospy.Publisher('grasp', GraspConfigList, queue_size=10)
@@ -42,6 +45,7 @@ class PostGPD():
             "/detect_grasps/clustered_grasps", GraspConfigList)
 
         grasps = self.GPDtoMoveItGrasp(msg)
+        self.new_object(grasps[0])
 
         #for grasp in grasps:
         ##
@@ -70,6 +74,7 @@ class PostGPD():
         for grasp in GCfgL:
             #Parameters
             finger_joints = ["l_int_finger_joint", "l_ext_finger_joint"]
+            grasp_width = grasp.width.data
 
             #Grasp Object Created
             g = Grasp()
@@ -86,7 +91,8 @@ class PostGPD():
             g.pre_grasp_posture.header.frame_id = frame_id
             g.pre_grasp_posture.joint_names = finger_joints
             pg_pos = JointTrajectoryPoint()
-            pg_pos.positions = [0.5, 0.5]
+            point = grasp_width/2
+            pg_pos.positions = [point, point]
             g.pre_grasp_posture.points.append(pg_pos)
 
             #Grasp Score/Quality
@@ -135,8 +141,46 @@ class PostGPD():
         p.pose.position = grasp.position
 
         return p
+    
+    def wait_for_update(self, box_name="part", box_is_known=False, box_is_attached=False, timeout=4):
+        start = rospy.get_time()
+        seconds = rospy.get_time()
+        while (seconds - start < timeout) and not rospy.is_shutdown():
+            # Test if the box is in attached objects
+            attached_objects = self.scene.get_attached_objects([box_name])
+            is_attached = len(attached_objects.keys()) > 0
 
+            # Test if the box is in the scene.
+            # Note that attaching the box will remove it from known_objects
+            is_known = box_name in self.scene.get_known_object_names()
 
+            # Test if we are in the expected state
+            if (box_is_attached == is_attached) and (box_is_known == is_known):
+                return True
+
+            # Sleep so that we give other threads time on the processor
+            rospy.sleep(0.1)
+            seconds = rospy.get_time()
+
+    def clean_scene(self, box_name="part"):
+        #Clean object attachment
+        self.scene.remove_attached_object(self.eef_link, name=box_name)
+        self.wait_for_update(box_name=box_name, box_is_known=True)
+
+        #Remove object from scene
+        self.scene.remove_world_object("part")
+        self.wait_for_update(box_name=box_name)
+        rospy.loginfo("Scene cleaned c:")
+
+    def new_object(self, grasp, box_name="part"):
+        #Create new object from grasp pose
+        p = PoseStamped()
+        p.header.frame_id = grasp.grasp_pose.header.frame_id
+        p.pose.orientation = grasp.grasp_pose.pose.orientation
+        p.pose.position = grasp.grasp_pose.pose.position
+        box_width = grasp.pre_grasp_posture.points[0].positions[0]/2
+        self.scene.add_box(box_name, p, (box_width, box_width, box_width))
+        self.wait_for_update(box_name=box_name, box_is_known=True)
 
 
 
@@ -147,9 +191,13 @@ if __name__ == "__main__":
     rospy.init_node("pick_demo", anonymous=True)
     roscpp_initialize(sys.argv)
     rate = rospy.Rate(10) # 10hz
+    g = PostGPD()
+    g.clean_scene()
+    g.clean_scene()
+
 
     while not rospy.is_shutdown():
-        g = PostGPD()
+        #g.clean_scene()
         g.grasp()
 
     rospy.spin()

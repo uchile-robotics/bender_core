@@ -9,6 +9,7 @@
 r_shoulder_pitch_joint:
   id: 11
   model: 'mx106'
+  operating_mode: 4
   init: 2055
   max: 3330
   min: 1050
@@ -24,7 +25,7 @@ l_shoulder_pitch_joint:
 # Motor no simetrico!
 r_shoulder_roll_joint:
   id: 12
-  model: 'ex106'
+  model: 'mx106'
   init: 2090
   max: 3510
   min: 1861
