@@ -46,8 +46,9 @@ class PostGPD():
         rospy.loginfo("Robot ready. Waiting for GPD output...")
         msg = rospy.wait_for_message(
             "/detect_grasps/clustered_grasps", GraspConfigList)
-
+        rospy.loginfo("Received {} grasps.".format(len(msg.grasps)))
         grasps = self.GPDtoMoveItGrasp(msg)
+        rospy.loginfo("Trying {} selected grasps.".format(len(grasps)))
         self.pick(grasps)
 
         #for grasp in grasps:
@@ -78,50 +79,57 @@ class PostGPD():
         grasps = []
 
         for grasp in GCfgL:
-            #Parameters
-            finger_joints = ["l_int_finger_joint", "l_ext_finger_joint"]
-            grasp_width = grasp.width.data
+            while True:
+                #Parameters
+                finger_joints = ["l_int_finger_joint", "l_ext_finger_joint"]
+                grasp_width = grasp.width.data
 
-            #Grasp Object Created
-            g = Grasp()
+                #Grasp Object Created
+                g = Grasp()
 
-            #Grasp Posture Config
-            g.grasp_posture.header.frame_id = frame_id
-            g.grasp_posture.joint_names = finger_joints
-            g_pos = JointTrajectoryPoint()
-            g_pos.positions = [0.0, 0.0]
-            g_pos.effort.append(0.0)
-            g.grasp_posture.points.append(g_pos)
+                #Grasp Pose Config
+                gpose = self.gpd_grasp_to_pose(grasp, frame_id)
 
-            #Pre-Grasp Posture Config
-            g.pre_grasp_posture.header.frame_id = frame_id
-            g.pre_grasp_posture.joint_names = finger_joints
-            pg_pos = JointTrajectoryPoint()
-            point = grasp_width/2
-            pg_pos.positions = [0.5, 0.5]
-            g.pre_grasp_posture.points.append(pg_pos)
+                if not gpose:
+                    break
+                else:
+                    g.grasp_pose = gpose
 
-            #Grasp Score/Quality
-            g.grasp_quality = grasp.score.data
+                #Grasp Posture Config
+                g.grasp_posture.header.frame_id = frame_id
+                g.grasp_posture.joint_names = finger_joints
+                g_pos = JointTrajectoryPoint()
+                g_pos.positions = [0.0, 0.0]
+                g_pos.effort.append(5.0)
+                g.grasp_posture.points.append(g_pos)
 
-            #Grasp Pose Config
-            g.grasp_pose = self.gpd_grasp_to_pose(grasp, frame_id)
-            
-            #Pre-Grasp Config
-            g.pre_grasp_approach.direction.header.frame_id = frame_id
-            g.pre_grasp_approach.direction.vector.x = grasp.approach.x
-            g.pre_grasp_approach.direction.vector.y = grasp.approach.y
-            g.pre_grasp_approach.direction.vector.z = grasp.approach.z
-            g.pre_grasp_approach.min_distance = 0.08
-            g.pre_grasp_approach.desired_distance = 0.12
+                #Pre-Grasp Posture Config
+                g.pre_grasp_posture.header.frame_id = frame_id
+                g.pre_grasp_posture.joint_names = finger_joints
+                pg_pos = JointTrajectoryPoint()
+                point = grasp_width/2
+                pg_pos.positions = [0.5, 0.5]
+                g.pre_grasp_posture.points.append(pg_pos)
 
-            #Post Grasp Config
-            g.post_grasp_retreat.direction.vector.z = 1.0
-            g.post_grasp_retreat.min_distance = 0.13
-            g.post_grasp_retreat.desired_distance = 0.15
-            g.post_grasp_retreat.direction.header.frame_id = frame_id
+                #Grasp Score/Quality
+                g.grasp_quality = grasp.score.data
+                
+                #Pre-Grasp Config
+                g.pre_grasp_approach.direction.header.frame_id = frame_id
+                g.pre_grasp_approach.direction.vector.x = grasp.approach.x
+                g.pre_grasp_approach.direction.vector.y = grasp.approach.y
+                g.pre_grasp_approach.direction.vector.z = grasp.approach.z
+                g.pre_grasp_approach.min_distance = 0.08
+                g.pre_grasp_approach.desired_distance = 0.16
 
-            grasps.append(g)
+                #Post Grasp Config
+                g.post_grasp_retreat.direction.vector.z = 1.0
+                g.post_grasp_retreat.min_distance = 0.13
+                g.post_grasp_retreat.desired_distance = 0.15
+                g.post_grasp_retreat.direction.header.frame_id = frame_id
+
+                grasps.append(g)
+                break
 
         return grasps
 
@@ -132,6 +140,8 @@ class PostGPD():
         x_approach,y_approach,z_approach = grasp.approach.x, grasp.approach.y, grasp.approach.z
         x_binormal,y_binormal,z_binormal = grasp.binormal.x, grasp.binormal.y, grasp.binormal.z
         x_axis,y_axis,z_axis = grasp.axis.x, grasp.axis.y, grasp.axis.z
+
+        if not (x_approach >= 0 and y_approach <=0 and z_approach <= 0 and z_axis <= 0): return 0
 
         R = [[x_approach,-x_binormal,-x_axis], 
              [y_approach,-y_binormal,-y_axis], 
@@ -209,9 +219,16 @@ class PostGPD():
                 grasp_pose = PoseStamped()
                 grasp_pose = grasp.grasp_pose
 
-                self.new_object(grasp, obj_name) 
-
                 self.pose_pub.publish(grasp_pose)
+
+                #Get the pre-grasp and grasp posture
+                gripper_frame_id = grasp.pre_grasp_posture.header.frame_id
+                gripper_joint_names = grasp.pre_grasp_posture.joint_names
+                gripper_pg_positions = grasp.pre_grasp_posture.points[0].positions
+                gripper_g_positions = grasp.grasp_posture.points[0].positions
+
+                
+                self.gripper.moveToJointPosition(gripper_joint_names,gripper_pg_positions)
 
                 #Try Grasp Pose
                 self.robot.l_arm.set_pose_target(grasp_pose)
@@ -261,17 +278,11 @@ class PostGPD():
                 post_grasp_pose.pose.position.y = grasp_pose.pose.position.y + retreat_y*post_desired_d
                 post_grasp_pose.pose.position.z = grasp_pose.pose.position.z + retreat_z*post_desired_d
 
-                #Get the pre-grasp and grasp posture
-                gripper_frame_id = grasp.pre_grasp_posture.header.frame_id
-                gripper_joint_names = grasp.pre_grasp_posture.joint_names
-                gripper_pg_positions = grasp.pre_grasp_posture.points[0].positions
-                gripper_g_positions = grasp.grasp_posture.points[0].positions
-
                 #Execute Pipeline
                 self.robot.l_arm.set_pose_target(pre_grasp_pose) #Set Pre-grasp 
                 self.robot.l_arm.go() #Move Gripper to Pre-Grasp
                 rospy.sleep(1)
-                self.gripper.moveToJointPosition(gripper_joint_names,gripper_pg_positions)
+                self.new_object(grasp, obj_name)
                 rospy.sleep(1)
                 (plan, fraction) = self.robot.l_arm.compute_cartesian_path([grasp_pose.pose], 0.01, 0.0)
                 self.robot.l_arm.execute(plan, wait=True)
@@ -290,9 +301,9 @@ class PostGPD():
                 (plan, fraction) = self.robot.l_arm.compute_cartesian_path([post_grasp_pose.pose], 0.01, 0.0)
                 self.robot.l_arm.execute(plan, wait=True)
                 rospy.sleep(1)
-                self.robot.l_arm.set_pose_target(pre_grasp_pose)
-                self.robot.l_arm.go() #Move Gripper to Pre-Grasp Again
-                rospy.sleep(1)
+                #self.robot.l_arm.set_pose_target(pre_grasp_pose)
+                #self.robot.l_arm.go() #Move Gripper to Pre-Grasp Again
+                #rospy.sleep(1)
                 grasp_done = True
                 break
             if grasp_done:
@@ -311,7 +322,8 @@ if __name__ == "__main__":
     rate = rospy.Rate(10) # 10hz
     g = PostGPD()
     g.go_to_pregrasp()
-    #g.clean_scene()
+    g.clean_scene()
+    rospy.sleep(1)
     #g.clean_scene()
 
 

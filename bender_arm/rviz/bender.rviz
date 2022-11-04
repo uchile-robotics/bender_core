@@ -6,10 +6,9 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /RobotModel1
-        - /RobotModel1/Links1
-        - /PlanningScene1
         - /PlanningScene1/Scene Robot1
+        - /TF1/Status1
+        - /TF1/Frames1
       Splitter Ratio: 0.4710578918457031
     Tree Height: 522
   - Class: rviz/Selection
@@ -310,6 +309,7 @@ Visualization Manager:
         PointCloud2: true
         Pose: true
         RobotModel: true
+        TF: true
         Value: true
       Zoom Factor: 1
     - Class: rviz/MarkerArray
@@ -637,6 +637,185 @@ Visualization Manager:
       Topic: grasp_pose
       Unreliable: false
       Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        bender/PC_Base:
+          Value: false
+        bender/base_footprint:
+          Value: true
+        bender/base_link:
+          Value: false
+        bender/face_link:
+          Value: false
+        bender/front_left_wheel:
+          Value: false
+        bender/front_right_wheel:
+          Value: false
+        bender/head_link:
+          Value: false
+        bender/l_arm_base_link:
+          Value: false
+        bender/l_elbow_pitch_link:
+          Value: false
+        bender/l_elbow_yaw_link:
+          Value: false
+        bender/l_ext_finger_link:
+          Value: false
+        bender/l_ext_finger_mount_link:
+          Value: false
+        bender/l_grasp_link:
+          Value: false
+        bender/l_int_finger_link:
+          Value: false
+        bender/l_int_finger_mount_link:
+          Value: false
+        bender/l_shoulder_pitch_link:
+          Value: false
+        bender/l_shoulder_roll_link:
+          Value: false
+        bender/l_shoulder_yaw_link:
+          Value: false
+        bender/l_wrist_pitch_link:
+          Value: false
+        bender/left_shoulder:
+          Value: false
+        bender/mobile_base_link:
+          Value: false
+        bender/neck_base:
+          Value: false
+        bender/neck_link:
+          Value: false
+        bender/odom:
+          Value: false
+        bender/r_arm_base_link:
+          Value: false
+        bender/r_elbow_pitch_link:
+          Value: false
+        bender/r_elbow_yaw_link:
+          Value: false
+        bender/r_ext_finger_link:
+          Value: false
+        bender/r_ext_finger_mount_link:
+          Value: false
+        bender/r_grasp_link:
+          Value: false
+        bender/r_int_finger_link:
+          Value: false
+        bender/r_int_finger_mount_link:
+          Value: false
+        bender/r_shoulder_pitch_link:
+          Value: false
+        bender/r_shoulder_roll_link:
+          Value: false
+        bender/r_shoulder_yaw_link:
+          Value: false
+        bender/r_wrist_pitch_link:
+          Value: false
+        bender/rear_left_wheel:
+          Value: false
+        bender/rear_right_wheel:
+          Value: false
+        bender/right_shoulder:
+          Value: false
+        bender/router:
+          Value: false
+        bender/sensors/laser_front_link:
+          Value: false
+        bender/sensors/laser_rear_link:
+          Value: false
+        bender/sensors/rgbd_head_depth_frame:
+          Value: false
+        bender/sensors/rgbd_head_depth_optical_frame:
+          Value: false
+        bender/sensors/rgbd_head_laser_link:
+          Value: false
+        bender/sensors/rgbd_head_rgb_frame:
+          Value: false
+        bender/sensors/rgbd_head_rgb_optical_frame:
+          Value: false
+        bender/torso:
+          Value: false
+        bender/torso_base_link:
+          Value: false
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        bender/odom:
+          bender/base_link:
+            bender/base_footprint:
+              {}
+            bender/mobile_base_link:
+              bender/front_left_wheel:
+                {}
+              bender/front_right_wheel:
+                {}
+              bender/rear_left_wheel:
+                {}
+              bender/rear_right_wheel:
+                {}
+              bender/torso:
+                bender/PC_Base:
+                  {}
+                bender/left_shoulder:
+                  bender/r_arm_base_link:
+                    bender/r_shoulder_pitch_link:
+                      bender/r_shoulder_roll_link:
+                        bender/r_shoulder_yaw_link:
+                          bender/r_elbow_pitch_link:
+                            bender/r_elbow_yaw_link:
+                              bender/r_wrist_pitch_link:
+                                bender/r_ext_finger_mount_link:
+                                  bender/r_ext_finger_link:
+                                    {}
+                                bender/r_grasp_link:
+                                  {}
+                                bender/r_int_finger_mount_link:
+                                  bender/r_int_finger_link:
+                                    {}
+                bender/neck_base:
+                  bender/neck_link:
+                    bender/head_link:
+                      bender/face_link:
+                        bender/sensors/rgbd_head_depth_frame:
+                          bender/sensors/rgbd_head_depth_optical_frame:
+                            {}
+                        bender/sensors/rgbd_head_rgb_frame:
+                          bender/sensors/rgbd_head_rgb_optical_frame:
+                            {}
+                bender/right_shoulder:
+                  bender/l_arm_base_link:
+                    bender/l_shoulder_pitch_link:
+                      bender/l_shoulder_roll_link:
+                        bender/l_shoulder_yaw_link:
+                          bender/l_elbow_pitch_link:
+                            bender/l_elbow_yaw_link:
+                              bender/l_wrist_pitch_link:
+                                bender/l_ext_finger_mount_link:
+                                  bender/l_ext_finger_link:
+                                    {}
+                                bender/l_grasp_link:
+                                  {}
+                                bender/l_int_finger_mount_link:
+                                  bender/l_int_finger_link:
+                                    {}
+                bender/router:
+                  {}
+            bender/sensors/laser_front_link:
+              {}
+            bender/sensors/laser_rear_link:
+              {}
+            bender/sensors/rgbd_head_laser_link:
+              {}
+            bender/torso_base_link:
+              {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -665,25 +844,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.618617296218872
+      Distance: 1.1997371912002563
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.5570498704910278
-        Y: 0.08038074523210526
-        Z: 0.6440373659133911
+        X: 0.6657754182815552
+        Y: 0.2652817666530609
+        Z: 0.5411580204963684
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3497953414916992
+      Pitch: 0.7347975969314575
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.044353485107422
+      Yaw: 4.249413967132568
     Saved: ~
 Window Geometry:
   Camera:
