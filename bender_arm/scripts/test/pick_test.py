@@ -27,7 +27,7 @@ import copy
 from sensor_msgs.msg import PointCloud, Image
 from geometry_msgs.msg import Point32
 
-class PostGPD():
+class Manipulator():
     def __init__(self):
         self.scene = PlanningSceneInterface()
         self.robot = RobotCommander()
@@ -204,7 +204,7 @@ class PostGPD():
         spos.header.frame_id="bender/base_link"
 
         #Position 
-        spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.3, 0.0, 0.8 #0.35, 0.0, 0.8
+        spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.28, 0.0, 0.8 #0.28, 0.0, 0.8
         #Orientation
         spos.pose.orientation.x, spos.pose.orientation.y, spos.pose.orientation.z, spos.pose.orientation.w = 0.0, 0.0, 0.0, 1.0
 
@@ -259,9 +259,10 @@ class PostGPD():
                 plan = self.robot.l_arm.plan()
                 if not plan.joint_trajectory.points:
                     rospy.loginfo("Pre-Grasp Plan Failed :c")
-                    break
+                    use_pregrasp = False
                 else:
                     rospy.loginfo("Pre-Grasp Plan Found!")
+                    use_pregrasp = True
 
                 #Get post-grasp pose from retreat vector
 
@@ -279,16 +280,21 @@ class PostGPD():
                 post_grasp_pose.pose.position.z = grasp_pose.pose.position.z + retreat_z*post_desired_d
 
                 #Execute Pipeline
-                self.robot.l_arm.set_pose_target(pre_grasp_pose) #Set Pre-grasp 
-                self.robot.l_arm.go() #Move Gripper to Pre-Grasp
-                rospy.sleep(1)
+                if use_pregrasp:
+                    self.robot.l_arm.set_pose_target(pre_grasp_pose) #Set Pre-grasp 
+                    self.robot.l_arm.go() #Move Gripper to Pre-Grasp
+                    rospy.sleep(1)
+                    (plan, fraction) = self.robot.l_arm.compute_cartesian_path([grasp_pose.pose], 0.01, 0.0)
+                    self.robot.l_arm.execute(plan, wait=True)
+                    rospy.sleep(3)
+                else:
+                    self.robot.l_arm.set_pose_target(grasp_pose) #Set Pre-grasp 
+                    self.robot.l_arm.go() #Move Gripper to Pre-Grasp
+                    rospy.sleep(3)
                 self.new_object(grasp, obj_name)
-                rospy.sleep(1)
-                (plan, fraction) = self.robot.l_arm.compute_cartesian_path([grasp_pose.pose], 0.01, 0.0)
-                self.robot.l_arm.execute(plan, wait=True)
                 #self.robot.l_arm.set_pose_target(grasp_pose) #Set Grasp 
                 #self.robot.l_arm.go() #Move Gripper to Grasp
-                rospy.sleep(1)
+                rospy.sleep(2)
                 #ATTACH OBJECT
                 self.scene.attach_box(self.eef_link, obj_name, touch_links=self.finger_links)
                 self.wait_for_update(obj_name, box_is_known=False, box_is_attached=True)
@@ -320,7 +326,7 @@ if __name__ == "__main__":
     rospy.init_node("pick_demo", anonymous=True)
     roscpp_initialize(sys.argv)
     rate = rospy.Rate(10) # 10hz
-    g = PostGPD()
+    g = Manipulator()
     g.go_to_pregrasp()
     g.clean_scene()
     rospy.sleep(1)
