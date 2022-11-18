@@ -1,0 +1,19 @@
+# Generado con script desde configuracion de motores Dynamixel
+single_motor_controller:
+  controller:
+    module: joint_position_mx_controller
+    package: bender_arm
+    type: JointPositionMXController
+  joint_name: single_motor
+  joint_speed: 1.0
+  p_gain: 15
+  i_gain: 10
+  d_gain: 5
+  joint_torque_limit: 1.0
+  torque_enable_init: False
+  motor:
+    id: 1
+    init: 2055
+    max: 3060
+    min: 780
+    operating_mode: 4

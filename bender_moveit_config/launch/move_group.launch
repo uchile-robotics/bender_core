@@ -54,10 +54,11 @@
     <param name="jiggle_fraction" value="$(arg jiggle_fraction)" />
 
     <!-- load these non-default MoveGroup capabilities -->    
-    <param name="capabilities" value="
+    <!-- <param name="capabilities" value="
               move_group/ManageOctomapService
               move_group/CapabilityMapPlugin
               " />
+              -->
     <!-- previous cap_map move_group/CapabilityMapPlugin-->
 
     <!-- inhibit these default MoveGroup capabilities -->
