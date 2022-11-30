@@ -2,8 +2,8 @@
 	<node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
 	<param name="destination_frame" value="bender/base_link"/>
 	<param name="cloud_destination_topic" value="/merged_cloud"/>
-	<param name="scan_destination_topic" value="/scan_multi"/> <!-- SCAN TOPIC TO PUBLIC -->
-	<param name="laserscan_topics" value ="/bender/sensors/laser_front/scan /camera/scan" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+	<param name="scan_destination_topic" value="/bender/sensors/scan_multi"/> <!-- SCAN TOPIC TO PUBLIC -->
+	<param name="laserscan_topics" value ="/bender/sensors/laser_front/scan /bender/sensors/rgbd_head/scan" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
 	<param name="angle_min" value="-1.0"/>
 	<param name="angle_max" value="1.0"/>
 	<param name="angle_increment" value="0.0058"/>

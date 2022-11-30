@@ -5,7 +5,7 @@
 
     <remap from="image"       to="bender/sensors/rgbd_head/depth/image_raw"/> <!-- change here for your camera depth topic name. Default: "/camera/depth/image_raw" -->
     <remap from="camera_info" to="bender/sensors/rgbd_head/depth/camera_info"/> 
-    <remap from="scan"        to="camera/scan"/>
+    <remap from="scan"        to="bender/sensors/rgbd_head/scan"/>
     <!-- the remap for camera_info by default uses the same path as the one given to the image topic. Default: "<path_to_image_topic>/camera_info>" -->
 
     <!-- PARAMETERS: -->
