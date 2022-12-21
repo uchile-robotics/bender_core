@@ -31,10 +31,11 @@ class Manipulator():
     def __init__(self):
         self.scene = PlanningSceneInterface()
         self.robot = RobotCommander()
+        self.joint_state_topic = ['joint_states:=/bender/joint_states']
+        roscpp_initialize(self.joint_state_topic)
         self.gripper = MoveGroupInterface("l_gripper", "bender/base_link", None, False)
         #self.eef_link = self.robot.l_arm.get_end_effector_link()
         self.robot.l_arm.set_end_effector_link("bender/l_grasp_link")
-        self.robot.l_arm.set_planning_time(2)
         self.eef_link = "bender/l_grasp_link"
         self.grasping_group = 'l_gripper'
         self.finger_links = self.robot.get_link_names(group=self.grasping_group)
@@ -50,8 +51,7 @@ class Manipulator():
         rospy.loginfo("Received {} grasps.".format(len(msg.grasps)))
         grasps = self.GPDtoMoveItGrasp(msg)
         rospy.loginfo("Trying {} selected grasps.".format(len(grasps)))
-        self.go_to_pregrasp()
-        self.pick(grasps, cartesian=False)
+        self.pick(grasps)
 
         #for grasp in grasps:
         #    gg = grasp.grasp_pose
@@ -83,7 +83,7 @@ class Manipulator():
                 rospy.loginfo("Grasp Plan Found!")
             return True
 
-    def GPDtoMoveItGrasp(self, GraspCfgList, N=None, force_plannar=False):
+    def GPDtoMoveItGrasp(self, GraspCfgList, N=None):
         
         frame_id = GraspCfgList.header.frame_id
         if N is None:
@@ -135,7 +135,7 @@ class Manipulator():
                 g.pre_grasp_approach.direction.vector.y = grasp.approach.y
                 g.pre_grasp_approach.direction.vector.z = grasp.approach.z
                 g.pre_grasp_approach.min_distance = 0.08
-                g.pre_grasp_approach.desired_distance = 0.2
+                g.pre_grasp_approach.desired_distance = 0.16
 
                 #Post Grasp Config
                 g.post_grasp_retreat.direction.vector.z = 1.0
@@ -156,8 +156,7 @@ class Manipulator():
         x_binormal,y_binormal,z_binormal = grasp.binormal.x, grasp.binormal.y, grasp.binormal.z
         x_axis,y_axis,z_axis = grasp.axis.x, grasp.axis.y, grasp.axis.z
 
-        if not (x_approach >= 0 and z_approach <= 0 and z_axis <= 0): return 0
-        #and y_approach <=0
+        if not (x_approach >= 0 and y_approach <=0 and z_approach <= 0 and z_axis <= 0): return 0
 
         R = [[x_approach,-x_binormal,-x_axis], 
              [y_approach,-y_binormal,-y_axis], 
@@ -220,14 +219,14 @@ class Manipulator():
         spos.header.frame_id="bender/base_link"
 
         #Position 
-        spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.45, 0.25, 0.85 #0.28, 0.0, 0.8
+        spos.pose.position.x, spos.pose.position.y, spos.pose.position.z = 0.28, 0.0, 0.8 #0.28, 0.0, 0.8
         #Orientation
         spos.pose.orientation.x, spos.pose.orientation.y, spos.pose.orientation.z, spos.pose.orientation.w = 0.0, 0.0, 0.0, 1.0
 
         self.robot.l_arm.set_pose_target(spos) #Set Pre-grasp 
         self.robot.l_arm.go() #Move Gripper to Pre-Grasp
 
-    def pick(self, grasps, obj_name="part", cartesian=False):
+    def pick(self, grasps, obj_name="part"):
         for grasp in grasps:
             grasp_done = False
             while True:
@@ -248,20 +247,12 @@ class Manipulator():
 
                 #Try Grasp Pose
                 self.robot.l_arm.set_pose_target(grasp_pose)
-                if cartesian:
-                    (plan, fraction) = self.robot.l_arm.compute_cartesian_path([grasp_pose.pose], 0.01, 0.0)
-                else:
-                    plan = self.robot.l_arm.plan()
-
+                plan = self.robot.l_arm.plan()
                 if not plan.joint_trajectory.points:
-                    rospy.loginfo("Grasp Plan Failed :c ({},{},{})".format(grasp_pose.pose.position.x,
-                                                                           grasp_pose.pose.position.y,
-                                                                           grasp_pose.pose.position.z))
+                    rospy.loginfo("Grasp Plan Failed :c")
                     break
                 else:
-                    rospy.loginfo("Grasp Plan Found! ({},{},{})".format(grasp_pose.pose.position.x,
-                                                                        grasp_pose.pose.position.y,
-                                                                        grasp_pose.pose.position.z))
+                    rospy.loginfo("Grasp Plan Found!")
 
                 #Get pre-grasp pose from appproach vector
                 pre_grasp_pose = PoseStamped()
@@ -280,11 +271,7 @@ class Manipulator():
 
                 #Try Pre-Grasp Pose
                 self.robot.l_arm.set_pose_target(pre_grasp_pose)
-                if cartesian:
-                    (plan, fraction) = self.robot.l_arm.compute_cartesian_path([pre_grasp_pose.pose], 0.01, 0.0)
-                else:
-                    plan = self.robot.l_arm.plan()
-
+                plan = self.robot.l_arm.plan()
                 if not plan.joint_trajectory.points:
                     rospy.loginfo("Pre-Grasp Plan Failed :c")
                     use_pregrasp = False
@@ -309,11 +296,7 @@ class Manipulator():
 
                 #Execute Pipeline
                 if use_pregrasp:
-                    if cartesian:
-                        (plan, fraction) = self.robot.l_arm.compute_cartesian_path([pre_grasp_pose.pose], 0.01, 0.0)
-                        self.robot.l_arm.execute(plan, wait=True)
-                    else:
-                        self.robot.l_arm.set_pose_target(pre_grasp_pose) #Set Pre-grasp 
+                    self.robot.l_arm.set_pose_target(pre_grasp_pose) #Set Pre-grasp 
                     self.robot.l_arm.go() #Move Gripper to Pre-Grasp
                     rospy.sleep(1)
                     (plan, fraction) = self.robot.l_arm.compute_cartesian_path([grasp_pose.pose], 0.01, 0.0)
@@ -345,28 +328,4 @@ class Manipulator():
                 grasp_done = True
                 break
             if grasp_done:
-                self.go_to_pregrasp()
                 break
-
-
-
-
-
-
-if __name__ == "__main__":
-    joint_state_topic = ['joint_states:=/bender/joint_states']
-    roscpp_initialize(joint_state_topic)
-    rospy.init_node("pick_demo", anonymous=True)
-    roscpp_initialize(sys.argv)
-    rate = rospy.Rate(10) # 10hz
-    g = Manipulator()
-    g.clean_scene()
-    rospy.sleep(1)
-    #g.clean_scene()
-
-    while not rospy.is_shutdown():
-        #g.clean_scene()
-        g.grasp()
-
-    rospy.spin()
-    roscpp_shutdown()

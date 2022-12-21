@@ -89,7 +89,7 @@
       <static>1</static>
       <link name='link'>
         <collision name='surface'>
-          <pose>0 0 0.7 0 -0 0</pose>
+          <pose>0 0 0.93 0 -0 0</pose>
           <geometry>
             <box>
               <size>1.5 0.8 0.03</size>
@@ -110,7 +110,7 @@
           <max_contacts>10</max_contacts>
         </collision>
         <visual name='visual1'>
-          <pose>0 0 0.7 0 -0 0</pose>
+          <pose>0 0 0.93 0 -0 0</pose>
           <geometry>
             <box>
               <size>1.5 0.8 0.03</size>
@@ -269,77 +269,53 @@
       </link>
       <pose>1 0 0 0 -0 0</pose>
     </model>
-    <model name='cocacola'>
-      <pose>1 0 0.06134 0 -0 0</pose>
-      <link name='link'>
-        <pose>0 0 0 0 -0 0</pose>
+    <model name="mustard_bottle">
+      <link name="link">
         <inertial>
-          <mass>0.39</mass>
+          <mass>0.603</mass>
           <inertia>
-            <ixx>0.00058</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.00058</iyy>
-            <iyz>0</iyz>
-            <izz>0.00019</izz>
+            <!-- these formulas are for a box/cuboid, but an ellipsoid might be a better approximation -->
+            <ixx>0.002267531</ixx> <!-- 1/12*0.603*(0.095^2+0.190^2) -->
+            <ixy>0.0</ixy>
+            <ixz>0.0</ixz>
+            <iyy>0.001983066</iyy> <!-- 1/12*0.603*(0.058^2+0.190^2) -->
+            <iyz>0.0</iyz>
+            <izz>0.000622547</izz> <!-- 1/12*0.603*(0.058^2+0.095^2) -->
           </inertia>
+          <pose>0 0 0.095 0 0 0</pose>
         </inertial>
-        <collision name='collision'>
+        <collision name="collision">
+          <!--<pose>0 0 0.095 0 0 0</pose>
           <geometry>
-            <cylinder>
-              <radius>0.03302</radius>
-              <length>0.12268</length>
-            </cylinder>
+            <box>
+              <size>0.058 0.095 0.190</size>
+            </box>
+          </geometry>-->
+          <pose>0.025 -0.005 0 0 0 -1.15</pose>
+          <geometry>
+            <mesh>
+              <uri>model://mustard_bottle/meshes/nontextured.stl</uri>
+            </mesh>
           </geometry>
-          <surface>
-            <contact>
-              <ode>
-                <min_depth>0.005</min_depth>
-              </ode>
-            </contact>
-            <friction>
-              <ode>
-                <mu>0.9</mu>
-                <mu2>0.9</mu2>
-              </ode>
-            </friction>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
         </collision>
-        <visual name='visual'>
+        <visual name="visual">
+          <pose>0.025 -0.005 0 0 0 -1.15</pose>
           <geometry>
-            <cylinder>
-              <radius>0.03302</radius>
-              <length>0.12268</length>
-            </cylinder>
+            <mesh>
+              <uri>model://mustard_bottle/meshes/textured.dae</uri>
+            </mesh>
           </geometry>
-          <material>
-            <script>
-              <uri>model://cocacola/materials/scripts</uri>
-              <uri>model://cocacola/materials/textures</uri>
-              <name>CocaCola/Diffuse</name>
-            </script>
-          </material>
         </visual>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
       </link>
-      <static>0</static>
     </model>
     <state world_name='default'>
       <sim_time>116 545000000</sim_time>
       <real_time>118 879699162</real_time>
       <wall_time>1486523754 439758171</wall_time>
-      <model name='cocacola'>
-        <pose>0.401165 -0.16301 0.773558 0 -0 0</pose>
+      <model name='mustard_bottle'>
+        <pose>0 0 0 0 0 0</pose>
         <link name='link'>
-          <pose>0.401165 -0.16301 0.773558 0 -0 0</pose>
+          <pose>0.7 0.2 0.95 0 0 4.6</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -355,9 +331,9 @@
         </link>
       </model>
       <model name='table_white'>
-        <pose>0.668348 0 0 0 0 -1.57</pose>
+        <pose>0.0 0 0 0 0 -1.57</pose>
         <link name='link'>
-          <pose>0.668348 0 0 0 0 -1.57</pose>
+          <pose>1.05 0 0 0 0 -1.57</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>

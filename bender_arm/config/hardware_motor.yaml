@@ -17,6 +17,7 @@ r_shoulder_pitch_joint:
 
 l_shoulder_pitch_joint:
   id: 1
+  operating_mode: 4
   model: 'mx106'
   init: 2055
   max: 3060

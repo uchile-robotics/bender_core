@@ -384,10 +384,10 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0.01525 -0.06"
+        xyz="0 -0.01525 -0.06"
         rpy="0 0 0" />
       <geometry>
-        <box size="0.04 0.08 0.0625" />
+        <box size="0.08 0.04 0.0625" />
       </geometry>
     </collision>
   </link>
