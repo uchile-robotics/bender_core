@@ -1,0 +1,6 @@
+<launch>
+
+  <node name="emotion_detect"        pkg="basic_perception"      type="ed.py" output="screen">
+    </node>
+
+</launch>
