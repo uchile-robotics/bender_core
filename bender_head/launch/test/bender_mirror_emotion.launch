@@ -1,0 +1,12 @@
+<launch>
+	
+	<include file="$(find bender_head)/launch/test/bender_head.launch">
+	</include>
+
+  <include file="$(find basic_perception)/launch/emotion_detector.launch">
+	</include>
+
+  <node name="Mirror_emotion"        pkg="bender_head"      type="mirror_emotion.py">
+    </node>
+
+</launch>

@@ -1,0 +1,20 @@
+<launch>
+
+	<!-- this launch initialize all requieriments for conversation between Bender and one person
+	 -->
+	<arg name="calibrated" 	default="true"/>
+	
+	<!-- Openni for head asus -->
+	<include file="$(find bender_sensors)/launch/rgbd/asus/asus.launch">
+		<arg name="asus_name"   value="rgbd_head"              />
+		<arg name="device_id"   value="$(env BENDER_RGBD_HEAD_ID)"/>
+		<arg name="publish_tf"  value="false"/>
+		<arg name="calibrated" 	value="$(arg calibrated)"/>
+	</include>
+
+  <node name="serial_node"        pkg="rosserial_python"      type="serial_node.py">
+    <param name="port"              type="string"               value="/dev/ttyUSB0"/>
+    <param name="baud"              type="int"                  value="57600"/>
+    </node>
+
+</launch>
