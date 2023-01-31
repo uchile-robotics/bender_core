@@ -1,0 +1,13 @@
+string emotion
+int32[] servos
+int32 mouth
+int32[] pitch
+int32[] yaw
+int32[] color_1
+int32[] color_2
+int32[] color_3
+int32[] color_4
+int32[] ring_i
+int32[] ring_d
+int32[] cheek_i
+int32[] cheek_d
