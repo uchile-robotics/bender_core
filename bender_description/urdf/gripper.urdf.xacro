@@ -9,6 +9,7 @@
 
   <xacro:property name="gripper_mass" value="0.160" />
   <xacro:property name="gripper_effort" value="${rx28_torque}" />
+  <!-- <xacro:property name="gripper_effort" value="${rx28_torque}" /> -->
 
   <xacro:macro name="gripper" params="side reflect prefix">
     <!-- Transmission -->

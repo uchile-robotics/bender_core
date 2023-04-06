@@ -105,7 +105,7 @@
     <limit
       lower="-3"
       upper="3"
-      effort="5"
+      effort="40"
       velocity="5" />
       <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
   </joint>
@@ -165,7 +165,7 @@
     <limit
       lower="-1.57"
       upper="0.1"
-      effort="5"
+      effort="40"
       velocity="5" />
       <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
   </joint>
@@ -225,7 +225,7 @@
     <limit
       lower="-1.37"
       upper="1.37"
-      effort="5"
+      effort="40"
       velocity="5" />
       <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
   </joint>
@@ -285,7 +285,7 @@
     <limit
       lower="-1.97"
       upper="0"
-      effort="5"
+      effort="40"
       velocity="5" />
       <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
   </joint>
@@ -345,7 +345,7 @@
     <limit
       lower="-1.2"
       upper="1.2"
-      effort="5"
+      effort="40"
       velocity="5" />
         <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
   </joint>
@@ -405,7 +405,7 @@
     <limit
       lower="-1.57"
       upper="1.57"
-      effort="5"
+      effort="40"
       velocity="5" />
       <dynamics damping="${dxl_damping}" friction="${dxl_friction}" />
   </joint>

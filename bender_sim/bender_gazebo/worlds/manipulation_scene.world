@@ -128,7 +128,7 @@
           <geometry>
             <cylinder>
               <radius>0.02</radius>
-              <length>0.7</length>
+              <length>0.915</length>
             </cylinder>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -143,11 +143,11 @@
           </surface>
         </collision>
         <visual name='front_left_leg'>
-          <pose>0.68 0.38 0.35 0 -0 0</pose>
+          <pose>0.68 0.38 0.4575 0 -0 0</pose>
           <geometry>
             <cylinder>
               <radius>0.02</radius>
-              <length>0.7</length>
+              <length>0.915</length>
             </cylinder>
           </geometry>
           <material>
@@ -158,11 +158,11 @@
           </material>
         </visual>
         <collision name='front_right_leg'>
-          <pose>0.68 -0.38 0.35 0 -0 0</pose>
+          <pose>0.68 -0.38 0.4575 0 -0 0</pose>
           <geometry>
             <cylinder>
               <radius>0.02</radius>
-              <length>0.7</length>
+              <length>0.915</length>
             </cylinder>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -177,11 +177,11 @@
           </surface>
         </collision>
         <visual name='front_right_leg'>
-          <pose>0.68 -0.38 0.35 0 -0 0</pose>
+          <pose>0.68 -0.38 0.4575 0 -0 0</pose>
           <geometry>
             <cylinder>
               <radius>0.02</radius>
-              <length>0.7</length>
+              <length>0.915</length>
             </cylinder>
           </geometry>
           <material>
@@ -192,11 +192,11 @@
           </material>
         </visual>
         <collision name='back_right_leg'>
-          <pose>-0.68 -0.38 0.35 0 -0 0</pose>
+          <pose>-0.68 -0.38 0.4575 0 -0 0</pose>
           <geometry>
             <cylinder>
               <radius>0.02</radius>
-              <length>0.7</length>
+              <length>0.915</length>
             </cylinder>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -211,11 +211,11 @@
           </surface>
         </collision>
         <visual name='back_right_leg'>
-          <pose>-0.68 -0.38 0.35 0 -0 0</pose>
+          <pose>-0.68 -0.38 0.4575 0 -0 0</pose>
           <geometry>
             <cylinder>
               <radius>0.02</radius>
-              <length>0.7</length>
+              <length>0.915</length>
             </cylinder>
           </geometry>
           <material>
@@ -226,11 +226,11 @@
           </material>
         </visual>
         <collision name='back_left_leg'>
-          <pose>-0.68 0.38 0.35 0 -0 0</pose>
+          <pose>-0.68 0.38 0.4575 0 -0 0</pose>
           <geometry>
             <cylinder>
               <radius>0.02</radius>
-              <length>0.7</length>
+              <length>0.915</length>
             </cylinder>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -245,11 +245,11 @@
           </surface>
         </collision>
         <visual name='back_left_leg'>
-          <pose>-0.68 0.38 0.35 0 -0 0</pose>
+          <pose>-0.68 0.38 0.4575 0 -0 0</pose>
           <geometry>
             <cylinder>
               <radius>0.02</radius>
-              <length>0.7</length>
+              <length>0.915</length>
             </cylinder>
           </geometry>
           <material>
@@ -269,53 +269,47 @@
       </link>
       <pose>1 0 0 0 -0 0</pose>
     </model>
-    <model name="mustard_bottle">
-      <link name="link">
-        <inertial>
-          <mass>0.603</mass>
-          <inertia>
-            <!-- these formulas are for a box/cuboid, but an ellipsoid might be a better approximation -->
-            <ixx>0.002267531</ixx> <!-- 1/12*0.603*(0.095^2+0.190^2) -->
-            <ixy>0.0</ixy>
-            <ixz>0.0</ixz>
-            <iyy>0.001983066</iyy> <!-- 1/12*0.603*(0.058^2+0.190^2) -->
-            <iyz>0.0</iyz>
-            <izz>0.000622547</izz> <!-- 1/12*0.603*(0.058^2+0.095^2) -->
-          </inertia>
-          <pose>0 0 0.095 0 0 0</pose>
-        </inertial>
-        <collision name="collision">
-          <!--<pose>0 0 0.095 0 0 0</pose>
-          <geometry>
-            <box>
-              <size>0.058 0.095 0.190</size>
-            </box>
-          </geometry>-->
-          <pose>0.025 -0.005 0 0 0 -1.15</pose>
-          <geometry>
-            <mesh>
-              <uri>model://mustard_bottle/meshes/nontextured.stl</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <pose>0.025 -0.005 0 0 0 -1.15</pose>
-          <geometry>
-            <mesh>
-              <uri>model://mustard_bottle/meshes/textured.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
-    </model>
+    <model name="tomato_soup_can">
+    <link name="link">
+      <inertial>
+        <mass>0.349</mass>
+        <inertia>
+          <ixx>0.000391694</ixx> <!-- 1/12*0.349*(3*0.033^2+0.101^2) -->
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.000391694</iyy> <!-- same as ixx -->
+          <iyz>0.0</iyz>
+          <izz>0.00019003</izz> <!-- 1/2*0.349*0.033^2 -->
+        </inertia>
+        <pose>0 0 0.0505 0 0 0</pose>
+      </inertial>
+      <collision name="collision">
+        <pose>0 0 0.0505 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.033</radius>
+            <length>0.101</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.01 -0.085 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://tomato_soup_can/meshes/textured.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
     <state world_name='default'>
       <sim_time>116 545000000</sim_time>
       <real_time>118 879699162</real_time>
       <wall_time>1486523754 439758171</wall_time>
-      <model name='mustard_bottle'>
+      <model name='tomato_soup_can'>
         <pose>0 0 0 0 0 0</pose>
         <link name='link'>
-          <pose>0.7 0.2 0.95 0 0 4.6</pose>
+          <pose>0.74 0.2 0.95 0 0 4.6</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -334,6 +328,15 @@
         <pose>0.0 0 0 0 0 -1.57</pose>
         <link name='link'>
           <pose>1.05 0 0 0 0 -1.57</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='table_white'>
+        <pose>0.0 0 0 0 0 -1.57</pose>
+        <link name='link2'>
+          <pose>-2.1 0 0 0 0 -1.57</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>

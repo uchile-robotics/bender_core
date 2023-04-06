@@ -18,6 +18,7 @@ from moveit_commander import (
     roscpp_shutdown,
 )
 from geometry_msgs.msg import PoseStamped
+from shape_msgs.msg import SolidPrimitive
 from moveit_msgs.msg import Grasp, GripperTranslation, PlaceLocation, MoveItErrorCodes
 from trajectory_msgs.msg import JointTrajectoryPoint
 from tf.transformations import euler_from_matrix, quaternion_from_euler
@@ -26,6 +27,7 @@ import tf2_geometry_msgs
 import copy
 from sensor_msgs.msg import PointCloud, Image
 from geometry_msgs.msg import Point32
+from uchile_msgs.msg import PrimitiveWithPose
 
 class Manipulator():
     def __init__(self):
@@ -40,6 +42,7 @@ class Manipulator():
         self.finger_links = self.robot.get_link_names(group=self.grasping_group)
         #self.grasp_sub = rospy.Subscriber('/detect_grasps/clustered_grasps', GraspConfigList, self.grasp)
         self.pose_pub = rospy.Publisher('grasp_pose', PoseStamped, queue_size=10)
+        self.post_pose_pub = rospy.Publisher('post_grasp_pose', PoseStamped, queue_size=10)
         self.grasp_pub = rospy.Publisher('grasp', GraspConfigList, queue_size=10)
         self.rate = rospy.Rate(10) # 10 hz
 
@@ -70,6 +73,27 @@ class Manipulator():
         #self.robot.l_arm.pick("part",grasps)
         rospy.loginfo("Grasp Finished")
 
+    def grasp_object(self):
+        rospy.loginfo('Robot ready. Waiting for object to be published on "/obj" topic...')
+        msg = rospy.wait_for_message("/obj", PrimitiveWithPose)
+        grasps = self.grasps_from_primitive(msg)
+        self.post_pose_pub.publish(grasps[0].grasp_pose)
+        rospy.loginfo("Trying {} selected grasps.".format(len(grasps)))
+        self.go_to_pregrasp()
+        self.pick(grasps, cartesian=True)
+        rospy.loginfo("Grasp Finished")
+
+    def grasp_cylinder(self):
+        rospy.loginfo("Robot ready. Waiting for object pose...")
+        msg = rospy.wait_for_message(
+            "/obj_pos", PoseStamped)
+        grasps = self.grasps_from_pose(msg)
+        rospy.loginfo("Trying {} selected grasps.".format(len(grasps)))
+        self.go_to_pregrasp()
+        self.pick(grasps, cartesian=True)
+        rospy.loginfo("Grasp Finished")
+
+
     def try_pose(self, pose, feedback=False):
         #Try Grasp Pose
         self.robot.l_arm.set_pose_target(pose)
@@ -82,6 +106,106 @@ class Manipulator():
             if feedback:
                 rospy.loginfo("Grasp Plan Found!")
             return True
+
+    def grasps_from_primitive(self, primitive):
+        
+        g = Grasp()
+
+        if primitive.shape.type == 3: # CYLINDER
+
+            #Cylinder Spawn
+            self.post_pose_pub.publish(primitive.pose)
+            self.new_object(primitive.pose, primitive.shape)
+
+            #Parameters
+            frame_id = primitive.pose.header.frame_id
+
+            p_height = primitive.shape.dimensions[0]
+            p_radius = primitive.shape.dimensions[1]
+
+            grasp_width = 0.5
+            finger_joints = ["l_int_finger_joint", "l_ext_finger_joint"]
+
+            #Grasp Config
+            g.grasp_pose = primitive.pose
+            g.grasp_pose.pose.position.x = primitive.pose.pose.position.x - p_radius - 0.03
+
+            #Grasp Posture Config
+            g.grasp_posture.header.frame_id = frame_id
+            g.grasp_posture.joint_names = finger_joints
+            g_pos = JointTrajectoryPoint()
+            g_pos.positions = [0.0, 0.0]
+            g_pos.effort.append(5.0)
+            g.grasp_posture.points.append(g_pos)
+
+            #Pre-Grasp Posture Config
+            g.pre_grasp_posture.header.frame_id = frame_id
+            g.pre_grasp_posture.joint_names = finger_joints
+            pg_pos = JointTrajectoryPoint()
+            point = grasp_width/2
+            pg_pos.positions = [0.5, 0.5]
+            g.pre_grasp_posture.points.append(pg_pos)
+
+            #Pre-Grasp Config
+            g.pre_grasp_approach.direction.header.frame_id = frame_id
+            g.pre_grasp_approach.direction.vector.x = 1.0
+            g.pre_grasp_approach.direction.vector.y = 0.0
+            g.pre_grasp_approach.direction.vector.z = 0.0
+            g.pre_grasp_approach.min_distance = 0.08
+            g.pre_grasp_approach.desired_distance = 0.2
+
+            #Post Grasp Config
+            g.post_grasp_retreat.direction.vector.z = 1.0
+            g.post_grasp_retreat.min_distance = 0.03
+            g.post_grasp_retreat.desired_distance = 0.05
+            g.post_grasp_retreat.direction.header.frame_id = frame_id
+
+        return [g]
+
+    def grasps_from_pose(self, pose):
+        
+        g = Grasp()
+
+        g.grasp_pose = pose
+
+        #Parameters
+        frame_id = pose.header.frame_id
+        grasp_width = 0.5
+        finger_joints = ["l_int_finger_joint", "l_ext_finger_joint"]
+
+        #Grasp Posture Config
+        g.grasp_posture.header.frame_id = frame_id
+        g.grasp_posture.joint_names = finger_joints
+        g_pos = JointTrajectoryPoint()
+        g_pos.positions = [0.0, 0.0]
+        g_pos.effort.append(5.0)
+        g.grasp_posture.points.append(g_pos)
+
+        #Pre-Grasp Posture Config
+        g.pre_grasp_posture.header.frame_id = frame_id
+        g.pre_grasp_posture.joint_names = finger_joints
+        pg_pos = JointTrajectoryPoint()
+        point = grasp_width/2
+        pg_pos.positions = [0.5, 0.5]
+        g.pre_grasp_posture.points.append(pg_pos)
+
+        #Pre-Grasp Config
+        g.pre_grasp_approach.direction.header.frame_id = frame_id
+        g.pre_grasp_approach.direction.vector.x = 1.0
+        g.pre_grasp_approach.direction.vector.y = 0.0
+        g.pre_grasp_approach.direction.vector.z = 0.0
+        g.pre_grasp_approach.min_distance = 0.08
+        g.pre_grasp_approach.desired_distance = 0.2
+
+        #Post Grasp Config
+        g.post_grasp_retreat.direction.vector.z = 1.0
+        g.post_grasp_retreat.min_distance = 0.03
+        g.post_grasp_retreat.desired_distance = 0.05
+        g.post_grasp_retreat.direction.header.frame_id = frame_id
+
+        return [g]
+
+
 
     def GPDtoMoveItGrasp(self, GraspCfgList, N=None, force_plannar=False):
         
@@ -139,8 +263,8 @@ class Manipulator():
 
                 #Post Grasp Config
                 g.post_grasp_retreat.direction.vector.z = 1.0
-                g.post_grasp_retreat.min_distance = 0.13
-                g.post_grasp_retreat.desired_distance = 0.15
+                g.post_grasp_retreat.min_distance = 0.05
+                g.post_grasp_retreat.desired_distance = 0.05
                 g.post_grasp_retreat.direction.header.frame_id = frame_id
 
                 grasps.append(g)
@@ -204,16 +328,29 @@ class Manipulator():
         self.wait_for_update(box_name=box_name)
         rospy.loginfo("Scene cleaned c:")
 
-    def new_object(self, grasp, box_name="part"):
+    def new_object(self, pose, shape=None, box_name="part"):
         #Create new object from grasp pose
         self.clean_scene(box_name)
-        p = PoseStamped()
-        p.header.frame_id = grasp.grasp_pose.header.frame_id
-        p.pose.orientation = grasp.grasp_pose.pose.orientation
-        p.pose.position = grasp.grasp_pose.pose.position
-        box_width = grasp.pre_grasp_posture.points[0].positions[0]/2
-        self.scene.add_box(box_name, p, (0.02, 0.02, 0.02))
+        if shape is not None:
+            if shape.type == 1: # BOX
+                self.scene.add_box(box_name, pose, (0.02, 0.02, 0.02))
+            if shape.type == 3: # CYLINDER
+                self.scene.add_box(box_name, pose, (shape.dimensions[1]*2, shape.dimensions[1]*2, shape.dimensions[0]))
         self.wait_for_update(box_name=box_name, box_is_known=True)
+
+    def add_table(self, xyz, size, frame_id):
+        self.clean_scene("table")
+        p = PoseStamped()
+        p.header.frame_id = frame_id
+        p.pose.orientation.x = 0
+        p.pose.orientation.y = 0
+        p.pose.orientation.z = 0
+        p.pose.orientation.w = 1
+        p.pose.position.x = xyz[0]
+        p.pose.position.y = xyz[1]
+        p.pose.position.z = xyz[2]
+        self.scene.add_box("table", p, size)
+        self.wait_for_update(box_name="table", box_is_known=True)
 
     def go_to_pregrasp(self):
         spos=PoseStamped()
@@ -227,7 +364,7 @@ class Manipulator():
         self.robot.l_arm.set_pose_target(spos) #Set Pre-grasp 
         self.robot.l_arm.go() #Move Gripper to Pre-Grasp
 
-    def pick(self, grasps, obj_name="part", cartesian=False):
+    def pick(self, grasps, obj_name="part", cartesian=False, create_obj=False):
         for grasp in grasps:
             grasp_done = False
             while True:
@@ -315,30 +452,36 @@ class Manipulator():
                     else:
                         self.robot.l_arm.set_pose_target(pre_grasp_pose) #Set Pre-grasp 
                     self.robot.l_arm.go() #Move Gripper to Pre-Grasp
-                    rospy.sleep(1)
+                    rospy.sleep(0.2)
                     (plan, fraction) = self.robot.l_arm.compute_cartesian_path([grasp_pose.pose], 0.01, 0.0)
                     self.robot.l_arm.execute(plan, wait=True)
-                    rospy.sleep(3)
+                    rospy.sleep(0.2)
                 else:
                     self.robot.l_arm.set_pose_target(grasp_pose) #Set Pre-grasp 
                     self.robot.l_arm.go() #Move Gripper to Pre-Grasp
-                    rospy.sleep(3)
-                self.new_object(grasp, obj_name)
+                    rospy.sleep(0.2)
+                if create_obj:
+                    self.new_object(grasp, obj_name)
                 #self.robot.l_arm.set_pose_target(grasp_pose) #Set Grasp 
                 #self.robot.l_arm.go() #Move Gripper to Grasp
-                rospy.sleep(2)
+                rospy.sleep(0.2)
                 #ATTACH OBJECT
                 self.scene.attach_box(self.eef_link, obj_name, touch_links=self.finger_links)
                 self.wait_for_update(obj_name, box_is_known=False, box_is_attached=True)
-                rospy.sleep(1)
+                rospy.sleep(0.2)
                 self.gripper.moveToJointPosition(gripper_joint_names,gripper_g_positions)
-                rospy.sleep(1)
+                rospy.sleep(0.2)
                 #POST GRASP
                 #self.robot.l_arm.set_pose_target(post_grasp_pose) #Go to Post Grasp 
                 #self.robot.l_arm.go()
-                (plan, fraction) = self.robot.l_arm.compute_cartesian_path([post_grasp_pose.pose], 0.01, 0.0)
+                self.post_pose_pub.publish(post_grasp_pose)
+                if cartesian:
+                    (plan, fraction) = self.robot.l_arm.compute_cartesian_path([post_grasp_pose.pose], 0.01, 0.0)
+                else:
+                    self.robot.l_arm.set_pose_target(post_grasp_pose) #Set Pre-grasp 
+                    self.robot.l_arm.go() #Move Gripper to Pre-Grasp
                 self.robot.l_arm.execute(plan, wait=True)
-                rospy.sleep(1)
+                rospy.sleep(0.2)
                 #self.robot.l_arm.set_pose_target(pre_grasp_pose)
                 #self.robot.l_arm.go() #Move Gripper to Pre-Grasp Again
                 #rospy.sleep(1)
@@ -361,12 +504,11 @@ if __name__ == "__main__":
     rate = rospy.Rate(10) # 10hz
     g = Manipulator()
     g.clean_scene()
+    g.add_table([1.05, 0.0, 0.4725],(0.8, 1.5, 0.945),"bender/base_footprint")
     rospy.sleep(1)
-    #g.clean_scene()
 
     while not rospy.is_shutdown():
-        #g.clean_scene()
-        g.grasp()
+        g.grasp_object()
 
     rospy.spin()
     roscpp_shutdown()
