@@ -145,6 +145,25 @@
         <odometryFrame>${prefix}odom</odometryFrame>
         <broadcastTF>1</broadcastTF>
       </plugin>
+      <!-- <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_diff_drive.so">
+        <robotNamespace>${ns}</robotNamespace>
+        <updateRate>50.0</updateRate>
+        <leftJoint>front_left_wheel_joint</leftJoint>
+        <rightJoint>front_right_wheel_joint</rightJoint>
+        <wheelSeparation>0.4</wheelSeparation>
+        <wheelDiameter>0.215</wheelDiameter>
+        <wheelAcceleration>1.0</wheelAcceleration>
+        <wheelTorque>400</wheelTorque>
+        <commandTopic>base/cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>${prefix}odom</odometryFrame>
+        <robotBaseFrame>${prefix}base_link</robotBaseFrame>
+        <odometrySource>1</odometrySource>
+        <publishWheelTF>true</publishWheelTF>
+        <publishOdom>true</publishOdom>
+        <publishWheelJointState>true</publishWheelJointState>
+        <legacyMode>false</legacyMode>
+      </plugin> -->
     </gazebo>
   </xacro:macro>
   <!-- Laser sensor plugin -->

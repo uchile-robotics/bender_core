@@ -11,6 +11,10 @@
   <!-- Map -->
   <arg name="worldname" default="empty" />
 
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="yaw" default="0"/>
+  
   <!-- Bender model type -->
   <arg name="model_type" default="standard" />
 
@@ -42,7 +46,9 @@
   </include>
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
-  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model bender_model -param robot_description">
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" 
+  output="screen" args="-urdf -model bender_model -param robot_description
+  -x $(arg x) -y $(arg y) -Y $(arg yaw)">
   </node>
   
   <!-- Effort Trajectory controllers, launch in another console -->
