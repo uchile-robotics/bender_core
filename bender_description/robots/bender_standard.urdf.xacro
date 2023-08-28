@@ -25,6 +25,12 @@
   <!-- Torso -->
   <xacro:include filename="$(find bender_description)/urdf/bender_torso.xacro" />
   <xacro:Torso prefix="${prefix}" parent="${prefix}mobile_base_link"/>
+  
+  <!-- Realsense D435 -->
+  <xacro:include filename="$(find bender_description)/urdf/d435.urdf.xacro" />
+  <xacro:realsense_d435 prefix="${prefix}" name="d435_camera" parent="bender/torso" ns="bender/d435_camera/" />
+  <!-- Realsense D435 Gazebo -->
+  <xacro:d435_sim_camera prefix="${prefix}" name="d435_camera" />
 
   <!-- Arm -->
   <xacro:include filename="$(find bender_description)/urdf/right_arm.urdf.xacro" />
