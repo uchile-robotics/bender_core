@@ -24,7 +24,7 @@
 
     <xacro:macro name="realsense_d435" params="prefix name parent ns">
         <joint name="${name}_joint" type="fixed">
-            <origin xyz="0.07 0.0 0.68" rpy="0 0 0"/>
+            <origin xyz="0.07 0.0 0.6" rpy="0 0 0"/>
             <parent link="${parent}"/>
             <child link="${name}_bottom_screw_frame" />
         </joint>
