@@ -12,7 +12,7 @@ import ros_numpy as rnp
 
 #ROS msgs
 from sensor_msgs.msg import Image, PointCloud2
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, PoseArray, Pose
 from visualization_msgs.msg import Marker, MarkerArray
 
 #Image Processing
@@ -44,15 +44,16 @@ class PersonLocator():
 		self.model = YOLO('yolov8n-pose.pt')
 		rospy.loginfo('YOLOv8 is now running...')
 		# self.sub = rospy.Subscriber("/camera/color/image_raw", Image, self.callback)
-		self.sub = rospy.Subscriber("/camera/depth/color/points", PointCloud2, self.callback)
-		# self.sub = rospy.Subscriber("/camera/depth_registered/points", PointCloud2, self.callback)
-		#self.person_poses = rospy.Publisher('person_pose', PoseStamped, queue_size=10)
-		self.pose_pub = rospy.Publisher("/person_pose", PoseStamped, queue_size = 2)
+		# self.sub = rospy.Subscriber("/camera/depth/color/points", PointCloud2, self.callback)
+		self.sub = rospy.Subscriber("/camera/depth_registered/points", PointCloud2, self.callback)
+		self.people_poses = rospy.Publisher('people_poses', PoseArray, queue_size=10)
+		#self.pose_pub = rospy.Publisher("/person_pose", PoseStamped, queue_size = 2)
 		self.marker_pub = rospy.Publisher("/visualization_markers", MarkerArray, queue_size = 2)
 		self.cv = cv_bridge.CvBridge()
 		self._points_data = None
 		self._image_data = None
-		self.location = PoseStamped()
+		self.poses = PoseArray()
+		self.poses.header.frame_id = "camera_depth_optical_frame"
 
 	def callback(self,msg):
 		seq = msg.header.seq
@@ -68,11 +69,13 @@ class PersonLocator():
 				detections = self.model(self._image_data,show=True,conf=0.8)
 			# print(res)
 			marker_array = MarkerArray()
+			self.poses.poses = []
 			if len(detections)>0:
-				for i, d in enumerate(detections):
+				d = detections[0]
+				for i, p in enumerate(d.keypoints.xy):
 					print(d)
-					left_shoulder_xy = (int(d.keypoints.xy[0,11,0].item()), int(d.keypoints.xy[0,11,1].item()))
-					right_shoulder_xy = (int(d.keypoints.xy[0,12,0].item()), int(d.keypoints.xy[0,12,1].item()))
+					left_shoulder_xy = (int(p[5,0].item()), int(p[5,1].item()))
+					right_shoulder_xy = (int(p[6,0].item()), int(p[6,1].item()))
 					person_x = int((left_shoulder_xy[0]+right_shoulder_xy[0])/2)
 					person_y = int((left_shoulder_xy[1]+right_shoulder_xy[1])/2)
 					# xy = (person_x,person_y)
@@ -89,18 +92,15 @@ class PersonLocator():
 					marker_array.markers.append(body)
 					marker_array.markers.append(head)
 
-					pose = PoseStamped()
+					pose = Pose()
 					# pose.header.frame_id = "d435_camera_depth_optical_frame"  # The source frame
-					pose.header.frame_id = "camera_depth_optical_frame"  # The source frame
-					pose.pose.position.x = x
-					pose.pose.position.y = y
-					pose.pose.position.z = z
-					pose.pose.orientation.w = 1
-
-					self.pose_pub.publish(pose)
-
+					pose.position.x = x
+					pose.position.y = y
+					pose.position.z = z
+					pose.orientation.w = 1
+					self.poses.poses.append(pose)
 					
-
+			self.people_poses.publish(self.poses)
 			self.marker_pub.publish(marker_array)
 			
 
