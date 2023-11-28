@@ -4,6 +4,7 @@
 import numpy as np
 np.float = np.float64
 import math
+import matplotlib.pyplot as plt
 
 #Ros Python Libs
 import rospy
@@ -11,7 +12,6 @@ import roslib
 import ros_numpy as rnp
 
 #ROS msgs
-from std_msgs.msg import Float64MultiArray
 from sensor_msgs.msg import Image, PointCloud2
 from geometry_msgs.msg import PoseStamped, PoseArray, Pose
 from visualization_msgs.msg import Marker, MarkerArray
@@ -20,36 +20,35 @@ from visualization_msgs.msg import Marker, MarkerArray
 import cv2
 import cv_bridge
 from ultralytics import YOLO
-from torchreid.utils import FeatureExtractor
 
 def get_quaternion_from_euler(roll, pitch, yaw):
-	"""
-	Convert an Euler angle to a quaternion.
-	
-	Input
-		:param roll: The roll (rotation around x-axis) angle in radians.
-		:param pitch: The pitch (rotation around y-axis) angle in radians.
-		:param yaw: The yaw (rotation around z-axis) angle in radians.
-	
-	Output
-		:return qx, qy, qz, qw: The orientation in quaternion [x,y,z,w] format
-	"""
-	qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
-	qy = np.cos(roll/2) * np.sin(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.cos(pitch/2) * np.sin(yaw/2)
-	qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
-	qw = np.cos(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
-	
-	return [qx, qy, qz, qw]
+  """
+  Convert an Euler angle to a quaternion.
+   
+  Input
+    :param roll: The roll (rotation around x-axis) angle in radians.
+    :param pitch: The pitch (rotation around y-axis) angle in radians.
+    :param yaw: The yaw (rotation around z-axis) angle in radians.
+ 
+  Output
+    :return qx, qy, qz, qw: The orientation in quaternion [x,y,z,w] format
+  """
+  qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+  qy = np.cos(roll/2) * np.sin(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.cos(pitch/2) * np.sin(yaw/2)
+  qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
+  qw = np.cos(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+ 
+  return [qx, qy, qz, qw]
 
 class PersonLocator():
 	def __init__(self):
-		self.model = YOLO('yolov8n-pose.pt')
+		self.model_seg = YOLO('yolov8n-seg.pt')
+		self.model_pose = YOLO('yolov8n-pose.pt')
 		rospy.loginfo('YOLOv8 is now running...')
 		# self.sub = rospy.Subscriber("/camera/color/image_raw", Image, self.callback)
 		# self.sub = rospy.Subscriber("/camera/depth/color/points", PointCloud2, self.callback)
 		self.sub = rospy.Subscriber("/camera/depth_registered/points", PointCloud2, self.callback)
 		self.people_poses = rospy.Publisher('people_poses', PoseArray, queue_size=10)
-		self.people_vector = rospy.Publisher('people_vector', Float64MultiArray, queue_size=10)
 		#self.pose_pub = rospy.Publisher("/person_pose", PoseStamped, queue_size = 2)
 		self.marker_pub = rospy.Publisher("/visualization_markers", MarkerArray, queue_size = 2)
 		self.cv = cv_bridge.CvBridge()
@@ -57,66 +56,65 @@ class PersonLocator():
 		self._image_data = None
 		self.poses = PoseArray()
 		self.poses.header.frame_id = "camera_depth_optical_frame"
-		self.extractor = FeatureExtractor(
-			model_name='mlfn',
-			model_path='/home/pipe/Downloads/mlfn.pth.tar',
-			device='cpu'
-		)
 
 	def callback(self,msg):
 		seq = msg.header.seq
 		try:
 			self._points_data = rnp.numpify(msg)
+			print(f"{self._points_data['rgb'].shape}")
 			image_data = self._points_data['rgb'].view(
-			(np.uint8, 4))[..., [0, 1, 2]]
+            (np.uint8, 4))[..., [0, 1, 2]]
 			self._image_data = np.ascontiguousarray(image_data)
 			# cv_image = self.cv.imgmsg_to_cv2(msg,'bgr8')
 			# res = model(cv_image, show=True, conf=0.8)
 			if not self._image_data is None:
-				detections = self.model(self._image_data,show=True,conf=0.8)
+				detections = self.model(self._image_data,show=False,conf=0.8)
 			# print(res)
 			marker_array = MarkerArray()
 			self.poses.poses = []
-			
-			vector = Float64MultiArray()
-			vector.data = []
-
 			if len(detections)>0:
 				d = detections[0]
-				for i, (p, box) in enumerate(zip(d.keypoints.xy, d.boxes.data)):
-					x, y, w, h = int(box[0].item()), int(box[1].item()), int(box[2].item()), int(box[3].item())
+				for i, mask in enumerate(d.masks.data):
+					numpy_mask = np.array(mask.numpy(),dtype=np.uint8)
+					out_img = cv2.bitwise_and(image_data,image_data,mask = numpy_mask)
+					cv2.imshow('img',out_img)
 
-					ls_x, ls_y = (int(p[5,0].item()), int(p[5,1].item()))
-					rs_x, rs_y = (int(p[6,0].item()), int(p[6,1].item()))
-					lh_x, lh_y = (int(p[11,0].item()), int(p[11,1].item()))
-					rh_x, rh_y = (int(p[12,0].item()), int(p[12,1].item()))
-					person_x = int((ls_x+rs_x)/2)
-					person_y = int((ls_y+rs_y)/2)
+					n_pixels = np.sum(numpy_mask)
 
-					if ls_x*rs_x:
-						x1, x2 = min(ls_x,rs_x), max(ls_x,rs_x)
-					else:
-						x1, x2 = x, w
+					X = np.copy(self._points_data['x'])
+					Y = np.copy(self._points_data['y'])
+					Z = np.copy(self._points_data['z'])
 
-					if lh_y+rh_y:
-						y2 = max(lh_y,rh_y,)
-					else:
-						y2 = h
+					X[np.isnan(X)] = 0
+					Y[np.isnan(Y)] = 0
+					Z[np.isnan(Z)] = 0
 
-					crop = image_data[y:y2,x1:x2]
-					cv2.imshow('crop',crop)
+					x = np.sum(X) / n_pixels
+					y = np.sum(Y) / n_pixels
+					z = np.sum(Z) / n_pixels
 
-					features = self.extractor(crop)[0]
-					f = features.tolist()
-					f = [float(value) for value in f]
-					# xy = (person_x,person_y)
-					# print(xy)
-					# cv_image = np.copy(self._image_data)
-					# cv_image = cv2.circle(cv_image,xy,radius=10,color=(0,0,255),thickness=-1)
-					# cv2.imshow('img',cv_image)
-					x = self._points_data['x'][person_y,person_x]
-					y = self._points_data['y'][person_y,person_x]
-					z = self._points_data['z'][person_y,person_x]
+					# out_img = np.zeros_like(image_data)
+					# for x, y in p:
+					# 	x = int(x)
+					# 	y = int(y)
+					# 	out_img[y][x][0] = 255
+					# 	out_img[y][x][1] = 255
+					# 	out_img[y][x][2] = 255
+					# cv2.imshow('img',out_img)
+
+					# left_shoulder_xy = (int(p[5,0].item()), int(p[5,1].item()))
+					# right_shoulder_xy = (int(p[6,0].item()), int(p[6,1].item()))
+					# person_x = int((left_shoulder_xy[0]+right_shoulder_xy[0])/2)
+					# person_y = int((left_shoulder_xy[1]+right_shoulder_xy[1])/2)
+					# # xy = (person_x,person_y)
+					# # print(xy)
+					# # cv_image = np.copy(self._image_data)
+					# # cv_image = cv2.circle(cv_image,xy,radius=10,color=(0,0,255),thickness=-1)
+					# # cv2.imshow('img',cv_image)
+					# x = self._points_data['x'][person_y,person_x]
+					# y = self._points_data['y'][person_y,person_x]
+					# z = self._points_data['z'][person_y,person_x]
+
 
 					body, head = self.target_marker(x, y, z, i)
 					marker_array.markers.append(body)
@@ -129,15 +127,12 @@ class PersonLocator():
 					pose.position.z = z
 					pose.orientation.w = 1
 					self.poses.poses.append(pose)
-
-					V = [float(x), float(y), float(z), *f]
-					vector.data = [*vector.data, *V]
-
-			print(np.array(vector.data).shape)
+					
 			self.people_poses.publish(self.poses)
 			self.marker_pub.publish(marker_array)
-			self.people_vector.publish(vector)
 			
+
+			#print(cv_image.shape)
 		except cv_bridge.CvBridgeError as e:
 			print(e)
 		cv2.putText(self._image_data,text = str(seq),org = (50,50), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color = (255,0,0), thickness=2)
