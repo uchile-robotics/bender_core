@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.9
 
 #Std Libs
 import numpy as np
@@ -66,7 +66,7 @@ class PersonLocator():
 			# cv_image = self.cv.imgmsg_to_cv2(msg,'bgr8')
 			# res = model(cv_image, show=True, conf=0.8)
 			if not self._image_data is None:
-				detections = self.model(self._image_data,show=True,conf=0.8)
+				detections = self.model(self._image_data,show=False,conf=0.8)
 			# print(res)
 			marker_array = MarkerArray()
 			self.poses.poses = []

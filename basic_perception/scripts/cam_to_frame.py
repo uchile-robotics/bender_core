@@ -12,7 +12,7 @@ def pose_callback(pose_msg):
         tf_listener = tf2_ros.TransformListener(tf_buffer)
 
         target_frame = "camera_link"
-        # target_frame = "bender/base_link"
+        #target_frame = "bender/base_link"
 
         # Wait for the transform from /person_pose to /camera_link
         transform = tf_buffer.lookup_transform(target_frame, pose_msg.header.frame_id, rospy.Time(0), rospy.Duration(1.0))
