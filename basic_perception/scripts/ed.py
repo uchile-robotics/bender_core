@@ -22,7 +22,7 @@ class emotion_detect:
     self.image_pub = rospy.Publisher("image_topic_2",Image, queue_size=2)
     self.emotion_pub = rospy.Publisher("/emotion_detect", String, queue_size=10)
     self.bridge = CvBridge()
-    self.image_sub = rospy.Subscriber("/bender/sensors/rgbd_head/rgb/image_raw",Image,self.callback)
+    self.image_sub = rospy.Subscriber("/camera/rgb/image_raw",Image,self.callback)
 
   def callback(self,data):
     try:
@@ -34,7 +34,7 @@ class emotion_detect:
     output = String()
 
     #LINK EMOTION-FERPLU-8: https://github.com/onnx/models/tree/main/vision/body_analysis/emotion_ferplus/model
-    ed.init_emotion('/home/robotica/uchile_ws/ros/bender/base_ws/src/bender_core/basic_perception/scripts/emotion-ferplus-8.onnx') 
+    ed.init_emotion('/home/bender/uchile_ws/pkgs/base_ws/bender_core/basic_perception/scripts/weights/emotion-ferplus-8.onnx') 
     start_time = time.time()
     emotion = ed.emotion(cv_image, returndata=True)
     cv_image = emotion[0]

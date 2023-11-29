@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.9
 
 #Std Libs
 import numpy as np
@@ -130,7 +130,7 @@ class PersonLocator():
 		body.color.r = 0.0
 		body.color.g = 1.0
 		body.color.b = 0.0
-		body.color.a = 1.0
+		body.color.a = 0.75
 
 		# Set the pose of the marker
 		q = get_quaternion_from_euler(0,math.pi/2,0)
@@ -162,7 +162,7 @@ class PersonLocator():
 		head.color.r = 0.0
 		head.color.g = 1.0
 		head.color.b = 0.0
-		head.color.a = 1.0
+		head.color.a = 0.75
 
 		# Set the pose of the marker
 		head.pose.position.x = x
