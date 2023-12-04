@@ -1,9 +1,8 @@
 #!/usr/bin/env python3.9
 
 #Std Libs
-import numpy as np
-np.float = np.float64
 import math
+import numpy as np
 
 #Ros Python Libs
 import rospy
@@ -21,6 +20,8 @@ import cv2
 import cv_bridge
 from ultralytics import YOLO
 from torchreid.utils import FeatureExtractor
+
+np.float = np.float64
 
 def get_quaternion_from_euler(roll, pitch, yaw):
 	"""
@@ -47,7 +48,8 @@ class PersonLocator():
 		rospy.loginfo('YOLOv8 is now running...')
 		# self.sub = rospy.Subscriber("/camera/color/image_raw", Image, self.callback)
 		# self.sub = rospy.Subscriber("/camera/depth/color/points", PointCloud2, self.callback)
-		self.sub = rospy.Subscriber("/camera/depth_registered/points", PointCloud2, self.callback)
+		# self.sub = rospy.Subscriber("/camera/depth_registered/points", PointCloud2, self.callback)
+		self.sub = rospy.Subscriber("/bender/sensors/rgbd_head/depth_registered/points", PointCloud2, self.callback)
 		self.people_poses = rospy.Publisher('people_poses', PoseArray, queue_size=10)
 		self.people_vector = rospy.Publisher('people_vector', Float64MultiArray, queue_size=10)
 		#self.pose_pub = rospy.Publisher("/person_pose", PoseStamped, queue_size = 2)
@@ -56,10 +58,10 @@ class PersonLocator():
 		self._points_data = None
 		self._image_data = None
 		self.poses = PoseArray()
-		self.poses.header.frame_id = "camera_depth_optical_frame"
+		self.poses.header.frame_id = "rgbd_head_depth_optical_frame"
 		self.extractor = FeatureExtractor(
 			model_name='mlfn',
-			model_path='/home/pipe/Downloads/mlfn.pth.tar',
+			model_path='/home/bender/Downloads/mlfn.pth.tar',
 			device='cpu'
 		)
 
@@ -67,12 +69,11 @@ class PersonLocator():
 		seq = msg.header.seq
 		try:
 			self._points_data = rnp.numpify(msg)
-			image_data = self._points_data['rgb'].view(
-			(np.uint8, 4))[..., [0, 1, 2]]
+			image_data = self._points_data['rgb'].view((np.uint8, 4))[..., [0, 1, 2]]
 			self._image_data = np.ascontiguousarray(image_data)
 			# cv_image = self.cv.imgmsg_to_cv2(msg,'bgr8')
 			# res = model(cv_image, show=True, conf=0.8)
-			if not self._image_data is None:
+			if self._image_data is not None:
 				detections = self.model(self._image_data,show=False,conf=0.8)
 			# print(res)
 			marker_array = MarkerArray()
@@ -104,7 +105,7 @@ class PersonLocator():
 						y2 = h
 
 					crop = image_data[y:y2,x1:x2]
-					cv2.imshow('crop',crop)
+					# cv2.imshow('crop',crop)
 
 					features = self.extractor(crop)[0]
 					f = features.tolist()
@@ -143,7 +144,7 @@ class PersonLocator():
 		cv2.putText(self._image_data,text = str(seq),org = (50,50), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color = (255,0,0), thickness=2)
 		cv2.waitKey(3)
 
-	def target_marker(self, x ,y, z, id, frame="/camera_depth_optical_frame"):
+	def target_marker(self, x ,y, z, id, frame="rgbd_head_depth_optical_frame"):
 		##BODY
 		body = Marker()
 

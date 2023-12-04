@@ -1,14 +1,12 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3
 import numpy as np
 from numpy.random import uniform
 import scipy.stats
 from PIL import Image
-# from time import sleep
-# import pickle
-# import cv2
 from lapsolver import solve_dense
 import yaml
-import sys, os
+import sys
+import os
 
 # mostrar directorio de este archivo
 this_file_path = os.path.dirname(os.path.realpath(__file__))
@@ -104,7 +102,8 @@ class ParticleFilter:
             if self.neff() < 0.9 * self.N:
                 indexes = self.systematic_resample()
                 map_indexes = self.map_occlusion_resample()
-                if map_indexes is not None: indexes = np.multiply(indexes, map_indexes)
+                if map_indexes is not None:
+                    indexes = np.multiply(indexes, map_indexes)
                 self.resample_from_index(indexes)
         self.estimated_trajectory = np.vstack((self.estimated_trajectory, self.estimate()[0]))
         self.estimated_var = np.vstack((self.estimated_var, self.estimate()[1]))
@@ -122,7 +121,8 @@ class ParticleFilter:
             if self.neff() < 0.8 * self.N:
                 indexes = self.systematic_resample()
                 map_indexes = self.map_occlusion_resample()
-                if map_indexes is not None: indexes = np.multiply(indexes, map_indexes)
+                if map_indexes is not None:
+                    indexes = np.multiply(indexes, map_indexes)
                 self.resample_from_index(indexes)
             self.estimated_trajectory = np.vstack((self.estimated_trajectory, self.estimate()[0]))
             self.estimated_var = np.vstack((self.estimated_var, self.estimate()[1]))
@@ -230,11 +230,16 @@ class Obj:
         # print(std_output)
         
     def update_loc(self, loc):
-        if loc is None: self.pf.rutine_wo_obs()
-        else: self.pf.rutine_w_obs(loc[0], loc[1])
+        if loc is None:
+            self.pf.rutine_wo_obs()
+        else:
+            self.pf.rutine_w_obs(loc[0], loc[1])
         
     def get_estimated_loc(self):
         return self.pf.estimate()
+    
+    def get_particles(self):
+        return self.pf.particles
 
 class Tracker:
     def __init__(self, width, height, landmarks):
@@ -308,3 +313,139 @@ class Tracker:
 
 map, walkable_area = load_map()
 map_with_margin = create_map_with_margin(map, padding=5)
+
+# Example usage
+if __name__ == "__main__":
+    from time import sleep
+    import pickle
+    import cv2
+    # Example usage for the particle filter visualization
+    WIDTH = 640
+    HEIGHT = 736
+    WINDOW_NAME = "Particle Filter"
+    DELAY_MSEC = 30
+    
+    locs1 = pickle.load(open(os.path.join(this_file_path, '../input/target_locs_4.pkl'), 'rb'), encoding='latin1')
+    locs2 = pickle.load(open(os.path.join(this_file_path, '../input/target_locs_5.pkl'), 'rb'), encoding='latin1')
+    locs3 = pickle.load(open(os.path.join(this_file_path, '../input/target_locs_6.pkl'), 'rb'), encoding='latin1')
+
+    # Borrar primeros 20 frames
+    locs1 = locs1[30:]
+    locs2 = locs2[30:]
+    locs3 = locs3[30:]
+
+    locs1 = np.array(locs1)
+    locs2 = np.array(locs2)
+    locs3 = np.array(locs3)
+
+    amp = 1
+
+    # Update the tracker with detections and features
+    step = 0
+    # Grid de 6 x 7 landmarks
+    landmarks =  np.array([[i * 100, j * 100] for i in range(6) for j in range(7)])
+    
+    # Create a Tracker instance
+    tracker = Tracker(WIDTH, HEIGHT, landmarks=landmarks)
+    
+    while True:
+        if step == 1:
+            sleep(5)
+        try:
+            # Amplificar detecciones
+            detections = [ locs1[step] * amp, locs2[step] * amp, locs3[step] * amp ]
+            base_feature = np.array([1 ,2 ,3])
+            features = [ np.roll(base_feature, i)* 100 + np.random.randn(3) for i in range(3)]
+            # print(f"Features: {features}")
+            
+            # Cada 20 steps borramos una deteccion aleatoria
+            # if step % 20 == 0:
+            #     idx = np.random.randint(0, 3)
+            #     detections.pop(idx)
+            #     features.pop(idx)
+            
+            # Entre los frames 50 y 80 eliminamos la deteccion 2
+            # if step > 0:
+            #     detections.pop(1)
+            #     features.pop(1)
+            #     detections.pop(1)
+            #     features.pop(1) 
+            
+            if step > 50 and step < 70:
+                detections.pop(0)
+                features.pop(0)
+                detections.pop(1)
+                features.pop(1)
+                
+            if step > 210 and step < 240:
+                detections.pop(0)
+                features.pop(0)
+                
+            if step > 510 and step < 540:
+                detections.pop(0)
+                features.pop(0)
+                
+            if step > 710 and step < 800:
+                detections.pop(0)
+                features.pop(0)
+            
+            tracker.update_tracking(detections, features, landmarks)
+            tracker.print_objs()
+            step += 1
+        # Quedarse en el ultimo frame
+        except IndexError:
+            pass
+        
+        # Visualize the particle filter
+        img = map_with_margin
+        # Pasar a rgb
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+        
+        # Resize
+        img = cv2.resize(img, (WIDTH, HEIGHT))
+        
+        
+        # Poner un color a cada objeto con sus particulas segun su id (color = f(id))
+        max_ids = 3.0
+        for obj in tracker.objects:
+            if obj.obj_id < max_ids:
+                colors = ["#3396FF", "#CE33FF", "#FF8A33"]
+                color_hex = colors[obj.obj_id]
+                color = tuple(int(color_hex[i:i+2], 16) for i in (1, 3, 5))
+                for particle in obj.pf.particles:
+                    # Opacidad de las particulas baja
+                    cv2.circle(img, (int(particle[0]), int(particle[1])), 1, color, -1, cv2.LINE_AA)
+                # Agregar una flecha que indique la velocidad media en el centro
+                mean_vel = np.mean(obj.pf.particles[:, 2:4], axis=0)
+                    
+            cv2.putText(img, str(obj.obj_id), (int(obj.pf.center[0, 0]), int(obj.pf.center[0, 1])), cv2.FONT_HERSHEY_SIMPLEX, 1, (200, 0, 0), 1, cv2.LINE_AA)
+            # Dibujar la trayectoria si tiene mas de 2 puntos
+            for i in range(max(2, obj.pf.trajectory.shape[0] - 100), obj.pf.trajectory.shape[0] - 1):
+                # Dibujar la trayectoria estimada si tiene mas de 2 puntos (en escala de rojo a verde dependiendo de la varianza)
+                if obj.pf.estimated_trajectory.shape[0] > 2:
+                    mean_var = (obj.pf.estimated_var[i, 0] + obj.pf.estimated_var[i, 1]) * 0.5
+                    cv2.line(img, (int(obj.pf.estimated_trajectory[i, 0]), int(obj.pf.estimated_trajectory[i, 1])), (int(obj.pf.estimated_trajectory[i + 1, 0]), int(obj.pf.estimated_trajectory[i + 1, 1])), (int(255 * (mean_var/ 100)), int(255 * (1 - mean_var/ 100)), 0), 2)
+                if obj.pf.trajectory.shape[0] > 2:
+                    trajectory_color = "#DF99E2"
+                    trajectory_color = tuple(int(trajectory_color[i:i+2], 16) for i in (1, 3, 5))
+                    cv2.line(img, (int(obj.pf.trajectory[i, 0]), int(obj.pf.trajectory[i, 1])), (int(obj.pf.trajectory[i + 1, 0]), int(obj.pf.trajectory[i + 1, 1])), trajectory_color, 2)
+        
+        # Landmarks
+        for landmark in tracker.objects[0].pf.landmarks:
+            cv2.circle(img, (int(landmark[0]), int(landmark[1])), 3, (255, 0, 0), -1, cv2.LINE_AA)
+        
+        # Cambiar canales de color
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        
+        # Graficar trayectoria completa real
+        for i in range(1, locs1.shape[0] - 1):
+            cv2.line(img, (int(locs1[i, 0] * amp), int(locs1[i, 1] * amp)), (int(locs1[i + 1, 0] * amp), int(locs1[i + 1, 1] * amp)), (255, 0, 0), 1)
+        
+        # Agrandar la imagen
+        cv2.imshow(WINDOW_NAME, img)
+        key = cv2.waitKey(DELAY_MSEC)
+
+        # Press 'q' to exit
+        if key == ord('q'):
+            break
+    cv2.destroyAllWindows()

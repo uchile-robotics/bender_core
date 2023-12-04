@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3
 import numpy as np
 from numpy.random import uniform
 from time import sleep
@@ -108,7 +108,8 @@ class ParticleFilter:
             if self.neff() < 0.9 * self.N:
                 indexes = self.systematic_resample()
                 map_indexes = self.map_occlusion_resample()
-                if map_indexes is not None: indexes = np.multiply(indexes, map_indexes)
+                if map_indexes is not None:
+                    indexes = np.multiply(indexes, map_indexes)
                 self.resample_from_index(indexes)
         self.estimated_trajectory = np.vstack((self.estimated_trajectory, self.estimate()[0]))
         self.estimated_var = np.vstack((self.estimated_var, self.estimate()[1]))
@@ -126,7 +127,8 @@ class ParticleFilter:
             if self.neff() < 0.8 * self.N:
                 indexes = self.systematic_resample()
                 map_indexes = self.map_occlusion_resample()
-                if map_indexes is not None: indexes = np.multiply(indexes, map_indexes)
+                if map_indexes is not None:
+                    indexes = np.multiply(indexes, map_indexes)
                 self.resample_from_index(indexes)
             self.estimated_trajectory = np.vstack((self.estimated_trajectory, self.estimate()[0]))
             self.estimated_var = np.vstack((self.estimated_var, self.estimate()[1]))
@@ -235,8 +237,10 @@ class Obj:
         # print(std_output)
         
     def update_loc(self, loc):
-        if loc is None: self.pf.rutine_wo_obs()
-        else: self.pf.rutine_w_obs(loc[0], loc[1])
+        if loc is None:
+            self.pf.rutine_wo_obs()
+        else:
+            self.pf.rutine_w_obs(loc[0], loc[1])
         
     def get_estimated_loc(self):
         return self.pf.estimate()
@@ -319,13 +323,15 @@ if __name__ == "__main__":
     WINDOW_NAME = "Particle Filter"
     DELAY_MSEC = 30
     
-    locs1 = pickle.load(open('./input/target_locs_4.pkl', 'rb'), encoding='latin1')
-    locs2 = pickle.load(open('./input/target_locs_5.pkl', 'rb'), encoding='latin1')
-    locs3 = pickle.load(open('./input/target_locs_6.pkl', 'rb'), encoding='latin1')
+    locs1 = pickle.load(open(os.path.join(this_file_path, '../input/target_locs_4.pkl'), 'rb'), encoding='latin1')
+    locs2 = pickle.load(open(os.path.join(this_file_path, '../input/target_locs_5.pkl'), 'rb'), encoding='latin1')
+    locs3 = pickle.load(open(os.path.join(this_file_path, '../input/target_locs_6.pkl'), 'rb'), encoding='latin1')
+
     # Borrar primeros 20 frames
     locs1 = locs1[30:]
     locs2 = locs2[30:]
     locs3 = locs3[30:]
+
     locs1 = np.array(locs1)
     locs2 = np.array(locs2)
     locs3 = np.array(locs3)

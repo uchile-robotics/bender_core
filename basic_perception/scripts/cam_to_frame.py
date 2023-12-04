@@ -13,7 +13,8 @@ def pose_callback(pose_msg):
 		tf_buffer = tf2_ros.Buffer()
 		tf_listener = tf2_ros.TransformListener(tf_buffer)
 
-		target_frame = "camera_link"
+		current_frame = "rgbd_head_depth_optical_frame"
+		target_frame = "map"
 		# target_frame = "bender/base_link"
 
 		# Wait for the transform from /person_pose to /camera_link
@@ -31,13 +32,14 @@ def pose_callback(pose_msg):
 
 			# Update the frame_id to /camera_link
 			transformed_pose.header.frame_id = target_frame
-			transformed_pose.pose.position.z = -0.7
+			transformed_pose.pose.position.z = 0.0
 			transformed_pose.pose.orientation.x = 0.0
 			transformed_pose.pose.orientation.y = 0.0
 			transformed_pose.pose.orientation.z = 0.0
 			transformed_pose.pose.orientation.w = 1.0
 
 			poses.poses.append(transformed_pose.pose)
+			print("pose")
 
 		# Publish the transformed pose
 		people_location_publisher.publish(poses)
@@ -51,8 +53,8 @@ def vector_callback(msg):
 		tf_buffer = tf2_ros.Buffer()
 		tf_listener = tf2_ros.TransformListener(tf_buffer)
 
-		current_frame = "camera_depth_optical_frame"
-		target_frame = "camera_link"
+		current_frame = "rgbd_head_depth_optical_frame"
+		target_frame = "map"
 		# target_frame = "bender/base_link"
 
 		# Wait for the transform from /person_pose to /camera_link
@@ -73,8 +75,6 @@ def vector_callback(msg):
 			last_idx = first_idx+1027
 			reconstructed.append(lst[first_idx:last_idx])
 
-		print np.array(reconstructed).shape
-
 		for v in reconstructed:
 			# Transform the pose to /camera_link frame
 			current_pose = PoseStamped()
@@ -88,7 +88,7 @@ def vector_callback(msg):
 
 			# Update the frame_id to /camera_link
 			transformed_pose.header.frame_id = target_frame
-			transformed_pose.pose.position.z = -0.7
+			transformed_pose.pose.position.z = 0.0
 			transformed_pose.pose.orientation.x = 0.0
 			transformed_pose.pose.orientation.y = 0.0
 			transformed_pose.pose.orientation.z = 0.0
@@ -113,8 +113,8 @@ if __name__ == '__main__':
 	rospy.init_node('pose_transformer_node')
 
 	# Initialize the subscriber to the /person_pose topic
-	# rospy.Subscriber("/people_poses", PoseArray, pose_callback)
-	rospy.Subscriber("/people_vector", Float64MultiArray, vector_callback)
+	rospy.Subscriber("/people_poses", PoseArray, pose_callback)
+	# rospy.Subscriber("/people_vector", Float64MultiArray, vector_callback)
 
 	# Initialize the publisher for /person_location topic
 	people_location_publisher = rospy.Publisher("/people_locations", PoseArray, queue_size=10)
