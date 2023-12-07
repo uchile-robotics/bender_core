@@ -227,7 +227,7 @@ class Obj:
         Estimated loc: {}\n
         Var: {}\n
         """.format(self.obj_id, self.features, self.loc, self.pf.estimate()[0], self.pf.estimate()[1])
-        # print(std_output)
+        print(std_output)
         
     def update_loc(self, loc):
         if loc is None:
@@ -286,7 +286,6 @@ class Tracker:
                     # else:
                     #     cost_matrix[i, j] = f_cost + 0.1*d_cost
                     cost_matrix[i, j] = f_cost
-                    print(f"Obj ID: {obj.obj_id}, f_cost: {f_cost}, d_cost: {d_cost}, total_cost: {f_cost + d_cost}")
 
             # row_ind, col_ind = linear_sum_assignment(cost_matrix) # Usar solver de lapsolver
             row_ind, col_ind = solve_dense(cost_matrix)
