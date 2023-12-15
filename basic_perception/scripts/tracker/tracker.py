@@ -1,83 +1,106 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.9
 import rospy
 import numpy as np
-from geometry_msgs.msg import PoseArray, Pose
-from utils.filter import Tracker
+from std_msgs.msg import Float64MultiArray, ColorRGBA
+from geometry_msgs.msg import PoseArray, Pose, Point
+from visualization_msgs.msg import Marker
+from nav_msgs.msg import OccupancyGrid
+import colorsys
+from utils.filter2 import Tracker
 
 class TrackingNode:
-    def __init__(self, WIDTH, HEIGHT, landmarks):
-        self.tracker = Tracker(WIDTH, HEIGHT, landmarks)
-        self.people_sub = rospy.Subscriber("/people_locations", PoseArray, self.people_callback)
-        # self.features_sub = rospy.Subscriber("/features", PoseArray, self.features_callback)
+    def __init__(self, WIDTH, HEIGHT):
+        self.tracker = Tracker(WIDTH, HEIGHT)
+        self.people_sub = rospy.Subscriber("/people_detections", Float64MultiArray, self.callback)
+        self.particles_pub = rospy.Publisher("/particle_cloud", PoseArray, queue_size=10)
+        self.map_pub = rospy.Publisher("/tracker_map", OccupancyGrid, queue_size=10)
+        self.markers_pub = rospy.Publisher("/markers", Marker, queue_size=10)
     
-    def people_callback(self, detections):
-        self.callback(detections, self.tracker, self.tracker.landmarks)
+    def callback(self, data):
+        # Obtener mapa del tracker
+        map = self.tracker.get_map()
+        # Crear mensaje de mapa
+        map_msg = OccupancyGrid()
+        map_msg.header.frame_id = "map"
+        map_msg.info.resolution = 0.05
+        map_msg.info.width = map.shape[1]
+        map_msg.info.height = map.shape[0]
+        map_msg.info.origin.position.x = -map.shape[1] * map_msg.info.resolution / 2
+        map_msg.info.origin.position.y = -map.shape[0] * map_msg.info.resolution / 2
+        map_msg.data = map.flatten()
+        self.map_pub.publish(map_msg)
 
-    # def features_callback(self, data=None):
-    #     self.callback(data, self.tracker, None)
+        # Printear dimensiones de las detecciones (1026*n) donde n es el numero de detecciones
 
-    def callback(self, detections, tracker, landmarks, features=None):
-        # Change detections to numpy array        
-        detections = np.array([[d.position.x, d.position.y] for d in detections.poses])
-        print(detections)
-        n = len(detections)
-        # assert n == 1, "Number of detections must be 1"
-        base_feature = np.array([i for i in range(1, n + 1)])
-        features = [np.roll(base_feature, i) * 100 + np.random.randn(len(detections)) for i in range(len(detections))]
-        tracker.update_tracking(detections, features, landmarks)
-        print(tracker.objects)
+        # Hacer reshape para tener (n, 1026)
+        data = np.array(data.data).reshape(-1, 1026)
+        # Las detecciones son una lista de [x, y]
+        detections = [d[:2] for d in data]
+        # Las features son una lista de [f1, f2, ..., fn]
+        features = [d[2:] for d in data]
 
-        # Publish pose array with ids
-        tracks_array = PoseArray()
-        particles_array = PoseArray()
-        tracks_array.header.frame_id = "map"    
-        for track in tracker.objects:
+        # Obtener indices de detecciones nan en x o y (a veces pasa)
+        nan_pos_indices = []
+        for i, d in enumerate(detections):
+            if np.isnan(d[0]) or np.isnan(d[1]):
+                nan_pos_indices.append(i)
+        
+        # Borrar de detections y features las detecciones nan
+        detections = np.delete(detections, nan_pos_indices, axis=0)
+        features = np.delete(features, nan_pos_indices, axis=0)
+        self.tracker.update_tracking(detections, features)
+
+        self.tracker.print_objs()
+
+        # Publish markers with ids
+        markers_array = Marker()
+        markers_array.header.frame_id = "map"
+        markers_array.type = Marker.POINTS
+        markers_array.action = Marker.ADD
+        markers_array.scale.x = 0.2  # Tamaño del marcador en el eje x
+        markers_array.scale.y = 0.2  # Tamaño del marcador en el eje y
+        markers_array.color.a = 1.0  # Transparencia
+        
+        # Crear el mensaje de la nube de puntos
+        particle_cloud_msg = PoseArray()
+        particle_cloud_msg.header.frame_id = "map"
+        
+
+        for i, track in enumerate(self.tracker.objects):
             loc = track.get_estimated_loc()[0]
-            t = Pose()
-            t.position.x = loc[0]
-            t.position.y = loc[1]
-            t.orientation.w = 1
-            tracks_array.poses.append(t)
-            print("Tracker id:", track.obj_id, "x:", loc[0], "y:", loc[1])
-            
-            particles = track.get_particles() # (n, 4) : (x, y, vx, vy)
+            p = Point()
+            p.x = loc[0]
+            p.y = loc[1]
+            markers_array.points.append(p)
+
+            # Asignar un color único basado en el ID
+            hue = (i % 10) / 10.0  # Asegura que el tono está en el rango [0, 1]
+            rgb = colorsys.hsv_to_rgb(hue, 1.0, 1.0)
+
+            # Corrige el formato del color para que sea un objeto ColorRGBA
+            color = {'r': rgb[0], 'g': rgb[1], 'b': rgb[2], 'a': 1.0}
+            markers_array.colors.append(ColorRGBA(**color))
+ 
+            # Obtener las particulas del tracker
+            particles = track.get_particles()
             # Guardar particulas
             for p in particles:
                 t = Pose()
                 t.position.x = p[0]
                 t.position.y = p[1]
                 t.orientation.w = 1
-                particles_array.poses.append(t)
-            
-        # Publicar un arreglo de particles
-        particles_array = PoseArray()
-        particles_array.header.frame_id = "map"
-        particles_pub = rospy.Publisher("/particles", PoseArray, queue_size=10)
-        particles_pub.publish(particles_array)
-        
-        # Publicar un arreglo de tracks
-        tracks_pub = rospy.Publisher("/tracks", PoseArray, queue_size=10)
-        tracks_pub.publish(tracks_array)
-        
+                particle_cloud_msg.poses.append(t)
+
+        # Publicar nube de puntos
+        self.markers_pub.publish(markers_array)
+        self.particles_pub.publish(particle_cloud_msg)
 
 def main():
     rospy.init_node('tracker', anonymous=True)
     WIDTH = 640
     HEIGHT = 736
-    landmarks = np.array([[i * 100, j * 100] for i in range(6) for j in range(7)])
-    # publicar landmarks para visualizarlos en rviz
-    landmarks_pub = rospy.Publisher("/landmarks", PoseArray, queue_size=10)
-    landmarks_array = PoseArray()
-    for landmark in landmarks:
-        landmark_pose = Pose()
-        landmark_pose.position.x = landmark[0]
-        landmark_pose.position.y = landmark[1]
-        landmark_pose.orientation.w = 1
-        landmarks_array.poses.append(landmark_pose)
-    
-    landmarks_pub.publish(landmarks_array)
-    tracking_node = TrackingNode(WIDTH, HEIGHT, landmarks)
-    print("Tracker node running...")
+    tracking_node = TrackingNode(WIDTH, HEIGHT)
+    print("Tracker node waiting for people locations...")
     rospy.spin()
 
 if __name__ == '__main__':
