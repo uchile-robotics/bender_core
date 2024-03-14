@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.9
 import numpy as np
 from numpy.random import uniform
 from time import sleep
@@ -134,7 +134,23 @@ class ParticleFilter:
             self.estimated_var = np.vstack((self.estimated_var, self.estimate()[1]))
             self.previous_x = self.center[0, 0]
             self.previous_y = self.center[0, 1]
-        
+
+    def update(self, R):
+        self.weights.fill(1.)
+        for i, landmark in enumerate(self.landmarks):
+            distance = np.power((self.particles[:, 0] - landmark[0]) ** 2 + (
+                    self.particles[:, 1] - landmark[1]) ** 2, 0.5)
+            self.weights *= scipy.stats.norm(distance, R).pdf(self.zs[i])
+        self.weights += 1.e-300  # avoid round-off to zero
+        self.weights /= sum(self.weights)
+
+    def update_wo_landmarks(self, R):
+        # Not use landmarks, only observations and particles
+        self.weights.fill(1.)
+        for i, observation in enumerate(self.zs):
+            distance = np.power((self.particles[:, 0] - observation[0]) ** 2 + (
+                    self.particles[:, 1] - observation[1]) ** 2, 0.5)
+            self.weights *= scipy.stats.norm(distance, R).pdf(self.zs[i])
 
     def predict(self, u, std, dt=1.): # u = [heading, distance]
         dist = (u[1] * dt) + (np.random.randn(self.N) * std[1])
@@ -158,15 +174,6 @@ class ParticleFilter:
         # self.particles[:, 1] += np.random.randn(self.N) * std[1]  # y
         # self.particles[:, 2] += np.random.randn(self.N) * std[0] * 10 # x
         # self.particles[:, 3] += np.random.randn(self.N) * std[1] * 10 # y
-
-    def update(self, R):
-        self.weights.fill(1.)
-        for i, landmark in enumerate(self.landmarks):
-            distance = np.power((self.particles[:, 0] - landmark[0]) ** 2 + (
-                    self.particles[:, 1] - landmark[1]) ** 2, 0.5)
-            self.weights *= scipy.stats.norm(distance, R).pdf(self.zs[i])
-        self.weights += 1.e-300  # avoid round-off to zero
-        self.weights /= sum(self.weights)
 
     def neff(self):
         return 1. / np.sum(np.square(self.weights))
@@ -211,6 +218,8 @@ class Obj:
         self.obj_id = obj_id
         self.features = features
         self.loc = loc
+        self.delta_features = np.zeros(self.features.shape)
+        self.delta_loc = np.zeros(self.loc.shape)
         self.pf = ParticleFilter(x_range=x_range, y_range=y_range, N=N, landmarks=landmarks, sensor_std_err=sensor_std_err, init_loc=loc)
         self.update(features, loc)
         self.sleep_time = 0
@@ -219,6 +228,7 @@ class Obj:
         
     def update_features(self, features):
         if features is not None:
+            self.delta_features = np.linalg.norm(self.features - features)
             self.features = 0.5 * self.features + 0.5 * features
             self.sleep_time = 0
         else:
@@ -227,19 +237,23 @@ class Obj:
     def update(self, features = None, loc = None):
         self.update_features(features)
         self.update_loc(loc)
+        
+    def __str__(self):
         std_output = """
         Obj ID: {}\n
-        Features: {}\n
-        Loc: {}\n
+        Features: {} \t\t Norm diff: {}\n
+        Loc: {} \t\t Norm diff: {}\n
         Estimated loc: {}\n
-        Var: {}\n
-        """.format(self.obj_id, self.features, self.loc, self.pf.estimate()[0], self.pf.estimate()[1])
-        # print(std_output)
+        Var: {}
+        """.format(self.obj_id, np.round(self.features, 2), self.delta_features, np.round(self.loc, 2), self.delta_loc, np.round(self.pf.estimate()[0], 2), np.round(self.pf.estimate()[1], 2))
+        return std_output
         
     def update_loc(self, loc):
         if loc is None:
             self.pf.rutine_wo_obs()
         else:
+            self.delta_loc = np.linalg.norm(self.loc - loc)
+            self.loc = loc
             self.pf.rutine_w_obs(loc[0], loc[1])
         
     def get_estimated_loc(self):
@@ -290,8 +304,6 @@ class Tracker:
                     else:
                         cost_matrix[i, j] = f_cost + 0.1*d_cost
 
-                    print(f"Obj ID: {obj.obj_id}, f_cost: {f_cost}, d_cost: {d_cost}, total_cost: {f_cost + d_cost}")
-
             # row_ind, col_ind = linear_sum_assignment(cost_matrix) # Usar solver de lapsolver
             row_ind, col_ind = solve_dense(cost_matrix)
 
@@ -311,8 +323,10 @@ class Tracker:
         # Print the updated objects
 
     def print_objs(self):
+        print("-" * 30)
         for obj in self.objects:
-            print(f"Object ID: {obj.obj_id}, Features: {obj.features}")
+            print(obj)
+        print("-" * 30)
 
 
 # Example usage
@@ -399,8 +413,6 @@ if __name__ == "__main__":
         
         # Resize
         img = cv2.resize(img, (WIDTH, HEIGHT))
-        print(np.unique(img))
-        
         
         # Poner un color a cada objeto con sus particulas segun su id (color = f(id))
         max_ids = 3.0

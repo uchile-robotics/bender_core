@@ -13,7 +13,7 @@ rviz rviz &
 sleep 5
 
 # Reproducir el rosbag a 0.5x
-rosbag play --clock --rate 0.5 rosbag_tracker.bag &
+rosbag play --clock --rate 0.5 demo.bag &
 
 # Esperar 3 segundos a que se suscriban los nodos
 sleep 5
