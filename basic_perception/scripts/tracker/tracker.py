@@ -6,7 +6,7 @@ from geometry_msgs.msg import PoseArray, Pose, Point, PoseWithCovarianceStamped
 from visualization_msgs.msg import Marker
 from nav_msgs.msg import OccupancyGrid
 import colorsys
-from utils.filter2 import Tracker
+from scripts.tracker.utils.filter import Tracker
 import pickle
 
 
