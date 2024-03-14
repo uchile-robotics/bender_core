@@ -7,15 +7,20 @@ from std_msgs.msg import Float64MultiArray
 from geometry_msgs.msg import PoseStamped, PoseArray, Pose
 from tf2_geometry_msgs import do_transform_pose
 
+
+# Asus
+current_frame = "rgbd_head_depth_optical_frame"
+target_frame = "map"
+# Realsense
+# current_frame = "camera_link"
+# target_frame = "bender/base_link"
+
 def pose_callback(pose_msg):
 	try:
 		# Initialize the tf2 listener
 		tf_buffer = tf2_ros.Buffer()
 		tf_listener = tf2_ros.TransformListener(tf_buffer)
 
-		current_frame = "rgbd_head_depth_optical_frame"
-		target_frame = "map"
-		# target_frame = "bender/base_link"
 
 		# Wait for the transform from /person_pose to /camera_link
 		transform = tf_buffer.lookup_transform(target_frame, pose_msg.header.frame_id, rospy.Time(0), rospy.Duration(1.0))
@@ -52,10 +57,6 @@ def vector_callback(msg):
 		# Initialize the tf2 listener
 		tf_buffer = tf2_ros.Buffer()
 		tf_listener = tf2_ros.TransformListener(tf_buffer)
-
-		current_frame = "rgbd_head_depth_optical_frame"
-		target_frame = "map"
-		# target_frame = "bender/base_link"
 
 		# Wait for the transform from /person_pose to /camera_link
 		transform = tf_buffer.lookup_transform(target_frame, current_frame, rospy.Time(0), rospy.Duration(1.0))
