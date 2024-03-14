@@ -2,20 +2,36 @@
 import rospy
 import numpy as np
 from std_msgs.msg import Float64MultiArray, ColorRGBA
-from geometry_msgs.msg import PoseArray, Pose, Point
+from geometry_msgs.msg import PoseArray, Pose, Point, PoseWithCovarianceStamped
 from visualization_msgs.msg import Marker
 from nav_msgs.msg import OccupancyGrid
 import colorsys
 from utils.filter2 import Tracker
+import pickle
+
+
+def loc_to_pixel(loc, resolution=0.02, origin=(-3, -5)):
+    return (loc - np.array(origin)) / resolution
+
+def pixel_to_loc(pixel, resolution=0.02, origin=(-3, -5)):
+    return pixel * resolution + np.array(origin)
 
 class TrackingNode:
     def __init__(self, WIDTH, HEIGHT):
+        self.WIDTH = WIDTH
+        self.HEIGHT = HEIGHT
         self.tracker = Tracker(WIDTH, HEIGHT)
         self.people_sub = rospy.Subscriber("/people_detections", Float64MultiArray, self.callback)
         self.particles_pub = rospy.Publisher("/particle_cloud", PoseArray, queue_size=10)
         self.map_pub = rospy.Publisher("/tracker_map", OccupancyGrid, queue_size=10)
         self.markers_pub = rospy.Publisher("/markers", Marker, queue_size=10)
-    
+        self.rect_pub = rospy.Publisher("/rect", Marker, queue_size=10)
+        self.historical_data = {'detections': [], 'features': []}  # Initialize an empty dictionary
+
+    def save_historical_data(self):
+        with open('historical_data.pkl', 'wb') as f:
+            pickle.dump(self.historical_data, f)
+
     def callback(self, data):
         # Obtener mapa del tracker
         map = self.tracker.get_map()
@@ -29,6 +45,39 @@ class TrackingNode:
         map_msg.info.origin.position.y = -map.shape[0] * map_msg.info.resolution / 2
         map_msg.data = map.flatten()
         self.map_pub.publish(map_msg)
+        
+        
+                
+        bounding_box = [
+            [0, 0], # Starting point
+            [self.WIDTH, 0], # Top right corner
+            [self.WIDTH, self.HEIGHT], # Bottom right corner
+            [0, self.HEIGHT], # Bottom left corner
+            [0, 0],  # Closing the loop
+        ]
+        
+        bounding_box = np.array(bounding_box)
+        bounding_box = bounding_box*0.02 + np.array([-3, -5])
+
+        # Create a visualization marker for the bounding box
+        bounding_box_marker = Marker()
+        bounding_box_marker.header.frame_id = "map"
+        bounding_box_marker.type = Marker.LINE_STRIP
+        bounding_box_marker.action = Marker.ADD
+        bounding_box_marker.scale.x = 0.05  # Adjust the line width
+        bounding_box_marker.color.r = 1.0
+        bounding_box_marker.color.g = 0.0
+        bounding_box_marker.color.b = 0.0
+        bounding_box_marker.color.a = 1.0
+
+        # Convert the bounding box coordinates to ROS Point messages
+        for point in bounding_box:
+            p = Point()
+            p.x, p.y = point
+            bounding_box_marker.points.append(p)
+
+        # Publish the bounding box marker
+        self.rect_pub.publish(bounding_box_marker)
 
         # Printear dimensiones de las detecciones (1026*n) donde n es el numero de detecciones
 
@@ -39,6 +88,9 @@ class TrackingNode:
         # Las features son una lista de [f1, f2, ..., fn]
         features = [d[2:] for d in data]
 
+        self.historical_data['detections'].append(detections)
+        self.historical_data['features'].append(features)
+
         # Obtener indices de detecciones nan en x o y (a veces pasa)
         nan_pos_indices = []
         for i, d in enumerate(detections):
@@ -48,8 +100,14 @@ class TrackingNode:
         # Borrar de detections y features las detecciones nan
         detections = np.delete(detections, nan_pos_indices, axis=0)
         features = np.delete(features, nan_pos_indices, axis=0)
-        self.tracker.update_tracking(detections, features)
 
+        # Transformar detecciones al mapa de pixeles
+        if len(detections) > 0: detections = loc_to_pixel(detections)
+
+        print("Detections:", detections)
+        print("Features:", features)
+
+        self.tracker.update_tracking(detections, features)
         self.tracker.print_objs()
 
         # Publish markers with ids
@@ -67,7 +125,8 @@ class TrackingNode:
         
 
         for i, track in enumerate(self.tracker.objects):
-            loc = track.get_estimated_loc()[0]
+            # Transformar posicion estimada al mapa del mundo
+            loc = pixel_to_loc(track.get_estimated_loc()[0])
             p = Point()
             p.x = loc[0]
             p.y = loc[1]
@@ -84,10 +143,11 @@ class TrackingNode:
             # Obtener las particulas del tracker
             particles = track.get_particles()
             # Guardar particulas
-            for p in particles:
+            for particle in particles:
                 t = Pose()
-                t.position.x = p[0]
-                t.position.y = p[1]
+                pos = pixel_to_loc(particle[:2])
+                t.position.x = pos[0]
+                t.position.y = pos[1]
                 t.orientation.w = 1
                 particle_cloud_msg.poses.append(t)
 
@@ -101,7 +161,10 @@ def main():
     HEIGHT = 736
     tracking_node = TrackingNode(WIDTH, HEIGHT)
     print("Tracker node waiting for people locations...")
-    rospy.spin()
+    rospy.spin() # Handle Ctrl+C interruption
+    print("Saving tracker state...")
+    tracking_node.save_historical_data()
+    print("Tracker state saved.")
 
 if __name__ == '__main__':
     main()
