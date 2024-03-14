@@ -1,6 +1,6 @@
 input/
 historical_data.pkl
-filter*.py
+filter_*.py
 tracker.zip
 yolov8n-pose.pt
 stage_real.pgm
