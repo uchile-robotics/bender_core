@@ -19,7 +19,7 @@ rosbag play --clock --rate 0.5 demo.bag &
 sleep 5
 
 # Ejecutar el tracker
-rosrun basic_perception tracker.py
+rosrun basic_perception TrackerNode.py
 
 # Probablemente la primera vez no alcances a cargar los topicos apenas parta el video
 # asi que seguramente la segunda vez los topicos ya estaran registrados y mantienes rviz abierto
