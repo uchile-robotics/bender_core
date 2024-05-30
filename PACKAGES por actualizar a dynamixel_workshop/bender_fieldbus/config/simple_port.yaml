@@ -1,9 +1,0 @@
-# Config for test port
-namespace: simple_port_manager
-serial_ports:
-  simple_port:
-    port_name: "/dev/ttyUSB0"
-    baud_rate: 200000
-    min_motor_id: 1
-    max_motor_id: 31
-    update_rate: 30

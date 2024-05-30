@@ -2,6 +2,9 @@
 <robot
   xmlns:xacro="http://www.ros.org/wiki/xacro"
   name="bender">
+
+  <!-- Macros -->
+  <xacro:include filename="$(find bender_description)/urdf/inertia_macros.xacro" />
   <!-- Prefix for Bender links -->
   <xacro:property name="prefix" value="bender/" />
 
@@ -40,16 +43,17 @@
   <!-- Right Arm -->
   <xacro:right_arm side="l" parent="${prefix}right_shoulder" reflect="1" prefix="${prefix}"/>
 
-  <!-- Gripper -->
+
+  <!-- Gripper
   <xacro:include filename="$(find bender_description)/urdf/gripper.urdf.xacro" />
-  <!-- Gripper Joints -->
+  Gripper Joints
   <xacro:gripper side="l" reflect="-1" prefix="${prefix}" />
   <xacro:gripper side="r" reflect="1" prefix="${prefix}" />
-  <!-- Grippers Links -->
+  Grippers Links
   <xacro:gripper_int side="l" reflect="-1" type="1" prefix="${prefix}"/>
   <xacro:gripper_ext side="l" reflect="-1" type="1" prefix="${prefix}"/>
   <xacro:gripper_int side="r" reflect="1" type="1" prefix="${prefix}"/>
-  <xacro:gripper_ext side="r" reflect="1" type="1" prefix="${prefix}"/>
+  <xacro:gripper_ext side="r" reflect="1" type="1" prefix="${prefix}"/> -->
   
   <!-- Head with Asus depth camera -->
   <xacro:include filename="$(find bender_description)/urdf/head.urdf.xacro" />

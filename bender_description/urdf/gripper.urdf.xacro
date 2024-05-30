@@ -79,7 +79,7 @@
           xyz="-0.018 -0.03 -0.07"
           rpy="${-M_PI/6} 0 0" />
         <mass value="${gripper_mass}" />
-        <cuboid_inertia_def x="0.05" y="0.035" z="0.16" mass="${gripper_mass}"/>
+        <xacro:cuboid_inertia_def x="0.05" y="0.035" z="0.16" mass="${gripper_mass}"/>
       </inertial>
       <visual>
         <xacro:if value="${ext}">
@@ -93,8 +93,8 @@
           rpy="0 0 0" />
         </xacro:unless>
         <geometry>
-          <mesh
-            filename="package://bender_description/meshes/visual/one_finger.stl" />
+          <!-- <mesh
+            filename="package://bender_description/meshes/visual/one_finger.stl" /> -->
         </geometry>
         <material name="Grey1" />
       </visual>
@@ -110,8 +110,10 @@
           rpy="0 0 0" />
         </xacro:unless>
         <geometry>
+        <!-- Ignorado 
           <mesh
             filename="package://bender_description/meshes/collision/finger.stl" scale="0.35 1.0 1.0"/>
+        -->
         </geometry>
       </collision>
     </xacro:if>
@@ -121,7 +123,7 @@
           xyz="-0.018 -0.03 -0.07"
           rpy="${-M_PI/6} 0 0" />
         <mass value="${gripper_mass}" />
-        <cuboid_inertia_def x="0.05" y="0.035" z="0.16" mass="${gripper_mass}"/>
+        <xacro:cuboid_inertia_def x="0.05" y="0.035" z="0.16" mass="${gripper_mass}"/>
       </inertial>
       <visual>
         <xacro:if value="${ext}">
@@ -135,8 +137,8 @@
           rpy="0 0 0" />
         </xacro:unless>
         <geometry>
-          <mesh
-            filename="package://bender_description/meshes/visual/two_finger.stl" />
+          <!-- <mesh
+            filename="package://bender_description/meshes/visual/two_finger.stl" /> -->
         </geometry>
         <material name="Grey1" />
       </visual>
@@ -152,8 +154,8 @@
           rpy="0 0 0" />
         </xacro:unless>
         <geometry>
-          <mesh
-            filename="package://bender_description/meshes/collision/finger.stl"/>
+          <!-- <mesh
+            filename="package://bender_description/meshes/collision/finger.stl"/> -->
         </geometry>
       </collision>
     </xacro:unless>

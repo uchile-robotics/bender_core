@@ -60,6 +60,6 @@
   <node if="$(arg rqt_gui)" name="rqt_command" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find bender_gazebo)/config/control.perspective"/>
 
   <!-- Laser limiter pipeline -->
-  <include file="$(find bender_gazebo)/launch/laser_limiters.launch.xml"/>
+  <!--<include file="$(find bender_gazebo)/launch/laser_limiters.launch.xml"/> -->
   
 </launch>
