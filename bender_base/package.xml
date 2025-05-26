@@ -1,68 +1,35 @@
 <?xml version="1.0"?>
-<package format="2">
-    <!-- 
-      <depend>             : build, export, and execution dependencies 
-      <build_depend>       : pkgs needed at compile time (any file or library)
-      <build_export_depend>: pkgs needed to build libraries against this pkg
-      <exec_depend>        : pkgs needed to run this code. (e.g: shared libs)
-      <test_depend>        : only additional deps for unit testing (e.g: gtest)
-      <doc_depend>         : dependencies for documentation generation
-
-      See also:
-      - http://wiki.ros.org/catkin/package.xml
-      - http://www.ros.org/reps/rep-0140.html
-    -->
-
-
-    <!-- PACKAGE INFORMATION -->
-    <!-- - - - - - - - - - - -->
-
-    <name>bender_base</name>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+    <name>rosaria2</name>
     <version>2.0.0</version>
-    
-    <description>The bender_base package</description>
+    <description>ROS2 driver for Pioneer P3-DX2 robot platform</description>
+    <author email="rprocha@isr.uc.pt">Rui P. Rocha</author>
+    <author email="joao@todo.todo">João André</author>
+    <maintainer email="rprocha@isr.uc.pt">Rui P. Rocha</maintainer>
+    <license>MIT</license>
 
-    <!-- team -->
-    <maintainer email="bender.devel@gmail.com">
-      Bender Team - UChile Homebreakers</maintainer>
-    <author     email="bender.devel@gmail.com">
-      Bender Team - UChile Homebreakers</author>
+    <buildtool_depend>ament_cmake</buildtool_depend>
 
-    <!-- specific developers -->
-    
+    <test_depend>ament_lint_auto</test_depend>
+    <test_depend>ament_lint_common</test_depend>
 
+    <depend>rclcpp</depend>
+    <depend>geometry_msgs</depend>
+    <depend>std_msgs</depend>
+    <depend>sensor_msgs</depend>
+    <depend>nav_msgs</depend>
+    <depend>std_srvs</depend>
+    <depend>tf2</depend>
+    <depend>tf2_ros</depend>
+    <depend>tf2_geometry_msgs</depend>
 
-    <license>TODO</license>
-
-
-
-    <!-- SYSTEM DEPENDENCIES -->
-    <!-- - - - - - - - - - - -->
-
-    <!--  build system tool to build this package -->
-    <buildtool_depend>catkin</buildtool_depend>
-
-
-    <!-- build, export, and execution dependencies -->
-    
-
-    <!-- build dependencies -->
-
-
-    <!-- export dependencies -->
-
-
-    <!-- excution dependencies -->
-	<exec_depend>rosaria</exec_depend>
-
-
-    <!-- test dependencies -->
-
-
-    <!-- documentation dependencies -->
-
+    <!-- message generation -->
+    <buildtool_depend>rosidl_default_generators</buildtool_depend>
+    <exec_depend>rosidl_default_runtime</exec_depend>
+    <member_of_group>rosidl_interface_packages</member_of_group>
 
     <export>
+        <build_type>ament_cmake</build_type>
     </export>
-  
 </package>

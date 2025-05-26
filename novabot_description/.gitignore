@@ -1,6 +1,0 @@
-meshes
-*.megadown
-tmp*
-
-robots/bender.sdf
-robots/bender.urdf

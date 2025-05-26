@@ -1,0 +1,180 @@
+<?xml version="1.0" ?>
+<robot name="bender" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+<transmission name="l2l_to_l1l_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l2l_to_l1l">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l2l_to_l1l_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l3l_to_l2l_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l3l_to_l2l">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l3l_to_l2l_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l4l_to_l3l_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l4l_to_l3l">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l4l_to_l3l_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l5l_to_l4l_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l5l_to_l4l">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l5l_to_l4l_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l6l_to_l5l_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l6l_to_l5l">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l6l_to_l5l_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l2r_to_l1r_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l2r_to_l1r">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l2r_to_l1r_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l3r_to_l2r_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l3r_to_l2r">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l3r_to_l2r_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l4r_to_l3r_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l4r_to_l3r">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l4r_to_l3r_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l5r_to_l4r_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l5r_to_l4r">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l5r_to_l4r_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l6r_to_l5r_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l6r_to_l5r">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l6r_to_l5r_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="g2ra_to_g1r_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="g2ra_to_g1r">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="g2ra_to_g1r_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="g2rb_to_g1r_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="g2rb_to_g1r">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="g2rb_to_g1r_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="g2lb_to_g1l_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="g2lb_to_g1l">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="g2lb_to_g1l_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="g2la_to_g1l_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="g2la_to_g1l">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="g2la_to_g1l_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l1r_to_base_link_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l1r_to_base_link">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l1r_to_base_link_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="l1l_to_base_link_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="l1l_to_base_link">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="l1l_to_base_link_actr">
+    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+</robot>
