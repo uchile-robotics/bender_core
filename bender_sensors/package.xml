@@ -1,82 +1,38 @@
 <?xml version="1.0"?>
-<package format="2">
-    <!-- 
-      <depend>             : build, export, and execution dependencies 
-      <build_depend>       : pkgs needed at compile time (any file or library)
-      <build_export_depend>: pkgs needed to build libraries against this pkg
-      <exec_depend>        : pkgs needed to run this code. (e.g: shared libs)
-      <test_depend>        : only additional deps for unit testing (e.g: gtest)
-      <doc_depend>         : dependencies for documentation generation
+<package format="3">
+  <name>bender_sensors</name>
+  <version>2.0.0</version>
+  <description>Sensores de Bender - UChile Homebreakers</description>
 
-      See also:
-      - http://wiki.ros.org/catkin/package.xml
-      - http://www.ros.org/reps/rep-0140.html
-    -->
+  <maintainer email="bender.devel@gmail.com">Bender Team - UChile Homebreakers</maintainer>
+  <author email="bender.devel@gmail.com">Bender Team - UChile Homebreakers</author>
 
+  <license>MIT</license> <!-- Cambia esto si usas otra licencia -->
 
-    <!-- PACKAGE INFORMATION -->
-    <!-- - - - - - - - - - - -->
+  <!-- Build tool -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
-    <name>bender_sensors</name>
-    <version>2.0.0</version>
-    
-    <description>The bender_sensors package</description>
+  <!-- Dependencias comunes en ROS 2 -->
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+  <depend>usb_cam</depend>
 
-    <!-- team -->
-    <maintainer email="bender.devel@gmail.com">
-      Bender Team - UChile Homebreakers</maintainer>
-    <author     email="bender.devel@gmail.com">
-      Bender Team - UChile Homebreakers</author>
+  <!-- Si uchile_msgs y uchile_srvs están porteados a ROS 2 -->
+  <depend>uchile_msgs</depend>
+  <depend>uchile_srvs</depend>
+  <depend>uchile_util</depend>
 
-    <!-- specific developers -->
-    
+  <!-- Dependencias opcionales (si existen en ROS 2) -->
+  <exec_depend>urg_node</exec_depend>
+  <exec_depend>image_view</exec_depend>
+  <exec_depend>openni_launch</exec_depend>
+  <exec_depend>openni2_launch</exec_depend>
 
-
-    <license>TODO</license>
-
-
-
-    <!-- SYSTEM DEPENDENCIES -->
-    <!-- - - - - - - - - - - -->
-
-    <!--  build system tool to build this package -->
-    <buildtool_depend>catkin</buildtool_depend>
-
-
-    <!-- build, export, and execution dependencies -->
-    <depend>roscpp</depend>
-    <depend>rospy</depend>
-    <depend>std_msgs</depend>
-    <depend>sensor_msgs</depend>
-    <depend>uchile_msgs</depend>
-    <depend>uchile_srvs</depend>
-    <depend>cv_bridge</depend>
-    <depend>libopencv-dev</depend>
-    <depend>image_transport</depend>
-    <depend>libusb-1.0-dev</depend>
-    <depend>uchile_util</depend>
-    <exec_depend>usb_cam</exec_depend>
-
-    <!-- build dependencies -->
-
-
-    <!-- export dependencies -->
-
-
-    <!-- excution dependencies -->
-    <exec_depend>urg_node</exec_depend>
-    <exec_depend>openni_launch</exec_depend>
-    <exec_depend>openni2_launch</exec_depend>
-    <exec_depend>image_view</exec_depend>
-
-    <!-- test dependencies -->
-
-
-    <!-- documentation dependencies -->
-
-
-    <export>
-    </export>
-  
+  <!-- Exportar el tipo de build -->
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>
-
