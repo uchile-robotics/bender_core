@@ -1,5 +1,9 @@
-# base_ws
+# Bender core
 
 ## Overview
 
-Este repositorio contiene todos los packages de ROS que conforman el *core* de Bender, los que corresponden funcionalidades de bajo nivel y que se espera siempre estén disponibles para los usuarios.
+This repository contain all ROS packages that  make up the core of Bender. These correspond to low-level functionalities that are expected to be always available for the users.
+
+This repo follows a certain structure that must be complied to keep these packages usable.
+
+## Structure
