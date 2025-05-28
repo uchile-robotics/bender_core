@@ -770,7 +770,7 @@
 </joint>
 
 <joint name="laser_to_base_link" type="fixed">
-  <origin xyz="0.188322 -0.007366 0.25882" rpy="0 0 0"/>
+  <origin xyz="0.188322 -0.007366 0.25882" rpy="0 0 ${pi}"/>
   <parent link="base_link"/>
   <child link="laser"/>
 </joint>
