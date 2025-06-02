@@ -28,7 +28,7 @@ install(DIRECTORY
 ) 
 
 install(PROGRAMS
-  src/laser_filter.py
+  scripts/laser_filter_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

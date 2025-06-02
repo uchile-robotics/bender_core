@@ -27,7 +27,7 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('namespace', default_value=''),
-        DeclareLaunchArgument('serial_port', default_value='/dev/ttyUSB0'),
+        DeclareLaunchArgument('serial_port', default_value='/dev/pioneer'),
         DeclareLaunchArgument('sonar_enabled', default_value='false'),
         DeclareLaunchArgument('publish_motors_state', default_value='true'),
         DeclareLaunchArgument('remap_cmd_vel', default_value='false'),

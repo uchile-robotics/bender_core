@@ -12,13 +12,13 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     channel_type =  LaunchConfiguration('channel_type', default='serial')
-    serial_port = LaunchConfiguration('serial_port', default='/dev/ttyUSB1')
+    serial_port = LaunchConfiguration('serial_port', default='/dev/rplidar')
     serial_baudrate = LaunchConfiguration('serial_baudrate', default='460800')
     frame_id = LaunchConfiguration('frame_id', default='laser')
     inverted = LaunchConfiguration('inverted', default='false')
     angle_compensate = LaunchConfiguration('angle_compensate', default='true')
     scan_mode = LaunchConfiguration('scan_mode', default='Standard')
-
+    
     return LaunchDescription([
         DeclareLaunchArgument(
             'channel_type',

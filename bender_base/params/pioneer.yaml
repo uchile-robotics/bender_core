@@ -5,7 +5,7 @@ rosaria2:
     'base_frame_id': 'base_link'
     'bumper_frame_id': 'bumper'
     'sonar_frame_id': 'sonar'
-    'serial_port': '/dev/ttyUSB0'
+    'serial_port': '/dev/pioneer'
     'sonar_enabled': false
     'publish_sonar': false
     'publish_sonar_pointcloud2': false
