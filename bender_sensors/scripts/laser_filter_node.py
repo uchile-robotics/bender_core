@@ -1,4 +1,4 @@
-#!/usr/bin/env/ python3
+#!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
@@ -18,7 +18,7 @@ class LaserFilter(Node):
             '/scan',
             10
         )
-        self._filtered_fov = (3.6652,2.618)
+        self._filtered_fov = (3.8397,2.4435)
         
         self._scan_data = None
         self._angle_increment = None
@@ -42,6 +42,7 @@ def main(args=None):
     lf = LaserFilter()
     try:
         rclpy.spin(lf)
+        lf.get_logger().info('Laser filter ran succesfully')
     except KeyboardInterrupt:
         lf.destroy_node()
         rclpy.shutdown()

@@ -18,6 +18,12 @@ def generate_launch_description():
     inverted = LaunchConfiguration('inverted', default='false')
     angle_compensate = LaunchConfiguration('angle_compensate', default='true')
     scan_mode = LaunchConfiguration('scan_mode', default='Standard')
+    laser_filter = Node(
+       namespace='',
+       package='bender_sensors',
+       executable='laser_filter_node.py',
+       name='laser_filter_node' 
+    )
     
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -54,7 +60,6 @@ def generate_launch_description():
             'scan_mode',
             default_value=scan_mode,
             description='Specifying scan mode of lidar'),
-
         Node(
             package='rplidar_ros',
             executable='rplidar_node',
@@ -68,5 +73,6 @@ def generate_launch_description():
                          'angle_compensate': angle_compensate,
                          'scan_mode': scan_mode}],
             output='screen'),
+        laser_filter,
     ])
 
