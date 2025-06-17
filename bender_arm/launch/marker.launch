@@ -1,8 +1,0 @@
-<launch>
-  <node pkg="bender_arm" type="tf_marker" name="tf_marker" output="screen">
-    <param name="rate" value="30" />
-    <param name="frame_id" value="/base_link" />
-    <param name="marker_frame" value="/marker_frame" />
-    <rosparam param="init_pose">[1, 0, 1, 0, 0, 0]</rosparam>
- </node>
-</launch>

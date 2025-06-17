@@ -1,7 +1,0 @@
-<launch>
-
-  <!-- Launch both face and neck controllers -->
-  <include file="$(find bender_head)/launch/face.launch"/>
-  <include file="$(find bender_head)/launch/neck.launch"/>
-
-</launch>
