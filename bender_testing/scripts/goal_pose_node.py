@@ -23,7 +23,6 @@ class GoalPosePublisher(Node):
     def joy_callback(self, msg: Joy):
         start_pressed = msg.buttons[7] == 1  # Start button
         select_pressed = msg.buttons[6] == 1  # Select button
-
         if start_pressed and not self._goal_sent:
             self.publish_goal(*self._goal_pose, label="meta definida")
             self._goal_sent = True

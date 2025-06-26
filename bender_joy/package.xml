@@ -1,23 +1,19 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>bender_sensors</name>
+  <name>bender_joy</name>
   <version>2.0.0</version>
-  <description>Sensores de Bender - UChile Homebreakers</description>
+  <description>Bender Joy - UChile Homebreakers</description>
 
   <maintainer email="bender.devel@gmail.com">Bender Team - UChile Homebreakers</maintainer>
   <author email="bender.devel@gmail.com">Bender Team - UChile Homebreakers</author>
 
-  <license>MIT</license> <!-- Cambia esto si usas otra licencia -->
+  <license>MIT</license> 
 
   <!-- Build tool -->
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <!-- Dependencias comunes en ROS 2 -->
-  <depend>rclcpp</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
-
-  <!-- Exportar el tipo de build -->
   <export>
     <build_type>ament_cmake</build_type>
   </export>

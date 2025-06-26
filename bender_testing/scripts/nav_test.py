@@ -1,122 +1,76 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-import matplotlib.pyplot as plt
-from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
+
+from geometry_msgs.msg import PoseStamped, Quaternion, Point
 from sensor_msgs.msg import Joy
-from tf_transformations import euler_from_quaternion
-import os
-import numpy as np
+from tf_transformations import quaternion_from_euler
 
-class OdometryPlotter(Node):
+class GoalPosePublisher(Node):
 
-    def __init__(self):
-        super().__init__('odometry_plotter')
-        self.declare_parameter('plot_filename', 'Ground_truth_trajectory.png')
-        self.declare_parameter('plot_title', 'xd')
-        self.declare_parameter('test_pose_label', 'AMCL')
-        self.plot_filename = self.get_parameter('plot_filename').get_parameter_value().string_value
-        self.plot_title = self.get_parameter('plot_title').get_parameter_value().string_value
-        self.test_pose_label = self.get_parameter('test_pose_label').get_parameter_value().string_value
+    def __init__(self, x, y, theta):
+        super().__init__('goal_pose_publisher')
 
-        self.gt_sub = self.create_subscription(
-            PoseStamped,
-            '/ground_truth_pose',
-            self.gt_callback,
-            10
-        )
-        self.estimation_sub = self.create_subscription(
-            PoseWithCovarianceStamped,
-            '/amcl_pose',
-            self.estimation_callback,
-            10
-        )
-        self.joy_sub = self.create_subscription(
-            Joy,
-            '/joy',
-            self.joy_callback,
-            10
-        ) 
-        self._loop_rate = self.create_rate(10, self.get_clock())
-        self.x = 0.0
-        self.y = 0.0
-        self.theta = 0.0
-        self.plot = False
-        self.ground_truth = []
-        self.estimation = []
+        self._goal_pose = (x, y, theta)
+        self._goal_sent = False
+        self._origin_sent = False
 
-    def gt_callback(self,msg):
-        self.x = msg.pose.position.x
-        self.y = msg.pose.position.y
-        orientation = [
-            msg.pose.orientation.x,
-            msg.pose.orientation.y,
-            msg.pose.orientation.z,
-            msg.pose.orientation.w
-        ]
+        self.sub_joy = self.create_subscription(Joy, '/joy', self.joy_callback, 10)
+        self.publisher_goal = self.create_publisher(PoseStamped, '/goal_pose', 10)
 
-        _,_,self.theta = euler_from_quaternion(orientation)
-        self.ground_truth.append([self.x, self.y, self.theta])
-    def estimation_callback(self, msg:PoseWithCovarianceStamped):
-        self.x = msg.pose.pose.position.x
-        self.y = msg.pose.pose.position.y
-        orientation = [
-            msg.pose.pose.orientation.x,
-            msg.pose.pose.orientation.y,
-            msg.pose.pose.orientation.z,
-            msg.pose.pose.orientation.w
-        ]
+        self.get_logger().info("Usa Start, Select, D-pad y X para enviar metas")
 
-        _,_,self.theta = euler_from_quaternion(orientation)
-        self.estimation.append([self.x, self.y, self.theta])
+    def joy_callback(self, msg: Joy):
+        start_pressed = msg.buttons[7] == 1
+        select_pressed = msg.buttons[6] == 1
 
+        if start_pressed and not self._goal_sent:
+            self.publish_goal(*self._goal_pose, label="meta definida")
+            self._goal_sent = True
+            self._origin_sent = False  
+        elif select_pressed and not self._origin_sent:
+            self.publish_goal(0.0, 0.0, 0.0, label="origen")
+            self._origin_sent = True
+            self._goal_sent = False
 
-    def joy_callback(self,msg):  
-        if msg.buttons[7] == 1 and not self.plot:
-            self.plot = True 
-            self.plot_odometry()
-    def plot_odometry(self):
-        gt_x, gt_y, gt_theta = zip(*self.ground_truth)
-        est_x, est_y, est_theta = zip(*self.estimation)
-        gt_x, gt_y, gt_theta = np.array(gt_x), np.array(gt_y), np.array(gt_theta)  
-        est_x, est_y, est_theta = np.array(est_x), np.array(est_y), np.array(est_theta)  
-        gt_orient_x = np.cos(gt_theta)
-        gt_orient_y = np.sin(gt_theta)
-        est_orient_x = np.cos(est_theta)
-        est_orient_y = np.sin(est_theta)
-        skip = 5 
-        gt_skip = 200
+        elif msg.buttons[11] == 1:  # D-pad arriba
+            self.publish_goal(2.95, 5.64, 0, label="D-pad ↑")
+        elif msg.buttons[12] == 1:  # D-pad abajo
+            self.publish_goal(3.36, 2.28, 2.237, label="D-pad ↓")
+        elif msg.buttons[13] == 1:  # D-pad izquierda
+            self.publish_goal(0.27, 4.97, -2.375, label="D-pad ←")
+        elif msg.buttons[14] == 1:  # D-pad derecha
+            self.publish_goal(1.61, 2.14, 1.57, label="D-pad →")
+        elif msg.buttons[2] == 1:  # Botón X
+            self.publish_goal(3.41, 0.21, -1.57, label="botón X")
 
-        plt.figure(figsize=(10, 6))
+    def publish_goal(self, x, y, theta, label=""):
+        goal_pose = PoseStamped()
+        goal_pose.header.stamp = self.get_clock().now().to_msg()
+        goal_pose.header.frame_id = "odom"
 
-        plt.plot(gt_x, gt_y, color='blue', linestyle='-', label='Trayectoria real del robot')
-        plt.plot(est_x, est_y, color='red', linestyle='-', label=self.test_pose_label)
+        orientation = Quaternion()
+        orientation.x, orientation.y, orientation.z, orientation.w = quaternion_from_euler(0, 0, theta)
 
-        plt.quiver(gt_x[::gt_skip], gt_y[::gt_skip],
-                gt_orient_x[::gt_skip], gt_orient_y[::gt_skip],
-                color='blue', scale=20, width=0.005)
+        position = Point()
+        position.x = x
+        position.y = y
+        position.z = 0.0
 
-        plt.quiver(est_x[::skip], est_y[::skip],
-                est_orient_x[::skip], est_orient_y[::skip],
-                color='red', scale=20, width=0.005)
+        goal_pose.pose.position = position
+        goal_pose.pose.orientation = orientation
 
-        plt.xlabel("X (m)")
-        plt.ylabel("Y (m)")
-        plt.title(self.plot_title)
-        plt.legend(loc='best')
-        plt.grid(True)
-        plt.axis('equal')
-        plt.savefig(self.plot_filename)
-        self.get_logger().info(f'Plotted correctly, figure saved in {os.getcwd()}')
-        self.plot = False
+        self.publisher_goal.publish(goal_pose)
+        self.get_logger().info(f"Pose publicada hacia {label} → x={x:.2f}, y={y:.2f}, θ={theta:.2f}")
 
-    
 def main(args=None):
     rclpy.init(args=args)
-    plotter = OdometryPlotter()
-    plotter.get_logger().info('Node started successfully')
-    rclpy.spin(plotter)
-    plotter.destroy_node()
+    x = 3.38
+    y = 3.48
+    theta = 2.0
+    node = GoalPosePublisher(x, y, theta)
+    rclpy.spin(node)
+    node.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
