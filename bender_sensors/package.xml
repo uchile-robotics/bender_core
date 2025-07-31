@@ -15,8 +15,9 @@
   <!-- Dependencias comunes en ROS 2 -->
   <depend>rclcpp</depend>
   <depend>sensor_msgs</depend>
-  <depend>std_msgs</depend>
-
+  <depend>std_msgs</depend> 
+  <depend>librealsense2_tools</depend>
+  <depend>realsense2_tutorial_demo</depend>
   <!-- Exportar el tipo de build -->
   <export>
     <build_type>ament_cmake</build_type>
