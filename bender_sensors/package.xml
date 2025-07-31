@@ -7,18 +7,15 @@
   <maintainer email="bender.devel@gmail.com">Bender Team - UChile Homebreakers</maintainer>
   <author email="bender.devel@gmail.com">Bender Team - UChile Homebreakers</author>
 
-  <license>MIT</license> <!-- Cambia esto si usas otra licencia -->
+  <license>MIT</license>
 
-  <!-- Build tool -->
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <!-- Dependencias comunes en ROS 2 -->
   <depend>rclcpp</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend> 
   <depend>librealsense2_tools</depend>
-  <depend>realsense2_tutorial_demo</depend>
-  <!-- Exportar el tipo de build -->
+  
   <export>
     <build_type>ament_cmake</build_type>
   </export>
