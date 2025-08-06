@@ -19,6 +19,12 @@ class GoalPosePublisher(Node):
         self.publisher_goal = self.create_publisher(PoseStamped, '/goal_pose', 10)
 
         self.get_logger().info("Usa Start, Select, D-pad y X para enviar metas")
+        
+        self.get_logger().info("D-pad arriba -> (2.95, 5.64, 0)")
+        self.get_logger().info("D-pad bajo -> (3.36, 2.28, 2.237)")
+        self.get_logger().info("D-pad izquierda -> (0.27, 4.97, -2.375)")
+        self.get_logger().info("D-pad derecha -> (1.61, 2.14, 1.57)")
+        self.get_logger().info("Botón X -> (3.41, 0.21, -1.57)")
 
     def joy_callback(self, msg: Joy):
         start_pressed = msg.buttons[7] == 1
