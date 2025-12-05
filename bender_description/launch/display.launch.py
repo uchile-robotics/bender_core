@@ -44,25 +44,25 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time,'robot_description': Command(['xacro ', urdf])}]
     )
-    rviz_config_file = os.path.join(get_package_share_directory(package_name), 'rviz', 'rviz.rviz')
-    rviz2 = GroupAction(
-        condition=IfCondition(rviz),
-        actions=[Node(
-                    package='rviz2',
-                    executable='rviz2',
-                    arguments=['-d', rviz_config_file],
-                    output='screen',)]
-    )
+    # rviz_config_file = os.path.join(get_package_share_directory(package_name), 'rviz', 'rviz.rviz')
+    # rviz2 = GroupAction(
+    #     condition=IfCondition(rviz),
+    #     actions=[Node(
+    #                 package='rviz2',
+    #                 executable='rviz2',
+    #                 arguments=['-d', rviz_config_file],
+    #                 output='screen',)]
+    # )
 
 
 
-    joint_state_publisher_gui = Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        output='screen',
-    )
+    # joint_state_publisher_gui = Node(
+    #     package='joint_state_publisher_gui',
+    #     executable='joint_state_publisher_gui',
+    #     output='screen',
+    # )
 
-    # Launch them all!
+    # # Launch them all!
     return LaunchDescription([
         declare_urdf,
         declare_use_sim_time,

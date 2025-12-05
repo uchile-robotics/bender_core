@@ -1,7 +1,7 @@
 joy_linux_node:
   ros__parameters:
     dev: /dev/joy
-    deadzone: 0.05
+    deadzone: 0.07
     autorepeat_rate: 20.0
     dev_ff: /dev/event_joy
 
