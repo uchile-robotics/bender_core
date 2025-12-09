@@ -8,8 +8,8 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
-
-    joy_params = os.path.join(get_package_share_directory('bender_joy'),'params','joystick.yaml')
+    pkg = 'bender_joy'
+    joy_params = os.path.join(get_package_share_directory(pkg),'params','joystick.yaml')
 
     joy_node = Node(
             package='joy_linux',
@@ -19,7 +19,7 @@ def generate_launch_description():
          )
 
     teleop_node = Node(
-            package='teleop_twist_joy',
+            package=pkg,
             executable='teleop_node',
             name='teleop_node',
             parameters=[joy_params, {'use_sim_time': use_sim_time}],
