@@ -7,15 +7,6 @@ from launch_ros.actions import Node
 def generate_launch_description():
     return LaunchDescription([
         # Nodo Action Server
-        Node(
-            package='bender_emotion',  
-            executable='emotion_action_server',
-            name='emotion_action_server',
-            output='screen',
-            parameters=[{
-                'use_sim_time': False
-            }]
-        ),
 
         # Nodo que publica emocione
         Node(
@@ -32,7 +23,7 @@ def generate_launch_description():
             name='emotion_sender',
             output='screen',
             parameters=[{
-                'serial_port': '/dev/ttyUSB1',
+                'serial_port': '/dev/head_ino',
                 'baudrate': 115200
             }]
         ),
@@ -44,8 +35,17 @@ def generate_launch_description():
             name='neck_publisher',
             output='screen',
             parameters=[{
-                'device_name': '/dev/ttyUSB0',
+                'device_name': '/dev/cuello',
                 'baudrate': 1000000
             }]
-        )
+        ),
+        Node(
+            package='bender_emotion',  
+            executable='action_server',
+            name='emotion_action_server',
+            output='screen',
+            parameters=[{
+                'use_sim_time': False
+            }]
+        ),
     ])

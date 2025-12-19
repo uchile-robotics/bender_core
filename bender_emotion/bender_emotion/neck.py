@@ -28,7 +28,7 @@ class DynamixelJointPublisher(Node):
         # Configuración general
         self.PROTOCOL_VERSION = 1.0
         self.BAUDRATE = 1000000
-        self.DEVICE_NAME = '/dev/ttyUSB1'
+        self.DEVICE_NAME = '/dev/cuello'
 
         self.DXL_IDS = [19,20,21]
 

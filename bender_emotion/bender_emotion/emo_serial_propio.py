@@ -8,7 +8,7 @@ class EmotionSender(Node):
         super().__init__('emotion_sender')
 
         # Abrir puerto serial (ajusta el puerto a tu caso: COM3 en Windows, /dev/ttyUSB0 en Linux)
-        self.ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+        self.ser = serial.Serial('/dev/head_ino', 115200, timeout=1)
 
         # Suscripción al tópico con los ángulos como string
         self.subscription = self.create_subscription(
