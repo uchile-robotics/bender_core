@@ -33,6 +33,7 @@ private:
   void joyCallback(const sensor_msgs::msg::Joy::SharedPtr msg)
   {
     geometry_msgs::msg::Twist v;
+
     if (latched_) {
       cmd_vel_pub_->publish(v);
       if (msg->buttons[0] == 1 && msg->axes[2] < -0.9) {
@@ -47,10 +48,17 @@ private:
       return;
     }
 
-    v.linear.x  = msg->axes[1] * scale_linear_;
-    v.angular.z = msg->axes[3] * scale_angular_;
+    double lin = msg->axes[1] * scale_linear_;
+    double ang = msg->axes[3] * scale_angular_;
 
-    cmd_vel_pub_->publish(v);
+    bool moved = (std::abs(lin) > 1e-3) || (std::abs(ang) > 1e-3);
+
+    if (moved) {
+      v.linear.x = lin;
+      v.angular.z = ang;
+      cmd_vel_pub_->publish(v);
+    }
+
   }
 
   bool latched_;
@@ -59,7 +67,7 @@ private:
 
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
-};
+}; 
 
 int main(int argc, char * argv[])
 {
