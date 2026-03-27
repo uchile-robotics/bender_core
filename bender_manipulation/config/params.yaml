@@ -1,0 +1,39 @@
+protocol_version: 1.0
+baudrate: 1000000
+device_name: "/dev/ttyUSB0"
+
+motors:
+  - id: 11
+    limits: [1024,2148]
+    offset: 2048
+    type: MX-106
+
+  - id: 12
+    limits: [275,725]
+    offset: 512
+    type: RX-28
+
+  - id: 13
+    limits: [2048,3072]
+    offset: 2048
+    type: MX-106
+
+  - id: 14
+    limits: [270,750]
+    offset: 512
+    type: RX-28
+
+  - id: 15
+    limits: [160,855]
+    offset: 512
+    type: RX-28
+
+  - id: 16
+    limits: [512,800]
+    offset: 512
+    type: RX-28
+
+  - id: 17
+    limits: [224,512]
+    offset: 512
+    type: RX-28

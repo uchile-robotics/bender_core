@@ -1,0 +1,24 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    right_arm:
+      type: position_controllers/JointGroupPositionController
+
+right_arm:
+  ros__parameters:
+    type: position_controllers/JointGroupPositionController
+    joints:
+      - l1r_to_base_link
+      - l2r_to_l1r
+      - l3r_to_l2r
+      - l4r_to_l3r
+      - l5r_to_l4r
+      - l6r_to_l5r
+
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+      - effort

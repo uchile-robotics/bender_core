@@ -1,0 +1,100 @@
+# joint_limits.yaml allows the dynamics properties specified in the URDF to be overwritten or augmented as needed
+
+# For beginners, we downscale velocity and acceleration limits.
+# You can always specify higher scaling factors (<= 1.0) in your motion requests.  # Increase the values below to 1.0 to always move at maximum speed.
+default_velocity_scaling_factor: 0.1
+default_acceleration_scaling_factor: 0.1
+
+# Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
+# Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
+joint_limits:
+  g2la_to_g1l:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  g2lb_to_g1l:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  g2ra_to_g1r:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  g2rb_to_g1r:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l1h_to_base_link:
+    has_velocity_limits: true
+    max_velocity: 50.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l1l_to_base_link:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l1r_to_base_link:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l2h_to_l1h:
+    has_velocity_limits: true
+    max_velocity: 50.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l2l_to_l1l:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l2r_to_l1r:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l3l_to_l2l:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l3r_to_l2r:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l4l_to_l3l:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l4r_to_l3r:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l5l_to_l4l:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l5r_to_l4r:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l6l_to_l5l:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0
+  l6r_to_l5r:
+    has_velocity_limits: true
+    max_velocity: 100.0
+    has_acceleration_limits: true
+    max_acceleration: 10.0

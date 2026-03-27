@@ -1,0 +1,9 @@
+occupancy_map_monitor:
+  ros__parameters:
+    sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+    point_cloud_topic: /camera/depth/color/points
+    max_range: 1.5
+    frame_subsample: 1
+    point_subsample: 2
+    filtered_cloud_topic: /filtered_cloud
+    octomap_resolution: 0.05

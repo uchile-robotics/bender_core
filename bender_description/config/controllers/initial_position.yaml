@@ -1,0 +1,19 @@
+initial_positions:
+  g2la_to_g1l: 0
+  g2lb_to_g1l: 0
+  g2ra_to_g1r: 0
+  g2rb_to_g1r: 0
+  l1h_to_base_link: 0
+  l1l_to_base_link: 0
+  l1r_to_base_link: 0
+  l2h_to_l1h: 0
+  l2l_to_l1l: 0
+  l2r_to_l1r: 0
+  l3l_to_l2l: 0
+  l3r_to_l2r: 0
+  l4l_to_l3l: 0
+  l4r_to_l3r: 0
+  l5l_to_l4l: 0
+  l5r_to_l4r: 0
+  l6l_to_l5l: 0
+  l6r_to_l5r: 0

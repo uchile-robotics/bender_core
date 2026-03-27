@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: bender_description
+    relative_path: urdf/bender.xacro
+  srdf:
+    relative_path: config/bender.srdf
+  package_settings:
+    author_name: Mattias Prieto
+    author_email: mattias.prieto@ug.uchile.cl
+    generated_timestamp: 1755987509

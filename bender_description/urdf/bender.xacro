@@ -1,875 +1,783 @@
 <?xml version="1.0" ?>
 <robot name="bender" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:include filename="$(find bender_description)/urdf/materials.xacro" />
+  <xacro:include filename="$(find bender_description)/urdf/rgbd_camera.xacro"/>
+  <xacro:include filename="$(find bender_description)/urdf/ros2_control.xacro" />
 
-<link name="base_link">
-  <!--
-  <inertial>
-    <origin xyz="0.007788124759933493 -0.007355769738403454 0.7107401090172263" rpy="0 0 0"/>
-    <mass value="8.572188299348024"/>
-    <inertia ixx="1.515422" iyy="1.498033" izz="0.132123" ixy="-0.0" iyz="5.1e-05" ixz="-0.001283"/>
-  </inertial>
-  -->
-  <visual>
+  <xacro:property name="epsilon" value="1e-4"/>
+
+  <xacro:rgbd_camera
+      prefix=""
+      camera_name="camera"
+      parent='l2h_1'
+      xyz_offset="0.0435 0.03 0.160"
+      rpy_offset="0 0 0"/>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l2l_1">
+    <inertial>
+      <origin xyz="-0.008469138038562633 4.816697341814002e-07 -0.07819087904751898" rpy="0 0 0"/>
+      <mass value="0.14071836856258027"/>
+      <inertia ixx="9.8e-05" iyy="0.000118" izz="8.7e-05" ixy="-0.0" iyz="-0.0" ixz="1.7e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.035737 -0.247634 -1.04582" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l2l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.035737 -0.247634 -1.04582" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l2l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l3l_1">
+    <inertial>
+      <origin xyz="-0.004049240589701097 -0.00011662761889197348 -0.1333626785766504" rpy="0 0 0"/>
+      <mass value="0.13433192894969845"/>
+      <inertia ixx="0.000296" iyy="0.000299" izz="4.9e-05" ixy="0.0" iyz="-0.0" ixz="4e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.007987 -0.247634 -0.985406" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l3l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.007987 -0.247634 -0.985406" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l3l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l4l_1">
+    <inertial>
+      <origin xyz="-0.022033052289373113 -0.027751420924878867 -0.07009451131427447" rpy="0 0 0"/>
+      <mass value="0.1319735958452518"/>
+      <inertia ixx="6.8e-05" iyy="8e-05" izz="7.4e-05" ixy="-0.0" iyz="0.0" ixz="-2e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.006819 -0.275388 -0.815556" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l4l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.006819 -0.275388 -0.815556" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l4l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l5l_1">
+    <inertial>
+      <origin xyz="0.0039138191304953236 -6.519106588914747e-05 -0.1904912654580233" rpy="0 0 0"/>
+      <mass value="0.09538513786529154"/>
+      <inertia ixx="0.000748" iyy="0.000753" izz="3e-05" ixy="-0.0" iyz="-0.0" ixz="-5.3e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.006819 -0.247637 -0.767806" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l5l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.006819 -0.247637 -0.767806" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l5l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l6l_1">
+    <inertial>
+      <origin xyz="1.1454305421428751e-07 -0.02225042100756011 -0.015076116417847174" rpy="0 0 0"/>
+      <mass value="0.004187419664904639"/>
+      <inertia ixx="2e-06" iyy="1e-06" izz="2e-06" ixy="-0.0" iyz="0.0" ixz="-0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.007275 -0.269887 -0.504262" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l6l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.007275 -0.269887 -0.504262" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l6l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l2r_1">
+    <inertial>
+      <origin xyz="-0.008469138038563282 4.816697872778164e-07 -0.07819087904754218" rpy="0 0 0"/>
+      <mass value="0.14071836856258027"/>
+      <inertia ixx="9.8e-05" iyy="0.000118" izz="8.7e-05" ixy="-0.0" iyz="-0.0" ixz="1.7e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.035737 0.262366 -1.04582" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l2r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.035737 0.262366 -1.04582" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l2r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l3r_1">
+    <inertial>
+      <origin xyz="-0.004049240589694631 -0.00011662761884700945 -0.1333626785766734" rpy="0 0 0"/>
+      <mass value="0.13433192894969845"/>
+      <inertia ixx="0.000296" iyy="0.000299" izz="4.9e-05" ixy="0.0" iyz="-0.0" ixz="4e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.007987 0.262366 -0.985406" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l3r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.007987 0.262366 -0.985406" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l3r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l4r_1">
+    <inertial>
+      <origin xyz="-0.022033052289359936 0.02775238458496604 -0.070094511314298" rpy="0 0 0"/>
+      <mass value="0.1319735958452518"/>
+      <inertia ixx="6.8e-05" iyy="8e-05" izz="7.4e-05" ixy="-0.0" iyz="0.0" ixz="-2e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.006819 0.290116 -0.815556" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l4r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.006819 0.290116 -0.815556" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l4r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l5r_1">
+    <inertial>
+      <origin xyz="0.003913819130518236 -6.438555604931784e-05 -0.1904912654580455" rpy="0 0 0"/>
+      <mass value="0.09538513786529154"/>
+      <inertia ixx="0.000748" iyy="0.000753" izz="3e-05" ixy="-0.0" iyz="-0.0" ixz="-5.3e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.006819 0.262364 -0.767806" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l5r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.006819 0.262364 -0.767806" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l5r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l6r_1">
+    <inertial>
+      <origin xyz="1.1454308115020628e-07 0.022250384502269127 -0.015076116417858498" rpy="0 0 0"/>
+      <mass value="0.004187419664904639"/>
+      <inertia ixx="2e-06" iyy="1e-06" izz="2e-06" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.007275 0.284614 -0.504262" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l6r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.007275 0.284614 -0.504262" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l6r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l2h_1">
+    <inertial>
+      <origin xyz="-0.01404344492546073 0.030000481747364617 0.06449858090998739" rpy="0 0 0"/>
+      <mass value="3.4435410806483597"/>
+      <inertia ixx="0.011996" iyy="0.015757" izz="0.017434" ixy="0.0" iyz="-0.0" ixz="-0.000256"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.007987 0.037366 -1.28382" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="head"/>
+    </visual>
+    <!-- Ojo izquierdo -->
+    <visual>
+      <origin xyz="0.07 -0.00 0.055" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
+      <geometry>
+        <cylinder radius="0.045" length="0.001"/> <!-- radio 4mm, grosor 1mm -->
+      </geometry>
+      <material name="light_blue"/>
+    </visual>
+
+    <!-- Ojo derecho -->
+    <visual>
+      <origin xyz="0.07 0.06 0.055" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
+      <geometry>
+        <cylinder radius="0.045" length="0.001"/> 
+      </geometry>
+      <material name="light_blue"/>
+    </visual>
+
+    <!-- Boca -->
+    <visual>
+      <origin xyz="0.07 0.03 0" rpy="0 0 0"/> <!-- rotado para que sea un disco plano -->
+      <geometry>
+        <box size="0.01 0.08 0.02"/> 
+      </geometry>
+      <material name="casi_blue"/>
+    </visual>
+
+    <collision>
+      <origin xyz="-0.007987 0.037366 -1.28382" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="g1r_1">
+    <inertial>
+      <origin xyz="6.478948623842799e-05 3.840721814474257e-07 -0.026736939315767316" rpy="0 0 0"/>
+      <mass value="0.12876405832743776"/>
+      <inertia ixx="8.6e-05" iyy="4.3e-05" izz="7e-05" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.007275 0.262364 -0.480247" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g1r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.007275 0.262364 -0.480247" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g1r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="g2ra_1">
+    <inertial>
+      <origin xyz="-0.0220993118378398 0.01442646877260062 -0.05721188075257794" rpy="0 0 0"/>
+      <mass value="0.05474843522698835"/>
+      <inertia ixx="3.9e-05" iyy="3.7e-05" izz="2e-05" ixy="-0.0" iyz="-1e-05" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.029225 0.243864 -0.438647" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g2ra_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.029225 0.243864 -0.438647" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g2ra_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="g2rb_1">
+    <inertial>
+      <origin xyz="-0.02210045907599773 -0.014425699768063904 -0.05721188075257849" rpy="0 0 0"/>
+      <mass value="0.05474843522698835"/>
+      <inertia ixx="3.9e-05" iyy="3.7e-05" izz="2e-05" ixy="-0.0" iyz="1e-05" ixz="-0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.029225 0.280864 -0.438647" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g2rb_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.029225 0.280864 -0.438647" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g2rb_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="g1l_1">
+    <inertial>
+      <origin xyz="6.478948621099247e-05 -4.2143764839019937e-07 -0.026736939315755603" rpy="0 0 0"/>
+      <mass value="0.12876405832743776"/>
+      <inertia ixx="8.6e-05" iyy="4.3e-05" izz="7e-05" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.007275 -0.247637 -0.480247" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g1l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.007275 -0.247637 -0.480247" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g1l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="g2lb_1">
+    <inertial>
+      <origin xyz="-0.022099311837869458 0.014425663262769728 -0.057211880752566724" rpy="0 0 0"/>
+      <mass value="0.05474843522698835"/>
+      <inertia ixx="3.9e-05" iyy="3.7e-05" izz="2e-05" ixy="-0.0" iyz="-1e-05" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.029225 -0.266137 -0.438647" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g2lb_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.029225 -0.266137 -0.438647" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g2lb_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="g2la_1">
+    <inertial>
+      <origin xyz="-0.022100459076024488 -0.01442650527789352 -0.057211880752566335" rpy="0 0 0"/>
+      <mass value="0.05474843522698835"/>
+      <inertia ixx="3.9e-05" iyy="3.7e-05" izz="2e-05" ixy="-0.0" iyz="1e-05" ixz="-0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.029225 -0.229137 -0.438647" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g2la_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.029225 -0.229137 -0.438647" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/g2la_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="laser_1">
+    <inertial>
+      <origin xyz="0.00021452729941068283 1.2832545766421587e-05 0.03715423693922987" rpy="0 0 0"/>
+      <mass value="0.14304545734211704"/>
+      <inertia ixx="8.2e-05" iyy="8.2e-05" izz="4.9e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.188322 0.007366 -0.25882" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/laser_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.188322 0.007366 -0.25882" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/laser_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="wfr_1">
+    <inertial>
+      <origin xyz="1.883831442783812e-07 -0.024064274086889242 -4.815819601294846e-07" rpy="0 0 0"/>
+      <mass value="1.281712318430354"/>
+      <inertia ixx="0.003526" iyy="0.006601" izz="0.003526" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.135487 0.164865 -0.09982" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/wfr_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.135487 0.164865 -0.09982" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/wfr_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="wrr_1">
+    <inertial>
+      <origin xyz="1.883831442783812e-07 -0.024064274086889104 -4.815819601294846e-07" rpy="0 0 0"/>
+      <mass value="1.281712318430354"/>
+      <inertia ixx="0.003526" iyy="0.006601" izz="0.003526" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.114513 0.164865 -0.09982" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/wrr_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0.114513 0.164865 -0.09982" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/wrr_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="wfl_1">
+    <inertial>
+      <origin xyz="1.8838314436164794e-07 0.024065023691868914 -4.80844077374587e-07" rpy="0 0 0"/>
+      <mass value="1.281712318430354"/>
+      <inertia ixx="0.003526" iyy="0.006601" izz="0.003526" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.135487 -0.150135 -0.09982" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/wfl_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.135487 -0.150135 -0.09982" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/wfl_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="wrl_1">
+    <inertial>
+      <origin xyz="1.8838314437552572e-07 0.02406502369186897 -4.808440774717315e-07" rpy="0 0 0"/>
+      <mass value="1.281712318430354"/>
+      <inertia ixx="0.003526" iyy="0.006601" izz="0.003526" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.114513 -0.150135 -0.09982" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/wrl_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0.114513 -0.150135 -0.09982" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/wrl_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l1r_1">
+    <inertial>
+      <origin xyz="-7.750802465356262e-05 -0.023051471870294216 -0.0003746843245819864" rpy="0 0 0"/>
+      <mass value="0.17510122063008318"/>
+      <inertia ixx="0.000118" iyy="9.1e-05" izz="8e-05" ixy="-0.0" iyz="-1e-06" ixz="-0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.007987 0.227866 -1.06382" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l1r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.007987 0.227866 -1.06382" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l1r_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l1l_1">
+    <inertial>
+      <origin xyz="7.755064862937852e-05 0.023052435365023938 -0.0003746843245824305" rpy="0 0 0"/>
+      <mass value="0.17510122063008318"/>
+      <inertia ixx="0.000118" iyy="9.1e-05" izz="8e-05" ixy="-0.0" iyz="1e-06" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.007987 -0.213134 -1.06382" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l1l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.007987 -0.213134 -1.06382" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l1l_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="l1h_1">
+    <inertial>
+      <origin xyz="2.1311988054537045e-08 4.817473648098883e-07 0.03361523031913305" rpy="0 0 0"/>
+      <mass value="0.14686451647034876"/>
+      <inertia ixx="0.000113" iyy="0.000108" izz="5.4e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.007987 0.007366 -1.21382" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l1h_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.007987 0.007366 -1.21382" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l1h_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="l2l_to_l1l" type="revolute">
+    <origin xyz="0.02775 0.0345 -0.018" rpy="0 0 0"/>
+    <parent link="l1l_1"/>
+    <child link="l2l_1"/>
+    <axis xyz="-1.0 0.0 -0.0"/>
+    <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l3l_to_l2l" type="revolute">
+    <origin xyz="-0.02775 0.0 -0.060414" rpy="0 0 0"/>
+    <parent link="l2l_1"/>
+    <child link="l3l_1"/>
+    <axis xyz="0.0 -0.0 -1.0"/>
+    <limit upper="${1.134464 + epsilon}" lower="${-1.134464 - epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l4l_to_l3l" type="revolute">
+    <origin xyz="-0.001168 0.027754 -0.16985" rpy="0 0 0"/>
+    <parent link="l3l_1"/>
+    <child link="l4l_1"/>
+    <axis xyz="-0.0 -1.0 0.0"/>
+    <limit upper="${2.356194 + epsilon}" lower="${-epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l5l_to_l4l" type="revolute">
+    <origin xyz="0.0 -0.027751 -0.04775" rpy="0 0 0"/>
+    <parent link="l4l_1"/>
+    <child link="l5l_1"/>
+    <axis xyz="0.0 -0.0 -1.0"/>
+    <limit upper="${1.047198 + epsilon}" lower="${-1.047198 -epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l6l_to_l5l" type="revolute">
+    <origin xyz="0.000456 0.02225 -0.263544" rpy="0 0 0"/>
+    <parent link="l5l_1"/>
+    <child link="l6l_1"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <limit upper="${1.570796 + epsilon}" lower="${-1.570796 -epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l2r_to_l1r" type="revolute">
+    <origin xyz="0.02775 -0.0345 -0.018" rpy="0 0 0"/>
+    <parent link="l1r_1"/>
+    <child link="l2r_1"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <limit upper="${epsilon}" lower="${-1.570796 -epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l3r_to_l2r" type="revolute">
+    <origin xyz="-0.02775 0.0 -0.060414" rpy="0 0 0"/>
+    <parent link="l2r_1"/>
+    <child link="l3r_1"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <limit upper="${1.134464 + epsilon}" lower="${-1.134464 -epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l4r_to_l3r" type="revolute">
+    <origin xyz="-0.001168 -0.02775 -0.16985" rpy="0 0 0"/>
+    <parent link="l3r_1"/>
+    <child link="l4r_1"/>
+    <axis xyz="-0.0 -1.0 0.0"/>
+    <limit upper="${2.356194 + epsilon}" lower="${-epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l5r_to_l4r" type="revolute">
+    <origin xyz="0.0 0.027752 -0.04775" rpy="0 0 0"/>
+    <parent link="l4r_1"/>
+    <child link="l5r_1"/>
+    <axis xyz="-0.0 0.0 1.0"/>
+    <limit upper="${1.047198 + epsilon}" lower="${-1.047198 - epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l6r_to_l5r" type="revolute">
+    <origin xyz="0.000456 -0.02225 -0.263544" rpy="0 0 0"/>
+    <parent link="l5r_1"/>
+    <child link="l6r_1"/>
+    <axis xyz="-0.0 -1.0 0.0"/>
+    <limit upper="${1.570796 + epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l2h_to_l1h" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 -0.03 0.07"/>
+    <parent link="l1h_1"/>
+    <child link="l2h_1"/>
+    <axis xyz="-0.0 -1.0 0.0"/>
+    <limit effort="50" lower="${-0.706858 - epsilon}" upper="${0.706858 + epsilon}" velocity="50"/>
+  </joint>
+
+  <joint name="g1r_to_l6r" type="fixed">
+    <origin xyz="0.0 0.02225 -0.024015" rpy="0 0 0"/>
+    <parent link="l6r_1"/>
+    <child link="g1r_1"/>
+  </joint>
+
+  <joint name="g2ra_to_g1r" type="revolute">
+    <origin xyz="0.02195 0.0185 -0.0416" rpy="0 0 0"/>
+    <parent link="g1r_1"/>
+    <child link="g2ra_1"/>
+    <axis xyz="1.0 -0.0 -0.0"/>
+    <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="g2rb_to_g1r" type="revolute">
+    <mimic joint="g2ra_to_g1r" multiplier="-1" offset="0"/>
+    <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
+    <parent link="g1r_1"/>
+    <child link="g2rb_1"/>
+    <axis xyz="1.0 -0.0 -0.0"/>
+    <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="g1l_to_l6l" type="fixed">
+    <origin xyz="0.0 -0.02225 -0.024015" rpy="0 0 0"/>
+    <parent link="l6l_1"/>
+    <child link="g1l_1"/>
+  </joint>
+
+  <joint name="g2lb_to_g1l" type="revolute">
+    <mimic joint="g2la_to_g1l" multiplier="-1" offset="0"/>
+    <origin xyz="0.02195 0.0185 -0.0416" rpy="0 0 0"/>
+    <parent link="g1l_1"/>
+    <child link="g2lb_1"/>
+    <axis xyz="-1.0 0.0 -0.0"/>
+    <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="g2la_to_g1l" type="revolute">
+    <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
+    <parent link="g1l_1"/>
+    <child link="g2la_1"/>
+    <axis xyz="-1.0 0.0 -0.0"/>
+    <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="laser_to_base_link" type="fixed">
+    <origin xyz="0.188322 -0.007366 0.25882" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="laser_1"/>
+  </joint>
+
+  <joint name="wfr_to_base_link" type="continuous">
+    <origin rpy="0 0 0" xyz="0.135487 -0.164865 0.09982"/>
+    <parent link="base_link"/>
+    <child link="wfr_1"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="wrr_to_base_link" type="continuous">
+    <origin rpy="0 0 0" xyz="-0.114513 -0.164865 0.09982"/>
+    <parent link="base_link"/>
+    <child link="wrr_1"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="wfl_to_base_link" type="continuous">
+    <origin rpy="0 0 0" xyz="0.135487 0.150135 0.09982"/>
+    <parent link="base_link"/>
+    <child link="wfl_1"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="wrl_to_base_link" type="continuous">
+    <origin rpy="0 0 0" xyz="-0.114513 0.150135 0.09982"/>
+    <parent link="base_link"/>
+    <child link="wrl_1"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="l1r_to_base_link" type="revolute">
+    <origin xyz="0.007987 -0.227866 1.06382" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="l1r_1"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <limit upper="${2.356194 + epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l1l_to_base_link" type="revolute">
+    <origin xyz="0.007987 0.213134 1.06382" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="l1l_1"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <limit upper="${2.356194 + epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+  </joint>
+
+  <joint name="l1h_to_base_link" type="revolute">
+    <origin rpy="0 0 0" xyz="0.007987 -0.007366 1.21382"/>
+    <parent link="base_link"/>
+    <child link="l1h_1"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <limit effort="50" lower="${-1.570796 - epsilon}" upper="${1.570796 + epsilon}" velocity="50"/>
+  </joint>
+
+  <link name="base_footprint"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="base_footprint"/>
-
-<joint name="base_footprint_joint" type="fixed">
-  <parent link="base_link"/>
-  <child link="base_footprint"/>
-  <origin xyz="0 0 0" rpy="0 0 0"/>
-</joint>
-
-<link name="l2l_1">
-  <inertial>
-    <origin xyz="-0.008469138038562633 4.816697341814002e-07 -0.07819087904751898" rpy="0 0 0"/>
-    <mass value="0.14071836856258027"/>
-    <inertia ixx="9.8e-05" iyy="0.000118" izz="8.7e-05" ixy="-0.0" iyz="-0.0" ixz="1.7e-05"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.035737 -0.247634 -1.04582" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l2l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.035737 -0.247634 -1.04582" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l2l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l3l_1">
-  <inertial>
-    <origin xyz="-0.004049240589701097 -0.00011662761889197348 -0.1333626785766504" rpy="0 0 0"/>
-    <mass value="0.13433192894969845"/>
-    <inertia ixx="0.000296" iyy="0.000299" izz="4.9e-05" ixy="0.0" iyz="-0.0" ixz="4e-05"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.007987 -0.247634 -0.985406" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l3l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.007987 -0.247634 -0.985406" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l3l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l4l_1">
-  <inertial>
-    <origin xyz="-0.022033052289373113 -0.027751420924878867 -0.07009451131427447" rpy="0 0 0"/>
-    <mass value="0.1319735958452518"/>
-    <inertia ixx="6.8e-05" iyy="8e-05" izz="7.4e-05" ixy="-0.0" iyz="0.0" ixz="-2e-06"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.006819 -0.275388 -0.815556" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l4l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.006819 -0.275388 -0.815556" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l4l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l5l_1">
-  <inertial>
-    <origin xyz="0.0039138191304953236 -6.519106588914747e-05 -0.1904912654580233" rpy="0 0 0"/>
-    <mass value="0.09538513786529154"/>
-    <inertia ixx="0.000748" iyy="0.000753" izz="3e-05" ixy="-0.0" iyz="-0.0" ixz="-5.3e-05"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.006819 -0.247637 -0.767806" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l5l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.006819 -0.247637 -0.767806" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l5l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l6l_1">
-  <inertial>
-    <origin xyz="1.1454305421428751e-07 -0.02225042100756011 -0.015076116417847174" rpy="0 0 0"/>
-    <mass value="0.004187419664904639"/>
-    <inertia ixx="2e-06" iyy="1e-06" izz="2e-06" ixy="-0.0" iyz="0.0" ixz="-0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.007275 -0.269887 -0.504262" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l6l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.007275 -0.269887 -0.504262" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l6l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l2r_1">
-  <inertial>
-    <origin xyz="-0.008469138038563282 4.816697872778164e-07 -0.07819087904754218" rpy="0 0 0"/>
-    <mass value="0.14071836856258027"/>
-    <inertia ixx="9.8e-05" iyy="0.000118" izz="8.7e-05" ixy="-0.0" iyz="-0.0" ixz="1.7e-05"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.035737 0.262366 -1.04582" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l2r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.035737 0.262366 -1.04582" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l2r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l3r_1">
-  <inertial>
-    <origin xyz="-0.004049240589694631 -0.00011662761884700945 -0.1333626785766734" rpy="0 0 0"/>
-    <mass value="0.13433192894969845"/>
-    <inertia ixx="0.000296" iyy="0.000299" izz="4.9e-05" ixy="0.0" iyz="-0.0" ixz="4e-05"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.007987 0.262366 -0.985406" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l3r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.007987 0.262366 -0.985406" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l3r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l4r_1">
-  <inertial>
-    <origin xyz="-0.022033052289359936 0.02775238458496604 -0.070094511314298" rpy="0 0 0"/>
-    <mass value="0.1319735958452518"/>
-    <inertia ixx="6.8e-05" iyy="8e-05" izz="7.4e-05" ixy="-0.0" iyz="0.0" ixz="-2e-06"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.006819 0.290116 -0.815556" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l4r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.006819 0.290116 -0.815556" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l4r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l5r_1">
-  <inertial>
-    <origin xyz="0.003913819130518236 -6.438555604931784e-05 -0.1904912654580455" rpy="0 0 0"/>
-    <mass value="0.09538513786529154"/>
-    <inertia ixx="0.000748" iyy="0.000753" izz="3e-05" ixy="-0.0" iyz="-0.0" ixz="-5.3e-05"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.006819 0.262364 -0.767806" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l5r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.006819 0.262364 -0.767806" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l5r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l6r_1">
-  <inertial>
-    <origin xyz="1.1454308115020628e-07 0.022250384502269127 -0.015076116417858498" rpy="0 0 0"/>
-    <mass value="0.004187419664904639"/>
-    <inertia ixx="2e-06" iyy="1e-06" izz="2e-06" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.007275 0.284614 -0.504262" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l6r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.007275 0.284614 -0.504262" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l6r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l2h_1">
-  <inertial>
-    <origin xyz="-0.01404344492546073 0.030000481747364617 0.06449858090998739" rpy="0 0 0"/>
-    <mass value="3.4435410806483597"/>
-    <inertia ixx="0.011996" iyy="0.015757" izz="0.017434" ixy="0.0" iyz="-0.0" ixz="-0.000256"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.007987 0.037366 -1.28382" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.007987 0.037366 -1.28382" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="real_sense_1">
-  <inertial>
-    <origin xyz="0.019913541807561386 9.653953529717863e-05 0.02293582384539583" rpy="0 0 0"/>
-    <mass value="0.061254068221964914"/>
-    <inertia ixx="3.4e-05" iyy="1e-05" izz="3.7e-05" ixy="-0.0" iyz="-0.0" ixz="-1e-06"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.049487 0.007366 -1.40882" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/real_sense_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.049487 0.007366 -1.40882" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/real_sense_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="g1r_1">
-  <inertial>
-    <origin xyz="6.478948623842799e-05 3.840721814474257e-07 -0.026736939315767316" rpy="0 0 0"/>
-    <mass value="0.12876405832743776"/>
-    <inertia ixx="8.6e-05" iyy="4.3e-05" izz="7e-05" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.007275 0.262364 -0.480247" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g1r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.007275 0.262364 -0.480247" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g1r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="g2ra_1">
-  <inertial>
-    <origin xyz="-0.0220993118378398 0.01442646877260062 -0.05721188075257794" rpy="0 0 0"/>
-    <mass value="0.05474843522698835"/>
-    <inertia ixx="3.9e-05" iyy="3.7e-05" izz="2e-05" ixy="-0.0" iyz="-1e-05" ixz="0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.029225 0.243864 -0.438647" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g2ra_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.029225 0.243864 -0.438647" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g2ra_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="g2rb_1">
-  <inertial>
-    <origin xyz="-0.02210045907599773 -0.014425699768063904 -0.05721188075257849" rpy="0 0 0"/>
-    <mass value="0.05474843522698835"/>
-    <inertia ixx="3.9e-05" iyy="3.7e-05" izz="2e-05" ixy="-0.0" iyz="1e-05" ixz="-0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.029225 0.280864 -0.438647" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g2rb_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.029225 0.280864 -0.438647" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g2rb_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="g1l_1">
-  <inertial>
-    <origin xyz="6.478948621099247e-05 -4.2143764839019937e-07 -0.026736939315755603" rpy="0 0 0"/>
-    <mass value="0.12876405832743776"/>
-    <inertia ixx="8.6e-05" iyy="4.3e-05" izz="7e-05" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.007275 -0.247637 -0.480247" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g1l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.007275 -0.247637 -0.480247" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g1l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="g2lb_1">
-  <inertial>
-    <origin xyz="-0.022099311837869458 0.014425663262769728 -0.057211880752566724" rpy="0 0 0"/>
-    <mass value="0.05474843522698835"/>
-    <inertia ixx="3.9e-05" iyy="3.7e-05" izz="2e-05" ixy="-0.0" iyz="-1e-05" ixz="0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.029225 -0.266137 -0.438647" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g2lb_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.029225 -0.266137 -0.438647" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g2lb_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="g2la_1">
-  <inertial>
-    <origin xyz="-0.022100459076024488 -0.01442650527789352 -0.057211880752566335" rpy="0 0 0"/>
-    <mass value="0.05474843522698835"/>
-    <inertia ixx="3.9e-05" iyy="3.7e-05" izz="2e-05" ixy="-0.0" iyz="1e-05" ixz="-0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.029225 -0.229137 -0.438647" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g2la_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.029225 -0.229137 -0.438647" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/g2la_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="laser">
-  <inertial>
-    <origin xyz="0.00021452729941068283 1.2832545766421587e-05 0.03715423693922987" rpy="0 0 0"/>
-    <mass value="0.14304545734211704"/>
-    <inertia ixx="8.2e-05" iyy="8.2e-05" izz="4.9e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.188322 0.007366 -0.25882" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/laser_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.188322 0.007366 -0.25882" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/laser_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="wfr_1">
-  <inertial>
-    <origin xyz="1.883831442783812e-07 -0.024064274086889242 -4.815819601294846e-07" rpy="0 0 0"/>
-    <mass value="1.281712318430354"/>
-    <inertia ixx="0.003526" iyy="0.006601" izz="0.003526" ixy="-0.0" iyz="0.0" ixz="0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.135487 0.164865 -0.09982" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/wfr_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.135487 0.164865 -0.09982" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/wfr_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="wrr_1">
-  <inertial>
-    <origin xyz="1.883831442783812e-07 -0.024064274086889104 -4.815819601294846e-07" rpy="0 0 0"/>
-    <mass value="1.281712318430354"/>
-    <inertia ixx="0.003526" iyy="0.006601" izz="0.003526" ixy="-0.0" iyz="0.0" ixz="0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="0.114513 0.164865 -0.09982" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/wrr_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="0.114513 0.164865 -0.09982" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/wrr_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="wfl_1">
-  <inertial>
-    <origin xyz="1.8838314436164794e-07 0.024065023691868914 -4.80844077374587e-07" rpy="0 0 0"/>
-    <mass value="1.281712318430354"/>
-    <inertia ixx="0.003526" iyy="0.006601" izz="0.003526" ixy="0.0" iyz="0.0" ixz="-0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.135487 -0.150135 -0.09982" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/wfl_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.135487 -0.150135 -0.09982" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/wfl_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="wrl_1">
-  <inertial>
-    <origin xyz="1.8838314437552572e-07 0.02406502369186897 -4.808440774717315e-07" rpy="0 0 0"/>
-    <mass value="1.281712318430354"/>
-    <inertia ixx="0.003526" iyy="0.006601" izz="0.003526" ixy="0.0" iyz="0.0" ixz="-0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="0.114513 -0.150135 -0.09982" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/wrl_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="0.114513 -0.150135 -0.09982" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/wrl_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l1r_1">
-  <inertial>
-    <origin xyz="-7.750802465356262e-05 -0.023051471870294216 -0.0003746843245819864" rpy="0 0 0"/>
-    <mass value="0.17510122063008318"/>
-    <inertia ixx="0.000118" iyy="9.1e-05" izz="8e-05" ixy="-0.0" iyz="-1e-06" ixz="-0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.007987 0.227866 -1.06382" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l1r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.007987 0.227866 -1.06382" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l1r_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l1l_1">
-  <inertial>
-    <origin xyz="7.755064862937852e-05 0.023052435365023938 -0.0003746843245824305" rpy="0 0 0"/>
-    <mass value="0.17510122063008318"/>
-    <inertia ixx="0.000118" iyy="9.1e-05" izz="8e-05" ixy="-0.0" iyz="1e-06" ixz="0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.007987 -0.213134 -1.06382" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l1l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.007987 -0.213134 -1.06382" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l1l_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="l1h_1">
-  <inertial>
-    <origin xyz="2.1311988054537045e-08 4.817473648098883e-07 0.03361523031913305" rpy="0 0 0"/>
-    <mass value="0.14686451647034876"/>
-    <inertia ixx="0.000113" iyy="0.000108" izz="5.4e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.007987 0.007366 -1.21382" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l1h_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="chassis_material">
-      <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-  </visual>
-  <collision>
-    <origin xyz="-0.007987 0.007366 -1.21382" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://bender_description/meshes/l1h_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<joint name="l2l_to_l1l" type="revolute">
-  <origin xyz="0.02775 0.0345 -0.018" rpy="0 0 0"/>
-  <parent link="l1l_1"/>
-  <child link="l2l_1"/>
-  <axis xyz="1.0 0.0 -0.0"/>
-  <limit upper="1.570796" lower="0.0" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l3l_to_l2l" type="revolute">
-  <origin xyz="-0.02775 0.0 -0.060414" rpy="0 0 0"/>
-  <parent link="l2l_1"/>
-  <child link="l3l_1"/>
-  <axis xyz="0.0 -0.0 1.0"/>
-  <limit upper="1.134464" lower="-1.134464" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l4l_to_l3l" type="revolute">
-  <origin xyz="-0.001168 0.027754 -0.16985" rpy="0 0 0"/>
-  <parent link="l3l_1"/>
-  <child link="l4l_1"/>
-  <axis xyz="-0.0 1.0 0.0"/>
-  <limit upper="0.0" lower="-2.356194" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l5l_to_l4l" type="revolute">
-  <origin xyz="0.0 -0.027751 -0.04775" rpy="0 0 0"/>
-  <parent link="l4l_1"/>
-  <child link="l5l_1"/>
-  <axis xyz="0.0 -0.0 1.0"/>
-  <limit upper="1.047198" lower="-1.047198" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l6l_to_l5l" type="revolute">
-  <origin xyz="0.000456 0.02225 -0.263544" rpy="0 0 0"/>
-  <parent link="l5l_1"/>
-  <child link="l6l_1"/>
-  <axis xyz="0.0 1.0 0.0"/>
-  <limit upper="1.570796" lower="-1.570796" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l2r_to_l1r" type="revolute">
-  <origin xyz="0.02775 -0.0345 -0.018" rpy="0 0 0"/>
-  <parent link="l1r_1"/>
-  <child link="l2r_1"/>
-  <axis xyz="1.0 0.0 0.0"/>
-  <limit upper="0.0" lower="-1.570796" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l3r_to_l2r" type="revolute">
-  <origin xyz="-0.02775 0.0 -0.060414" rpy="0 0 0"/>
-  <parent link="l2r_1"/>
-  <child link="l3r_1"/>
-  <axis xyz="0.0 0.0 1.0"/>
-  <limit upper="1.134464" lower="-1.134464" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l4r_to_l3r" type="revolute">
-  <origin xyz="-0.001168 -0.02775 -0.16985" rpy="0 0 0"/>
-  <parent link="l3r_1"/>
-  <child link="l4r_1"/>
-  <axis xyz="-0.0 -1.0 0.0"/>
-  <limit upper="2.356194" lower="0.0" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l5r_to_l4r" type="revolute">
-  <origin xyz="0.0 0.027752 -0.04775" rpy="0 0 0"/>
-  <parent link="l4r_1"/>
-  <child link="l5r_1"/>
-  <axis xyz="-0.0 0.0 1.0"/>
-  <limit upper="1.047198" lower="-1.047198" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l6r_to_l5r" type="revolute">
-  <origin xyz="0.000456 -0.02225 -0.263544" rpy="0 0 0"/>
-  <parent link="l5r_1"/>
-  <child link="l6r_1"/>
-  <axis xyz="-0.0 -1.0 0.0"/>
-  <limit upper="1.570796" lower="-1.570796" effort="100" velocity="100"/>
-</joint>
-
-<joint name="lh2_to_lh1" type="fixed">
-  <origin xyz="0.0 -0.03 0.07" rpy="0 0 0"/>
-  <parent link="l1h_1"/>
-  <child link="l2h_1"/>
-</joint>
-
-<joint name="real_sense_to_lh2" type="fixed">
-  <origin xyz="0.0415 0.03 0.125" rpy="0 0 0"/>
-  <parent link="l2h_1"/>
-  <child link="real_sense_1"/>
-</joint>
-
-<joint name="g1r_to_l6r" type="fixed">
-  <origin xyz="0.0 0.02225 -0.024015" rpy="0 0 0"/>
-  <parent link="l6r_1"/>
-  <child link="g1r_1"/>
-</joint>
-
-<joint name="g2ra_to_g1r" type="revolute">
-  <origin xyz="0.02195 0.0185 -0.0416" rpy="0 0 0"/>
-  <parent link="g1r_1"/>
-  <child link="g2ra_1"/>
-  <axis xyz="1.0 -0.0 -0.0"/>
-  <limit upper="1.570796" lower="0.0" effort="100" velocity="100"/>
-</joint>
-
-<joint name="g2rb_to_g1r" type="revolute">
-  <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
-  <parent link="g1r_1"/>
-  <child link="g2rb_1"/>
-  <axis xyz="1.0 -0.0 -0.0"/>
-  <limit upper="0.0" lower="-1.570796" effort="100" velocity="100"/>
-</joint>
-
-<joint name="g1l_to_l6l" type="fixed">
-  <origin xyz="0.0 -0.02225 -0.024015" rpy="0 0 0"/>
-  <parent link="l6l_1"/>
-  <child link="g1l_1"/>
-</joint>
-
-<joint name="g2lb_to_g1l" type="revolute">
-  <origin xyz="0.02195 0.0185 -0.0416" rpy="0 0 0"/>
-  <parent link="g1l_1"/>
-  <child link="g2lb_1"/>
-  <axis xyz="1.0 0.0 -0.0"/>
-  <limit upper="1.570796" lower="0.0" effort="100" velocity="100"/>
-</joint>
-
-<joint name="g2la_to_g1l" type="revolute">
-  <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
-  <parent link="g1l_1"/>
-  <child link="g2la_1"/>
-  <axis xyz="1.0 0.0 -0.0"/>
-  <limit upper="0.0" lower="-1.570796" effort="100" velocity="100"/>
-</joint>
-
-<joint name="laser_to_base_link" type="fixed">
-	<origin xyz="0.188322 -0.007366 0.25882" rpy="0 0 ${pi}"/>
-  <parent link="base_link"/>
-  <child link="laser"/>
-</joint>
-
-<joint name="wfr_to_base_link" type="fixed">
-  <origin xyz="0.135487 -0.164865 0.09982" rpy="0 0 0"/>
-  <parent link="base_link"/>
-  <child link="wfr_1"/>
-</joint>
-
-<joint name="wrr_to_base_link" type="fixed">
-  <origin xyz="-0.114513 -0.164865 0.09982" rpy="0 0 0"/>
-  <parent link="base_link"/>
-  <child link="wrr_1"/>
-</joint>
-
-<joint name="wfl_to_base_link" type="fixed">
-  <origin xyz="0.135487 0.150135 0.09982" rpy="0 0 0"/>
-  <parent link="base_link"/>
-  <child link="wfl_1"/>
-</joint>
-
-<joint name="wrl_to_base_link" type="fixed">
-  <origin xyz="-0.114513 0.150135 0.09982" rpy="0 0 0"/>
-  <parent link="base_link"/>
-  <child link="wrl_1"/>
-</joint>
-
-<joint name="l1r_to_base_link" type="revolute">
-  <origin xyz="0.007987 -0.227866 1.06382" rpy="0 0 0"/>
-  <parent link="base_link"/>
-  <child link="l1r_1"/>
-  <axis xyz="0.0 -1.0 0.0"/>
-  <limit upper="2.356194" lower="-1.570796" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l1l_to_base_link" type="revolute">
-  <origin xyz="0.007987 0.213134 1.06382" rpy="0 0 0"/>
-  <parent link="base_link"/>
-  <child link="l1l_1"/>
-  <axis xyz="0.0 1.0 0.0"/>
-  <limit upper="1.570796" lower="-2.356194" effort="100" velocity="100"/>
-</joint>
-
-<joint name="l1h_to_base_link" type="fixed">
-  <origin xyz="0.007987 -0.007366 1.21382" rpy="0 0 0"/>
-  <parent link="base_link"/>
-  <child link="l1h_1"/>
-</joint>
-
-<!-- TCP definition for end-effectors references -->
-
-<!-- right end_effector link and joint -->
-<link name="tcp_r">
-  <visual>
-    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
-    <geometry>
-      <sphere radius="0.005"/>
-    </geometry>
-  </visual>
-  <!--
-  <collision>
-    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
-    <geometry>
-      <sphere radius="0.001"/>
-    </geometry>
-  </collision>
-  -->
-</link>
-
-<joint name="end_effector_r" type="fixed">
-  <parent link="g1r_1"/> 
-  <child link="tcp_r"/>
-  <origin xyz="0.0 0.0 -0.08" rpy="3.1416 0 0"/> 
-</joint>
-
-<!-- left end_effector link and joint -->
-<link name="tcp_l">
-  <visual>
-    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
-    <geometry>
-      <sphere radius="0.005"/>
-    </geometry>
-  </visual>
-  <!--
-  <collision>
-    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
-    <geometry>
-      <sphere radius="0.001"/>
-    </geometry>
-  </collision>
-  -->
-</link>
-
-<joint name="end_effector_l" type="fixed">
-  <parent link="g1l_1"/> 
-  <child link="tcp_l"/>
-  <origin xyz="0.0 0.0 -0.08" rpy="3.1416 0 0"/> 
-</joint>
-
-
+  </joint>
 </robot>
