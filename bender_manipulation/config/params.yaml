@@ -1,6 +1,6 @@
 protocol_version: 1.0
 baudrate: 1000000
-device_name: "/dev/ttyUSB0"
+device_name: "/dev/dynamixel"
 
 motors:
   - id: 11
