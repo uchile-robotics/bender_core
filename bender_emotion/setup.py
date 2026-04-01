@@ -19,7 +19,6 @@ setup(
     maintainer_email='tu_email@example.com',
     description='Paquete para control emocional del robot Bender',
     license='MIT',
-    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'action_server = bender_emotion.emotion_action_server:main',
@@ -32,5 +31,3 @@ setup(
         ],
     },
 )
-
-
