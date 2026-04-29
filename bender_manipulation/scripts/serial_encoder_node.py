@@ -10,7 +10,7 @@ class SerialEncoderReader(Node):
         super().__init__('serial_encoder_node')
 
         # Parámetros de conexión
-        self.declare_parameter('port', '/dev/encoders')
+        self.declare_parameter('port', '/dev/ttyACM1')
         self.declare_parameter('baudrate', 115200)
 
         port = self.get_parameter('port').get_parameter_value().string_value
