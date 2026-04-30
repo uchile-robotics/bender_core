@@ -5,8 +5,13 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# Dependencias básicas (para paquetes Python no es obligatorio listar msgs aquí)
+# Dependencias básicas
 find_package(ament_cmake REQUIRED)
+
+# --- NUEVO: Dependencias obligatorias para C++ ---
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+# -------------------------------------------------
 
 # --- Instalación de recursos ---
 
@@ -27,10 +32,18 @@ install(
   PROGRAMS
     scripts/dynamixel_node.py
     scripts/dynamixel_vel_node.py
-    scripts/serial_encoder_node.py
     scripts/oddrive.py
     scripts/dynamixel_command.py
     scripts/dynamixel_trajectory_bridge.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Compilación y enlace del nodo C++
+add_executable(serial_encoder_node src/serial_encoder_node.cpp)
+ament_target_dependencies(serial_encoder_node rclcpp std_msgs)
+
+install(TARGETS
+  serial_encoder_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
