@@ -34,6 +34,7 @@ install(
     scripts/dynamixel_vel_node.py
     scripts/oddrive.py
     scripts/dynamixel_command.py
+    scripts/shoulder_control.py
     scripts/dynamixel_trajectory_bridge.py
   DESTINATION lib/${PROJECT_NAME}
 )
