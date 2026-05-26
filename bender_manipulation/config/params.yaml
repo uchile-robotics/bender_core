@@ -11,7 +11,7 @@ motors:
   - id: 12
     limits: [275,725]
     offset: 512
-    type: RX-28
+    type: RX-9
 
   - id: 13
     limits: [2048,3072]

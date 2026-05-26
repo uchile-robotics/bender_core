@@ -1,170 +1,118 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <robot name="bender" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <ros2_control name="RobotSystem" type="system">
+  <ros2_control name="OdriveJoint" type="actuator">
     <hardware>
-          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+      <plugin>odrive_hardware_interface/ODriveHardwareInterface</plugin>
+    </hardware>
+  </ros2_control>
+
+  <ros2_control name="ShoulderJoint" type="sensor">
+    <hardware>
+      <plugin>bender_hardware_interfaces/EncoderInterface</plugin>
+      <param name="serial_device">/dev/encoders</param>
+      <param name="baud_rate">115200</param>
+    </hardware>
+    <sensor name="encoder_left">
+      <state_interface name="position" />
+    </sensor>
+    <sensor name="encoder_right">
+      <state_interface name="position" />
+    </sensor>
+  </ros2_control>
+
+  <ros2_control name="DynamixelChain" type="system">
+    <hardware>
+      <plugin>dynamixel_hardware/DynamixelHardware</plugin>
+      <param name="usb_port">/dev/dynamixel</param>
+      <param name="baud_rate">1000000</param>
+      <param name="protocol_version">1.0</param>
     </hardware>
 
-    <!-- Brazo Izquierdo -->
-    <joint name="l1l_to_base_link">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
     <joint name="l2l_to_l1l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
+      <command_interface name="position" />
+      <state_interface name="position" />
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+      <param name="id">11</param>
+      <param name="type">MX-106</param>
+      <param name="offset">2048</param>
+      <param name="min_position_limit">1024</param>
+      <param name="max_position_limit">2148</param>
     </joint>
 
     <joint name="l3l_to_l2l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
+      <command_interface name="position" />
+      <state_interface name="position" />
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+      <param name="id">12</param>
+      <param name="type">RX-9</param>
+      <param name="offset">512</param>
+      <param name="min_position_limit">275</param>
+      <param name="max_position_limit">725</param>
     </joint>
 
     <joint name="l4l_to_l3l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
+      <command_interface name="position" />
+      <state_interface name="position" />
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+      <param name="id">13</param>
+      <param name="type">MX-106</param>
+      <param name="offset">2048</param>
+      <param name="min_position_limit">2048</param>
+      <param name="max_position_limit">3072</param>
     </joint>
 
     <joint name="l5l_to_l4l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
+      <command_interface name="position" />
+      <state_interface name="position" />
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+      <param name="id">14</param>
+      <param name="type">RX-28</param>
+      <param name="offset">512</param>
+      <param name="min_position_limit">270</param>
+      <param name="max_position_limit">750</param>
     </joint>
 
     <joint name="l6l_to_l5l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
+      <command_interface name="position" />
+      <state_interface name="position" />
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+      <param name="id">15</param>
+      <param name="type">RX-28</param>
+      <param name="offset">512</param>
+      <param name="min_position_limit">160</param>
+      <param name="max_position_limit">855</param>
     </joint>
 
-    <!-- Brazo Derecho -->
-    <joint name="l1r_to_base_link">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l2r_to_l1r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l3r_to_l2r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l4r_to_l3r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l5r_to_l4r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l6r_to_l5r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <!-- Cuello -->
-    <joint name="l2h_to_l1h">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l1h_to_base_link">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-     <!-- Gripper Izquierdo -->
     <joint name="g2la_to_g1l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
+      <command_interface name="position" />
+      <state_interface name="position" />
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+      <param name="id">16</param>
+      <param name="type">RX-28</param>
+      <param name="offset">512</param>
+      <param name="min_position_limit">512</param>
+      <param name="max_position_limit">800</param>
     </joint>
+
     <joint name="g2lb_to_g1l">
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
+      <command_interface name="position" />
+      <state_interface name="position" />
+      <state_interface name="velocity" />
+      <state_interface name="effort" />
+      <param name="id">17</param>
+      <param name="type">RX-28</param>
+      <param name="offset">512</param>
+      <param name="min_position_limit">224</param>
+      <param name="max_position_limit">512</param>
     </joint>
 
-    <!-- Gripper Derecho -->
-    <joint name="g2ra_to_g1r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-    <joint name="g2rb_to_g1r">
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
+    </ros2_control>
 
-    <!-- RUEDAS BASE -->
-    <joint name="wrl_to_base_link">
-      <command_interface name="velocity"/>
-      <state_interface name="velocity"/>
-      <state_interface name="position"/>
-    </joint>
-
-    <joint name="wrr_to_base_link">
-      <command_interface name="velocity"/>
-      <state_interface name="velocity"/>
-      <state_interface name="position"/>
-    </joint>
-
-    <joint name="wfl_to_base_link">
-      <command_interface name="velocity"/>
-      <state_interface name="velocity"/>
-      <state_interface name="position"/>
-    </joint>
-
-    <joint name="wfr_to_base_link">
-      <command_interface name="velocity"/>
-      <state_interface name="velocity"/>
-      <state_interface name="position"/>
-    </joint>
-
-  </ros2_control>
-  
-  <gazebo> 
-    <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin"> 
-      <parameters>$(find bender_description)/config/controllers/controllers.yaml</parameters> 
-    </plugin> 
-  </gazebo>
-
-  
 </robot>

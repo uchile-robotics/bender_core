@@ -98,3 +98,5 @@ joint_limits:
     max_velocity: 100.0
     has_acceleration_limits: true
     max_acceleration: 10.0
+    has_goal_tolerance: true
+    goal_position_tolerance: 0.01  # Radians (~2.8 degrees)

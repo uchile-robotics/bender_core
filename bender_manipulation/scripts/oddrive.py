@@ -9,7 +9,7 @@ import math
 class ODriveVelocityNode(Node):
     def __init__(self):
         super().__init__('odrive_velocity_node')
-        
+
         self.get_logger().info("Buscando ODrive...")
         try:
             self.odrv = odrive.find_any()
@@ -18,7 +18,7 @@ class ODriveVelocityNode(Node):
         except Exception as e:
             self.get_logger().error("No se encontró ODrive")
             self.connected = False
-            
+
         # Suscripción al tópico de velocidad
         self.subscription = self.create_subscription(
             Float64,
@@ -34,7 +34,7 @@ class ODriveVelocityNode(Node):
 
         # Enviar comando directo al ODrive
         self.odrv.axis0.controller.input_vel = target_rad_s
-        
+
     def stop_motor(self):
         if self.connected:
             self.odrv.axis0.controller.input_vel = 0
@@ -43,7 +43,7 @@ class ODriveVelocityNode(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = ODriveVelocityNode()
-    
+
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
