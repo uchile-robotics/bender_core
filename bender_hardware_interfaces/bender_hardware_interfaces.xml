@@ -1,8 +1,7 @@
 <library path="bender_hardware_interfaces">
   <class name="bender_hardware_interfaces/EncoderInterface"
          type="bender_hardware_interfaces::EncoderInterface"
-         base_class_type="hardware_interface::SystemInterface">
-    <description>
+         base_class_type="hardware_interface::SensorInterface"> <description>
       Bender's hardware interfaces for ros2_control communication
     </description>
   </class>

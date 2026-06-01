@@ -1,4 +1,3 @@
-
 #ifndef BENDER_HARDWARE_INTERFACES__ENCODER_INTERFACE_HPP_
 #define BENDER_HARDWARE_INTERFACES__ENCODER_INTERFACE_HPP_
 
@@ -20,7 +19,6 @@ class EncoderInterface : public hardware_interface::SensorInterface
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(EncoderInterface)
 
-  // Inicialización del componente desde el archivo URDF
   hardware_interface::CallbackReturn on_init(
     const hardware_interface::HardwareComponentInterfaceParams & params) override;
 
@@ -38,8 +36,13 @@ public:
 private:
   std::string serial_device_ = "/dev/encoders";
   int baud_rate_;
-  std::vector<double> hw_states_;
   int serial_fd_ = -1;
+
+  // Variables para almacenar los estados de los encoders
+  double left_pos_ = 0.0;
+  double left_vel_ = 0.0;
+  double right_pos_ = 0.0;
+  double right_vel_ = 0.0;
 };
 
 }  // namespace bender_hardware_interfaces

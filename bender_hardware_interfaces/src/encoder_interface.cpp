@@ -1,4 +1,3 @@
-
 #include "bender_hardware_interfaces/encoder_interface.hpp"
 
 #include <chrono>
@@ -40,11 +39,30 @@ hardware_interface::CallbackReturn EncoderInterface::on_init(
   }
 
   if (info_.sensors.size() != 2) {
-    RCLCPP_ERROR(get_logger(), "Expected 2 sensors in urdf, got: %zu", info_.sensors.size());
+    RCLCPP_ERROR(get_logger(), "Se esperaban 2 sensores en el URDF (izq y der), se detectaron: %zu", info_.sensors.size());
     return hardware_interface::CallbackReturn::ERROR;
   }
 
   return hardware_interface::CallbackReturn::SUCCESS;
+}
+
+std::vector<hardware_interface::StateInterface> EncoderInterface::export_state_interfaces() {
+  std::vector<hardware_interface::StateInterface> state_interfaces;
+
+  // Vinculamos las variables internas a ROS 2 Control usando los nombres del URDF
+  // Sensor 0: Izquierdo ("left")
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+    info_.sensors[0].name, hardware_interface::HW_IF_POSITION, &left_pos_));
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+    info_.sensors[0].name, hardware_interface::HW_IF_VELOCITY, &left_vel_));
+
+  // Sensor 1: Derecho ("right")
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+    info_.sensors[1].name, hardware_interface::HW_IF_POSITION, &right_pos_));
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+    info_.sensors[1].name, hardware_interface::HW_IF_VELOCITY, &right_vel_));
+
+  return state_interfaces;
 }
 
 hardware_interface::CallbackReturn EncoderInterface::on_activate(
@@ -60,7 +78,7 @@ hardware_interface::CallbackReturn EncoderInterface::on_activate(
 
   struct termios tty;
   if (tcgetattr(serial_fd_, &tty) != 0) {
-    RCLCPP_ERROR(get_logger(), "Error getting serial port attributes");
+    RCLCPP_ERROR(get_logger(), "Error al obtener atributos del puerto serial");
     close(serial_fd_);
     return hardware_interface::CallbackReturn::ERROR;
   }
@@ -104,7 +122,6 @@ hardware_interface::CallbackReturn EncoderInterface::on_deactivate(
     close(serial_fd_);
     serial_fd_ = -1;
   }
-  RCLCPP_INFO(get_logger(), "Puerto serial cerrado. Desactivación exitosa.");
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -115,51 +132,50 @@ hardware_interface::return_type EncoderInterface::read(
     return hardware_interface::return_type::ERROR;
   }
 
-  char buf[256];
+  char c;
   int bytes_leidos;
-  std::string datos_crudos = "";
+  static std::string buffer_acumulador = "";
 
-  while ((bytes_leidos = ::read(serial_fd_, buf, sizeof(buf) - 1)) > 0) {
-    buf[bytes_leidos] = '\0';
-    datos_crudos += buf;
-  }
+  while ((bytes_leidos = ::read(serial_fd_, &c, 1)) > 0) {
+    if (c == '\n') {
+      std::string ultima_linea = buffer_acumulador;
+      buffer_acumulador.clear();
 
-  std::string ultima_linea = "";
-  if (!datos_crudos.empty()) {
-    size_t ultimo_salto = datos_crudos.rfind('\n');
-    if (ultimo_salto != std::string::npos) {
-      size_t previo_salto = datos_crudos.rfind('\n', ultimo_salto - 1);
-      if (previo_salto == std::string::npos) {
-        ultima_linea = datos_crudos.substr(0, ultimo_salto);
-      } else {
-        ultima_linea = datos_crudos.substr(previo_salto + 1, ultimo_salto - previo_salto - 1);
+      if (!ultima_linea.empty()) {
+        try {
+          size_t left_start = ultima_linea.find("\"left\"");
+          size_t right_start = ultima_linea.find("\"right\"");
+
+          if (left_start != std::string::npos && right_start != std::string::npos) {
+            std::string left_sub = ultima_linea.substr(left_start, right_start - left_start);
+            std::string right_sub = ultima_linea.substr(right_start);
+
+            // Parseo Izquierdo (Left)
+            size_t lp = left_sub.find("\"pos\":");
+            size_t lv = left_sub.find("\"vel\":");
+            if (lp != std::string::npos) left_pos_ = std::stod(left_sub.substr(lp + 6, left_sub.find_first_of(",}", lp) - (lp + 6)));
+            if (lv != std::string::npos) left_vel_ = std::stod(left_sub.substr(lv + 6, left_sub.find_first_of(",}", lv) - (lv + 6)));
+
+            // Parseo Derecho (Right)
+            size_t rp = right_sub.find("\"pos\":");
+            size_t rv = right_sub.find("\"vel\":");
+            if (rp != std::string::npos) right_pos_ = std::stod(right_sub.substr(rp + 6, right_sub.find_first_of(",}", rp) - (rp + 6)));
+            if (rv != std::string::npos) right_vel_ = std::stod(right_sub.substr(rv + 6, right_sub.find_first_of(",}", rv) - (rv + 6)));
+          }
+        } catch (const std::exception &e) {
+          RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 2000, "Error decodificando JSON: %s", e.what());
+        }
       }
+    } else if (c != '\r') {
+      buffer_acumulador += c;
+    }
+
+    if (buffer_acumulador.length() > 500) {
+      buffer_acumulador.clear();
     }
   }
 
-  // Si logramos aislar una línea completa, la decodificamos
-  if (!ultima_linea.empty()) {
-    float angulo1 = 0.0f;
-    float angulo2 = 0.0f;
-
-    // Parseamos el string "angulo1,angulo2" enviado desde la Pico W
-    if (sscanf(ultima_linea.c_str(), "%f,%f", &angulo1, &angulo2) == 2) {
-      // Mapear los datos numéricos a los nombres de los sensores declarados en tu URDF
-      std::string interfaz_sensor1 = info_.sensors[0].name + "/" + hardware_interface::HW_IF_POSITION;
-      std::string interfaz_sensor2 = info_.sensors[1].name + "/" + hardware_interface::HW_IF_POSITION;
-
-      set_state(interfaz_sensor1, static_cast<double>(angulo1));
-      set_state(interfaz_sensor2, static_cast<double>(angulo2));
-    }
-  }
-
-  std::string interfaz_sensor1 = info_.sensors[0].name + "/" + hardware_interface::HW_IF_POSITION;
-  std::string interfaz_sensor2 = info_.sensors[1].name + "/" + hardware_interface::HW_IF_POSITION;
-  // logging every 500 ms
-  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500,
-                       "%s: %.2f deg | %s: %.2f deg",
-                       info_.sensors[0].name.c_str(), get_state(interfaz_sensor1),
-                       info_.sensors[1].name.c_str(), get_state(interfaz_sensor2));
+  // Throttle de telemetría cada 500 ms
 
   return hardware_interface::return_type::OK;
 }
