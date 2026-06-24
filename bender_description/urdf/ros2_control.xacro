@@ -1,118 +1,344 @@
 <?xml version="1.0" ?>
-<robot name="bender" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <ros2_control name="OdriveJoint" type="actuator">
-    <hardware>
-      <plugin>odrive_hardware_interface/ODriveHardwareInterface</plugin>
-    </hardware>
-  </ros2_control>
+       <!-- <ros2_control name="OdriveJoint" type="actuator">
+         <hardware>
+           <plugin>odrive_hardware_interface/ODriveHardwareInterface</plugin>
+         </hardware>
+       </ros2_control>
 
-  <ros2_control name="ShoulderJoint" type="sensor">
-    <hardware>
-      <plugin>bender_hardware_interfaces/EncoderInterface</plugin>
-      <param name="serial_device">/dev/encoders</param>
-      <param name="baud_rate">115200</param>
-    </hardware>
-    <sensor name="encoder_left">
-      <state_interface name="position" />
-    </sensor>
-    <sensor name="encoder_right">
-      <state_interface name="position" />
-    </sensor>
-  </ros2_control>
+       <ros2_control name="ShoulderJoint" type="sensor">
+           <hardware>
+             <plugin>bender_hardware_interfaces/EncoderInterface</plugin>
+             <param name="serial_device">/dev/encoders</param>
+             <param name="baud_rate">115200</param>
+           </hardware>
+           <sensor name="base_link_to_l1l">
+             <state_interface name="position" />
+             <state_interface name="velocity" />
+           </sensor>
+           <sensor name="base_link_to_l1r">
+             <state_interface name="position" />
+             <state_interface name="velocity" />
+           </sensor>
+         </ros2_control> -->
 
-  <ros2_control name="DynamixelChain" type="system">
-    <hardware>
-      <plugin>dynamixel_hardware/DynamixelHardware</plugin>
-      <param name="usb_port">/dev/dynamixel</param>
-      <param name="baud_rate">1000000</param>
-      <param name="protocol_version">1.0</param>
-    </hardware>
+         <ros2_control name="DynamixelChainMain" type="system">
+             <hardware>
+               <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
+               <param name="port_name">/dev/dynamixel</param>
+               <param name="baud_rate">2000000</param>
+               <param name="protocol_version">1.0</param>
+               <param name="number_of_joints">13</param>
+               <param name="number_of_transmissions">13</param>
+               <param name="dynamixel_model_folder">/param/dxl_model</param>
+               <param name="disable_torque_at_init">true</param>
+               <param name="torque_enable">0</param>
+             </hardware>
 
-    <joint name="l2l_to_l1l">
-      <command_interface name="position" />
-      <state_interface name="position" />
-      <state_interface name="velocity" />
-      <state_interface name="effort" />
-      <param name="id">11</param>
-      <param name="type">MX-106</param>
-      <param name="offset">2048</param>
-      <param name="min_position_limit">1024</param>
-      <param name="max_position_limit">2148</param>
-    </joint>
+             <joint name="l2r_to_l1r">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <joint name="l3r_to_l2r">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <joint name="l4r_to_l3r">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <joint name="l5r_to_l4r">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <joint name="l6r_to_l5r">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
 
-    <joint name="l3l_to_l2l">
-      <command_interface name="position" />
-      <state_interface name="position" />
-      <state_interface name="velocity" />
-      <state_interface name="effort" />
-      <param name="id">12</param>
-      <param name="type">RX-9</param>
-      <param name="offset">512</param>
-      <param name="min_position_limit">275</param>
-      <param name="max_position_limit">725</param>
-    </joint>
+             <joint name="l2l_to_l1l">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <joint name="l3l_to_l2l">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <joint name="l5l_to_l4l">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <joint name="l6l_to_l5l">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
 
-    <joint name="l4l_to_l3l">
-      <command_interface name="position" />
-      <state_interface name="position" />
-      <state_interface name="velocity" />
-      <state_interface name="effort" />
-      <param name="id">13</param>
-      <param name="type">MX-106</param>
-      <param name="offset">2048</param>
-      <param name="min_position_limit">2048</param>
-      <param name="max_position_limit">3072</param>
-    </joint>
+             <joint name="g2ra_to_g1r">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <joint name="g2rb_to_g1r">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <!-- <joint name="g2r_to_g1r"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint> -->
+             <joint name="l1h_to_base_link">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <joint name="l2h_to_l1h">
+                <command_interface name="position" />
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+             </joint>
+             <!-- <joint name="l2h_to_l1h_coupled"><command_interface name="position" /><state_interface name="position" /><state_interface name="velocity" /></joint> -->
 
-    <joint name="l5l_to_l4l">
-      <command_interface name="position" />
-      <state_interface name="position" />
-      <state_interface name="velocity" />
-      <state_interface name="effort" />
-      <param name="id">14</param>
-      <param name="type">RX-28</param>
-      <param name="offset">512</param>
-      <param name="min_position_limit">270</param>
-      <param name="max_position_limit">750</param>
-    </joint>
 
-    <joint name="l6l_to_l5l">
-      <command_interface name="position" />
-      <state_interface name="position" />
-      <state_interface name="velocity" />
-      <state_interface name="effort" />
-      <param name="id">15</param>
-      <param name="type">RX-28</param>
-      <param name="offset">512</param>
-      <param name="min_position_limit">160</param>
-      <param name="max_position_limit">855</param>
-    </joint>
+             <gpio name="motor_l2r">
+                <param name="type">dxl</param>
+                <param name="ID">11</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="P Gain">8</param>
+                <param name="I Gain">2</param>
+                <param name="D Gain">5</param>
+                <param name="Return Delay Time">25</param>
+            </gpio>
 
-    <joint name="g2la_to_g1l">
-      <command_interface name="position" />
-      <state_interface name="position" />
-      <state_interface name="velocity" />
-      <state_interface name="effort" />
-      <param name="id">16</param>
-      <param name="type">RX-28</param>
-      <param name="offset">512</param>
-      <param name="min_position_limit">512</param>
-      <param name="max_position_limit">800</param>
-    </joint>
+             <gpio name="motor_l3r">
+                <param name="type">dxl</param>
+                <param name="ID">12</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+             <gpio name="motor_l4r">
+                <param name="type">dxl</param>
+                <param name="ID">13</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="P Gain">8</param>
+                <param name="I Gain">2</param>
+                <param name="D Gain">5</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+             <gpio name="motor_l5r">
+                <param name="type">dxl</param>
+                <param name="ID">14</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+             <gpio name="motor_l6r">
+                <param name="type">dxl</param>
+                <param name="ID">15</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
 
-    <joint name="g2lb_to_g1l">
-      <command_interface name="position" />
-      <state_interface name="position" />
-      <state_interface name="velocity" />
-      <state_interface name="effort" />
-      <param name="id">17</param>
-      <param name="type">RX-28</param>
-      <param name="offset">512</param>
-      <param name="min_position_limit">224</param>
-      <param name="max_position_limit">512</param>
-    </joint>
+             <gpio name="motor_l2l">
+                <param name="type">dxl</param>
+                <param name="ID">4</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+             <gpio name="motor_l3l">
+                <param name="type">dxl</param>
+                <param name="ID">3</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+             <gpio name="motor_l5l">
+                <param name="type">dxl</param>
+                <param name="ID">5</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+             <gpio name="motor_l6l">
+                <param name="type">dxl</param>
+                <param name="ID">6</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
 
-    </ros2_control>
+             <gpio name="motor_g2ra">
+                <param name="type">dxl</param>
+                <param name="ID">17</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+             <gpio name="motor_g2rb">
+                <param name="type">dxl</param>
+                <param name="ID">16</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+             <gpio name="motor_g2r">
+                <param name="type">dxl</param>
+                <param name="ID">7</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+
+             <gpio name="motor_l1h">
+                <param name="type">dxl</param>
+                <param name="ID">19</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+
+             <!-- <joint name="l4l_to_l3l">
+               <command_interface name="position" />
+               <state_interface name="position" />
+               <state_interface name="velocity" />
+             </joint>
+
+             <gpio name="motor_l4l">
+               <param name="type">dxl</param>
+               <param name="ID">1</param>
+               <command_interface name="Goal Position" />
+               <state_interface name="Present Position" />
+               <state_interface name="Present Velocity" />
+               <state_interface name="Present Load" />
+               <param name="P Gain">8</param>
+               <param name="I Gain">2</param>
+               <param name="D Gain">5</param>
+               <param name="Return Delay Time">25</param>
+             </gpio> -->
+             <!-- <gpio name="motor_l2h_master">
+                <param name="type">dxl</param>
+                <param name="ID">20</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">25</param>
+             </gpio>
+             <gpio name="motor_l2h_slave">
+                <param name="type">dxl</param>
+                <param name="ID">21</param>
+                <command_interface name="Goal Position" />
+                <state_interface name="Present Position" />
+                <state_interface name="Present Velocity" />
+                <state_interface name="Present Load" />
+                <param name="CW Compliance Margin">1</param>
+                <param name="CCW Compliance Margin">1</param>
+                <param name="CW Compliance Slope">254</param>
+                <param name="CCW Compliance Slope">254</param>
+                <param name="Return Delay Time">100</param>
+             </gpio> -->
+
+           </ros2_control>
+<!--
+           <ros2_control name="DynamixelChainSlow" type="system">
+             <hardware>
+               <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
+               <param name="port_name">/dev/dynamixel</param>
+               <param name="baud_rate">57600</param>
+               <param name="protocol_version">1.0</param>
+               <param name="number_of_joints">1</param>
+               <param name="number_of_transmissions">1</param>
+               <param name="dynamixel_model_folder">/param/dxl_model</param>
+               <param name="disable_torque_at_init">true</param>
+               <param name="torque_enable">0</param>
+             </hardware>
+
+           </ros2_control> -->
 
 </robot>

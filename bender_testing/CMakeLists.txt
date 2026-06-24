@@ -14,6 +14,7 @@ install(
   PROGRAMS
   scripts/goal_pose_node.py
   scripts/nav_test.py
+  scripts/test.py
   DESTINATION lib/${PROJECT_NAME}
 )
 if(BUILD_TESTING)

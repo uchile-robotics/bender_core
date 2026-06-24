@@ -1,10 +1,10 @@
 controller_manager:
   ros__parameters:
-    update_rate: 100  # Hz
+    update_rate: 10  # Hz
 
-    joint_state_broadcaster: 
-      type: joint_state_broadcaster/JointStateBroadcaster 
-    
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
     left_arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
@@ -14,26 +14,26 @@ controller_manager:
     head_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
-    left_gripper_controller:
-      type: position_controllers/GripperActionController
+    # left_gripper_controller:
+    #   type: position_controllers/GripperActionController
 
-    right_gripper_controller:
-      type: position_controllers/GripperActionController
-    
-    mecanum_base_controller:
-      type: "mecanum_drive_controller/MecanumDriveController"
+    # right_gripper_controller:
+    #   type: position_controllers/GripperActionController
+
+    # mecanum_base_controller:
+    #   type: "mecanum_drive_controller/MecanumDriveController"
 
 joint_state_broadcaster:
   ros__parameters:
     type: joint_state_broadcaster/JointStateBroadcaster
     joints:
-      - l1l_to_base_link
+      # - l1l_to_base_link
       - l2l_to_l1l
       - l3l_to_l2l
       - l4l_to_l3l
       - l5l_to_l4l
       - l6l_to_l5l
-      - l1r_to_base_link
+      # - l1r_to_base_link
       - l2r_to_l1r
       - l3r_to_l2r
       - l4r_to_l3r
@@ -41,8 +41,8 @@ joint_state_broadcaster:
       - l6r_to_l5r
       - l1h_to_base_link
       - l2h_to_l1h
-      - g2la_to_g1l
-      - g2lb_to_g1l
+      # - g2la_to_g1l
+      # - g2lb_to_g1l
       - g2ra_to_g1r
       - g2rb_to_g1r
     publish_rate: 50
@@ -51,7 +51,7 @@ left_arm_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      - l1l_to_base_link
+      # - l1l_to_base_link
       - l2l_to_l1l
       - l3l_to_l2l
       - l4l_to_l3l
@@ -64,7 +64,7 @@ right_arm_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      - l1r_to_base_link
+      # - l1r_to_base_link
       - l2r_to_l1r
       - l3r_to_l2r
       - l4r_to_l3r
@@ -82,30 +82,29 @@ head_controller:
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-left_gripper_controller:
-  ros__parameters:
-    type: position_controllers/GripperActionController
-    joint: g2la_to_g1l
+# left_gripper_controller:
+#   ros__parameters:
+#     type: position_controllers/GripperActionController
+#     joint: g2la_to_g1l
 
-right_gripper_controller:
-  ros__parameters:
-    type: position_controllers/GripperActionController
-    joint: g2ra_to_g1r
+# right_gripper_controller:
+#   ros__parameters:
+#     type: position_controllers/GripperActionController
+#     joint: g2ra_to_g1r
 
-mecanum_base_controller:
-  ros__parameters:
-    reference_timeout: 0.9
-    front_left_wheel_command_joint_name: "wfl_to_base_link"
-    front_right_wheel_command_joint_name: "wfr_to_base_link"
-    rear_right_wheel_command_joint_name: "wrl_to_base_link"
-    rear_left_wheel_command_joint_name: "wrr_to_base_link"
-    kinematics:
-      base_frame_offset: { x: 0.0, y: 0.0, theta: 0.0 }
-      wheels_radius: 0.1
-      sum_of_robot_center_projection_on_X_Y_axis: 1.0
-    base_frame_id: "base_link"
-    odom_frame_id: "odom"
-    enable_odom_tf: true
-    twist_covariance_diagonal: [0.0, 7.0, 14.0, 21.0, 28.0, 35.0]
-    pose_covariance_diagonal: [0.0, 6.0, 12.0, 18.0, 24.0, 30.0]
-  
+# mecanum_base_controller:
+#   ros__parameters:
+#     reference_timeout: 0.9
+#     front_left_wheel_command_joint_name: "wfl_to_base_link"
+#     front_right_wheel_command_joint_name: "wfr_to_base_link"
+#     rear_right_wheel_command_joint_name: "wrl_to_base_link"
+#     rear_left_wheel_command_joint_name: "wrr_to_base_link"
+#     kinematics:
+#       base_frame_offset: { x: 0.0, y: 0.0, theta: 0.0 }
+#       wheels_radius: 0.1
+#       sum_of_robot_center_projection_on_X_Y_axis: 1.0
+#     base_frame_id: "base_link"
+#     odom_frame_id: "odom"
+#     enable_odom_tf: true
+#     twist_covariance_diagonal: [0.0, 7.0, 14.0, 21.0, 28.0, 35.0]
+#     pose_covariance_diagonal: [0.0, 6.0, 12.0, 18.0, 24.0, 30.0]

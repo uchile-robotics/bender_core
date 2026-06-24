@@ -266,7 +266,7 @@
     <visual>
       <origin xyz="0.07 0.06 0.055" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
       <geometry>
-        <cylinder radius="0.045" length="0.001"/> 
+        <cylinder radius="0.045" length="0.001"/>
       </geometry>
       <material name="light_blue"/>
     </visual>
@@ -275,7 +275,7 @@
     <visual>
       <origin xyz="0.07 0.03 0" rpy="0 0 0"/> <!-- rotado para que sea un disco plano -->
       <geometry>
-        <box size="0.01 0.08 0.02"/> 
+        <box size="0.01 0.08 0.02"/>
       </geometry>
       <material name="casi_blue"/>
     </visual>
@@ -351,7 +351,7 @@
     </collision>
   </link>
 
-  <link name="g1l_1">
+  <!-- <link name="g1l_1">
     <inertial>
       <origin xyz="6.478948621099247e-05 -4.2143764839019937e-07 -0.026736939315755603" rpy="0 0 0"/>
       <mass value="0.12876405832743776"/>
@@ -371,8 +371,8 @@
       </geometry>
     </collision>
   </link>
-
-  <link name="g2lb_1">
+ -->
+  <!-- <link name="g2lb_1">
     <inertial>
       <origin xyz="-0.022099311837869458 0.014425663262769728 -0.057211880752566724" rpy="0 0 0"/>
       <mass value="0.05474843522698835"/>
@@ -391,9 +391,9 @@
         <mesh filename="file://$(find bender_description)/meshes/g2lb_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
-  </link>
+  </link> -->
 
-  <link name="g2la_1">
+  <!-- <link name="g2la_1">
     <inertial>
       <origin xyz="-0.022100459076024488 -0.01442650527789352 -0.057211880752566335" rpy="0 0 0"/>
       <mass value="0.05474843522698835"/>
@@ -412,8 +412,54 @@
         <mesh filename="file://$(find bender_description)/meshes/g2la_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
-  </link>
+  </link> -->
 
+  <joint name="l6l_to_gripper" type="fixed">
+      <origin xyz="0.0 -0.02225 -0.024015" rpy="0 0 0"/>
+      <parent link="l6l_1"/>
+      <child link="gripper_l_base"/>
+    </joint>
+
+    <link name="gripper_l_base">
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://robot_gripper/meshes/base.stl"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="gripper_base_to_fijo" type="fixed">
+      <parent link="gripper_l_base"/>
+      <child link="fijo"/>
+      <origin xyz="0 0 0"/>
+    </joint>
+
+    <link name="fijo">
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://robot_gripper/meshes/fijo_v2.stl"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="gripper_base_to_movil" type="revolute">
+      <axis xyz="0 1 0"/>
+      <origin rpy="0 0 0" xyz="-18.69 0 -19.45"/>
+      <parent link="gripper_l_base"/>
+      <child link="movil"/>
+      <limit effort="1000.0" lower="0.0" upper="0.5" velocity="0.5"/>
+    </joint>
+
+    <link name="movil">
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://robot_gripper/meshes/movil2.stl"/>
+        </geometry>
+      </visual>
+    </link>
   <link name="laser_1">
     <inertial>
       <origin xyz="0.00021452729941068283 1.2832545766421587e-05 0.03715423693922987" rpy="0 0 0"/>
@@ -685,7 +731,6 @@
   </joint>
 
   <joint name="g2rb_to_g1r" type="revolute">
-    <mimic joint="g2ra_to_g1r" multiplier="-1" offset="0"/>
     <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
     <parent link="g1r_1"/>
     <child link="g2rb_1"/>
@@ -693,29 +738,28 @@
     <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
   </joint>
 
-  <joint name="g1l_to_l6l" type="fixed">
+  <!-- <joint name="g1l_to_l6l" type="fixed">
     <origin xyz="0.0 -0.02225 -0.024015" rpy="0 0 0"/>
     <parent link="l6l_1"/>
     <child link="g1l_1"/>
-  </joint>
+  </joint> -->
 
-  <joint name="g2lb_to_g1l" type="revolute">
-    <mimic joint="g2la_to_g1l" multiplier="-1" offset="0"/>
+  <!-- <joint name="g2lb_to_g1l" type="revolute">
     <origin xyz="0.02195 0.0185 -0.0416" rpy="0 0 0"/>
     <parent link="g1l_1"/>
     <child link="g2lb_1"/>
     <axis xyz="-1.0 0.0 -0.0"/>
     <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
-  </joint>
+  </joint> -->
 
-  <joint name="g2la_to_g1l" type="revolute">
+  <!-- <joint name="g2la_to_g1l" type="revolute">
     <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
     <parent link="g1l_1"/>
     <child link="g2la_1"/>
     <axis xyz="-1.0 0.0 -0.0"/>
     <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100" velocity="100"/>
   </joint>
-
+ -->
   <joint name="laser_to_base_link" type="fixed">
     <origin xyz="0.188322 -0.007366 0.25882" rpy="0 0 0"/>
     <parent link="base_link"/>
