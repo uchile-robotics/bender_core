@@ -8,8 +8,6 @@
   <maintainer email="samuel@example.com">samuel</maintainer>
   <license>Apache-2.0</license>
 
-  <!-- Herramienta de build para paquetes Python -->
-  <buildtool_depend>ament_python</buildtool_depend>
 
   <!-- Dependencias de ejecución -->
   <exec_depend>std_msgs</exec_depend>
