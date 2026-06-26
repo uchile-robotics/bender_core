@@ -1,11 +1,58 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-       <!-- <ros2_control name="OdriveJoint" type="actuator">
-         <hardware>
-           <plugin>odrive_hardware_interface/ODriveHardwareInterface</plugin>
-         </hardware>
-       </ros2_control>
+<xacro:macro name="odrive_ros2_control" params="name serial_number joint_name axis:=0">
+    <ros2_control name="${name}" type="system">
+      <hardware>
+        <plugin>odrive_hardware_interface/ODriveHardwareInterface</plugin>
+      </hardware>
+
+      <sensor name="${name}_dev0">
+        <param name="serial_number">${serial_number}</param>
+      </sensor>
+
+      <joint name="${joint_name}">
+        <param name="serial_number">${serial_number}</param>
+        <param name="axis">${axis}</param>
+        <param name="enable_watchdog">1</param>
+        <param name="watchdog_timeout">1.0</param>
+        <command_interface name="position" />
+        <command_interface name="velocity" />
+        <command_interface name="effort" />
+        <state_interface name="position" />
+        <state_interface name="velocity" />
+        <state_interface name="effort" />
+      </joint>
+    </ros2_control>
+  </xacro:macro>
+
+  <xacro:odrive_ros2_control
+    name="OdriveLeft"
+    serial_number="336B33573235"
+    joint_name="l1l_to_base_link"
+    axis="0"/>
+
+  <xacro:odrive_ros2_control
+    name="OdriveRight"
+    serial_number="CAMBIA EL NUMERO DE SERIE LUCHO"
+    joint_name="l1r_to_base_link"
+    axis="0"/>
+
+  <transmission name="trans_l1l_to_base_link">
+    <plugin>transmission_interface/SimpleTransmission</plugin>
+    <actuator name="motor_l1l_to_base_link" role="actuator1"/>
+    <joint name="l1l_to_base_link" role="joint1">
+      <mechanicalReduction>10.0</mechanicalReduction> <!-- Cambiar reducción-->
+    </joint>
+  </transmission>
+
+  <transmission name="trans_l1r_to_base_link">
+    <plugin>transmission_interface/SimpleTransmission</plugin>
+    <actuator name="motor_l1r_to_base_link" role="actuator1"/>
+    <joint name="l1r_to_base_link" role="joint1">
+      <mechanicalReduction>10.0</mechanicalReduction><!-- Cambiar reducción-->
+    </joint>
+  </transmission>
 
        <ros2_control name="ShoulderJoint" type="sensor">
            <hardware>
@@ -27,10 +74,10 @@
              <hardware>
                <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
                <param name="port_name">/dev/dynamixel</param>
-               <param name="baud_rate">2000000</param>
+               <param name="baud_rate">1000000</param>
                <param name="protocol_version">1.0</param>
-               <param name="number_of_joints">13</param>
-               <param name="number_of_transmissions">13</param>
+               <param name="number_of_joints">14</param>
+               <param name="number_of_transmissions">14</param>
                <param name="dynamixel_model_folder">/param/dxl_model</param>
                <param name="disable_torque_at_init">true</param>
                <param name="torque_enable">0</param>
@@ -279,7 +326,7 @@
                 <param name="Return Delay Time">25</param>
              </gpio>
 
-             <!-- <joint name="l4l_to_l3l">
+             <joint name="l4l_to_l3l">
                <command_interface name="position" />
                <state_interface name="position" />
                <state_interface name="velocity" />
@@ -296,7 +343,7 @@
                <param name="I Gain">2</param>
                <param name="D Gain">5</param>
                <param name="Return Delay Time">25</param>
-             </gpio> -->
+             </gpio>
              <!-- <gpio name="motor_l2h_master">
                 <param name="type">dxl</param>
                 <param name="ID">20</param>
