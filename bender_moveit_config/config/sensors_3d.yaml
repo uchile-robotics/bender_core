@@ -1,12 +1,6 @@
 sensors:
   - default_sensor
   - kinect_depthimage
-
-# Configuración general del monitor
-octomap_frame: base_link
-octomap_resolution: 0.02   # <-- resolución deseada (en metros por voxel)
-max_range: 5.0
-
 default_sensor:
   filtered_cloud_topic: filtered_cloud
   max_range: 5.0
@@ -16,7 +10,6 @@ default_sensor:
   point_cloud_topic: /camera/depth/color/points
   point_subsample: 1
   sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
-
 kinect_depthimage:
   far_clipping_plane_distance: 5.0
   filtered_cloud_topic: filtered_cloud

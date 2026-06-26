@@ -13,7 +13,6 @@ moveit_simple_controller_manager:
   left_arm_controller:
     type: FollowJointTrajectory
     joints:
-      - l1l_to_base_link
       - l2l_to_l1l
       - l3l_to_l2l
       - l4l_to_l3l
@@ -24,7 +23,6 @@ moveit_simple_controller_manager:
   right_arm_controller:
     type: FollowJointTrajectory
     joints:
-      - l1r_to_base_link
       - l2r_to_l1r
       - l3r_to_l2r
       - l4r_to_l3r
@@ -36,7 +34,6 @@ moveit_simple_controller_manager:
     type: FollowJointTrajectory
     joints:
       - l1h_to_base_link
-      - l2h_to_l1h
     action_ns: follow_joint_trajectory
     default: true
   left_gripper_controller:

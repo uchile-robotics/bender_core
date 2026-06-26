@@ -5,7 +5,7 @@
          <hardware>
            <plugin>odrive_hardware_interface/ODriveHardwareInterface</plugin>
          </hardware>
-       </ros2_control>
+       </ros2_control> -->
 
        <ros2_control name="ShoulderJoint" type="sensor">
            <hardware>
@@ -21,13 +21,13 @@
              <state_interface name="position" />
              <state_interface name="velocity" />
            </sensor>
-         </ros2_control> -->
+         </ros2_control> 
 
          <ros2_control name="DynamixelChainMain" type="system">
              <hardware>
                <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
                <param name="port_name">/dev/dynamixel</param>
-               <param name="baud_rate">2000000</param>
+               <param name="baud_rate">1000000</param>
                <param name="protocol_version">1.0</param>
                <param name="number_of_joints">13</param>
                <param name="number_of_transmissions">13</param>
@@ -227,7 +227,7 @@
 
              <gpio name="motor_g2ra">
                 <param name="type">dxl</param>
-                <param name="ID">17</param>
+                <param name="ID">16</param>
                 <command_interface name="Goal Position" />
                 <state_interface name="Present Position" />
                 <state_interface name="Present Velocity" />
@@ -240,7 +240,7 @@
              </gpio>
              <gpio name="motor_g2rb">
                 <param name="type">dxl</param>
-                <param name="ID">16</param>
+                <param name="ID">17</param>
                 <command_interface name="Goal Position" />
                 <state_interface name="Present Position" />
                 <state_interface name="Present Velocity" />
