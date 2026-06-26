@@ -54,9 +54,9 @@ def generate_launch_description():
             output='screen',)]
     )
 
-    joint_state_publisher_gui = Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
+    joint_state_publisher = Node(
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
         output='screen',
     )
 
@@ -67,5 +67,5 @@ def generate_launch_description():
         robot_state_publisher,
         declare_rviz,
         rviz2,
-        joint_state_publisher_gui, 
+        joint_state_publisher, 
     ])

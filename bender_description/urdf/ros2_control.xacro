@@ -68,7 +68,7 @@
              <state_interface name="position" />
              <state_interface name="velocity" />
            </sensor>
-         </ros2_control> -->
+         </ros2_control>
 
          <ros2_control name="DynamixelChainMain" type="system">
              <hardware>
@@ -274,7 +274,7 @@
 
              <gpio name="motor_g2ra">
                 <param name="type">dxl</param>
-                <param name="ID">17</param>
+                <param name="ID">16</param>
                 <command_interface name="Goal Position" />
                 <state_interface name="Present Position" />
                 <state_interface name="Present Velocity" />
@@ -287,7 +287,7 @@
              </gpio>
              <gpio name="motor_g2rb">
                 <param name="type">dxl</param>
-                <param name="ID">16</param>
+                <param name="ID">17</param>
                 <command_interface name="Goal Position" />
                 <state_interface name="Present Position" />
                 <state_interface name="Present Velocity" />
