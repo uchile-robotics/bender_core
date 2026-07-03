@@ -689,7 +689,7 @@
     <parent link="l3r_1"/>
     <child link="l4r_1"/>
     <axis xyz="-0.0 -1.0 0.0"/>
-    <limit upper="${2.356194 + epsilon}" lower="${-epsilon}" effort="100" velocity="100"/>
+    <limit upper="${2.356194 + epsilon}" lower="-3.14" effort="100" velocity="100"/>
   </joint>
 
   <joint name="l5r_to_l4r" type="revolute">
@@ -708,6 +708,7 @@
     <limit upper="${1.570796 + epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
   </joint>
 
+  <!-- head pitch joint -->
   <joint name="l2h_to_l1h" type="revolute">
     <origin rpy="0 0 0" xyz="0.0 -0.03 0.07"/>
     <parent link="l1h_1"/>
@@ -715,6 +716,15 @@
     <axis xyz="-0.0 -1.0 0.0"/>
     <limit effort="50" lower="${-0.706858 - epsilon}" upper="${0.706858 + epsilon}" velocity="50"/>
   </joint>
+
+  <!-- head roll joint -->
+  <!-- <joint name="l3h_to_l2h" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 -0.03 0.07"/>
+    <parent link="l2h_1"/>
+    <child link="l3h_1"/>
+    <axis xyz="-0.0 -1.0 0.0"/>
+    <limit effort="50" lower="${-0.706858 - epsilon}" upper="${0.706858 + epsilon}" velocity="50"/>
+  </joint> -->
 
   <joint name="g1r_to_l6r" type="fixed">
     <origin xyz="0.0 0.02225 -0.024015" rpy="0 0 0"/>

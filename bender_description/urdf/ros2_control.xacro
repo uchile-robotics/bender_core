@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<xacro:macro name="odrive_ros2_control" params="name serial_number joint_name axis:=0">
+<!-- <xacro:macro name="odrive_ros2_control" params="name serial_number joint_name axis:=0">
     <ros2_control name="${name}" type="system">
       <hardware>
         <plugin>odrive_hardware_interface/ODriveHardwareInterface</plugin>
@@ -42,7 +42,7 @@
     <plugin>transmission_interface/SimpleTransmission</plugin>
     <actuator name="motor_l1l_to_base_link" role="actuator1"/>
     <joint name="l1l_to_base_link" role="joint1">
-      <mechanicalReduction>10.0</mechanicalReduction> <!-- Cambiar reducción-->
+      <mechanicalReduction>10.0</mechanicalReduction>
     </joint>
   </transmission>
 
@@ -50,7 +50,7 @@
     <plugin>transmission_interface/SimpleTransmission</plugin>
     <actuator name="motor_l1r_to_base_link" role="actuator1"/>
     <joint name="l1r_to_base_link" role="joint1">
-      <mechanicalReduction>10.0</mechanicalReduction><!-- Cambiar reducción-->
+      <mechanicalReduction>10.0</mechanicalReduction>
     </joint>
   </transmission>
 
@@ -68,7 +68,7 @@
              <state_interface name="position" />
              <state_interface name="velocity" />
            </sensor>
-         </ros2_control>
+         </ros2_control> -->
 
          <ros2_control name="DynamixelChainMain" type="system">
              <hardware>
@@ -161,6 +161,8 @@
                 <state_interface name="Present Position" />
                 <state_interface name="Present Velocity" />
                 <state_interface name="Present Load" />
+                <!-- software re-center -->
+                <param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -3.1001879291; Goal Position, 0.001533981, rad, unsigned, -3.1001879291</param>
                 <param name="P Gain">8</param>
                 <param name="I Gain">2</param>
                 <param name="D Gain">5</param>
@@ -174,6 +176,7 @@
                 <state_interface name="Present Position" />
                 <state_interface name="Present Velocity" />
                 <state_interface name="Present Load" />
+                <!-- doesn't need recentering -->
                 <param name="CW Compliance Margin">1</param>
                 <param name="CCW Compliance Margin">1</param>
                 <param name="CW Compliance Slope">254</param>
@@ -187,6 +190,7 @@
                 <state_interface name="Present Position" />
                 <state_interface name="Present Velocity" />
                 <state_interface name="Present Load" />
+                <param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -3.471399003; Goal Position, 0.001533981, rad, unsigned, -3.471399003</param>
                 <param name="P Gain">8</param>
                 <param name="I Gain">2</param>
                 <param name="D Gain">5</param>
@@ -226,6 +230,7 @@
                 <state_interface name="Present Position" />
                 <state_interface name="Present Velocity" />
                 <state_interface name="Present Load" />
+                <param name="[unit info]">Present Position, 0.001047198, rad, unsigned, -1.6221098; Goal Position, 0.001047198, rad, unsigned, -1.6221098</param>
                 <param name="CW Compliance Margin">1</param>
                 <param name="CCW Compliance Margin">1</param>
                 <param name="CW Compliance Slope">254</param>
@@ -239,6 +244,7 @@
                 <state_interface name="Present Position" />
                 <state_interface name="Present Velocity" />
                 <state_interface name="Present Load" />
+                <param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -2.070135026; Goal Position, 0.005061455, rad, unsigned, -2.070135026</param>
                 <param name="CW Compliance Margin">1</param>
                 <param name="CCW Compliance Margin">1</param>
                 <param name="CW Compliance Slope">254</param>
@@ -339,12 +345,13 @@
                <state_interface name="Present Position" />
                <state_interface name="Present Velocity" />
                <state_interface name="Present Load" />
+               <param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -2.963651292; Goal Position, 0.001533981, rad, unsigned, -2.963651292</param>
                <param name="P Gain">8</param>
                <param name="I Gain">2</param>
                <param name="D Gain">5</param>
                <param name="Return Delay Time">25</param>
              </gpio>
-             <!-- <gpio name="motor_l2h_master">
+             <!-- <gpio name="motor_l2h_1">
                 <param name="type">dxl</param>
                 <param name="ID">20</param>
                 <command_interface name="Goal Position" />
@@ -357,7 +364,7 @@
                 <param name="CCW Compliance Slope">254</param>
                 <param name="Return Delay Time">25</param>
              </gpio>
-             <gpio name="motor_l2h_slave">
+             <gpio name="motor_l2h_2">
                 <param name="type">dxl</param>
                 <param name="ID">21</param>
                 <command_interface name="Goal Position" />
@@ -372,20 +379,5 @@
              </gpio> -->
 
            </ros2_control>
-<!--
-           <ros2_control name="DynamixelChainSlow" type="system">
-             <hardware>
-               <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
-               <param name="port_name">/dev/dynamixel</param>
-               <param name="baud_rate">57600</param>
-               <param name="protocol_version">1.0</param>
-               <param name="number_of_joints">1</param>
-               <param name="number_of_transmissions">1</param>
-               <param name="dynamixel_model_folder">/param/dxl_model</param>
-               <param name="disable_torque_at_init">true</param>
-               <param name="torque_enable">0</param>
-             </hardware>
-
-           </ros2_control> -->
 
 </robot>
