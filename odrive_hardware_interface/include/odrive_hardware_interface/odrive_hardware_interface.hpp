@@ -55,7 +55,7 @@ public:
   RCLCPP_SHARED_PTR_DEFINITIONS(ODriveHardwareInterface)
 
   ODRIVE_HARDWARE_INTERFACE_PUBLIC
-  CallbackReturn on_init(const hardware_interface::HardwareInfo & info) override;
+  CallbackReturn on_init(const hardware_interface::HardwareComponentInterfaceParams & info) override;
 
   ODRIVE_HARDWARE_INTERFACE_PUBLIC
   CallbackReturn on_activate(const rclcpp_lifecycle::State &) override;
@@ -91,6 +91,9 @@ private:
   std::vector<int> axes_;
   std::vector<float> torque_constants_;
   std::vector<bool> enable_watchdogs_;
+  std::vector<float> gear_ratios_;
+  std::vector<float> position_offsets_;
+  std::vector<bool> offset_captured_;
 
   std::vector<double> hw_vbus_voltages_;
 

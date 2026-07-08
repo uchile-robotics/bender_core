@@ -18,11 +18,10 @@
 
 namespace odrive_hardware_interface
 {
-CallbackReturn ODriveHardwareInterface::on_init(const hardware_interface::HardwareInfo & info)
-{
-  if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
+CallbackReturn ODriveHardwareInterface::on_init(const hardware_interface::HardwareComponentInterfaceParams & info){
+    if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
     return CallbackReturn::ERROR;
-  }
+}
 
   serial_numbers_.resize(2);
 
@@ -41,6 +40,8 @@ CallbackReturn ODriveHardwareInterface::on_init(const hardware_interface::Hardwa
   hw_controller_errors_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_fet_temperatures_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_motor_temperatures_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  position_offsets_.resize(info_.joints.size(), 0.0f);
+  offset_captured_.resize(info_.joints.size(), false);
 
   for (const hardware_interface::ComponentInfo & sensor : info_.sensors) {
     serial_numbers_[0].emplace_back(std::stoull(sensor.parameters.at("serial_number"), 0, 16));
@@ -50,6 +51,11 @@ CallbackReturn ODriveHardwareInterface::on_init(const hardware_interface::Hardwa
     serial_numbers_[1].emplace_back(std::stoull(joint.parameters.at("serial_number"), 0, 16));
     axes_.emplace_back(std::stoi(joint.parameters.at("axis")));
     enable_watchdogs_.emplace_back(std::stoi(joint.parameters.at("enable_watchdog")));
+    float ratio = 1.0;
+    if (joint.parameters.find("gear_ratio") != joint.parameters.end()) {
+        ratio = std::stof(joint.parameters.at("gear_ratio"));
+    }
+    gear_ratios_.emplace_back(ratio);
   }
 
   odrive = new ODriveUSB();
@@ -80,7 +86,7 @@ CallbackReturn ODriveHardwareInterface::on_activate(const rclcpp_lifecycle::Stat
 {
   for (size_t i = 0; i < info_.joints.size(); i++) {
     if (enable_watchdogs_[i]) {
-      CHECK_TS(
+        CHECK_TS(
         odrive->call(serial_numbers_[1][i], AXIS__WATCHDOG_FEED + per_axis_offset * axes_[i]));
     }
     CHECK_TS(odrive->call(serial_numbers_[1][i], CLEAR_ERRORS));
@@ -109,12 +115,24 @@ std::vector<hardware_interface::StateInterface> ODriveHardwareInterface::export_
   }
 
   for (size_t i = 0; i < info_.joints.size(); i++) {
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_EFFORT, &hw_efforts_[i]));
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-      info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
+    // NUEVO COMPORTAMIENTO: Solo exportar estados si el URDF lo pide explícitamente.
+    // Esto evita choques con tu Encoder externo.
+    for (const auto & state_interface : info_.joints[i].state_interfaces) {
+      if (state_interface.name == hardware_interface::HW_IF_POSITION) {
+        state_interfaces.emplace_back(hardware_interface::StateInterface(
+          info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_positions_[i]));
+      }
+      if (state_interface.name == hardware_interface::HW_IF_VELOCITY) {
+        state_interfaces.emplace_back(hardware_interface::StateInterface(
+          info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &hw_velocities_[i]));
+      }
+      if (state_interface.name == hardware_interface::HW_IF_EFFORT) {
+        state_interfaces.emplace_back(hardware_interface::StateInterface(
+          info_.joints[i].name, hardware_interface::HW_IF_EFFORT, &hw_efforts_[i]));
+      }
+    }
+
+    // Los parámetros de diagnóstico propios del ODrive siempre se exportan
     state_interfaces.emplace_back(
       hardware_interface::StateInterface(info_.joints[i].name, "axis_error", &hw_axis_errors_[i]));
     state_interfaces.emplace_back(hardware_interface::StateInterface(
@@ -225,11 +243,11 @@ return_type ODriveHardwareInterface::perform_command_mode_switch(
           serial_numbers_[1][i],
           AXIS__CONTROLLER__CONFIG__CONTROL_MODE + per_axis_offset * axes_[i],
           (int32_t)control_level_[i]));
-        input_vel = hw_commands_velocities_[i] / 2 / M_PI;
+        input_vel = (hw_commands_velocities_[i] * gear_ratios_[i]) / 2 / M_PI;
         CHECK_RW(odrive->write(
           serial_numbers_[1][i], AXIS__CONTROLLER__INPUT_VEL + per_axis_offset * axes_[i],
           input_vel));
-        input_torque = hw_commands_efforts_[i];
+        input_torque = hw_commands_efforts_[i] / gear_ratios_[i];
         CHECK_RW(odrive->write(
           serial_numbers_[1][i], AXIS__CONTROLLER__INPUT_TORQUE + per_axis_offset * axes_[i],
           input_torque));
@@ -247,15 +265,15 @@ return_type ODriveHardwareInterface::perform_command_mode_switch(
           serial_numbers_[1][i],
           AXIS__CONTROLLER__CONFIG__CONTROL_MODE + per_axis_offset * axes_[i],
           (int32_t)control_level_[i]));
-        input_pos = hw_commands_positions_[i] / 2 / M_PI;
+        input_pos = position_offsets_[i] + (hw_commands_positions_[i] * gear_ratios_[i]) / 2 / M_PI;
         CHECK_RW(odrive->write(
           serial_numbers_[1][i], AXIS__CONTROLLER__INPUT_POS + per_axis_offset * axes_[i],
           input_pos));
-        input_vel = hw_commands_velocities_[i] / 2 / M_PI;
+        input_vel = (hw_commands_velocities_[i] * gear_ratios_[i]) / 2 / M_PI;
         CHECK_RW(odrive->write(
           serial_numbers_[1][i], AXIS__CONTROLLER__INPUT_VEL + per_axis_offset * axes_[i],
           input_vel));
-        input_torque = hw_commands_efforts_[i];
+        input_torque = hw_commands_efforts_[i] / gear_ratios_[i];
         CHECK_RW(odrive->write(
           serial_numbers_[1][i], AXIS__CONTROLLER__INPUT_TORQUE + per_axis_offset * axes_[i],
           input_torque));
@@ -294,12 +312,12 @@ return_type ODriveHardwareInterface::read(const rclcpp::Time &, const rclcpp::Du
     CHECK_RW(odrive->read(
       serial_numbers_[1][i], AXIS__ENCODER__VEL_ESTIMATE + per_axis_offset * axes_[i],
       vel_estimate));
-    hw_velocities_[i] = vel_estimate * 2 * M_PI;
+    hw_velocities_[i] = vel_estimate * 2 * M_PI / gear_ratios_[i];
 
     CHECK_RW(odrive->read(
       serial_numbers_[1][i], AXIS__ENCODER__POS_ESTIMATE + per_axis_offset * axes_[i],
       pos_estimate));
-    hw_positions_[i] = pos_estimate * 2 * M_PI;
+    hw_positions_[i] = (pos_estimate - position_offsets_[i]) * 2 * M_PI / gear_ratios_[i];
 
     CHECK_RW(
       odrive->read(serial_numbers_[1][i], AXIS__ERROR + per_axis_offset * axes_[i], axis_error));
@@ -339,28 +357,33 @@ return_type ODriveHardwareInterface::write(const rclcpp::Time &, const rclcpp::D
 
     switch (control_level_[i]) {
       case integration_level_t::POSITION:
-        input_pos = hw_commands_positions_[i] / 2 / M_PI;
+        // Multiplicamos por gear_ratios_[i]
+        input_pos = (hw_commands_positions_[i] * gear_ratios_[i]) / 2 / M_PI;
         CHECK_RW(odrive->write(
           serial_numbers_[1][i], AXIS__CONTROLLER__INPUT_POS + per_axis_offset * axes_[i],
           input_pos));
+        break;
 
       case integration_level_t::VELOCITY:
-        input_vel = hw_commands_velocities_[i] / 2 / M_PI;
+        input_vel = (hw_commands_velocities_[i] * gear_ratios_[i]) / 2 / M_PI;
         CHECK_RW(odrive->write(
           serial_numbers_[1][i], AXIS__CONTROLLER__INPUT_VEL + per_axis_offset * axes_[i],
           input_vel));
+        break;
 
       case integration_level_t::EFFORT:
-        input_torque = hw_commands_efforts_[i];
+        input_torque = hw_commands_efforts_[i] / gear_ratios_[i];
         CHECK_RW(odrive->write(
           serial_numbers_[1][i], AXIS__CONTROLLER__INPUT_TORQUE + per_axis_offset * axes_[i],
           input_torque));
+        break;
 
       case integration_level_t::UNDEFINED:
         if (enable_watchdogs_[i]) {
           CHECK_RW(
             odrive->call(serial_numbers_[1][i], AXIS__WATCHDOG_FEED + per_axis_offset * axes_[i]));
         }
+        break;
     }
   }
 
