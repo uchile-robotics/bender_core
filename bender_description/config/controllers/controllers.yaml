@@ -51,7 +51,7 @@ left_arm_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      # - l1l_to_base_link
+      - l1l_to_base_link
       - l2l_to_l1l
       - l3l_to_l2l
       - l4l_to_l3l
@@ -64,7 +64,7 @@ right_arm_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      # - l1r_to_base_link
+      - l1r_to_base_link
       - l2r_to_l1r
       - l3r_to_l2r
       - l4r_to_l3r
