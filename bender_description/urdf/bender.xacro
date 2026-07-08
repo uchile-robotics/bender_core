@@ -351,71 +351,8 @@
     </collision>
   </link>
 
-  <!-- <link name="g1l_1">
-    <inertial>
-      <origin xyz="6.478948621099247e-05 -4.2143764839019937e-07 -0.026736939315755603" rpy="0 0 0"/>
-      <mass value="0.12876405832743776"/>
-      <inertia ixx="8.6e-05" iyy="4.3e-05" izz="7e-05" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
-    </inertial>
-    <visual>
-      <origin xyz="-0.007275 -0.247637 -0.480247" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://$(find bender_description)/meshes/g1l_1.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="grey"/>
-    </visual>
-    <collision>
-      <origin xyz="-0.007275 -0.247637 -0.480247" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://$(find bender_description)/meshes/g1l_1.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
-  </link>
- -->
-  <!-- <link name="g2lb_1">
-    <inertial>
-      <origin xyz="-0.022099311837869458 0.014425663262769728 -0.057211880752566724" rpy="0 0 0"/>
-      <mass value="0.05474843522698835"/>
-      <inertia ixx="3.9e-05" iyy="3.7e-05" izz="2e-05" ixy="-0.0" iyz="-1e-05" ixz="0.0"/>
-    </inertial>
-    <visual>
-      <origin xyz="-0.029225 -0.266137 -0.438647" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://$(find bender_description)/meshes/g2lb_1.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="red"/>
-    </visual>
-    <collision>
-      <origin xyz="-0.029225 -0.266137 -0.438647" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://$(find bender_description)/meshes/g2lb_1.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
-  </link> -->
-
-  <!-- <link name="g2la_1">
-    <inertial>
-      <origin xyz="-0.022100459076024488 -0.01442650527789352 -0.057211880752566335" rpy="0 0 0"/>
-      <mass value="0.05474843522698835"/>
-      <inertia ixx="3.9e-05" iyy="3.7e-05" izz="2e-05" ixy="-0.0" iyz="1e-05" ixz="-0.0"/>
-    </inertial>
-    <visual>
-      <origin xyz="-0.029225 -0.229137 -0.438647" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://$(find bender_description)/meshes/g2la_1.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="red"/>
-    </visual>
-    <collision>
-      <origin xyz="-0.029225 -0.229137 -0.438647" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://$(find bender_description)/meshes/g2la_1.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
-  </link> -->
-
   <joint name="l6l_to_gripper" type="fixed">
-      <origin xyz="0.0 -0.02225 -0.024015" rpy="0 0 0"/>
+      <origin xyz="0.0 -0.02225 -0.091" rpy="0 3.14159 0"/>
       <parent link="l6l_1"/>
       <child link="gripper_l_base"/>
     </joint>
@@ -424,7 +361,7 @@
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://robot_gripper/meshes/base.stl"/>
+          <mesh filename="file://$(find bender_description)/meshes/base.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </visual>
     </link>
@@ -439,14 +376,14 @@
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://robot_gripper/meshes/fijo_v2.stl"/>
+          <mesh filename="file://$(find bender_description)/meshes/fijo_v2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </visual>
     </link>
 
     <joint name="gripper_base_to_movil" type="revolute">
       <axis xyz="0 1 0"/>
-      <origin rpy="0 0 0" xyz="-18.69 0 -19.45"/>
+      <origin rpy="0 0 0" xyz="-0.01869 0 -0.01945"/>
       <parent link="gripper_l_base"/>
       <child link="movil"/>
       <limit effort="1000.0" lower="0.0" upper="0.5" velocity="0.5"/>
@@ -456,7 +393,7 @@
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://robot_gripper/meshes/movil2.stl"/>
+          <mesh filename="file://$(find bender_description)/meshes/movil2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </visual>
     </link>
