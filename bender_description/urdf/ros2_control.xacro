@@ -71,17 +71,18 @@
 			<state_interface name="velocity" />
 		</joint>
 		<gpio name="motor_l2r">
-			<param name="type">dxl</param>
-			<param name="ID">11</param>
-			<command_interface name="Goal Position" />
-			<state_interface name="Present Position" />
-			<state_interface name="Present Velocity" />
-			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -3.1001879291; Goal Position, 0.001533981, rad, unsigned, -3.1001879291</param>
-			<param name="P Gain">8</param>
-			<param name="I Gain">2</param>
-			<param name="D Gain">5</param>
-			<param name="Return Delay Time">25</param>
+    		<param name="type">dxl</param>
+    		<param name="ID">4</param>
+    		<command_interface name="Goal Position" />
+    		<state_interface name="Present Position" />
+    		<state_interface name="Present Velocity" />
+    		<state_interface name="Present Load" />
+    		<param name="[unit info]">Present Position, 0.001047198, rad, unsigned, -1.6221098; Goal Position, 0.001047198, rad, unsigned, -1.6221098</param>
+    		<param name="CW Compliance Margin">1</param>
+    		<param name="CCW Compliance Margin">1</param>
+    		<param name="CW Compliance Slope">254</param>
+    		<param name="CCW Compliance Slope">254</param>
+    		<param name="Return Delay Time">25</param>
 		</gpio>
 		<joint name="l3r_to_l2r">
 			<command_interface name="position" />
@@ -90,11 +91,12 @@
 		</joint>
 		<gpio name="motor_l3r">
 			<param name="type">dxl</param>
-			<param name="ID">12</param>
+			<param name="ID">3</param>
 			<command_interface name="Goal Position" />
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
+			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -2.04988725; Goal Position, 0.005061455, rad, unsigned, -2.04988725</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
 			<param name="CW Compliance Slope">254</param>
@@ -113,7 +115,7 @@
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -3.471399003; Goal Position, 0.001533981, rad, unsigned, -3.471399003</param>
+			<param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -3.05262219; Goal Position, 0.001533981, rad, unsigned, -3.05262219</param>
 			<param name="P Gain">8</param>
 			<param name="I Gain">2</param>
 			<param name="D Gain">5</param>
@@ -126,7 +128,7 @@
 		</joint>
 		<gpio name="motor_l5r">
 			<param name="type">dxl</param>
-			<param name="ID">14</param>
+			<param name="ID">5</param>
 			<command_interface name="Goal Position" />
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
@@ -149,6 +151,7 @@
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
+			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -1.94866011; Goal Position, 0.005061455, rad, unsigned, -1.94866011</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
 			<param name="CW Compliance Slope">254</param>
@@ -161,18 +164,16 @@
 			<state_interface name="velocity" />
 		</joint>
 		<gpio name="motor_l2l">
-			<param name="type">dxl</param>
-			<param name="ID">4</param>
-			<command_interface name="Goal Position" />
-			<state_interface name="Present Position" />
-			<state_interface name="Present Velocity" />
-			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.001047198, rad, unsigned, -1.6221098; Goal Position, 0.001047198, rad, unsigned, -1.6221098</param>
-			<param name="CW Compliance Margin">1</param>
-			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">25</param>
+    		<param name="type">dxl</param>
+    		<param name="ID">1</param>
+    		<command_interface name="Goal Position" />
+    		<state_interface name="Present Position" />
+    		<state_interface name="Present Velocity" />
+    		<state_interface name="Present Load" />
+    		<param name="P Gain">8</param>
+    		<param name="I Gain">2</param>
+    		<param name="D Gain">5</param>
+    		<param name="Return Delay Time">25</param>
 		</gpio>
 		<joint name="l3l_to_l2l">
 			<command_interface name="position" />
@@ -181,12 +182,12 @@
 		</joint>
 		<gpio name="motor_l3l">
 			<param name="type">dxl</param>
-			<param name="ID">3</param>
+			<param name="ID">12</param>
 			<command_interface name="Goal Position" />
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -2.070135026; Goal Position, 0.005061455, rad, unsigned, -2.070135026</param>
+			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -2.566157685; Goal Position, 0.005061455, rad, unsigned, -2.566157685</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
 			<param name="CW Compliance Slope">254</param>
@@ -200,12 +201,12 @@
 		</joint>
 		<gpio name="motor_l4l">
 			<param name="type">dxl</param>
-			<param name="ID">1</param>
+			<param name="ID">11</param>
 			<command_interface name="Goal Position" />
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -2.963651292; Goal Position, 0.001533981, rad, unsigned, -2.963651292</param>
+			<param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -3.040350342; Goal Position, 0.001533981, rad, unsigned, -3.040350342</param>
 			<param name="P Gain">8</param>
 			<param name="I Gain">2</param>
 			<param name="D Gain">5</param>
@@ -218,7 +219,7 @@
 		</joint>
 		<gpio name="motor_l5l">
 			<param name="type">dxl</param>
-			<param name="ID">5</param>
+			<param name="ID">14</param>
 			<command_interface name="Goal Position" />
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
