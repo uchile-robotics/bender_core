@@ -14,8 +14,8 @@ controller_manager:
     head_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
-    # left_gripper_controller:
-    #   type: position_controllers/GripperActionController
+    left_gripper_controller:
+      type: position_controllers/GripperActionController
 
     # right_gripper_controller:
     #   type: position_controllers/GripperActionController
@@ -41,10 +41,9 @@ joint_state_broadcaster:
       - l6r_to_l5r
       - l1h_to_base_link
       - l2h_to_l1h
-      # - g2la_to_g1l
-      # - g2lb_to_g1l
       - g2ra_to_g1r
       - g2rb_to_g1r
+      - gripper_base_to_movil
     publish_rate: 50
 
 left_arm_controller:
@@ -82,10 +81,10 @@ head_controller:
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-# left_gripper_controller:
-#   ros__parameters:
-#     type: position_controllers/GripperActionController
-#     joint: g2la_to_g1l
+left_gripper_controller:
+  ros__parameters:
+    type: position_controllers/GripperActionController
+    joint: gripper_base_to_movil
 
 # right_gripper_controller:
 #   ros__parameters:
