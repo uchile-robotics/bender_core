@@ -358,45 +358,63 @@
     </joint>
 
     <link name="gripper_l_base">
-      <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <mesh filename="file://$(find bender_description)/meshes/base.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-      </visual>
-    </link>
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+              <mesh filename="file://$(find bender_description)/meshes/base.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+          </visual>
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+              <mesh filename="file://$(find bender_description)/meshes/base.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+          </collision>
+        </link>
 
-    <joint name="gripper_base_to_fijo" type="fixed">
-      <parent link="gripper_l_base"/>
-      <child link="fijo"/>
-      <origin xyz="0 0 0"/>
-    </joint>
+        <joint name="gripper_base_to_fijo" type="fixed">
+          <parent link="gripper_l_base"/>
+          <child link="fijo"/>
+          <origin xyz="0 0 0"/>
+        </joint>
 
-    <link name="fijo">
-      <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <mesh filename="file://$(find bender_description)/meshes/fijo_v2.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-      </visual>
-    </link>
+        <link name="fijo">
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+              <mesh filename="file://$(find bender_description)/meshes/fijo_v2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+          </visual>
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+              <mesh filename="file://$(find bender_description)/meshes/fijo_v2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+          </collision>
+        </link>
 
-    <joint name="gripper_base_to_movil" type="revolute">
-      <axis xyz="0 1 0"/>
-      <origin rpy="0 0 0" xyz="-0.01869 0 -0.01945"/>
-      <parent link="gripper_l_base"/>
-      <child link="movil"/>
-      <limit effort="1000.0" lower="0.0" upper="0.5" velocity="0.5"/>
-    </joint>
+        <joint name="gripper_base_to_movil" type="revolute">
+          <axis xyz="0 1 0"/>
+          <origin rpy="0 -1.0 0" xyz="-0.01869 0 -0.01945"/>
+          <parent link="gripper_l_base"/>
+          <child link="movil"/>
+          <limit effort="1000.0" lower="0.0" upper="0.5" velocity="0.5"/>
+        </joint>
 
-    <link name="movil">
-      <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <mesh filename="file://$(find bender_description)/meshes/movil2.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-      </visual>
-    </link>
+        <link name="movil">
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+              <mesh filename="file://$(find bender_description)/meshes/movil2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+          </visual>
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+              <mesh filename="file://$(find bender_description)/meshes/movil2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+          </collision>
+        </link>
   <link name="laser_1">
     <inertial>
       <origin xyz="0.00021452729941068283 1.2832545766421587e-05 0.03715423693922987" rpy="0 0 0"/>
@@ -570,7 +588,7 @@
     <parent link="l1l_1"/>
     <child link="l2l_1"/>
     <axis xyz="-1.0 0.0 -0.0"/>
-    <limit upper="0.09" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+    <limit upper="0.09" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l3l_to_l2l" type="revolute">
@@ -578,7 +596,7 @@
     <parent link="l2l_1"/>
     <child link="l3l_1"/>
     <axis xyz="0.0 -0.0 -1.0"/>
-    <limit upper="${1.134464 + epsilon}" lower="${-1.134464 - epsilon}" effort="100" velocity="100"/>
+    <limit upper="${1.134464 + epsilon}" lower="${-1.134464 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l4l_to_l3l" type="revolute">
@@ -586,7 +604,7 @@
     <parent link="l3l_1"/>
     <child link="l4l_1"/>
     <axis xyz="-0.0 -1.0 0.0"/>
-    <limit upper="${2.356194 + epsilon}" lower="-1.5" effort="100" velocity="100"/>
+    <limit upper="${2.356194 + epsilon}" lower="-1.5" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l5l_to_l4l" type="revolute">
@@ -594,7 +612,7 @@
     <parent link="l4l_1"/>
     <child link="l5l_1"/>
     <axis xyz="0.0 -0.0 -1.0"/>
-    <limit upper="${1.047198 + epsilon}" lower="${-1.047198 -epsilon}" effort="100" velocity="100"/>
+    <limit upper="${1.047198 + epsilon}" lower="${-1.047198 -epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l6l_to_l5l" type="revolute">
@@ -602,7 +620,7 @@
     <parent link="l5l_1"/>
     <child link="l6l_1"/>
     <axis xyz="0.0 1.0 0.0"/>
-    <limit upper="${1.570796 + epsilon}" lower="${-1.570796 -epsilon}" effort="100" velocity="100"/>
+    <limit upper="${1.570796 + epsilon}" lower="${-1.570796 -epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l2r_to_l1r" type="revolute">
@@ -610,7 +628,7 @@
     <parent link="l1r_1"/>
     <child link="l2r_1"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit upper="0.1" lower="${-1.570796 - 0.1}" effort="100" velocity="100"/>
+    <limit upper="0.1" lower="${-1.570796 - 0.1}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l3r_to_l2r" type="revolute">
@@ -618,7 +636,7 @@
     <parent link="l2r_1"/>
     <child link="l3r_1"/>
     <axis xyz="0.0 0.0 1.0"/>
-    <limit upper="${1.134464 + epsilon}" lower="${-1.134464 -epsilon}" effort="100" velocity="100"/>
+    <limit upper="${1.134464 + epsilon}" lower="${-1.134464 -epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l4r_to_l3r" type="revolute">
@@ -626,7 +644,7 @@
     <parent link="l3r_1"/>
     <child link="l4r_1"/>
     <axis xyz="-0.0 -1.0 0.0"/>
-    <limit upper="${2.356194 + epsilon}" lower="-3.14" effort="100" velocity="100"/>
+    <limit upper="${2.356194 + epsilon}" lower="-3.14" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l5r_to_l4r" type="revolute">
@@ -634,7 +652,7 @@
     <parent link="l4r_1"/>
     <child link="l5r_1"/>
     <axis xyz="-0.0 0.0 1.0"/>
-    <limit upper="${1.047198 + epsilon}" lower="${-1.047198 - epsilon}" effort="100" velocity="100"/>
+    <limit upper="${1.047198 + epsilon}" lower="${-1.047198 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l6r_to_l5r" type="revolute">
@@ -642,7 +660,7 @@
     <parent link="l5r_1"/>
     <child link="l6r_1"/>
     <axis xyz="-0.0 -1.0 0.0"/>
-    <limit upper="${1.570796 + epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+    <limit upper="${1.570796 + epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <!-- head pitch joint -->
@@ -674,7 +692,7 @@
     <parent link="g1r_1"/>
     <child link="g2ra_1"/>
     <axis xyz="1.0 -0.0 -0.0"/>
-    <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100" velocity="100"/>
+    <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="g2rb_to_g1r" type="revolute">
@@ -682,7 +700,7 @@
     <parent link="g1r_1"/>
     <child link="g2rb_1"/>
     <axis xyz="1.0 -0.0 -0.0"/>
-    <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+    <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <!-- <joint name="g1l_to_l6l" type="fixed">
@@ -696,7 +714,7 @@
     <parent link="g1l_1"/>
     <child link="g2lb_1"/>
     <axis xyz="-1.0 0.0 -0.0"/>
-    <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+    <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint> -->
 
   <!-- <joint name="g2la_to_g1l" type="revolute">
@@ -704,7 +722,7 @@
     <parent link="g1l_1"/>
     <child link="g2la_1"/>
     <axis xyz="-1.0 0.0 -0.0"/>
-    <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100" velocity="100"/>
+    <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
  -->
   <joint name="laser_to_base_link" type="fixed">
@@ -746,7 +764,7 @@
     <parent link="base_link"/>
     <child link="l1r_1"/>
     <axis xyz="0.0 -1.0 0.0"/>
-    <limit upper="${2.356194 + epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+    <limit upper="${2.356194 + epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l1l_to_base_link" type="revolute">
@@ -754,7 +772,7 @@
     <parent link="base_link"/>
     <child link="l1l_1"/>
     <axis xyz="0.0 -1.0 0.0"/>
-    <limit upper="${2.356194 + epsilon}" lower="${-1.570796 - epsilon}" effort="100" velocity="100"/>
+    <limit upper="${2.356194 + epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l1h_to_base_link" type="revolute">
@@ -762,7 +780,7 @@
     <parent link="base_link"/>
     <child link="l1h_1"/>
     <axis xyz="0.0 0.0 1.0"/>
-    <limit effort="50" lower="${-1.570796 - epsilon}" upper="${1.570796 + epsilon}" velocity="50"/>
+    <limit effort="50.0" lower="${-1.570796 - epsilon}" upper="${1.570796 + epsilon}" velocity="50.0"/>
   </joint>
 
   <link name="base_footprint"/>

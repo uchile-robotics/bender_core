@@ -5,6 +5,21 @@ moveit_setup_assistant_config:
   srdf:
     relative_path: config/bender.srdf
   package_settings:
-    author_name: Mattias Prieto
-    author_email: mattias.prieto@ug.uchile.cl
-    generated_timestamp: 1782427289
+    author_name: Luis Cuevas
+    author_email: luis.cuevas@ug.uchile.cl
+    generated_timestamp: 1785271176
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

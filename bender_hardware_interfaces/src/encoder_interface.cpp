@@ -101,6 +101,7 @@ hardware_interface::CallbackReturn EncoderInterface::on_activate(
   tty.c_cflag &= ~(PARENB | PARODD);
   tty.c_cflag &= ~CSTOPB;
   tty.c_cflag &= ~CRTSCTS;
+  tty.c_cflag &= ~HUPCL;
 
   if (tcsetattr(serial_fd_, TCSANOW, &tty) != 0) {
     RCLCPP_ERROR(get_logger(), "Error al aplicar la configuración termios.");
@@ -132,50 +133,56 @@ hardware_interface::return_type EncoderInterface::read(
     return hardware_interface::return_type::ERROR;
   }
 
-  char c;
+  char buf[256]; // Búfer de lectura en memoria
   int bytes_leidos;
   static std::string buffer_acumulador = "";
 
-  while ((bytes_leidos = ::read(serial_fd_, &c, 1)) > 0) {
-    if (c == '\n') {
-      std::string ultima_linea = buffer_acumulador;
-      buffer_acumulador.clear();
+  // 1. Leer todo lo disponible en el puerto de una sola vez
+  while ((bytes_leidos = ::read(serial_fd_, buf, sizeof(buf))) > 0) {
 
-      if (!ultima_linea.empty()) {
-        try {
-          size_t left_start = ultima_linea.find("\"left\"");
-          size_t right_start = ultima_linea.find("\"right\"");
+    // 2. Iterar sobre los bytes en RAM (mucho más eficiente)
+    for (int i = 0; i < bytes_leidos; ++i) {
+      char c = buf[i];
 
-          if (left_start != std::string::npos && right_start != std::string::npos) {
-            std::string left_sub = ultima_linea.substr(left_start, right_start - left_start);
-            std::string right_sub = ultima_linea.substr(right_start);
+      if (c == '\n') {
+        std::string ultima_linea = buffer_acumulador;
+        buffer_acumulador.clear();
 
-            // Parseo Izquierdo (Left)
-            size_t lp = left_sub.find("\"pos\":");
-            size_t lv = left_sub.find("\"vel\":");
-            if (lp != std::string::npos) left_pos_ = std::stod(left_sub.substr(lp + 6, left_sub.find_first_of(",}", lp) - (lp + 6)));
-            if (lv != std::string::npos) left_vel_ = std::stod(left_sub.substr(lv + 6, left_sub.find_first_of(",}", lv) - (lv + 6)));
+        if (!ultima_linea.empty()) {
+          try {
+            size_t left_start = ultima_linea.find("\"left\"");
+            size_t right_start = ultima_linea.find("\"right\"");
 
-            // Parseo Derecho (Right)
-            size_t rp = right_sub.find("\"pos\":");
-            size_t rv = right_sub.find("\"vel\":");
-            if (rp != std::string::npos) right_pos_ = std::stod(right_sub.substr(rp + 6, right_sub.find_first_of(",}", rp) - (rp + 6)));
-            if (rv != std::string::npos) right_vel_ = std::stod(right_sub.substr(rv + 6, right_sub.find_first_of(",}", rv) - (rv + 6)));
+            if (left_start != std::string::npos && right_start != std::string::npos) {
+              std::string left_sub = ultima_linea.substr(left_start, right_start - left_start);
+              std::string right_sub = ultima_linea.substr(right_start);
+
+              // Parseo Izquierdo
+              size_t lp = left_sub.find("\"pos\":");
+              size_t lv = left_sub.find("\"vel\":");
+              if (lp != std::string::npos) left_pos_ = std::stod(left_sub.substr(lp + 6, left_sub.find_first_of(",}", lp) - (lp + 6)));
+              if (lv != std::string::npos) left_vel_ = std::stod(left_sub.substr(lv + 6, left_sub.find_first_of(",}", lv) - (lv + 6)));
+
+              // Parseo Derecho
+              size_t rp = right_sub.find("\"pos\":");
+              size_t rv = right_sub.find("\"vel\":");
+              if (rp != std::string::npos) right_pos_ = std::stod(right_sub.substr(rp + 6, right_sub.find_first_of(",}", rp) - (rp + 6)));
+              if (rv != std::string::npos) right_vel_ = std::stod(right_sub.substr(rv + 6, right_sub.find_first_of(",}", rv) - (rv + 6)));
+            }
+          } catch (const std::exception &e) {
+            RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 2000, "Error decodificando JSON: %s", e.what());
           }
-        } catch (const std::exception &e) {
-          RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 2000, "Error decodificando JSON: %s", e.what());
         }
+      } else if (c != '\r') {
+        buffer_acumulador += c;
       }
-    } else if (c != '\r') {
-      buffer_acumulador += c;
-    }
 
-    if (buffer_acumulador.length() > 500) {
-      buffer_acumulador.clear();
+      // Evitar desbordamiento de memoria por ruido en el serial
+      if (buffer_acumulador.length() > 500) {
+        buffer_acumulador.clear();
+      }
     }
   }
-
-  // Throttle de telemetría cada 500 ms
 
   return hardware_interface::return_type::OK;
 }
