@@ -15,7 +15,7 @@
 				<param name="enable_watchdog">0</param>
 				<param name="watchdog_timeout">1.0</param>
 				<param name="gear_ratio">${gear_ratio}</param>
-				<command_interface name="position" />
+				<!-- <command_interface name="position" /> -->
 				<command_interface name="velocity" />
 				<command_interface name="effort" />
 				<state_interface name="effort" />
@@ -267,7 +267,6 @@
 			<param name="Return Delay Time">10</param>
 		</gpio>
 		<joint name="g2rb_to_g1r">
-			<command_interface name="position" />
 			<state_interface name="position" />
 			<state_interface name="velocity" />
 		</joint>
@@ -290,18 +289,19 @@
             <state_interface name="velocity"/>
         </joint>
         <gpio name="motor_g2r">
-			<param name="type">dxl</param>
-			<param name="ID">7</param>
-			<command_interface name="Goal Position" />
-			<state_interface name="Present Position" />
-			<state_interface name="Present Velocity" />
-			<state_interface name="Present Load" />
-			<param name="CW Compliance Margin">1</param>
-			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
-		</gpio>
+            <param name="type">dxl</param>
+            <param name="ID">7</param>
+            <command_interface name="Goal Position" />
+            <state_interface name="Present Position" />
+            <state_interface name="Present Velocity" />
+            <state_interface name="Present Load" />
+            <param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -3.335673; Goal Position, 0.005061455, rad, unsigned, -3.335673</param>
+            <param name="CW Compliance Margin">1</param>
+            <param name="CCW Compliance Margin">1</param>
+            <param name="CW Compliance Slope">254</param>
+            <param name="CCW Compliance Slope">254</param>
+            <param name="Return Delay Time">10</param>
+        </gpio>
 		<joint name="l1h_to_base_link">
 			<command_interface name="position" />
 			<state_interface name="position" />

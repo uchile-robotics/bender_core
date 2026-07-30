@@ -395,10 +395,10 @@
 
         <joint name="gripper_base_to_movil" type="revolute">
           <axis xyz="0 1 0"/>
-          <origin rpy="0 -1.0 0" xyz="-0.01869 0 -0.01945"/>
+          <origin rpy="0 0 0" xyz="-0.01869 0 -0.01945"/>
           <parent link="gripper_l_base"/>
           <child link="movil"/>
-          <limit effort="1000.0" lower="0.0" upper="0.5" velocity="0.5"/>
+          <limit effort="1000.0" lower="-2.0" upper="0.3495" velocity="0.5"/>
         </joint>
 
         <link name="movil">
@@ -664,7 +664,7 @@
   </joint>
 
   <!-- head pitch joint -->
-  <joint name="l2h_to_l1h" type="revolute">
+  <joint name="l2h_to_l1h" type="fixed">
     <origin rpy="0 0 0" xyz="0.0 -0.03 0.07"/>
     <parent link="l1h_1"/>
     <child link="l2h_1"/>
@@ -688,20 +688,22 @@
   </joint>
 
   <joint name="g2ra_to_g1r" type="revolute">
-    <origin xyz="0.02195 0.0185 -0.0416" rpy="0 0 0"/>
-    <parent link="g1r_1"/>
-    <child link="g2ra_1"/>
-    <axis xyz="1.0 -0.0 -0.0"/>
-    <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100.0" velocity="100.0"/>
-  </joint>
+      <origin xyz="0.02195 0.0185 -0.0416" rpy="0 0 0"/>
+      <parent link="g1r_1"/>
+      <child link="g2ra_1"/>
+      <axis xyz="1.0 -0.0 -0.0"/>
+      <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100.0" velocity="100.0"/>
+    </joint>
 
-  <joint name="g2rb_to_g1r" type="revolute">
-    <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
-    <parent link="g1r_1"/>
-    <child link="g2rb_1"/>
-    <axis xyz="1.0 -0.0 -0.0"/>
-    <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
-  </joint>
+    <joint name="g2rb_to_g1r" type="revolute">
+      <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
+      <parent link="g1r_1"/>
+      <child link="g2rb_1"/>
+      <axis xyz="1.0 -0.0 -0.0"/>
+      <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
+      <!-- Agregamos la etiqueta mimic aquí -->
+      <mimic joint="g2ra_to_g1r" multiplier="-1.0" offset="0.0"/>
+    </joint>
 
   <joint name="laser_to_base_link" type="fixed">
     <origin xyz="0.188322 -0.007366 0.25882" rpy="0 0 0"/>
@@ -709,28 +711,28 @@
     <child link="laser_1"/>
   </joint>
 
-  <joint name="wfr_to_base_link" type="continuous">
+  <joint name="wfr_to_base_link" type="fixed">
     <origin rpy="0 0 0" xyz="0.135487 -0.164865 0.09982"/>
     <parent link="base_link"/>
     <child link="wfr_1"/>
     <axis xyz="0 1 0"/>
   </joint>
 
-  <joint name="wrr_to_base_link" type="continuous">
+  <joint name="wrr_to_base_link" type="fixed">
     <origin rpy="0 0 0" xyz="-0.114513 -0.164865 0.09982"/>
     <parent link="base_link"/>
     <child link="wrr_1"/>
     <axis xyz="0 1 0"/>
   </joint>
 
-  <joint name="wfl_to_base_link" type="continuous">
+  <joint name="wfl_to_base_link" type="fixed">
     <origin rpy="0 0 0" xyz="0.135487 0.150135 0.09982"/>
     <parent link="base_link"/>
     <child link="wfl_1"/>
     <axis xyz="0 1 0"/>
   </joint>
 
-  <joint name="wrl_to_base_link" type="continuous">
+  <joint name="wrl_to_base_link" type="fixed">
     <origin rpy="0 0 0" xyz="-0.114513 0.150135 0.09982"/>
     <parent link="base_link"/>
     <child link="wrl_1"/>
