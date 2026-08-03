@@ -63,13 +63,25 @@ def generate_launch_description():
         arguments=["mecanum_base_controller", "--controller-manager", "/controller_manager"],
     )
 
+    # --- SPAWNERS DE LOS HOMBROS (ODrive) ---
+    left_shoulder_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["left_shoulder_controller", "--controller-manager", "/controller_manager"],
+    )
+
+    right_shoulder_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["right_shoulder_controller", "--controller-manager", "/controller_manager"],
+    )
+
+    # --- SPAWNERS DEL RESTO DEL BRAZO (Posición) ---
     left_arm_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["left_arm_controller", "--controller-manager", "/controller_manager"],
     )
-
-    # --- NUEVOS SPAWNERS AGREGADOS ---
 
     right_arm_controller_spawner = Node(
         package="controller_manager",
@@ -77,6 +89,7 @@ def generate_launch_description():
         arguments=["right_arm_controller", "--controller-manager", "/controller_manager"],
     )
 
+    # --- OTROS SPAWNERS ---
     head_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -103,9 +116,16 @@ def generate_launch_description():
         ros2_control_node,
         joint_state_broadcaster_spawner,
         # mecanum_base_controller_spawner,
+
+        # Hombros
+        left_shoulder_controller_spawner,
+        right_shoulder_controller_spawner,
+
+        # Brazos
         left_arm_controller_spawner,
         right_arm_controller_spawner,
+
         # head_controller_spawner,
-        # left_gripper_controller_spawner,
+        left_gripper_controller_spawner,
         right_gripper_controller_spawner
     ])

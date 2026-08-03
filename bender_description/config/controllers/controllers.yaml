@@ -1,11 +1,17 @@
 controller_manager:
   ros__parameters:
-    update_rate: 10  # Hz
+    update_rate: 50  # Hz (Necesario para que el PID de los hombros funcione bien)
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
+    left_shoulder_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
     left_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    right_shoulder_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
     right_arm_controller:
@@ -14,11 +20,11 @@ controller_manager:
     head_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
-    # left_gripper_controller:
-    #   type: position_controllers/GripperActionController
+    left_gripper_controller:
+      type: position_controllers/GripperActionController
 
-    # right_gripper_controller:
-    #   type: position_controllers/GripperActionController
+    right_gripper_controller:
+      type: position_controllers/GripperActionController
 
     # mecanum_base_controller:
     #   type: "mecanum_drive_controller/MecanumDriveController"
@@ -41,17 +47,35 @@ joint_state_broadcaster:
       - l6r_to_l5r
       - l1h_to_base_link
       - l2h_to_l1h
-      # - g2la_to_g1l
-      # - g2lb_to_g1l
       - g2ra_to_g1r
       - g2rb_to_g1r
+      - gripper_base_to_movil
     publish_rate: 50
+
+# =========================================
+# BRAZO IZQUIERDO
+# =========================================
+left_shoulder_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - l1l_to_base_link
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+    gains:
+      l1l_to_base_link:
+        p: 25.0
+        i: 0.1
+        d: 10.0
+        ff_velocity_scale: 1.0
 
 left_arm_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      - l1l_to_base_link
       - l2l_to_l1l
       - l3l_to_l2l
       - l4l_to_l3l
@@ -60,11 +84,30 @@ left_arm_controller:
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-right_arm_controller:
+# =========================================
+# BRAZO DERECHO
+# =========================================
+right_shoulder_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
       - l1r_to_base_link
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+    gains:
+      l1r_to_base_link:
+        p: 25.0
+        i: 0.1
+        d: 10.0
+        ff_velocity_scale: 1.0
+
+right_arm_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
       - l2r_to_l1r
       - l3r_to_l2r
       - l4r_to_l3r
@@ -73,6 +116,9 @@ right_arm_controller:
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
+# =========================================
+# CABEZA Y GRIPPERS
+# =========================================
 head_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
@@ -82,16 +128,19 @@ head_controller:
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-# left_gripper_controller:
-#   ros__parameters:
-#     type: position_controllers/GripperActionController
-#     joint: g2la_to_g1l
+left_gripper_controller:
+  ros__parameters:
+    type: position_controllers/GripperActionController
+    joint: gripper_base_to_movil
 
-# right_gripper_controller:
-#   ros__parameters:
-#     type: position_controllers/GripperActionController
-#     joint: g2ra_to_g1r
+right_gripper_controller:
+  ros__parameters:
+    type: position_controllers/GripperActionController
+    joint: g2ra_to_g1r
 
+# =========================================
+# BASE MÓVIL (Comentada)
+# =========================================
 # mecanum_base_controller:
 #   ros__parameters:
 #     reference_timeout: 0.9
@@ -103,8 +152,8 @@ head_controller:
 #       base_frame_offset: { x: 0.0, y: 0.0, theta: 0.0 }
 #       wheels_radius: 0.1
 #       sum_of_robot_center_projection_on_X_Y_axis: 1.0
-#     base_frame_id: "base_link"
-#     odom_frame_id: "odom"
-#     enable_odom_tf: true
-#     twist_covariance_diagonal: [0.0, 7.0, 14.0, 21.0, 28.0, 35.0]
-#     pose_covariance_diagonal: [0.0, 6.0, 12.0, 18.0, 24.0, 30.0]
+#       base_frame_id: "base_link"
+#       odom_frame_id: "odom"
+#       enable_odom_tf: true
+#       twist_covariance_diagonal: [0.0, 7.0, 14.0, 21.0, 28.0, 35.0]
+#       pose_covariance_diagonal: [0.0, 6.0, 12.0, 18.0, 24.0, 30.0]

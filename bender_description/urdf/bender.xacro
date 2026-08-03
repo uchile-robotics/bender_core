@@ -395,10 +395,10 @@
 
         <joint name="gripper_base_to_movil" type="revolute">
           <axis xyz="0 1 0"/>
-          <origin rpy="0 -1.0 0" xyz="-0.01869 0 -0.01945"/>
+          <origin rpy="0 0 0" xyz="-0.01869 0 -0.01945"/>
           <parent link="gripper_l_base"/>
           <child link="movil"/>
-          <limit effort="1000.0" lower="0.0" upper="0.5" velocity="0.5"/>
+          <limit effort="1000.0" lower="-2.0" upper="0.3495" velocity="0.5"/>
         </joint>
 
         <link name="movil">
@@ -594,15 +594,15 @@
     <origin xyz="0.02775 0.0345 -0.018" rpy="0 0 0"/>
     <parent link="l1l_1"/>
     <child link="l2l_1"/>
-    <axis xyz="-1.0 0.0 -0.0"/>
-    <limit upper="0.09" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
+    <axis xyz="1.0 0.0 -0.0"/>
+    <limit upper="${1.570796 + epsilon}" lower="-0.09" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l3l_to_l2l" type="revolute">
     <origin xyz="-0.02775 0.0 -0.060414" rpy="0 0 0"/>
     <parent link="l2l_1"/>
     <child link="l3l_1"/>
-    <axis xyz="0.0 -0.0 -1.0"/>
+    <axis xyz="0.0 -0.0 1.0"/>
     <limit upper="${1.134464 + epsilon}" lower="${-1.134464 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
@@ -642,7 +642,7 @@
     <origin xyz="-0.02775 0.0 -0.060414" rpy="0 0 0"/>
     <parent link="l2r_1"/>
     <child link="l3r_1"/>
-    <axis xyz="0.0 0.0 1.0"/>
+    <axis xyz="0.0 0.0 -1.0"/>
     <limit upper="${1.134464 + epsilon}" lower="${-1.134464 -epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
@@ -650,15 +650,15 @@
     <origin xyz="-0.001168 -0.02775 -0.16985" rpy="0 0 0"/>
     <parent link="l3r_1"/>
     <child link="l4r_1"/>
-    <axis xyz="-0.0 -1.0 0.0"/>
-    <limit upper="${2.356194 + epsilon}" lower="-3.14" effort="100.0" velocity="100.0"/>
+    <axis xyz="-0.0 1.0 0.0"/>
+    <limit upper="1.5" lower="${-2.356194 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l5r_to_l4r" type="revolute">
     <origin xyz="0.0 0.027752 -0.04775" rpy="0 0 0"/>
     <parent link="l4r_1"/>
     <child link="l5r_1"/>
-    <axis xyz="-0.0 0.0 1.0"/>
+    <axis xyz="-0.0 0.0 -1.0"/>
     <limit upper="${1.047198 + epsilon}" lower="${-1.047198 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
@@ -666,12 +666,12 @@
     <origin xyz="0.000456 -0.02225 -0.263544" rpy="0 0 0"/>
     <parent link="l5r_1"/>
     <child link="l6r_1"/>
-    <axis xyz="-0.0 -1.0 0.0"/>
+    <axis xyz="-0.0 1.0 0.0"/>
     <limit upper="${1.570796 + epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
   </joint>
 
   <!-- head pitch joint -->
-  <joint name="l2h_to_l1h" type="revolute">
+  <joint name="l2h_to_l1h" type="fixed">
     <origin rpy="0 0 0" xyz="0.0 -0.03 0.07"/>
     <parent link="l1h_1"/>
     <child link="l2h_1"/>
@@ -695,71 +695,51 @@
   </joint>
 
   <joint name="g2ra_to_g1r" type="revolute">
-    <origin xyz="0.02195 0.0185 -0.0416" rpy="0 0 0"/>
-    <parent link="g1r_1"/>
-    <child link="g2ra_1"/>
-    <axis xyz="1.0 -0.0 -0.0"/>
-    <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100.0" velocity="100.0"/>
-  </joint>
+      <origin xyz="0.02195 0.0185 -0.0416" rpy="0 0 0"/>
+      <parent link="g1r_1"/>
+      <child link="g2ra_1"/>
+      <axis xyz="1.0 -0.0 -0.0"/>
+      <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100.0" velocity="100.0"/>
+    </joint>
 
-  <joint name="g2rb_to_g1r" type="revolute">
-    <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
-    <parent link="g1r_1"/>
-    <child link="g2rb_1"/>
-    <axis xyz="1.0 -0.0 -0.0"/>
-    <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
-  </joint>
+    <joint name="g2rb_to_g1r" type="revolute">
+      <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
+      <parent link="g1r_1"/>
+      <child link="g2rb_1"/>
+      <axis xyz="1.0 -0.0 -0.0"/>
+      <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
+      <!-- Agregamos la etiqueta mimic aquí -->
+      <mimic joint="g2ra_to_g1r" multiplier="-1.0" offset="0.0"/>
+    </joint>
 
-  <!-- <joint name="g1l_to_l6l" type="fixed">
-    <origin xyz="0.0 -0.02225 -0.024015" rpy="0 0 0"/>
-    <parent link="l6l_1"/>
-    <child link="g1l_1"/>
-  </joint> -->
-
-  <!-- <joint name="g2lb_to_g1l" type="revolute">
-    <origin xyz="0.02195 0.0185 -0.0416" rpy="0 0 0"/>
-    <parent link="g1l_1"/>
-    <child link="g2lb_1"/>
-    <axis xyz="-1.0 0.0 -0.0"/>
-    <limit upper="${epsilon}" lower="${-1.570796 - epsilon}" effort="100.0" velocity="100.0"/>
-  </joint> -->
-
-  <!-- <joint name="g2la_to_g1l" type="revolute">
-    <origin xyz="0.02195 -0.0185 -0.0416" rpy="0 0 0"/>
-    <parent link="g1l_1"/>
-    <child link="g2la_1"/>
-    <axis xyz="-1.0 0.0 -0.0"/>
-    <limit upper="${1.570796 + epsilon}" lower="${-epsilon}" effort="100.0" velocity="100.0"/>
-  </joint>
- -->
   <joint name="laser_to_base_link" type="fixed">
     <origin xyz="0.188322 -0.007366 0.25882" rpy="0 0 0"/>
     <parent link="base_link"/>
     <child link="laser_1"/>
   </joint>
 
-  <joint name="wfr_to_base_link" type="continuous">
+  <joint name="wfr_to_base_link" type="fixed">
     <origin rpy="0 0 0" xyz="0.135487 -0.164865 0.09982"/>
     <parent link="base_link"/>
     <child link="wfr_1"/>
     <axis xyz="0 1 0"/>
   </joint>
 
-  <joint name="wrr_to_base_link" type="continuous">
+  <joint name="wrr_to_base_link" type="fixed">
     <origin rpy="0 0 0" xyz="-0.114513 -0.164865 0.09982"/>
     <parent link="base_link"/>
     <child link="wrr_1"/>
     <axis xyz="0 1 0"/>
   </joint>
 
-  <joint name="wfl_to_base_link" type="continuous">
+  <joint name="wfl_to_base_link" type="fixed">
     <origin rpy="0 0 0" xyz="0.135487 0.150135 0.09982"/>
     <parent link="base_link"/>
     <child link="wfl_1"/>
     <axis xyz="0 1 0"/>
   </joint>
 
-  <joint name="wrl_to_base_link" type="continuous">
+  <joint name="wrl_to_base_link" type="fixed">
     <origin rpy="0 0 0" xyz="-0.114513 0.150135 0.09982"/>
     <parent link="base_link"/>
     <child link="wrl_1"/>
