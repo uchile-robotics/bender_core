@@ -54,17 +54,55 @@
 		</sensor>
 	</ros2_control>
 	<ros2_control name="DynamixelChainMain" type="system">
-		<hardware>
-			<plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
-			<param name="port_name">/dev/dynamixel</param>
-			<param name="baud_rate">1000000</param>
-			<param name="protocol_version">1.0</param>
-			<param name="number_of_joints">14</param>
-			<param name="number_of_transmissions">14</param>
-			<param name="dynamixel_model_folder">/param/dxl_model</param>
-			<param name="disable_torque_at_init">true</param>
-			<param name="torque_enable">0</param>
-		</hardware>
+        <hardware>
+            <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
+            <param name="port_name">/dev/dynamixel</param>
+            <param name="baud_rate">1000000</param>
+            <param name="protocol_version">1.0</param>
+            <param name="number_of_joints">16</param>
+            <param name="number_of_transmissions">16</param>
+            <param name="dynamixel_model_folder">/param/dxl_model</param>
+            <param name="disable_torque_at_init">true</param>
+            <param name="torque_enable">0</param>
+
+            <param name="transmission_to_joint_matrix">
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0.5,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.5, 0.5
+            </param>
+
+            <param name="joint_to_transmission_matrix">
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+            </param>
+        </hardware>
 		<joint name="l2r_to_l1r">
 			<command_interface name="position" />
 			<state_interface name="position" />
@@ -320,7 +358,12 @@
 			<param name="CCW Compliance Slope">254</param>
 			<param name="Return Delay Time">25</param>
 		</gpio>
-		<!-- <joint name="l2h_to_l1h">
+		<joint name="l2h_to_l1h">
+			<command_interface name="position" />
+			<state_interface name="position" />
+			<state_interface name="velocity" />
+		</joint>
+		<joint name="l3h_to_l1h">
 			<command_interface name="position" />
 			<state_interface name="position" />
 			<state_interface name="velocity" />
@@ -350,6 +393,6 @@
 			<param name="CW Compliance Slope">254</param>
 			<param name="CCW Compliance Slope">254</param>
 			<param name="Return Delay Time">100</param>
-		</gpio> -->
+		</gpio>
 	</ros2_control>
 </robot>
