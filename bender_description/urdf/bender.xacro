@@ -671,7 +671,7 @@
   </joint>
 
   <!-- head pitch joint -->
-  <joint name="l2h_to_l1h" type="fixed">
+  <joint name="l2h_to_l1h" type="revolute">
     <origin rpy="0 0 0" xyz="0.0 -0.03 0.07"/>
     <parent link="l1h_1"/>
     <child link="l2h_1"/>

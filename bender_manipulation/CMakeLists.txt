@@ -36,6 +36,7 @@ install(
     scripts/dynamixel_command.py
     scripts/shoulder_control.py
     scripts/dynamixel_trajectory_bridge.py
+    scripts/saludo_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
