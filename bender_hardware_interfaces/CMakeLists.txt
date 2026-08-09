@@ -20,6 +20,7 @@ find_package(rclcpp REQUIRED)
 # Ajusta "src/encoder_interface.cpp" si tu archivo está en otra ruta
 add_library(${PROJECT_NAME} SHARED
   src/encoder_interface.cpp
+  src/pioneer_interface.cpp
 )
 
 # 3. Vincular dependencias a la librería

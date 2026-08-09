@@ -1,174 +1,106 @@
 #include "bender_hardware_interfaces/pioneer_interface.hpp"
 
-#include <chrono>
-#include <cmath>
-#include <iomanip>
-#include <limits>
-#include <memory>
-#include <sstream>
-#include <vector>
-
-#include <fcntl.h>
-#include <termios.h>
-#include <unistd.h>
-#include <cstdio>
-
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
+#include "pluginlib/class_list_macros.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include <array>
+#include <utility>
 
 namespace bender_hardware_interfaces {
 
 hardware_interface::CallbackReturn PioneerInterface::on_init(
-    const hardware_interface::HardwareComponentInterfaceParams &params) {
+    const hardware_interface::HardwareComponentInterfaceParams& params) {
+    // TODO:
+    // 1. Ejecutar el on_init() de la clase base
+    // (hardware_interface::SystemInterface::on_init(params)).
+    // 2. Leer/parsear los parámetros desde el mapa 'info_.hardware_parameters'.
 
-  if (hardware_interface::SystemInterface::on_init(params) !=
-      hardware_interface::CallbackReturn::SUCCESS) {
-    return hardware_interface::CallbackReturn::ERROR;
-  }
+    return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-std::vector<hardware_interface::StateInterface> EncoderInterface::export_state_interfaces() {
-  std::vector<hardware_interface::StateInterface> state_interfaces;
+hardware_interface::CallbackReturn
+PioneerInterface::on_activate(const rclcpp_lifecycle::State& /*previous_state*/) {
+    Aria::init();
+    // 1. Instanciar los objetos de ARIA (ArRobot, ArRobotConnector, etc.).
+    // 2. Pasar los parámetros del puerto serie y baudrate.
+    // 3. Conectar al robot real (connectRobot()), activar motores y lanzar el hilo
+    // asíncrono (runAsync()).
 
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    info_.sensors[0].name, hardware_interface::HW_IF_POSITION, &left_pos_));
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    info_.sensors[0].name, hardware_interface::HW_IF_VELOCITY, &left_vel_));
-
-  // Sensor 1: Derecho ("right")
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    info_.sensors[1].name, hardware_interface::HW_IF_POSITION, &right_pos_));
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    info_.sensors[1].name, hardware_interface::HW_IF_VELOCITY, &right_vel_));
-
-  return state_interfaces;
+    return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::CallbackReturn EncoderInterface::on_activate(
-    const rclcpp_lifecycle::State & /*previous_state*/) {
-
-  RCLCPP_INFO(get_logger(), "Conectando al encoder en %s a %d baudios...", serial_device_.c_str(), baud_rate_);
-
-  serial_fd_ = open(serial_device_.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
-  if (serial_fd_ < 0) {
-    RCLCPP_ERROR(get_logger(), "Error crítico: No se pudo abrir el puerto %s", serial_device_.c_str());
-    return hardware_interface::CallbackReturn::ERROR;
-  }
-
-  struct termios tty;
-  if (tcgetattr(serial_fd_, &tty) != 0) {
-    RCLCPP_ERROR(get_logger(), "Error al obtener atributos del puerto serial");
-    close(serial_fd_);
-    return hardware_interface::CallbackReturn::ERROR;
-  }
-
-  speed_t speed = B115200;
-  if (baud_rate_ == 9600) speed = B9600;
-  else if (baud_rate_ == 57600) speed = B57600;
-
-  cfsetospeed(&tty, speed);
-  cfsetispeed(&tty, speed);
-
-  tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;
-  tty.c_iflag &= ~IGNBRK;
-  tty.c_lflag = 0;
-  tty.c_oflag = 0;
-  tty.c_cc[VMIN]  = 0;
-  tty.c_cc[VTIME] = 0;
-
-  tty.c_cflag |= (CLOCAL | CREAD);
-  tty.c_cflag &= ~(PARENB | PARODD);
-  tty.c_cflag &= ~CSTOPB;
-  tty.c_cflag &= ~CRTSCTS;
-  tty.c_cflag &= ~HUPCL;
-
-  if (tcsetattr(serial_fd_, TCSANOW, &tty) != 0) {
-    RCLCPP_ERROR(get_logger(), "Error al aplicar la configuración termios.");
-    close(serial_fd_);
-    return hardware_interface::CallbackReturn::ERROR;
-  }
-
-  tcflush(serial_fd_, TCIOFLUSH);
-  RCLCPP_INFO(get_logger(), "Puerto serial inicializado con éxito.");
-
-  return hardware_interface::CallbackReturn::SUCCESS;
+hardware_interface::CallbackReturn
+PioneerInterface::on_deactivate(const rclcpp_lifecycle::State& /*previous_state*/) {
+    // TODO:
+    // 1. Enviar comando de detención y desactivar motores en ARIA.
+    // 2. Detener el hilo de procesamiento (stopRunning()) y apagar la librería
+    // (Aria::shutdown()).
+    Aria::shutdown();
+    return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::CallbackReturn EncoderInterface::on_deactivate(
-    const rclcpp_lifecycle::State & /*previous_state*/) {
+hardware_interface::return_type
+PioneerInterface::read(const rclcpp::Time& /*time*/,
+                       const rclcpp::Duration& /*period*/) {
+    // TODO:
+    // 1. Leer las velocidades y odometría actuales del objeto 'robot_'.
+    // 2. Convertir las unidades de ARIA a las unidades del estándar de ROS 2.
+    // 3. Asignar los valores a tus variables de estado.
+    double aria_v = robot_->getVel();
+    double aria_w = robot_->getRotVel();
+    std::array<double, 2> velocities = this->inverse_kinematics(aria_v, aria_w);
+    double v_r = velocities[0];
+    double v_l = velocities[1];
 
-  RCLCPP_INFO(get_logger(), "Desactivando interfaz de hardware...");
-  if (serial_fd_ >= 0) {
-    close(serial_fd_);
-    serial_fd_ = -1;
-  }
-  return hardware_interface::CallbackReturn::SUCCESS;
+
+
+    return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type EncoderInterface::read(
-    const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) {
+hardware_interface::return_type
+PioneerInterface::write(const rclcpp::Time& /*time*/,
+                        const rclcpp::Duration& /*period*/) {
+    double v_left = hw_cmd_wheel_left_;   // CommandInterface rueda izq
+    double v_right = hw_cmd_wheel_right_; // CommandInterface rueda der
 
-  if (serial_fd_ < 0) {
-    return hardware_interface::return_type::ERROR;
-  }
+    std::array<double, 2> velocities = this->forward_kinematics(v_left, v_right);
+    double aria_v = velocities[0];
+    double aria_w = velocities[1];
 
-  char buf[256]; // Búfer de lectura en memoria
-  int bytes_leidos;
-  static std::string buffer_acumulador = "";
+    robot_->lock();
+    robot_->setVel(aria_v);
+    robot_->setRotVel(aria_w);
+    robot_->unlock();
 
-  // 1. Leer todo lo disponible en el puerto de una sola vez
-  while ((bytes_leidos = ::read(serial_fd_, buf, sizeof(buf))) > 0) {
+    return hardware_interface::return_type::OK;
+}
+std::array<double, 2> PioneerInterface::inverse_kinematics(const double& v,
+                                                           const double& w) {
 
-    // 2. Iterar sobre los bytes en RAM (mucho más eficiente)
-    for (int i = 0; i < bytes_leidos; ++i) {
-      char c = buf[i];
+    double ros_v = v / 1000.0;
+    double ros_w = w * (M_PI / 180);
 
-      if (c == '\n') {
-        std::string ultima_linea = buffer_acumulador;
-        buffer_acumulador.clear();
-
-        if (!ultima_linea.empty()) {
-          try {
-            size_t left_start = ultima_linea.find("\"left\"");
-            size_t right_start = ultima_linea.find("\"right\"");
-
-            if (left_start != std::string::npos && right_start != std::string::npos) {
-              std::string left_sub = ultima_linea.substr(left_start, right_start - left_start);
-              std::string right_sub = ultima_linea.substr(right_start);
-
-              // Parseo Izquierdo
-              size_t lp = left_sub.find("\"pos\":");
-              size_t lv = left_sub.find("\"vel\":");
-              if (lp != std::string::npos) left_pos_ = std::stod(left_sub.substr(lp + 6, left_sub.find_first_of(",}", lp) - (lp + 6)));
-              if (lv != std::string::npos) left_vel_ = std::stod(left_sub.substr(lv + 6, left_sub.find_first_of(",}", lv) - (lv + 6)));
-
-              // Parseo Derecho
-              size_t rp = right_sub.find("\"pos\":");
-              size_t rv = right_sub.find("\"vel\":");
-              if (rp != std::string::npos) right_pos_ = std::stod(right_sub.substr(rp + 6, right_sub.find_first_of(",}", rp) - (rp + 6)));
-              if (rv != std::string::npos) right_vel_ = std::stod(right_sub.substr(rv + 6, right_sub.find_first_of(",}", rv) - (rv + 6)));
-            }
-          } catch (const std::exception &e) {
-            RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 2000, "Error decodificando JSON: %s", e.what());
-          }
-        }
-      } else if (c != '\r') {
-        buffer_acumulador += c;
-      }
-
-      // Evitar desbordamiento de memoria por ruido en el serial
-      if (buffer_acumulador.length() > 500) {
-        buffer_acumulador.clear();
-      }
-    }
-  }
-
-  return hardware_interface::return_type::OK;
+    double v_r = (2 * ros_v + wheel_separation_ * ros_w) / 2;
+    double v_l = (2 * ros_v - wheel_separation_ * ros_w) / 2;
+    std::array<double, 2> val_pair = {v_r, v_l};
+    return val_pair;
 }
 
+std::array<double, 2>
+PioneerInterface::forward_kinematics(const double& left_wheel_speed,
+                                     const double& right_wheel_speed) {
+    std::array<double, 2> speeds = {0.0, 0.0};
+    double v_linear = (right_wheel_speed + left_wheel_speed) / 2.0;
+    double v_angular = (right_wheel_speed - left_wheel_speed) / wheel_separation_;
+    double aria_v = v_linear * 1000.0;
+    double aria_w = v_angular * (180.0 / M_PI);
+
+    speeds = {aria_v, aria_w};
+    return speeds;
+}
 } // namespace bender_hardware_interfaces
 
-#include "pluginlib/class_list_macros.hpp"
-
-PLUGINLIB_EXPORT_CLASS(bender_hardware_interfaces::EncoderInterface,
-                       hardware_interface::SensorInterface)
+// Exportación como plugin para que pluginlib y ros2_control puedan cargar esta clase
+// dinámicamente
+PLUGINLIB_EXPORT_CLASS(bender_hardware_interfaces::PioneerInterface,
+                       hardware_interface::SystemInterface)

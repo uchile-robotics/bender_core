@@ -400,32 +400,21 @@
 	</ros2_control>
 	<ros2_control name="Pioneer" type="system">
     	<hardware>
-            <plugin>mock_components/GenericSystem</plugin>
-            <param name="calculate_dynamics">false</param>
-            <param name="custom_interface_with_following_offset"></param>
-            <param name="disable_commands">false</param>
-            <param name="mock_gpio_commands">false</param>
-            <param name="mock_sensor_commands">false</param>
-            <param name="position_state_following_offset">0.0</param>
+            <plugin>bender_hardware_interfaces/PioneerInterface</plugin>
+            <param name="serial_device">/dev/pioneer</param>
+            <param name="baud_rate">9600</param>
         </hardware>
         <joint name="joint1">
-            <command_interface name="position"/>
+            <!-- TODO: check if more state interfaces are available in ARIACODA -->
             <command_interface name="velocity"/>
-            <state_interface name="position">
-            <param name="initial_value">3.45</param>
-            </state_interface>
             <state_interface name="velocity"/>
-            <state_interface name="acceleration"/>
         </joint>
         <joint name="joint2">
+            <!-- TODO: check if more state interfaces are available in ARIACODA -->
             <command_interface name="velocity"/>
-            <command_interface name="acceleration"/>
-            <state_interface name="position">
-            <param name="initial_value">2.78</param>
-            </state_interface>
-            <state_interface name="position"/>
             <state_interface name="velocity"/>
-            <state_interface name="acceleration"/>
         </joint>
+        <sensor name="E-stop">
+        </sensor>
 	</ros2_control>
 </robot>
