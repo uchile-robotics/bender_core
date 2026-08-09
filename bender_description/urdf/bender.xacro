@@ -718,32 +718,35 @@
     <child link="laser_1"/>
   </joint>
 
-  <joint name="wfr_to_base_link" type="fixed">
+  <joint name="wfr_to_base_link" type="continuous">
     <origin rpy="0 0 0" xyz="0.135487 -0.164865 0.09982"/>
     <parent link="base_link"/>
     <child link="wfr_1"/>
     <axis xyz="0 1 0"/>
+    <mimic joint="wrr_to_base_link" multiplier="1.0" offset="0.0"/>
   </joint>
 
-  <joint name="wrr_to_base_link" type="fixed">
+  <joint name="wrr_to_base_link" type="continuous">
     <origin rpy="0 0 0" xyz="-0.114513 -0.164865 0.09982"/>
     <parent link="base_link"/>
     <child link="wrr_1"/>
     <axis xyz="0 1 0"/>
   </joint>
 
-  <joint name="wfl_to_base_link" type="fixed">
+  <joint name="wfl_to_base_link" type="continuous">
     <origin rpy="0 0 0" xyz="0.135487 0.150135 0.09982"/>
     <parent link="base_link"/>
     <child link="wfl_1"/>
     <axis xyz="0 1 0"/>
+    <mimic joint="wrl_to_base_link" multiplier="1.0" offset="0.0"/>
   </joint>
 
-  <joint name="wrl_to_base_link" type="fixed">
+  <joint name="wrl_to_base_link" type="continuous">
     <origin rpy="0 0 0" xyz="-0.114513 0.150135 0.09982"/>
     <parent link="base_link"/>
     <child link="wrl_1"/>
     <axis xyz="0 1 0"/>
+
   </joint>
 
   <joint name="l1r_to_base_link" type="revolute">

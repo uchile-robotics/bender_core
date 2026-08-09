@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot
 	xmlns:xacro="http://www.ros.org/wiki/xacro">
-<xacro:macro name="odrive_ros2_control" params="name serial_number joint_name axis:=0 gear_ratio:=1.0">
+    <xacro:macro name="odrive_ros2_control" params="name serial_number joint_name axis:=0 gear_ratio:=1.0">
 		<ros2_control name="${name}" type="system">
 			<hardware>
 				<plugin>odrive_hardware_interface/ODriveHardwareInterface</plugin>
@@ -24,19 +24,19 @@
 	</xacro:macro>
 
 	<xacro:odrive_ros2_control
-    name="OdriveLeft"
-    serial_number="3690387D3333"
-    joint_name="l1l_to_base_link"
-    axis="0"
-	gear_ratio="250"
+        name="OdriveLeft"
+        serial_number="3690387D3333"
+        joint_name="l1l_to_base_link"
+        axis="0"
+    	gear_ratio="250"
 	/>
 
 	<xacro:odrive_ros2_control
-    name="OdriveRight"
-    serial_number="336B33573235"
-    joint_name="l1r_to_base_link"
-    axis="0"
-	gear_ratio="250"
+        name="OdriveRight"
+        serial_number="336B33573235"
+        joint_name="l1r_to_base_link"
+        axis="0"
+    	gear_ratio="250"
 	/>
 	<ros2_control name="ShoulderJoint" type="sensor">
 		<hardware>
@@ -397,5 +397,35 @@
 			<param name="CCW Compliance Slope">254</param>
 			<param name="Return Delay Time">100</param>
 		</gpio>
+	</ros2_control>
+	<ros2_control name="Pioneer" type="system">
+    	<hardware>
+            <plugin>mock_components/GenericSystem</plugin>
+            <param name="calculate_dynamics">false</param>
+            <param name="custom_interface_with_following_offset"></param>
+            <param name="disable_commands">false</param>
+            <param name="mock_gpio_commands">false</param>
+            <param name="mock_sensor_commands">false</param>
+            <param name="position_state_following_offset">0.0</param>
+        </hardware>
+        <joint name="joint1">
+            <command_interface name="position"/>
+            <command_interface name="velocity"/>
+            <state_interface name="position">
+            <param name="initial_value">3.45</param>
+            </state_interface>
+            <state_interface name="velocity"/>
+            <state_interface name="acceleration"/>
+        </joint>
+        <joint name="joint2">
+            <command_interface name="velocity"/>
+            <command_interface name="acceleration"/>
+            <state_interface name="position">
+            <param name="initial_value">2.78</param>
+            </state_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+            <state_interface name="acceleration"/>
+        </joint>
 	</ros2_control>
 </robot>

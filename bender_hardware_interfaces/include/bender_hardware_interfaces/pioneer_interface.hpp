@@ -1,0 +1,54 @@
+#ifndef BENDER_HARDWARE_INTERFACES__PIONEER_INTERFACE_HPP_
+#define BENDER_HARDWARE_INTERFACES__PIONEER_INTERFACE_HPP_
+
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "hardware_interface/handle.hpp"
+#include "hardware_interface/hardware_info.hpp"
+#include "hardware_interface/system_interface.hpp"
+#include "hardware_interface/types/hardware_interface_return_values.hpp"
+#include "rclcpp/macros.hpp"
+#include "rclcpp/time.hpp"
+#include "rclcpp_lifecycle/state.hpp"
+
+#include <Aria/Aria.h>
+#include <Aria/ArRobot.h>
+
+namespace bender_hardware_interfaces {
+class PioneerInterface : public hardware_interface::SystemInterface {
+public:
+  RCLCPP_SHARED_PTR_DEFINITIONS(PioneerInterface)
+
+  hardware_interface::CallbackReturn
+  on_init(const hardware_interface::HardwareComponentInterfaceParams &params)
+      override;
+
+  hardware_interface::CallbackReturn
+  on_activate(const rclcpp_lifecycle::State &previous_state) override;
+
+  hardware_interface::CallbackReturn
+  on_deactivate(const rclcpp_lifecycle::State &previous_state) override;
+
+  hardware_interface::return_type read(const rclcpp::Time &time,
+                                       const rclcpp::Duration &period) override;
+
+  hardware_interface::return_type
+  write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+
+private:
+    // params
+    std::string serial_port_;
+    int serial_baud_;
+
+    // ariacoda stuff
+    std::shared_ptr<ArRobot> robot_;
+    std::shared_ptr<ArRobotConnector> conn_;
+    std::shared_ptr<ArArgumentBuilder> args_;
+    std::shared_ptr<ArArgumentParser> argparser_;
+};
+
+} // namespace bender_hardware_interfaces
+
+#endif // BENDER_HARDWARE_INTERFACES__PIONEER_INTERFACE_HPP_
