@@ -42,17 +42,12 @@ PioneerInterface::on_deactivate(const rclcpp_lifecycle::State& /*previous_state*
 hardware_interface::return_type
 PioneerInterface::read(const rclcpp::Time& /*time*/,
                        const rclcpp::Duration& /*period*/) {
-    // TODO:
-    // 1. Leer las velocidades y odometría actuales del objeto 'robot_'.
-    // 2. Convertir las unidades de ARIA a las unidades del estándar de ROS 2.
-    // 3. Asignar los valores a tus variables de estado.
+
     double aria_v = robot_->getVel();
     double aria_w = robot_->getRotVel();
     std::array<double, 2> velocities = this->inverse_kinematics(aria_v, aria_w);
-    double v_r = velocities[0];
-    double v_l = velocities[1];
-
-
+    right_wheel_vel_ = velocities[0];
+    left_wheel_vel_ = velocities[1];
 
     return hardware_interface::return_type::OK;
 }
@@ -60,8 +55,8 @@ PioneerInterface::read(const rclcpp::Time& /*time*/,
 hardware_interface::return_type
 PioneerInterface::write(const rclcpp::Time& /*time*/,
                         const rclcpp::Duration& /*period*/) {
-    double v_left = hw_cmd_wheel_left_;   // CommandInterface rueda izq
-    double v_right = hw_cmd_wheel_right_; // CommandInterface rueda der
+    double v_left = hw_cmd_wheel_left_;
+    double v_right = hw_cmd_wheel_right_;
 
     std::array<double, 2> velocities = this->forward_kinematics(v_left, v_right);
     double aria_v = velocities[0];

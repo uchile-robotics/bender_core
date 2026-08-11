@@ -33,6 +33,10 @@ namespace bender_hardware_interfaces {
 
             hardware_interface::return_type write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
+            std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+
+            std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+
             std::array<double, 2> inverse_kinematics(const double &v, const double &w);
             std::array<double, 2> forward_kinematics(const double &left_wheel_speed, const double &right_wheel_speed);
 
@@ -40,6 +44,7 @@ namespace bender_hardware_interfaces {
             // params
             std::string serial_port_;
             int serial_baud_;
+            double wheel_separation_;
 
             // ariacoda stuff
             std::shared_ptr<ArRobot> robot_;
@@ -47,9 +52,14 @@ namespace bender_hardware_interfaces {
             std::shared_ptr<ArArgumentBuilder> args_;
             std::shared_ptr<ArArgumentParser> argparser_;
 
-            double wheel_separation_;
+            // command variables
             double hw_cmd_wheel_left_;
             double hw_cmd_wheel_right_;
+            // state variables
+            double left_wheel_pos_;
+            double left_wheel_vel_;
+            double right_wheel_pos_;
+            double right_wheel_vel_;
     };
 
 } // namespace bender_hardware_interfaces
