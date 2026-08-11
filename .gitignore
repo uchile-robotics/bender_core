@@ -6,3 +6,5 @@
 build/
 install/
 log/
+rosaria2/
+.cache/
