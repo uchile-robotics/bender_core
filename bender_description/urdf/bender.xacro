@@ -712,6 +712,13 @@
       <mimic joint="g2ra_to_g1r" multiplier="-1.0" offset="0.0"/>
     </joint>
 
+    <link name="TCP"/>
+
+    <joint name="g1r_to_TCP" type="fixed">
+      <origin xyz="0.0 0.0 -0.12" rpy="0 0 0"/>
+      <parent link="g1r_1"/>
+      <child link="TCP"/>
+    </joint>
   <joint name="laser_to_base_link" type="fixed">
     <origin xyz="0.188322 -0.007366 0.25882" rpy="0 0 0"/>
     <parent link="base_link"/>
