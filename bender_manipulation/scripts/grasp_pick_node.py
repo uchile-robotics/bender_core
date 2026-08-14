@@ -110,7 +110,7 @@ class GraspPickNode(Node):
         # que quita el rechazo de parámetros desconocidos como qos_overrides.*;
         # ver PR moveit2#3689 / issue moveit2#2940 - de lo contrario esto crashea
         # con rclcpp::exceptions::InvalidParameterValueException.)
-        config_dict["use_sim_time"] = True
+        config_dict["use_sim_time"] = False
 
         # provide_planning_service=False: ya hay un move_group corriendo (para RViz);
         # este nodo no debe competir por los mismos nombres de servicio/acción.

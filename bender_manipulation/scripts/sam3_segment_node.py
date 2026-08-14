@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Nodo de segmentación SAM3: de imagen+prompt a nube de puntos del objeto.
 
 sam3 no es un nodo ROS2, es un servidor Flask aparte (http://localhost:5001),
