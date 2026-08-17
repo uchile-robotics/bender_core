@@ -9,13 +9,22 @@
 			<sensor name="${name}_dev0">
 				<param name="serial_number">${serial_number}</param>
 			</sensor>
-			<joint name="${joint_name}">
+			<joint name="${joint_name_left}">
 				<param name="serial_number">${serial_number}</param>
-				<param name="axis">${axis}</param>
+				<param name="axis">${axis_left}</param>
 				<param name="enable_watchdog">0</param>
 				<param name="watchdog_timeout">1.0</param>
-				<param name="gear_ratio">${gear_ratio}</param>
-				<!-- <command_interface name="position" /> -->
+				<param name="gear_ratio">${gear_ratio_left}</param>
+				<command_interface name="velocity" />
+				<command_interface name="effort" />
+				<state_interface name="effort" />
+			</joint>
+			<joint name="${joint_name_right}">
+				<param name="serial_number">${serial_number}</param>
+				<param name="axis">${axis_right}</param>
+				<param name="enable_watchdog">0</param>
+				<param name="watchdog_timeout">1.0</param>
+				<param name="gear_ratio">${gear_ratio_right}</param>
 				<command_interface name="velocity" />
 				<command_interface name="effort" />
 				<state_interface name="effort" />
@@ -24,20 +33,16 @@
 	</xacro:macro>
 
 	<xacro:odrive_ros2_control
-    name="OdriveLeft"
+    name="Odrive"
     serial_number="3690387D3333"
-    joint_name="l1l_to_base_link"
-    axis="0"
-	gear_ratio="250"
+    joint_name_left="l1l_to_base_link"
+    joint_name_right="l1r_to_base_link"
+    axis_left="0"
+    axis_right="1"
+	gear_ratio_left="250"
+	gear_ratio_right="250"
 	/>
 
-	<xacro:odrive_ros2_control
-    name="OdriveRight"
-    serial_number="336B33573235"
-    joint_name="l1r_to_base_link"
-    axis="0"
-	gear_ratio="250"
-	/>
 	<ros2_control name="ShoulderJoint" type="sensor">
 		<hardware>
 			<plugin>bender_hardware_interfaces/EncoderInterface</plugin>
