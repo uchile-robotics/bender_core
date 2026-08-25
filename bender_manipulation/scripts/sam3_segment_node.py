@@ -44,11 +44,11 @@ class Sam3SegmentNode(Node):
     def __init__(self):
         super().__init__('sam3_segment_node')
 
-        self.declare_parameter('sam3_url', 'http://localhost:5001')
+        self.declare_parameter('sam3_url', 'http://192.168.1.134:5001')
         self.declare_parameter('color_topic', '/camera/color/image_raw')
         self.declare_parameter('depth_topic', '/camera/aligned_depth_to_color/image_raw')
         self.declare_parameter('camera_info_topic', '/camera/color/camera_info')
-        self.declare_parameter('prompt', 'object')
+        self.declare_parameter('prompt', 'soda can')
         self.declare_parameter('min_mask_score', 0.20)
         self.declare_parameter('min_object_points', 50)
         self.declare_parameter('request_timeout', 15.0)
@@ -136,7 +136,7 @@ class Sam3SegmentNode(Node):
     def _segment_scene_cb(self, request: Trigger.Request, response: Trigger.Response):
         if self.last_color is None or self.last_depth is None or self.last_camera_info is None:
             response.success = False
-            response.message = 'faltan datos de cámara (color/depth/camera_info)'
+            response.message = f'faltan datos de cámara (color{self.last_color} \n/depth{self.last_depth}\n/camera_info{self.last_camera_info})'
             return response
 
         color_bgr = self.bridge.imgmsg_to_cv2(self.last_color, desired_encoding='bgr8')
