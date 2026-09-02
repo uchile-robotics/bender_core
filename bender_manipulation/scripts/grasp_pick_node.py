@@ -133,6 +133,22 @@ class GraspPickNode(Node):
     # ------------------------------------------------------------------
     # Algoritmo 2: Selección de la pose de agarre alcanzable
     # ------------------------------------------------------------------
+
+    def _transform_to_base(self, pose_stamped: PoseStamped, target_frame="base_link") -> PoseStamped:
+        if pose_stamped.header.frame_id == target_frame:
+            return pose_stamped
+        try:
+            transform = self.tf_buffer.lookup_transform(
+                target_frame,
+                pose_stamped.header.frame_id,
+                rclpy.time.Time(),
+                timeout=rclpy.duration.Duration(seconds=1.0)
+            )
+            return do_transform_pose_stamped(pose_stamped, transform)
+        except Exception as e:
+            self.get_logger().error(f"Error transformando TF de {pose_stamped.header.frame_id} a {target_frame}: {e}")
+            return None
+
     def select_reachable_grasp(self, candidates: list, d: float):
         """
         Entrada: candidates (G) ordenadas por confianza (mayor primero), d.

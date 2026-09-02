@@ -10,6 +10,7 @@ initial_positions:
   l2h_to_l1h: 0.0
   l2l_to_l1l: 0.0
   l2r_to_l1r: 0.0
+  l3h_to_l1h: 0.0
   l3l_to_l2l: 0.0
   l3r_to_l2r: 0.0
   l4l_to_l3l: 0.0

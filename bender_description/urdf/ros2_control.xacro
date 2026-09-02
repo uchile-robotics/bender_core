@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot
 	xmlns:xacro="http://www.ros.org/wiki/xacro">
-<xacro:macro name="odrive_ros2_control" params="name serial_number joint_name axis:=0 gear_ratio:=1.0">
+<xacro:macro name="odrive_ros2_control" params="name serial_number joint_name_left joint_name_right axis_left axis_right gear_ratio_left gear_ratio_right">
 		<ros2_control name="${name}" type="system">
 			<hardware>
 				<plugin>odrive_hardware_interface/ODriveHardwareInterface</plugin>
@@ -37,8 +37,8 @@
     serial_number="3690387D3333"
     joint_name_left="l1l_to_base_link"
     joint_name_right="l1r_to_base_link"
-    axis_left="0"
-    axis_right="1"
+    axis_left="1"
+    axis_right="0"
 	gear_ratio_left="250"
 	gear_ratio_right="250"
 	/>

@@ -20,9 +20,9 @@ def generate_launch_description():
         ),
         launch_arguments={
             'camera_name': 'camera',
-            'camera_namespace': '',             # Evita el doble prefijo /camera/camera/
+            'camera_namespace': '',
             'align_depth.enable': 'true',
-            'pointcloud.enable': 'true',        # <--- HABILITA POINTCLOUD2
+            'pointcloud.enable': 'true',
             'enable_color': 'true',
             'enable_depth': 'true',
             'initial_reset': 'true',
@@ -64,7 +64,7 @@ def generate_launch_description():
         output='screen',
         emulate_tty=True,
         parameters=[{
-            'prompt': 'tomato can'
+            'prompt': 'yellow box'
         }]
     )
 

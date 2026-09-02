@@ -11,7 +11,7 @@
       prefix=""
       camera_name="camera"
       parent='l2h_1'
-      xyz_offset="0.0435 0.03 0.160"
+      xyz_offset="0.0435 0.03 0.180"
       rpy_offset="0 0 0"/>
 
   <link name="base_link">

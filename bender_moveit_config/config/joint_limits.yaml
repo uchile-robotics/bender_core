@@ -43,6 +43,11 @@ joint_limits:
     max_velocity: 50.0
     has_acceleration_limits: true
     max_acceleration: 1.0
+  l3h_to_l1h:
+    has_velocity_limits: true
+    max_velocity: 50.0
+    has_acceleration_limits: true
+    max_acceleration: 1.0
   l2l_to_l1l:
     has_velocity_limits: true
     max_velocity: 100.0
