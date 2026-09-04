@@ -33,14 +33,32 @@ from moveit_msgs.msg import Constraints, OrientationConstraint, PositionConstrai
 from shape_msgs.msg import SolidPrimitive
 from std_msgs.msg import String
 
+import tf2_ros
+from tf2_geometry_msgs import do_transform_pose_stamped
+
 from moveit.planning import MoveItPy, PlanRequestParameters
 from moveit.core.robot_state import RobotState
 from moveit_configs_utils import MoveItConfigsBuilder
 
+from moveit_msgs.msg import Constraints, OrientationConstraint, PositionConstraint, MoveItErrorCodes
+
+MOVEIT_ERROR_MAP = {
+    MoveItErrorCodes.SUCCESS: "Éxito",
+    MoveItErrorCodes.FAILURE: "Fallo no especificado",
+    MoveItErrorCodes.PLANNING_FAILED: "Fallo general del algoritmo de planificación",
+    MoveItErrorCodes.TIMED_OUT: "Tiempo límite agotado (Timeout)",
+    MoveItErrorCodes.START_STATE_IN_COLLISION: "Estado inicial en colisión con la escena/robot",
+    MoveItErrorCodes.GOAL_IN_COLLISION: "Estado objetivo en colisión con la escena/octomap",
+    MoveItErrorCodes.GOAL_VIOLATES_PATH_CONSTRAINTS: "Estado objetivo viola restricciones",
+    MoveItErrorCodes.NO_IK_SOLUTION: "Sin solución de cinemática inversa (IK)",
+}
 
 GROUP_NAME = "right_arm"
 TIP_LINK = "TCP"
 
+
+def get_error_string(code: int) -> str:
+    return MOVEIT_ERROR_MAP.get(code, f"Código de error {code}")
 
 def _retroceder(pose: Pose, distance: float) -> Pose:
     """gpre = retroceder(g, d)
@@ -66,7 +84,8 @@ def _retroceder(pose: Pose, distance: float) -> Pose:
 class GraspPickNode(Node):
     def __init__(self):
         super().__init__("grasp_pick_node")
-
+        self.tf_buffer = tf2_ros.Buffer()
+        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self)
         self.declare_parameter("approach_distance", 0.10)  # d, en metros
         self.declare_parameter("ik_timeout", 0.5)
         self.declare_parameter("ik_random_restarts", 5)
@@ -77,8 +96,8 @@ class GraspPickNode(Node):
         # se deja holgada porque el goal por defecto de MoveIt usa una tolerancia
         # angular ~0 (epsilon de máquina) que hace que el planner batalle para
         # converger, incluso cuando la pose sí es alcanzable.
-        self.declare_parameter("goal_position_tolerance", 0.005)     # metros
-        self.declare_parameter("goal_orientation_tolerance", 0.35)   # radianes (~20°)
+        self.declare_parameter("goal_position_tolerance", 0.05)     # metros
+        self.declare_parameter("goal_orientation_tolerance", 0.50)   # radianes (~20°)
         # Cuánto puede diferir el primer punto de la trayectoria del estado real
         # del robot al momento de ejecutar (asentamiento del controlador entre
         # tramos). Con el valor por defecto (0.01 rad) trajectory_execution_manager
@@ -146,7 +165,16 @@ class GraspPickNode(Node):
             )
             return do_transform_pose_stamped(pose_stamped, transform)
         except Exception as e:
-            self.get_logger().error(f"Error transformando TF de {pose_stamped.header.frame_id} a {target_frame}: {e}")
+            pose_to_transform = PoseStamped()
+            pose_to_transform.header.frame_id = pose_stamped.header.frame_id
+            pose_to_transform.header.stamp = rclpy.time.Time().to_msg()
+            pose_to_transform.pose = pose_stamped.pose
+            return do_transform_pose_stamped(pose_to_transform, transform)
+        except tf2_ros.TransformException as e:
+            self.get_logger().error(f"Error de TF transformando de {pose_stamped.header.frame_id} a {target_frame}: {e}")
+            return None
+        except Exception as e:
+            self.get_logger().error(f"Error inesperado al transformar pose: {e}")
             return None
 
     def select_reachable_grasp(self, candidates: list, d: float):
@@ -282,8 +310,11 @@ class GraspPickNode(Node):
 
         plan_result = self.arm.plan(single_plan_parameters=params)  # tau = P(qstart, qgoal, M)
 
-        if not plan_result:  # tau == vacio
-            return "fallo_planificacion"
+        if not plan_result or plan_result.error_code.val != MoveItErrorCodes.SUCCESS:
+            code = plan_result.error_code.val if plan_result else MoveItErrorCodes.FAILURE
+            reason = get_error_string(code)
+            self.get_logger().error(f"Fallo de planificación (Código {code}): {reason}")
+            return f"fallo_planificacion: {reason}"
 
         exec_status = self.moveit.execute(plan_result.trajectory, controllers=[])  # ejecutar(tau)
         if not exec_status:
@@ -300,11 +331,14 @@ class GraspPickNode(Node):
     def grasp_candidate_cb(self, msg: PoseStamped):
         d = self.get_parameter("approach_distance").value
         self.get_logger().info(f"Candidato de agarre recibido (frame={msg.header.frame_id}), d={d:.3f} m")
-
+        msg_base_link = self._transform_to_base(msg, target_frame="base_link")
+        self.get_logger().info(str(msg_base_link.pose))
+        if msg_base_link is None:
+            return
         # Por ahora G = [msg] (una sola pose publicada a mano). Cuando exista
         # un nodo de detección de agarres, este callback puede acumular una
         # lista de PoseStamped ordenada por confianza y pasarla completa aquí.
-        result = self.select_reachable_grasp([msg], d)
+        result = self.select_reachable_grasp([msg_base_link], d)
 
         if result is None:
             self.get_logger().warn("sin_agarre_alcanzable")
@@ -316,8 +350,8 @@ class GraspPickNode(Node):
 
         # Tramo 1: configuración actual -> pose de aproximación (pre-agarre)
         status = self.execute_segment(gpre)
-        if status != "exito":
-            self.get_logger().error(f"Aproximación: {status}")
+        if not status.startswith("exito"):
+            self.get_logger().error(f"Aproximación fallida -> {status}")
             self.status_pub.publish(String(data=status))
             return
 

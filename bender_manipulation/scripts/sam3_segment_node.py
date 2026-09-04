@@ -44,7 +44,7 @@ class Sam3SegmentNode(Node):
     def __init__(self):
         super().__init__('sam3_segment_node')
 
-        self.declare_parameter('sam3_url', 'http://192.168.1.136:5001')
+        self.declare_parameter('sam3_url', 'http://192.168.1.133:5001')
         self.declare_parameter('color_topic', '/camera/color/image_raw')
         self.declare_parameter('depth_topic', '/camera/aligned_depth_to_color/image_raw')
         self.declare_parameter('camera_info_topic', '/camera/color/camera_info')

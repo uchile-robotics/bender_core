@@ -56,7 +56,7 @@ class GraspgenPickBridgeNode(Node):
         super().__init__('graspgen_pick_bridge_node')
 
         self.declare_parameter('segment_service', '/segment_scene')
-        self.declare_parameter('graspgen_url', 'http://192.168.1.136:5002')
+        self.declare_parameter('graspgen_url', 'http://192.168.1.133:5002')
         self.declare_parameter('object_cloud_topic', '/sam3/object_cloud')
         self.declare_parameter('scene_cloud_topic', '/sam3/scene_cloud')
         self.declare_parameter('service_timeout', 60.0)

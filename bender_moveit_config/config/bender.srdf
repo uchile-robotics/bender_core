@@ -10,6 +10,7 @@
     <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="right_arm">
+        <link name="TCP"/>
         <joint name="l2r_to_l1r"/>
         <joint name="l3r_to_l2r"/>
         <joint name="l4r_to_l3r"/>
@@ -60,7 +61,7 @@
         <joint name="l6r_to_l5r" value="0"/>
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="right_gripper_end_effector" parent_link="l6r_1" group="right_gripper" parent_group="right_arm"/>
+    <end_effector name="right_gripper_end_effector" parent_link="TCP" group="right_gripper" parent_group="right_arm"/>
     <end_effector name="left_gripper_end_effector" parent_link="l6l_1" group="left_gripper" parent_group="left_arm"/>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="virtual_joint" type="fixed" parent_frame="world" child_link="base_link"/>
