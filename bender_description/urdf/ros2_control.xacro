@@ -309,8 +309,8 @@
 			<state_interface name="Present Load" />
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
+			<param name="CW Compliance Slope">32</param>
+			<param name="CCW Compliance Slope">32</param>
 			<param name="Return Delay Time">10</param>
 		</gpio>
 		<gpio name="motor_g2rb">
@@ -322,8 +322,8 @@
 			<state_interface name="Present Load" />
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
+			<param name="CW Compliance Slope">32</param>
+			<param name="CCW Compliance Slope">32</param>
 			<param name="Return Delay Time">10</param>
 		</gpio>
         <joint name="gripper_base_to_movil">

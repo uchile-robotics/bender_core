@@ -5,7 +5,7 @@ from rclpy.action import ActionClient
 from control_msgs.action import FollowJointTrajectory, GripperCommand
 from trajectory_msgs.msg import JointTrajectoryPoint
 from builtin_interfaces.msg import Duration
-import time
+from sensor_msgs.msg import Joy
 
 class RobotRoutine(Node):
     def __init__(self):
@@ -23,12 +23,16 @@ class RobotRoutine(Node):
         self.right_arm_client = ActionClient(self, FollowJointTrajectory, '/right_arm_controller/follow_joint_trajectory')
         self.head_client = ActionClient(self, FollowJointTrajectory, '/head_controller/follow_joint_trajectory')
 
-        # Grippers (GripperActionController) - Agregué el derecho también por completitud
+        # Grippers (GripperActionController)
         self.left_gripper_client = ActionClient(self, GripperCommand, '/left_gripper_controller/gripper_cmd')
         self.right_gripper_client = ActionClient(self, GripperCommand, '/right_gripper_controller/gripper_cmd')
 
         # Esperar a que los servidores estén listos
         self.wait_for_servers()
+        self.create_subscription(Joy, "/joy", self.joy_callback, 10)
+
+    def joy_callback(self, msg):
+        pass
 
     def wait_for_servers(self):
         servers = [
@@ -65,6 +69,12 @@ class RobotRoutine(Node):
         self.get_logger().info(f"Moviendo gripper a posición {position}...")
         return action_client.send_goal_async(goal_msg)
 
+    def wait_seconds(self, seconds):
+        """Espera activa manteniendo el procesamiento de callbacks de ROS 2."""
+        start_time = self.get_clock().now().seconds_nanoseconds()[0]
+        while (self.get_clock().now().seconds_nanoseconds()[0] - start_time) < seconds:
+            rclpy.spin_once(self, timeout_sec=0.1)
+
     def execute_routine(self):
         """Define la secuencia de movimientos de la rutina."""
 
@@ -74,29 +84,28 @@ class RobotRoutine(Node):
         left_arm_joints = ['l2l_to_l1l', 'l3l_to_l2l', 'l4l_to_l3l', 'l5l_to_l4l', 'l6l_to_l5l']
         right_arm_joints = ['l2r_to_l1r', 'l3r_to_l2r', 'l4r_to_l3r', 'l5r_to_l4r', 'l6r_to_l5r']
 
+        arm_move_duration = 2  # Duración del movimiento del brazo en segundos
 
+        # 1. Mover Hombro y Brazo derecho
+        self.send_trajectory(self.right_shoulder_client, right_shoulder_joint, [1.5], arm_move_duration)
+        self.send_trajectory(self.right_arm_client, right_arm_joints, [-0.0, 0.0, 0.0, 0.3, 0.2], arm_move_duration)
 
-        # 2. Mover TODO (Hombros + Brazos) a una posición de inicio (Zero)
-        self.send_trajectory(self.left_shoulder_client, left_shoulder_joint, [0.0], 2)
-        self.send_trajectory(self.right_shoulder_client, right_shoulder_joint, [1.5], 2)
-        self.send_trajectory(self.left_arm_client, left_arm_joints, [0.0, 0.0, 0.0, 0.0, 0.0], 2)
-        self.send_trajectory(self.right_arm_client, right_arm_joints, [-0.5, 0.0, -1.5, 0.3, 0.2], 2)
-        time.sleep(10.0)
+        # 2. Esperar a que el movimiento finalice completamente
+        self.wait_seconds(arm_move_duration)
 
+        # 3. Cerrar el gripper derecho (asociado a la joint 'g2ra_to_g1r')
+        # Cambia 'position=0.0' por el valor de posición cerrada configurado en tu URDF si es distinto.
+        self.send_gripper_cmd(self.right_gripper_client, position=0.0, max_effort=10.0)
 
-        self.send_trajectory(self.left_shoulder_client, left_shoulder_joint, [0.0], 2)
-        self.send_trajectory(self.right_shoulder_client, right_shoulder_joint, [0.0], 2)
-        self.send_trajectory(self.left_arm_client, left_arm_joints, [0.0, 0.0, 0.0, 0.0, 0.0], 2)
-        self.send_trajectory(self.right_arm_client, right_arm_joints, [0.0, 0.0, 0.0, 0.0, 0.0], 2)
+        # Dar 1 segundo para que el gripper termine de cerrar físicamente
+        self.wait_seconds(1.0)
 
-        self.get_logger().info("Rutina completada con éxito.")
 
 def main(args=None):
     rclpy.init(args=args)
     routine_node = RobotRoutine()
 
     try:
-        # Ejecutar la rutina secuencial
         routine_node.execute_routine()
     except KeyboardInterrupt:
         routine_node.get_logger().info("Rutina interrumpida por el usuario.")
