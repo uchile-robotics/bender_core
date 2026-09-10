@@ -715,7 +715,7 @@
     <link name="TCP"/>
 
     <joint name="g1r_to_TCP" type="fixed">
-      <origin xyz="0.0 0.0 -0.12" rpy="0 0 0"/>
+      <origin xyz="0.0 0.0 -0.12" rpy="3.14159 0 1.5707963"/>
       <parent link="g1r_1"/>
       <child link="TCP"/>
     </joint>

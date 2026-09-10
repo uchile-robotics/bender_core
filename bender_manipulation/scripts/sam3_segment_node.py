@@ -20,7 +20,7 @@ servicio ROS2. El pipeline, disparado por el servicio 'segment_scene'
 
   Nubes:
       object_cloud = deproyección 3D de los píxeles de Objeto
-      scene_cloud  = deproyección 3D de los píxeles de Escena
+      scene_cloud  = deproyección 3D de los píxeles de Escena (con subsampling opcional)
 
   Validación:
       Si object_cloud tiene menos de min_object_points, falla la inferencia.
@@ -52,6 +52,9 @@ class Sam3SegmentNode(Node):
         self.declare_parameter('min_mask_score', 0.20)
         self.declare_parameter('min_object_points', 50)
         self.declare_parameter('request_timeout', 15.0)
+
+        # Parámetro de subsampling para la escena (1 = sin subsampling, 2 = toma 1 de cada 2 puntos, etc.)
+        self.declare_parameter('scene_subsample_factor', 64)
 
         self.bridge = CvBridge()
         self.last_color = None
@@ -128,7 +131,6 @@ class Sam3SegmentNode(Node):
 
     def _build_cloud(self, points: np.ndarray, frame_id: str) -> PointCloud2:
         header = self.get_clock().now().to_msg()
-        from std_msgs.msg import Header
         h = Header(frame_id=frame_id, stamp=header)
         return point_cloud2.create_cloud_xyz32(h, points.tolist())
 
@@ -147,6 +149,7 @@ class Sam3SegmentNode(Node):
         prompt = self.get_parameter('prompt').value
         min_mask_score = self.get_parameter('min_mask_score').value
         min_object_points = self.get_parameter('min_object_points').value
+        scene_subsample_factor = self.get_parameter('scene_subsample_factor').value
 
         # Inferencia(imagen, prompt) -> máscaras + scores
         try:
@@ -190,13 +193,17 @@ class Sam3SegmentNode(Node):
             )
             return response
 
+        # Subsampling de la nube de puntos de la escena
+        if scene_subsample_factor > 1:
+            scene_points = scene_points[::scene_subsample_factor]
+
         self.object_cloud_pub.publish(self._build_cloud(object_points, frame_id))
         self.scene_cloud_pub.publish(self._build_cloud(scene_points, frame_id))
 
         response.success = True
         response.message = (
             f"score={best['score']:.3f} object_cloud={object_points.shape[0]}pts "
-            f"scene_cloud={scene_points.shape[0]}pts"
+            f"scene_cloud={scene_points.shape[0]}pts (subsample_factor={scene_subsample_factor})"
         )
         return response
 

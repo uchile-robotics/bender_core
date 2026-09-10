@@ -1,36 +1,12 @@
 #!/usr/bin/env python3
-"""
-Nodo de recogida (pick) para el brazo derecho de Bender.
-
-Implementa dos algoritmos:
-
-  Algoritmo 2 - Selección de la pose de agarre alcanzable:
-      Recorre las poses de agarre candidatas (ordenadas por confianza) y
-      devuelve la primera cuya pose de contacto y su pose de aproximación
-      (retrocedida una distancia d sobre el eje de aproximación) sean
-      alcanzables por IK y estén libres de colisión contra la escena de
-      planificación (incluye el octomap M cuando está disponible).
-
-  Algoritmo 3 - Ejecución de un tramo de movimiento:
-      Planifica entre una configuración de inicio y una configuración
-      objetivo con el pipeline de planificación configurado, y ejecuta la
-      trayectoria resultante si la planificación tuvo éxito.
-
-Modo de prueba manual (aún no hay nodo de detección de agarres): publica una
-geometry_msgs/PoseStamped en /grasp_candidate_pose y el nodo la trata como
-única candidata (G = [g]) para ir probando el pipeline extremo a extremo.
-
-    ros2 topic pub -1 /grasp_candidate_pose geometry_msgs/msg/PoseStamped "{
-      header: {frame_id: 'base_link'},
-      pose: {position: {x: 0.5, y: -0.2, z: 0.4}, orientation: {w: 1.0}}}"
-"""
+import math
 import time
 
 import rclpy
 from rclpy.node import Node
+from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.executors import MultiThreadedExecutor
 from geometry_msgs.msg import PoseStamped, Pose
-from moveit_msgs.msg import Constraints, OrientationConstraint, PositionConstraint
-from shape_msgs.msg import SolidPrimitive
 from std_msgs.msg import String
 
 import tf2_ros
@@ -39,17 +15,15 @@ from tf2_geometry_msgs import do_transform_pose_stamped
 from moveit.planning import MoveItPy, PlanRequestParameters
 from moveit.core.robot_state import RobotState
 from moveit_configs_utils import MoveItConfigsBuilder
-
-from moveit_msgs.msg import Constraints, OrientationConstraint, PositionConstraint, MoveItErrorCodes
+from moveit_msgs.msg import MoveItErrorCodes
 
 MOVEIT_ERROR_MAP = {
     MoveItErrorCodes.SUCCESS: "Éxito",
     MoveItErrorCodes.FAILURE: "Fallo no especificado",
-    MoveItErrorCodes.PLANNING_FAILED: "Fallo general del algoritmo de planificación",
+    MoveItErrorCodes.PLANNING_FAILED: "Fallo general de planificación",
     MoveItErrorCodes.TIMED_OUT: "Tiempo límite agotado (Timeout)",
-    MoveItErrorCodes.START_STATE_IN_COLLISION: "Estado inicial en colisión con la escena/robot",
-    MoveItErrorCodes.GOAL_IN_COLLISION: "Estado objetivo en colisión con la escena/octomap",
-    MoveItErrorCodes.GOAL_VIOLATES_PATH_CONSTRAINTS: "Estado objetivo viola restricciones",
+    MoveItErrorCodes.START_STATE_IN_COLLISION: "Estado inicial en colisión",
+    MoveItErrorCodes.GOAL_IN_COLLISION: "Estado objetivo en colisión",
     MoveItErrorCodes.NO_IK_SOLUTION: "Sin solución de cinemática inversa (IK)",
 }
 
@@ -60,79 +34,120 @@ TIP_LINK = "TCP"
 def get_error_string(code: int) -> str:
     return MOVEIT_ERROR_MAP.get(code, f"Código de error {code}")
 
-def _retroceder(pose: Pose, distance: float) -> Pose:
-    """gpre = retroceder(g, d)
 
-    Retrocede 'distance' metros a lo largo del eje de aproximación (eje Z
-    local de la orientación del agarre), manteniendo la misma orientación.
-    """
-    qx, qy, qz, qw = pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w
+# ---------------------------------------------------------------- quaterniones
 
-    # Eje Z local de la pose, expresado en el frame de referencia: R(q) @ [0, 0, 1]
-    zx = 2.0 * (qx * qz + qw * qy)
-    zy = 2.0 * (qy * qz - qw * qx)
-    zz = 1.0 - 2.0 * (qx * qx + qy * qy)
+def _q_normalize(q):
+    x, y, z, w = q
+    n = math.sqrt(x * x + y * y + z * z + w * w)
+    if n < 1e-9:
+        # Cuaternión nulo (mensaje sin inicializar). Devolvemos identidad.
+        return (0.0, 0.0, 0.0, 1.0)
+    return (x / n, y / n, z / n, w / n)
+
+
+def _q_mul(a, b):
+    ax, ay, az, aw = a
+    bx, by, bz, bw = b
+    return (
+        aw * bx + ax * bw + ay * bz - az * by,
+        aw * by - ax * bz + ay * bw + az * bx,
+        aw * bz + ax * by - ay * bx + az * bw,
+        aw * bw - ax * bx - ay * by - az * bz,
+    )
+
+
+def _q_from_axis_angle(axis, angle):
+    ax, ay, az = axis
+    n = math.sqrt(ax * ax + ay * ay + az * az)
+    ax, ay, az = ax / n, ay / n, az / n
+    s = math.sin(angle / 2.0)
+    return (ax * s, ay * s, az * s, math.cos(angle / 2.0))
+
+
+def _axis_vector(q, axis: str):
+    """Devuelve el eje X, Y o Z de la pose expresado en el frame padre."""
+    qx, qy, qz, qw = q
+    if axis == "x":
+        return (1.0 - 2.0 * (qy * qy + qz * qz),
+                2.0 * (qx * qy + qw * qz),
+                2.0 * (qx * qz - qw * qy))
+    if axis == "y":
+        return (2.0 * (qx * qy - qw * qz),
+                1.0 - 2.0 * (qx * qx + qz * qz),
+                2.0 * (qy * qz + qw * qx))
+    return (2.0 * (qx * qz + qw * qy),
+            2.0 * (qy * qz - qw * qx),
+            1.0 - 2.0 * (qx * qx + qy * qy))
+
+
+def _retroceder(pose: Pose, distance: float, approach_axis: str = "z") -> Pose:
+    """Retrocede `distance` metros a lo largo del eje de aproximación del TCP."""
+    q = _q_normalize((pose.orientation.x, pose.orientation.y,
+                      pose.orientation.z, pose.orientation.w))
+    ax, ay, az = _axis_vector(q, approach_axis)
 
     pre = Pose()
-    pre.orientation = pose.orientation
-    pre.position.x = pose.position.x - distance * zx
-    pre.position.y = pose.position.y - distance * zy
-    pre.position.z = pose.position.z - distance * zz
+    pre.orientation.x, pre.orientation.y, pre.orientation.z, pre.orientation.w = q
+    pre.position.x = pose.position.x - distance * ax
+    pre.position.y = pose.position.y - distance * ay
+    pre.position.z = pose.position.z - distance * az
     return pre
 
+
+def _aplicar_bias(pose: Pose, bias: float, approach_axis: str = "z") -> Pose:
+    """Avanza `bias` metros a lo largo del eje de aproximación del TCP."""
+    return _retroceder(pose, -bias, approach_axis)
+
+
+def _variantes_simetria(pose_stamped: PoseStamped, approach_axis: str, angulos):
+    """Genera poses equivalentes girando el gripper sobre su eje de aproximación."""
+    eje = {"x": (1.0, 0.0, 0.0), "y": (0.0, 1.0, 0.0), "z": (0.0, 0.0, 1.0)}[approach_axis]
+    q0 = _q_normalize((pose_stamped.pose.orientation.x, pose_stamped.pose.orientation.y,
+                       pose_stamped.pose.orientation.z, pose_stamped.pose.orientation.w))
+    salida = []
+    for ang in angulos:
+        qx, qy, qz, qw = _q_mul(q0, _q_from_axis_angle(eje, ang))
+        p = PoseStamped()
+        p.header = pose_stamped.header
+        p.pose.position = pose_stamped.pose.position
+        p.pose.orientation.x, p.pose.orientation.y = qx, qy
+        p.pose.orientation.z, p.pose.orientation.w = qz, qw
+        salida.append((math.degrees(ang), p))
+    return salida
+
+
+# --------------------------------------------------------------------- el nodo
 
 class GraspPickNode(Node):
     def __init__(self):
         super().__init__("grasp_pick_node")
+        self.cb_group = ReentrantCallbackGroup()
+
         self.tf_buffer = tf2_ros.Buffer()
-        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self)
-        self.declare_parameter("approach_distance", 0.10)  # d, en metros
-        self.declare_parameter("ik_timeout", 0.5)
-        self.declare_parameter("ik_random_restarts", 5)
-        self.declare_parameter("planning_time", 10.0)
-        self.declare_parameter("planning_attempts", 10)
-        # Tolerancias del goal en el tip (TCP) al planificar el tramo. La posición
-        # se mantiene ceñida (el agarre debe caer donde se pidió); la orientación
-        # se deja holgada porque el goal por defecto de MoveIt usa una tolerancia
-        # angular ~0 (epsilon de máquina) que hace que el planner batalle para
-        # converger, incluso cuando la pose sí es alcanzable.
-        self.declare_parameter("goal_position_tolerance", 0.05)     # metros
-        self.declare_parameter("goal_orientation_tolerance", 0.50)   # radianes (~20°)
-        # Cuánto puede diferir el primer punto de la trayectoria del estado real
-        # del robot al momento de ejecutar (asentamiento del controlador entre
-        # tramos). Con el valor por defecto (0.01 rad) trajectory_execution_manager
-        # rechazaba tramos válidos con "Invalid Trajectory: start point deviates...".
-        self.declare_parameter("allowed_start_tolerance", 0.1)       # radianes
-        # Pausa tras ejecutar un tramo para que el robot termine de asentarse
-        # físicamente antes de que el siguiente tramo capture el estado actual
-        # como punto de partida (evita "start point deviates..." si el robot
-        # sigue frenando/oscilando levemente cuando arranca la planificación).
-        self.declare_parameter("settle_time_after_segment", 0.3)     # segundos
+        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self, spin_thread=True)
+
+        self.declare_parameter("approach_distance", 0.10)
+        self.declare_parameter("approach_axis", "z")          # eje del TCP que apunta al objeto
+        self.declare_parameter("symmetry_angles_deg", [0.0, 180.0, 90.0, -90.0])
+        self.declare_parameter("ik_timeout", 0.2)
+        self.declare_parameter("ik_random_restarts", 25)
+        self.declare_parameter("planning_time", 5.0)
+        self.declare_parameter("planning_attempts", 5)
+        self.declare_parameter("allowed_start_tolerance", 0.1)
+        self.declare_parameter("settle_time_after_segment", 0.3)
+        self.declare_parameter("bias", 0.10)                  # Desplazamiento adicional hacia adelante en metros
+        self.declare_parameter("skip_collision_check_at_grasp", False)
 
         moveit_config = MoveItConfigsBuilder("bender", package_name="bender_moveit_config").to_moveit_configs()
         config_dict = moveit_config.to_dict()
-
-        # MoveItCpp (usado por MoveItPy) espera 'planning_pipelines.pipeline_names'
-        # (dict anidado), mientras que MoveItConfigsBuilder entrega 'planning_pipelines'
-        # como lista plana (formato que sí entiende el nodo move_group clásico).
-        # Sin este ajuste, MoveItPy falla con "Failed to load planning pipelines".
         config_dict["planning_pipelines"] = {"pipeline_names": config_dict["planning_pipelines"]}
 
         te = config_dict.get("trajectory_execution", {})
         te["allowed_start_tolerance"] = self.get_parameter("allowed_start_tolerance").value
         config_dict["trajectory_execution"] = te
-
-        # Necesario para sincronizar con el reloj simulado de Gazebo; sin esto
-        # trajectory_execution_manager rechaza el estado articular por "obsoleto"
-        # y nunca llega a mover el robot de verdad.
-        # (Requiere el parche en moveit_ros_planning/trajectory_execution_manager
-        # que quita el rechazo de parámetros desconocidos como qos_overrides.*;
-        # ver PR moveit2#3689 / issue moveit2#2940 - de lo contrario esto crashea
-        # con rclcpp::exceptions::InvalidParameterValueException.)
         config_dict["use_sim_time"] = False
 
-        # provide_planning_service=False: ya hay un move_group corriendo (para RViz);
-        # este nodo no debe competir por los mismos nombres de servicio/acción.
         self.moveit = MoveItPy(
             node_name="grasp_pick_moveit_py",
             config_dict=config_dict,
@@ -142,16 +157,17 @@ class GraspPickNode(Node):
         self.psm = self.moveit.get_planning_scene_monitor()
 
         self.status_pub = self.create_publisher(String, "/grasp_pick_status", 10)
-        self.create_subscription(PoseStamped, "/grasp_candidate_pose", self.grasp_candidate_cb, 10)
+        self.create_subscription(PoseStamped, "/grasp_candidate_pose",
+                                 self.grasp_candidate_cb, 10,
+                                 callback_group=self.cb_group)
 
         self.get_logger().info(
-            f"grasp_pick_node listo (grupo='{GROUP_NAME}', tip='{TIP_LINK}'). "
-            "Publica geometry_msgs/PoseStamped en /grasp_candidate_pose para probar."
+            f"grasp_pick_node iniciado (grupo='{GROUP_NAME}', tip='{TIP_LINK}', "
+            f"approach_axis='{self.get_parameter('approach_axis').value}', "
+            f"bias={self.get_parameter('bias').value}m)."
         )
 
-    # ------------------------------------------------------------------
-    # Algoritmo 2: Selección de la pose de agarre alcanzable
-    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------ frames
 
     def _transform_to_base(self, pose_stamped: PoseStamped, target_frame="base_link") -> PoseStamped:
         if pose_stamped.header.frame_id == target_frame:
@@ -165,160 +181,104 @@ class GraspPickNode(Node):
             )
             return do_transform_pose_stamped(pose_stamped, transform)
         except Exception as e:
-            pose_to_transform = PoseStamped()
-            pose_to_transform.header.frame_id = pose_stamped.header.frame_id
-            pose_to_transform.header.stamp = rclpy.time.Time().to_msg()
-            pose_to_transform.pose = pose_stamped.pose
-            return do_transform_pose_stamped(pose_to_transform, transform)
-        except tf2_ros.TransformException as e:
-            self.get_logger().error(f"Error de TF transformando de {pose_stamped.header.frame_id} a {target_frame}: {e}")
-            return None
-        except Exception as e:
-            self.get_logger().error(f"Error inesperado al transformar pose: {e}")
+            self.get_logger().error(
+                f"Error al transformar frame {pose_stamped.header.frame_id} a {target_frame}: {e}")
             return None
 
-    def select_reachable_grasp(self, candidates: list, d: float):
-        """
-        Entrada: candidates (G) ordenadas por confianza (mayor primero), d.
-        Salida: (g, gpre, qg, qpre) del primer candidato alcanzable, o None
-                si ningún candidato admite solución ("sin_agarre_alcanzable").
-        """
-        for g in candidates:  # recorrido en orden decreciente de confianza
-            qg = self._compute_ik(g)                      # qg = IK(g)
-            gpre = self._offset_stamped(g, d)              # gpre = retroceder(g, d)
-            qpre = self._compute_ik(gpre)                  # qpre = IK(gpre)
+    # ---------------------------------------------------------------------- IK
 
-            qg_valid = qg is not None and self._alcanzable(qg)
-            qpre_valid = qpre is not None and self._alcanzable(qpre)
-            self.get_logger().info(
-                f"Candidato: IK(g)={'ok' if qg is not None else 'fail'} "
-                f"alcanzable(g)={qg_valid} IK(gpre)={'ok' if qpre is not None else 'fail'} "
-                f"alcanzable(gpre)={qpre_valid}"
-            )
-
-            if qg_valid and qpre_valid:
-                return g, gpre, qg, qpre                   # primer candidato alcanzable
-
-        return None  # "sin_agarre_alcanzable"
-
-    def _offset_stamped(self, g: PoseStamped, d: float) -> PoseStamped:
-        gpre = PoseStamped()
-        gpre.header = g.header
-        gpre.pose = _retroceder(g.pose, d)
-        return gpre
-
-    def _compute_ik(self, pose_stamped: PoseStamped):
-        """qg = IK(g): configuración que alcanza la pose de contacto, o None si no hay solución.
-
-        El solver KDL (Newton-Raphson) es local: si la semilla inicial (estado
-        actual del robot) está cerca de una singularidad cinemática, puede
-        oscilar sin converger aunque exista solución. Por eso, si la búsqueda
-        desde el estado actual falla, se reintenta unas pocas veces desde
-        configuraciones aleatorias dentro de los límites de las articulaciones.
-        """
+    def _compute_ik(self, pose_stamped: PoseStamped, seed_state: RobotState = None,
+                    check_collision: bool = True, etiqueta: str = ""):
         timeout = self.get_parameter("ik_timeout").value
+        restarts = self.get_parameter("ik_random_restarts").value
+
+        ik_ok_pero_en_colision = False
 
         with self.psm.read_only() as scene:
             base_model = scene.current_state.robot_model
-            current_joint_positions = scene.current_state.joint_positions
+            jmg = base_model.get_joint_model_group(GROUP_NAME)
 
-        # Intento 1: semilla = estado actual del robot.
-        state = RobotState(base_model)
-        state.joint_positions = current_joint_positions
-        state.update()
-        if state.set_from_ik(GROUP_NAME, pose_stamped.pose, TIP_LINK, timeout):
-            state.update()
-            return state
-
-        # Intentos adicionales: semillas aleatorias (reinicio para escapar de singularidades).
-        jmg = state.robot_model.get_joint_model_group(GROUP_NAME)
-        for _ in range(self.get_parameter("ik_random_restarts").value):
             state = RobotState(base_model)
-            state.set_to_random_positions(jmg)
+            if seed_state is not None:
+                state.joint_positions = seed_state.joint_positions
+            else:
+                state.joint_positions = scene.current_state.joint_positions
             state.update()
+
             if state.set_from_ik(GROUP_NAME, pose_stamped.pose, TIP_LINK, timeout):
                 state.update()
-                return state
+                if not check_collision or scene.is_state_valid(state, GROUP_NAME):
+                    return state, "ok"
+                ik_ok_pero_en_colision = True
+
+            for _ in range(restarts):
+                state = RobotState(base_model)
+                state.set_to_random_positions(jmg)
+                state.update()
+                if state.set_from_ik(GROUP_NAME, pose_stamped.pose, TIP_LINK, timeout):
+                    state.update()
+                    if not check_collision or scene.is_state_valid(state, GROUP_NAME):
+                        return state, "ok"
+                    ik_ok_pero_en_colision = True
+
+        motivo = "colision" if ik_ok_pero_en_colision else "sin_ik"
+        self.get_logger().warn(f"IK {etiqueta}: fallo por '{motivo}'.")
+        return None, motivo
+
+    # --------------------------------------------------------------- selección
+
+    def select_reachable_grasp(self, candidates: list, d: float):
+        eje = self.get_parameter("approach_axis").value
+        angulos = [math.radians(a) for a in self.get_parameter("symmetry_angles_deg").value]
+        skip_col_grasp = self.get_parameter("skip_collision_check_at_grasp").value
+
+        for idx, cand in enumerate(candidates):
+            for grados, g in _variantes_simetria(cand, eje, angulos):
+                gpre = PoseStamped()
+                gpre.header = g.header
+                gpre.pose = _retroceder(g.pose, d, eje)
+
+                q_gpre, motivo_pre = self._compute_ik(
+                    gpre, etiqueta=f"cand{idx} rot{grados:+.0f}° (pre-agarre)")
+                if q_gpre is None:
+                    continue
+
+                q_g, motivo_g = self._compute_ik(
+                    g, seed_state=q_gpre,
+                    check_collision=not skip_col_grasp,
+                    etiqueta=f"cand{idx} rot{grados:+.0f}° (agarre)")
+                if q_g is None:
+                    continue
+
+                self.get_logger().info(
+                    f"Candidato {idx} con rotación {grados:+.0f}° sobre el eje "
+                    f"'{eje}': alcanzable.")
+                return g, gpre, q_g, q_gpre
 
         return None
 
-    def _alcanzable(self, state: RobotState) -> bool:
-        """alcanzable(q, M): sin colisión contra la escena de planificación (incluye el octomap M)."""
-        with self.psm.read_only() as scene:
-            return scene.is_state_valid(state, GROUP_NAME)
+    # --------------------------------------------------------------- ejecución
 
-    def _goal_constraints_with_slack(self, goal_pose: PoseStamped) -> Constraints:
-        """Constraints de posición+orientación para TIP_LINK, con tolerancia de
-        posición ceñida y de orientación holgada (ver parámetros del nodo)."""
-        position_tolerance = self.get_parameter("goal_position_tolerance").value
-        orientation_tolerance = self.get_parameter("goal_orientation_tolerance").value
-
-        pos = PositionConstraint()
-        pos.header = goal_pose.header
-        pos.link_name = TIP_LINK
-        pos.target_point_offset.x = 0.0
-        pos.target_point_offset.y = 0.0
-        pos.target_point_offset.z = 0.0
-        sphere = SolidPrimitive(type=SolidPrimitive.SPHERE, dimensions=[position_tolerance])
-        pos.constraint_region.primitives.append(sphere)
-        pos.constraint_region.primitive_poses.append(goal_pose.pose)
-        pos.weight = 1.0
-
-        orient = OrientationConstraint()
-        orient.header = goal_pose.header
-        orient.link_name = TIP_LINK
-        orient.orientation = goal_pose.pose.orientation
-        orient.absolute_x_axis_tolerance = orientation_tolerance
-        orient.absolute_y_axis_tolerance = orientation_tolerance
-        orient.absolute_z_axis_tolerance = orientation_tolerance
-        orient.weight = 1.0
-
-        constraints = Constraints()
-        constraints.position_constraints.append(pos)
-        constraints.orientation_constraints.append(orient)
-        return constraints
-
-    # ------------------------------------------------------------------
-    # Algoritmo 3: Ejecución de un tramo de movimiento
-    # ------------------------------------------------------------------
-    def execute_segment(self, goal_pose: PoseStamped) -> str:
-        """
-        tau = P(qstart, qgoal, M)
-        Si no hay trayectoria -> "fallo_planificacion" (se reporta al orquestador).
-        Si la hay -> ejecutar(tau) -> "exito".
-
-        qstart se toma como el estado ACTUAL del robot justo antes de planificar
-        (no un RobotState capturado antes, ver más abajo por qué) y qgoal se
-        expresa como pose cartesiana en TIP_LINK, con tolerancia de posición
-        ceñida y de orientación holgada, en vez del goal articular por defecto
-        (tolerancia ~0 por articulación).
-        """
-        # set_start_state_to_current_state() lee el estado en vivo justo antes
-        # de planificar. Usar un RobotState capturado antes (p.ej. al comienzo
-        # del callback) deja una ventana en la que el robot real se sigue
-        # asentando/moviendo un poco; al ejecutar, trajectory_execution_manager
-        # compara el primer punto del plan contra el estado real en ese momento
-        # y lo rechaza si difiere más de allowed_start_tolerance (~0.01 rad):
-        # "Invalid Trajectory: start point deviates from current robot state".
+    def execute_segment_to_state(self, target_state: RobotState) -> str:
         self.arm.set_start_state_to_current_state()
-        self.arm.set_goal_state(motion_plan_constraints=[self._goal_constraints_with_slack(goal_pose)])
+        self.arm.set_goal_state(robot_state=target_state)
 
         params = PlanRequestParameters(self.moveit, "")
         params.planning_pipeline = "ompl"
         params.planning_time = self.get_parameter("planning_time").value
         params.planning_attempts = self.get_parameter("planning_attempts").value
 
-        plan_result = self.arm.plan(single_plan_parameters=params)  # tau = P(qstart, qgoal, M)
+        plan_result = self.arm.plan(single_plan_parameters=params)
 
         if not plan_result or plan_result.error_code.val != MoveItErrorCodes.SUCCESS:
             code = plan_result.error_code.val if plan_result else MoveItErrorCodes.FAILURE
             reason = get_error_string(code)
-            self.get_logger().error(f"Fallo de planificación (Código {code}): {reason}")
+            self.get_logger().error(f"Fallo de planificación a RobotState (Código {code}): {reason}")
             return f"fallo_planificacion: {reason}"
 
-        exec_status = self.moveit.execute(plan_result.trajectory, controllers=[])  # ejecutar(tau)
+        exec_status = self.moveit.execute(plan_result.trajectory, controllers=[])
         if not exec_status:
-            self.get_logger().error(f"Ejecución rechazada/fallida: {exec_status.status}")
+            self.get_logger().error("Ejecución rechazada por el controlador.")
             return "fallo_ejecucion"
 
         settle_time = self.get_parameter("settle_time_after_segment").value
@@ -327,45 +287,64 @@ class GraspPickNode(Node):
 
         return "exito"
 
-    # ------------------------------------------------------------------
+    # ---------------------------------------------------------------- callback
+
     def grasp_candidate_cb(self, msg: PoseStamped):
         d = self.get_parameter("approach_distance").value
-        self.get_logger().info(f"Candidato de agarre recibido (frame={msg.header.frame_id}), d={d:.3f} m")
+        bias = self.get_parameter("bias").value
+        eje = self.get_parameter("approach_axis").value
+
+        self.get_logger().info(f"Pose de agarre recibida (frame={msg.header.frame_id}). Procesando...")
+
+        qn = _q_normalize((msg.pose.orientation.x, msg.pose.orientation.y,
+                           msg.pose.orientation.z, msg.pose.orientation.w))
+        msg.pose.orientation.x, msg.pose.orientation.y = qn[0], qn[1]
+        msg.pose.orientation.z, msg.pose.orientation.w = qn[2], qn[3]
+
         msg_base_link = self._transform_to_base(msg, target_frame="base_link")
-        self.get_logger().info(str(msg_base_link.pose))
         if msg_base_link is None:
             return
-        # Por ahora G = [msg] (una sola pose publicada a mano). Cuando exista
-        # un nodo de detección de agarres, este callback puede acumular una
-        # lista de PoseStamped ordenada por confianza y pasarla completa aquí.
+
+        # Aplicar el bias a lo largo del eje de aproximación si es distinto de cero
+        if abs(bias) > 1e-6:
+            msg_base_link.pose = _aplicar_bias(msg_base_link.pose, bias, eje)
+            self.get_logger().info(f"Bias aplicado: {bias:+.3f}m en eje local '{eje}'.")
+
+        p = msg_base_link.pose.position
+        self.get_logger().info(
+            f"Pose final en base_link (con bias): xyz=({p.x:.3f}, {p.y:.3f}, {p.z:.3f}) "
+            f"q=({qn[0]:.3f}, {qn[1]:.3f}, {qn[2]:.3f}, {qn[3]:.3f})")
+
         result = self.select_reachable_grasp([msg_base_link], d)
 
         if result is None:
-            self.get_logger().warn("sin_agarre_alcanzable")
+            self.get_logger().warn("sin_agarre_alcanzable (revisa los motivos de IK arriba)")
             self.status_pub.publish(String(data="sin_agarre_alcanzable"))
             return
 
-        g, gpre, _qg, _qpre = result
-        self.get_logger().info("Agarre alcanzable encontrado, ejecutando aproximación...")
+        g, gpre, q_g, q_gpre = result
+        self.get_logger().info("Agarre válido encontrado. Tramo 1: aproximación (gpre)...")
 
-        # Tramo 1: configuración actual -> pose de aproximación (pre-agarre)
-        status = self.execute_segment(gpre)
+        status = self.execute_segment_to_state(q_gpre)
         if not status.startswith("exito"):
-            self.get_logger().error(f"Aproximación fallida -> {status}")
+            self.get_logger().error(f"Fallo en aproximación -> {status}")
             self.status_pub.publish(String(data=status))
             return
 
-        # Tramo 2: pose de aproximación -> pose de agarre final
-        status = self.execute_segment(g)
-        self.get_logger().info(f"Agarre: {status}")
+        self.get_logger().info("Aproximación completada. Tramo 2: agarre final (g)...")
+
+        status = self.execute_segment_to_state(q_g)
+        self.get_logger().info(f"Resultado final del agarre: {status}")
         self.status_pub.publish(String(data=status))
 
 
 def main():
     rclpy.init()
     node = GraspPickNode()
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
     try:
-        rclpy.spin(node)
+        executor.spin()
     except KeyboardInterrupt:
         pass
     finally:

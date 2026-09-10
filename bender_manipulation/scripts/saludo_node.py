@@ -84,10 +84,10 @@ class RobotRoutine(Node):
         left_arm_joints = ['l2l_to_l1l', 'l3l_to_l2l', 'l4l_to_l3l', 'l5l_to_l4l', 'l6l_to_l5l']
         right_arm_joints = ['l2r_to_l1r', 'l3r_to_l2r', 'l4r_to_l3r', 'l5r_to_l4r', 'l6r_to_l5r']
 
-        arm_move_duration = 2  # Duración del movimiento del brazo en segundos
+        arm_move_duration = 10  # Duración del movimiento del brazo en segundos
 
         # 1. Mover Hombro y Brazo derecho
-        self.send_trajectory(self.right_shoulder_client, right_shoulder_joint, [1.5], arm_move_duration)
+        self.send_trajectory(self.right_shoulder_client, right_shoulder_joint, [0.0], arm_move_duration)
         self.send_trajectory(self.right_arm_client, right_arm_joints, [-0.0, 0.0, 0.0, 0.3, 0.2], arm_move_duration)
 
         # 2. Esperar a que el movimiento finalice completamente
