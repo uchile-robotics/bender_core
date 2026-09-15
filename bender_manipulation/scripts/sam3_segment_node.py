@@ -54,7 +54,7 @@ class Sam3SegmentNode(Node):
         self.declare_parameter('request_timeout', 15.0)
 
         # Parámetro de subsampling para la escena (1 = sin subsampling, 2 = toma 1 de cada 2 puntos, etc.)
-        self.declare_parameter('scene_subsample_factor', 64)
+        self.declare_parameter('scene_subsample_factor', 100)
 
         self.bridge = CvBridge()
         self.last_color = None

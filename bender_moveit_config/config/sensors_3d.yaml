@@ -1,5 +1,5 @@
 octomap_frame: base_link
-octomap_resolution: 0.06
+octomap_resolution: 0.05
 max_range: 2.5
 
 sensors:

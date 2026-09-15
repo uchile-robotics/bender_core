@@ -118,7 +118,7 @@ def generate_launch_description():
         name="sam3_segment_node",
         output="screen",
         emulate_tty=True,
-        parameters=[{"prompt": "yellow box"}],
+        parameters=[{"prompt": "bottle"}],
     )
 
     return LaunchDescription([

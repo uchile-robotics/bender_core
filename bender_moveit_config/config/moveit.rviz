@@ -7,6 +7,7 @@ Panels:
         - /MotionPlanning1
         - /MotionPlanning1/Scene Geometry1
         - /PointCloud22
+        - /PointCloud22/Topic1
         - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 245
@@ -521,7 +522,7 @@ Visualization Manager:
       Channel Name: intensity
       Class: rviz_default_plugins/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: Intensity
+      Color Transformer: RGB8
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
@@ -540,7 +541,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /sam3/scene_cloud
+        Value: /camera/depth/color/points
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -712,6 +713,27 @@ Visualization Manager:
               {}
       Update Interval: 0
       Value: true
+    - Alpha: 1
+      Arrow Length: 0.30000001192092896
+      Axes Length: 0.30000001192092896
+      Axes Radius: 0.009999999776482582
+      Class: rviz_default_plugins/PoseArray
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.07000000029802322
+      Head Radius: 0.029999999329447746
+      Name: PoseArray
+      Shaft Length: 0.23000000417232513
+      Shaft Radius: 0.009999999776482582
+      Shape: Arrow (Flat)
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /graspgen/top_grasps
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -730,7 +752,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 2.466904640197754
+      Distance: 1.7720558643341064
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -745,10 +767,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7897961139678955
+      Pitch: 0.5697967410087585
       Target Frame: base_link
       Value: Orbit (rviz_default_plugins)
-      Yaw: 3.3102118968963623
+      Yaw: 3.31023907661438
     Saved: ~
 Window Geometry:
   Displays:
