@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot
 	xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:macro name="odrive_ros2_control" params="name serial_number joint_name axis:=0 gear_ratio:=1.0">
+<xacro:macro name="odrive_ros2_control" params="name serial_number joint_name_left joint_name_right axis_left axis_right gear_ratio_left gear_ratio_right">
 		<ros2_control name="${name}" type="system">
 			<hardware>
 				<plugin>odrive_hardware_interface/ODriveHardwareInterface</plugin>
@@ -9,13 +9,22 @@
 			<sensor name="${name}_dev0">
 				<param name="serial_number">${serial_number}</param>
 			</sensor>
-			<joint name="${joint_name}">
+			<joint name="${joint_name_left}">
 				<param name="serial_number">${serial_number}</param>
-				<param name="axis">${axis}</param>
+				<param name="axis">${axis_left}</param>
 				<param name="enable_watchdog">0</param>
 				<param name="watchdog_timeout">1.0</param>
-				<param name="gear_ratio">${gear_ratio}</param>
-				<!-- <command_interface name="position" /> -->
+				<param name="gear_ratio">${gear_ratio_left}</param>
+				<command_interface name="velocity" />
+				<command_interface name="effort" />
+				<state_interface name="effort" />
+			</joint>
+			<joint name="${joint_name_right}">
+				<param name="serial_number">${serial_number}</param>
+				<param name="axis">${axis_right}</param>
+				<param name="enable_watchdog">0</param>
+				<param name="watchdog_timeout">1.0</param>
+				<param name="gear_ratio">${gear_ratio_right}</param>
 				<command_interface name="velocity" />
 				<command_interface name="effort" />
 				<state_interface name="effort" />
@@ -24,20 +33,16 @@
 	</xacro:macro>
 
 	<xacro:odrive_ros2_control
-        name="OdriveLeft"
-        serial_number="3690387D3333"
-        joint_name="l1l_to_base_link"
-        axis="0"
-    	gear_ratio="250"
+    name="Odrive"
+    serial_number="3690387D3333"
+    joint_name_left="l1l_to_base_link"
+    joint_name_right="l1r_to_base_link"
+    axis_left="1"
+    axis_right="0"
+	gear_ratio_left="250"
+	gear_ratio_right="250"
 	/>
 
-	<xacro:odrive_ros2_control
-        name="OdriveRight"
-        serial_number="336B33573235"
-        joint_name="l1r_to_base_link"
-        axis="0"
-    	gear_ratio="250"
-	/>
 	<ros2_control name="ShoulderJoint" type="sensor">
 		<hardware>
 			<plugin>bender_hardware_interfaces/EncoderInterface</plugin>
@@ -80,8 +85,8 @@
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0.5,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.5, 0.5
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, -0.5,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0.5
             </param>
 
             <param name="joint_to_transmission_matrix">
@@ -99,8 +104,8 @@
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1
             </param>
         </hardware>
 		<joint name="l2r_to_l1r">
@@ -118,9 +123,9 @@
     		<param name="[unit info]">Present Position, 0.001047198, rad, unsigned, -1.6221098; Goal Position, 0.001047198, rad, unsigned, -1.6221098</param>
     		<param name="CW Compliance Margin">1</param>
     		<param name="CCW Compliance Margin">1</param>
-    		<param name="CW Compliance Slope">254</param>
-    		<param name="CCW Compliance Slope">254</param>
-    		<param name="Return Delay Time">10</param>
+    		<param name="CW Compliance Slope">50</param>
+    		<param name="CCW Compliance Slope">50</param>
+    		<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l3r_to_l2r">
 			<command_interface name="position" />
@@ -137,9 +142,9 @@
 			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -2.04988725; Goal Position, 0.005061455, rad, unsigned, -2.04988725</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
+			<param name="CW Compliance Slope">16</param>
+			<param name="CCW Compliance Slope">16</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l4r_to_l3r">
 			<command_interface name="position" />
@@ -154,10 +159,10 @@
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
 			<param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -3.05262219; Goal Position, 0.001533981, rad, unsigned, -3.05262219</param>
-			<param name="P Gain">8</param>
-			<param name="I Gain">2</param>
-			<param name="D Gain">5</param>
-			<param name="Return Delay Time">10</param>
+			<param name="P Gain">50</param>
+			<param name="I Gain">32</param>
+			<param name="D Gain">22</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l5r_to_l4r">
 			<command_interface name="position" />
@@ -173,9 +178,9 @@
 			<state_interface name="Present Load" />
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
+			<param name="CW Compliance Slope">64</param>
+			<param name="CCW Compliance Slope">64</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l6r_to_l5r">
 			<command_interface name="position" />
@@ -192,9 +197,9 @@
 			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -1.94866011; Goal Position, 0.005061455, rad, unsigned, -1.94866011</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
+			<param name="CW Compliance Slope">128</param>
+			<param name="CCW Compliance Slope">128</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l2l_to_l1l">
 			<command_interface name="position" />
@@ -211,7 +216,7 @@
     		<param name="P Gain">8</param>
     		<param name="I Gain">2</param>
     		<param name="D Gain">5</param>
-    		<param name="Return Delay Time">10</param>
+    		<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l3l_to_l2l">
 			<command_interface name="position" />
@@ -228,9 +233,9 @@
 			<param name="[unit info]">Present Position, -0.005061455, rad, unsigned, 2.566157685; Goal Position, -0.005061455, rad, unsigned, 2.566157685</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
+			<param name="CW Compliance Slope">127</param>
+			<param name="CCW Compliance Slope">127</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l4l_to_l3l">
 			<command_interface name="position" />
@@ -248,7 +253,7 @@
 			<param name="P Gain">8</param>
 			<param name="I Gain">2</param>
 			<param name="D Gain">5</param>
-			<param name="Return Delay Time">10</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l5l_to_l4l">
 			<command_interface name="position" />
@@ -266,7 +271,7 @@
 			<param name="CCW Compliance Margin">1</param>
 			<param name="CW Compliance Slope">254</param>
 			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l6l_to_l5l">
 			<command_interface name="position" />
@@ -284,7 +289,7 @@
 			<param name="CCW Compliance Margin">1</param>
 			<param name="CW Compliance Slope">254</param>
 			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="g2ra_to_g1r">
 			<command_interface name="position" />
@@ -304,9 +309,9 @@
 			<state_interface name="Present Load" />
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
+			<param name="CW Compliance Slope">32</param>
+			<param name="CCW Compliance Slope">32</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<gpio name="motor_g2rb">
 			<param name="type">dxl</param>
@@ -317,9 +322,9 @@
 			<state_interface name="Present Load" />
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
+			<param name="CW Compliance Slope">32</param>
+			<param name="CCW Compliance Slope">32</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
         <joint name="gripper_base_to_movil">
             <command_interface name="position"/>
@@ -338,7 +343,7 @@
             <param name="CCW Compliance Margin">1</param>
             <param name="CW Compliance Slope">254</param>
             <param name="CCW Compliance Slope">254</param>
-            <param name="Return Delay Time">10</param>
+            <param name="Return Delay Time">5</param>
         </gpio>
 		<joint name="l1h_to_base_link">
 			<command_interface name="position" />
@@ -357,7 +362,7 @@
 			<param name="CCW Compliance Margin">1</param>
 			<param name="CW Compliance Slope">254</param>
 			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l2h_to_l1h">
 			<command_interface name="position" />
@@ -376,12 +381,12 @@
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -1.047721185; Goal Position, 0.005061455, rad, unsigned, -1.047721185</param>
+			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -1.012291; Goal Position, 0.005061455, rad, unsigned, -1.012291</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
 			<param name="CW Compliance Slope">254</param>
 			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">10</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 		<gpio name="motor_l2h_2">
 			<param name="type">dxl</param>
@@ -390,12 +395,12 @@
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -3.993487995; Goal Position, 0.005061455, rad, unsigned, -3.993487995</param>
+			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -3.912504715; Goal Position, 0.005061455, rad, unsigned, -3.912504715</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
 			<param name="CW Compliance Slope">254</param>
 			<param name="CCW Compliance Slope">254</param>
-			<param name="Return Delay Time">100</param>
+			<param name="Return Delay Time">5</param>
 		</gpio>
 	</ros2_control>
 	<ros2_control name="Pioneer" type="system">

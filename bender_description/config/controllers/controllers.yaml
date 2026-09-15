@@ -68,7 +68,7 @@ left_shoulder_controller:
     gains:
       l1l_to_base_link:
         p: 1.0
-        i: 0.
+        i: 0.0
         d: 0.0
         ff_velocity_scale: 1.0
 

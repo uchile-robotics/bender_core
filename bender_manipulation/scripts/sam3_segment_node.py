@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Nodo de segmentación SAM3: de imagen+prompt a nube de puntos del objeto.
 
 sam3 no es un nodo ROS2, es un servidor Flask aparte (http://localhost:5001),
@@ -21,7 +20,7 @@ servicio ROS2. El pipeline, disparado por el servicio 'segment_scene'
 
   Nubes:
       object_cloud = deproyección 3D de los píxeles de Objeto
-      scene_cloud  = deproyección 3D de los píxeles de Escena
+      scene_cloud  = deproyección 3D de los píxeles de Escena (con subsampling opcional)
 
   Validación:
       Si object_cloud tiene menos de min_object_points, falla la inferencia.
@@ -45,14 +44,17 @@ class Sam3SegmentNode(Node):
     def __init__(self):
         super().__init__('sam3_segment_node')
 
-        self.declare_parameter('sam3_url', 'http://localhost:5001')
+        self.declare_parameter('sam3_url', 'http://192.168.1.133:5001')
         self.declare_parameter('color_topic', '/camera/color/image_raw')
         self.declare_parameter('depth_topic', '/camera/aligned_depth_to_color/image_raw')
         self.declare_parameter('camera_info_topic', '/camera/color/camera_info')
-        self.declare_parameter('prompt', 'object')
+        self.declare_parameter('prompt', 'soda can')
         self.declare_parameter('min_mask_score', 0.20)
         self.declare_parameter('min_object_points', 50)
         self.declare_parameter('request_timeout', 15.0)
+
+        # Parámetro de subsampling para la escena (1 = sin subsampling, 2 = toma 1 de cada 2 puntos, etc.)
+        self.declare_parameter('scene_subsample_factor', 100)
 
         self.bridge = CvBridge()
         self.last_color = None
@@ -129,7 +131,6 @@ class Sam3SegmentNode(Node):
 
     def _build_cloud(self, points: np.ndarray, frame_id: str) -> PointCloud2:
         header = self.get_clock().now().to_msg()
-        from std_msgs.msg import Header
         h = Header(frame_id=frame_id, stamp=header)
         return point_cloud2.create_cloud_xyz32(h, points.tolist())
 
@@ -137,7 +138,7 @@ class Sam3SegmentNode(Node):
     def _segment_scene_cb(self, request: Trigger.Request, response: Trigger.Response):
         if self.last_color is None or self.last_depth is None or self.last_camera_info is None:
             response.success = False
-            response.message = 'faltan datos de cámara (color/depth/camera_info)'
+            response.message = f'faltan datos de cámara (color{self.last_color} \n/depth{self.last_depth}\n/camera_info{self.last_camera_info})'
             return response
 
         color_bgr = self.bridge.imgmsg_to_cv2(self.last_color, desired_encoding='bgr8')
@@ -148,6 +149,7 @@ class Sam3SegmentNode(Node):
         prompt = self.get_parameter('prompt').value
         min_mask_score = self.get_parameter('min_mask_score').value
         min_object_points = self.get_parameter('min_object_points').value
+        scene_subsample_factor = self.get_parameter('scene_subsample_factor').value
 
         # Inferencia(imagen, prompt) -> máscaras + scores
         try:
@@ -159,7 +161,7 @@ class Sam3SegmentNode(Node):
 
         if not objects:
             response.success = False
-            response.message = 'sin_agarre_alcanzable: sam3 no detectó objetos'
+            response.message = f'sin_agarre_alcanzable: sam3 no detectó objetos de clase {prompt}'
             return response
 
         # Selecciona máscara con score más alto (sam3 ya las entrega ordenadas)
@@ -167,7 +169,7 @@ class Sam3SegmentNode(Node):
         if best['score'] < min_mask_score:
             response.success = False
             response.message = (
-                f"score {best['score']:.3f} bajo min_mask_score={min_mask_score}"
+                f"score {best['score']:.3f} bajo min_mask_score={min_mask_score}, {prompt = }"
             )
             return response
 
@@ -191,13 +193,17 @@ class Sam3SegmentNode(Node):
             )
             return response
 
+        # Subsampling de la nube de puntos de la escena
+        if scene_subsample_factor > 1:
+            scene_points = scene_points[::scene_subsample_factor]
+
         self.object_cloud_pub.publish(self._build_cloud(object_points, frame_id))
         self.scene_cloud_pub.publish(self._build_cloud(scene_points, frame_id))
 
         response.success = True
         response.message = (
             f"score={best['score']:.3f} object_cloud={object_points.shape[0]}pts "
-            f"scene_cloud={scene_points.shape[0]}pts"
+            f"scene_cloud={scene_points.shape[0]}pts (subsample_factor={scene_subsample_factor})"
         )
         return response
 

@@ -11,8 +11,8 @@
       prefix=""
       camera_name="camera"
       parent='l2h_1'
-      xyz_offset="0.0435 0.03 0.160"
-      rpy_offset="0 0 0"/>
+      xyz_offset="0.0435 0.03 0.180"
+      rpy_offset="0 0.2 0"/>
 
   <link name="base_link">
     <visual>
@@ -675,7 +675,7 @@
     <origin rpy="0 0 0" xyz="0.0 -0.03 0.07"/>
     <parent link="l1h_1"/>
     <child link="l2h_1"/>
-    <axis xyz="-0.0 -1.0 0.0"/>
+    <axis xyz="-0.0 1.0 0.0"/>
     <limit effort="50" lower="${-0.706858 - epsilon}" upper="${0.706858 + epsilon}" velocity="50"/>
   </joint>
 
@@ -712,6 +712,13 @@
       <mimic joint="g2ra_to_g1r" multiplier="-1.0" offset="0.0"/>
     </joint>
 
+    <link name="TCP"/>
+
+    <joint name="g1r_to_TCP" type="fixed">
+      <origin xyz="0.0 0.0 -0.12" rpy="3.14159 0 1.5707963"/>
+      <parent link="g1r_1"/>
+      <child link="TCP"/>
+    </joint>
   <joint name="laser_to_base_link" type="fixed">
     <origin xyz="0.188322 -0.007366 0.25882" rpy="0 0 0"/>
     <parent link="base_link"/>

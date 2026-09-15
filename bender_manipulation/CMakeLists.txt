@@ -30,17 +30,14 @@ install(
 # Scripts Python ejecutables
 install(
   PROGRAMS
-    scripts/dynamixel_node.py
-    scripts/dynamixel_vel_node.py
-    scripts/oddrive.py
-    scripts/dynamixel_command.py
-    scripts/shoulder_control.py
-    scripts/dynamixel_trajectory_bridge.py
     scripts/saludo_node.py
+    scripts/camera_time_bridge_node.py
+    scripts/grasp_pick_node.py
+    scripts/graspgen_pick_bridge_node.py
+    scripts/sam3_segment_node.py
+    scripts/pub_pose.py
   DESTINATION lib/${PROJECT_NAME}
 )
-
-
 # Tests/linters opcionales
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

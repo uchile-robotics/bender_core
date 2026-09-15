@@ -64,17 +64,17 @@
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>
+            <joint name="l3h_to_l1h">
+                <command_interface name="position"/>
+                <state_interface name="position">
+                  <param name="initial_value">${initial_positions['l3h_to_l1h']}</param>
+                </state_interface>
+                <state_interface name="velocity"/>
+            </joint>
             <joint name="g2ra_to_g1r">
                 <command_interface name="position"/>
                 <state_interface name="position">
                   <param name="initial_value">${initial_positions['g2ra_to_g1r']}</param>
-                </state_interface>
-                <state_interface name="velocity"/>
-            </joint>
-            <joint name="g2rb_to_g1r">
-                <command_interface name="position"/>
-                <state_interface name="position">
-                  <param name="initial_value">${initial_positions['g2rb_to_g1r']}</param>
                 </state_interface>
                 <state_interface name="velocity"/>
             </joint>
