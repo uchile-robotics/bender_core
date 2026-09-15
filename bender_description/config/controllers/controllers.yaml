@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 50  # Hz (Necesario para que el PID de los hombros funcione bien)
+    update_rate: 50  # Hz
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
@@ -25,9 +25,8 @@ controller_manager:
 
     right_gripper_controller:
       type: position_controllers/GripperActionController
-
-    # mecanum_base_controller:
-    #   type: "mecanum_drive_controller/MecanumDriveController"
+    pioneer_base_controller:
+      type: diff_drive_controller/DiffDriveController
 
 joint_state_broadcaster:
   ros__parameters:
@@ -50,6 +49,8 @@ joint_state_broadcaster:
       - g2ra_to_g1r
       - g2rb_to_g1r
       - gripper_base_to_movil
+      - wrl_to_base_link
+      - wrr_to_base_link
     publish_rate: 50
 
 # =========================================
@@ -139,22 +140,27 @@ right_gripper_controller:
     type: position_controllers/GripperActionController
     joint: g2ra_to_g1r
 
-# =========================================
-# BASE MÓVIL (Comentada)
-# =========================================
-# mecanum_base_controller:
-#   ros__parameters:
-#     reference_timeout: 0.9
-#     front_left_wheel_command_joint_name: "wfl_to_base_link"
-#     front_right_wheel_command_joint_name: "wfr_to_base_link"
-#     rear_right_wheel_command_joint_name: "wrl_to_base_link"
-#     rear_left_wheel_command_joint_name: "wrr_to_base_link"
-#     kinematics:
-#       base_frame_offset: { x: 0.0, y: 0.0, theta: 0.0 }
-#       wheels_radius: 0.1
-#       sum_of_robot_center_projection_on_X_Y_axis: 1.0
-#       base_frame_id: "base_link"
-#       odom_frame_id: "odom"
-#       enable_odom_tf: true
-#       twist_covariance_diagonal: [0.0, 7.0, 14.0, 21.0, 28.0, 35.0]
-#       pose_covariance_diagonal: [0.0, 6.0, 12.0, 18.0, 24.0, 30.0]
+pioneer_base_controller:
+  ros__parameters:
+    left_wheel_names: ["wrl_to_base_link"]
+    right_wheel_names: ["wrr_to_base_link"]
+
+    position_feedback: false
+
+    wheel_separation: 0.397 # TODO: check
+    wheel_radius: 0.21
+
+    wheel_separation_multiplier: 1.0
+    left_wheel_radius_multiplier: 1.0
+    right_wheel_radius_multiplier: 1.0
+
+    publish_rate: 50.0
+    base_frame_id: "base_link"
+    odom_frame_id: "odom"
+    enable_odom_tf: true
+    open_loop: false
+
+    cmd_vel_timeout: 0.5
+    # TODO: check covariance matrices
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+    pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]

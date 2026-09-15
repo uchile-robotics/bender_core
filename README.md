@@ -22,6 +22,7 @@ This repository contains all the core ROS packages that make up the foundational
 - `bender_description`: Robot description (URDF/XACRO) and TF tree publisher for the real robot, including 3D meshes.
 - `bender_gripper`: Drivers and control for Bender’s gripper.
 - `bender_hand`: <!--Interfaces and hardware description for Bender’s hand mechanisms.-->
+- `bender_hardware_interfaces`: Custom `ros2_control` hardware interfaces (`SystemInterface`/`SensorInterface`) for hardware without an off-the-shelf ROS 2 driver, such as the shoulder encoders and the Pioneer 3-AT base. See its [README](./bender_hardware_interfaces/include/bender_hardware_interfaces/README.md) for details.
 - `bender_head`: <!--Control and description of Bender’s head mechanisms (e.g., cameras or sensors mounted on the head). -->
 - `bender_joy`: Joystick control interfaces for teleoperating Bender.
 - `bender_sensors`: Drivers and interfaces for onboard sensors (RGB cameras, depth sensors, LIDAR, etc.).
@@ -38,9 +39,6 @@ bender_<component>/
 ├── src/ # Source code
 ├── include/ # Header files (if C++ is used)
 ├── scripts/ # Python scripts
-├── msg/ # Custom message definitions (if any)
-├── srv/ # Custom service definitions (if any)
 ├── CMakeLists.txt
 ├── package.xml
 ```
-

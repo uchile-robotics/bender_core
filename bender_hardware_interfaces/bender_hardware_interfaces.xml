@@ -7,7 +7,7 @@
     </description>
 	</class>
 	<class name="bender_hardware_interfaces/PioneerInterface"
-         type="bender_hardware_interfaces::EncoderInterface"
+         type="bender_hardware_interfaces::PioneerInterface"
          base_class_type="hardware_interface::SystemInterface">
 		<description>
       Hardware Interface for pioneer base
