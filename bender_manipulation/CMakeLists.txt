@@ -40,14 +40,6 @@ install(
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Compilación y enlace del nodo C++
-add_executable(serial_encoder_node src/serial_encoder_node.cpp)
-ament_target_dependencies(serial_encoder_node rclcpp std_msgs)
-
-install(TARGETS
-  serial_encoder_node
-  DESTINATION lib/${PROJECT_NAME}
-)
 
 # Tests/linters opcionales
 if(BUILD_TESTING)

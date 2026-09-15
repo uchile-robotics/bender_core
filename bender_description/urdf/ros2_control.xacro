@@ -403,6 +403,10 @@
             <plugin>bender_hardware_interfaces/PioneerInterface</plugin>
             <param name="serial_device">/dev/pioneer</param>
             <param name="baud_rate">9600</param>
+            <!-- Separación entre ruedas (track width) del Pioneer 3-AT, en metros.
+                 Valor de referencia según la ficha técnica de ActivMedia/MobileRobots;
+                 verificar contra el robot físico antes de usarlo en navegación. -->
+            <param name="wheel_separation">0.397</param>
         </hardware>
         <joint name="joint1">
             <!-- TODO: check if more state interfaces are available in ARIACODA -->
