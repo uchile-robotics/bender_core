@@ -413,12 +413,12 @@
                  verificar contra el robot físico antes de usarlo en navegación. -->
             <param name="wheel_separation">0.397</param>
         </hardware>
-        <joint name="joint1">
+        <joint name="wrl_to_base_link">
             <!-- TODO: check if more state interfaces are available in ARIACODA -->
             <command_interface name="velocity"/>
             <state_interface name="velocity"/>
         </joint>
-        <joint name="joint2">
+        <joint name="wrr_to_base_link">
             <!-- TODO: check if more state interfaces are available in ARIACODA -->
             <command_interface name="velocity"/>
             <state_interface name="velocity"/>
