@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import math
+import threading
 import time
 
 import rclpy
 from rclpy.node import Node
+from rclpy.action import ActionClient
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from geometry_msgs.msg import PoseStamped, Pose
@@ -16,6 +18,8 @@ from moveit.planning import MoveItPy, PlanRequestParameters
 from moveit.core.robot_state import RobotState
 from moveit_configs_utils import MoveItConfigsBuilder
 from moveit_msgs.msg import MoveItErrorCodes
+from moveit_msgs.srv import GetCartesianPath
+from moveit_msgs.action import ExecuteTrajectory
 
 MOVEIT_ERROR_MAP = {
     MoveItErrorCodes.SUCCESS: "Éxito",
@@ -138,6 +142,10 @@ class GraspPickNode(Node):
         self.declare_parameter("settle_time_after_segment", 0.3)
         self.declare_parameter("bias", 0.10)                  # Desplazamiento adicional hacia adelante en metros
         self.declare_parameter("skip_collision_check_at_grasp", False)
+        self.declare_parameter("cartesian_max_step", 0.005)   # resolución de la interpolación en metros
+        self.declare_parameter("cartesian_min_fraction", 0.99)
+        self.declare_parameter("cartesian_avoid_collisions", True)
+        self.declare_parameter("cartesian_timeout", 10.0)
 
         moveit_config = MoveItConfigsBuilder("bender", package_name="bender_moveit_config").to_moveit_configs()
         config_dict = moveit_config.to_dict()
@@ -155,6 +163,16 @@ class GraspPickNode(Node):
         )
         self.arm = self.moveit.get_planning_component(GROUP_NAME)
         self.psm = self.moveit.get_planning_scene_monitor()
+
+        # Clientes contra move_group para el tramo cartesiano. Van en su propio
+        # callback group porque grasp_candidate_cb bloquea esperando su resultado.
+        self.client_cb_group = ReentrantCallbackGroup()
+        self.cartesian_client = self.create_client(
+            GetCartesianPath, "/compute_cartesian_path",
+            callback_group=self.client_cb_group)
+        self.execute_client = ActionClient(
+            self, ExecuteTrajectory, "/execute_trajectory",
+            callback_group=self.client_cb_group)
 
         self.status_pub = self.create_publisher(String, "/grasp_pick_status", 10)
         self.create_subscription(PoseStamped, "/grasp_candidate_pose",
@@ -259,7 +277,28 @@ class GraspPickNode(Node):
 
     # --------------------------------------------------------------- ejecución
 
-    def execute_segment_to_state(self, target_state: RobotState) -> str:
+    def execute_segment_to_state(self, target_state: RobotState,
+                                 cartesian: bool = False,
+                                 target_pose: PoseStamped = None) -> str:
+        """Ejecuta un tramo hasta `target_state`.
+
+        Con `cartesian=True` el TCP sigue una recta hasta `target_pose` en vez de
+        un camino arbitrario en espacio de joints; `target_pose` es obligatoria en
+        ese caso y `target_state` se ignora.
+        """
+        if cartesian:
+            status = self._plan_and_execute_cartesian(target_pose)
+        else:
+            status = self._plan_and_execute_ompl(target_state)
+
+        if status == "exito":
+            settle_time = self.get_parameter("settle_time_after_segment").value
+            if settle_time > 0.0:
+                time.sleep(settle_time)
+
+        return status
+
+    def _plan_and_execute_ompl(self, target_state: RobotState) -> str:
         self.arm.set_start_state_to_current_state()
         self.arm.set_goal_state(robot_state=target_state)
 
@@ -281,9 +320,82 @@ class GraspPickNode(Node):
             self.get_logger().error("Ejecución rechazada por el controlador.")
             return "fallo_ejecucion"
 
-        settle_time = self.get_parameter("settle_time_after_segment").value
-        if settle_time > 0.0:
-            time.sleep(settle_time)
+        return "exito"
+
+    def _plan_and_execute_cartesian(self, target_pose: PoseStamped) -> str:
+        timeout = self.get_parameter("cartesian_timeout").value
+
+        if not self.cartesian_client.wait_for_service(timeout_sec=5.0):
+            self.get_logger().error("Servicio /compute_cartesian_path no disponible.")
+            return "fallo_planificacion: /compute_cartesian_path no disponible"
+
+        req = GetCartesianPath.Request()
+        req.header.frame_id = target_pose.header.frame_id
+        req.start_state.is_diff = True          # parte del estado actual del robot
+        req.group_name = GROUP_NAME
+        req.link_name = TIP_LINK
+        req.waypoints = [target_pose.pose]
+        req.max_step = self.get_parameter("cartesian_max_step").value
+        req.avoid_collisions = self.get_parameter("cartesian_avoid_collisions").value
+
+        done = threading.Event()
+        future = self.cartesian_client.call_async(req)
+        future.add_done_callback(lambda _f: done.set())
+        if not done.wait(timeout):
+            self.get_logger().error("Timeout esperando /compute_cartesian_path.")
+            return "fallo_planificacion: timeout en /compute_cartesian_path"
+
+        result = future.result()
+        if result.error_code.val != MoveItErrorCodes.SUCCESS:
+            reason = get_error_string(result.error_code.val)
+            self.get_logger().error(f"Fallo de planificación cartesiana: {reason}")
+            return f"fallo_planificacion: {reason}"
+
+        min_fraction = self.get_parameter("cartesian_min_fraction").value
+        if result.fraction < min_fraction:
+            self.get_logger().error(
+                f"Recta cartesiana incompleta: fraction={result.fraction:.3f} "
+                f"(mínimo {min_fraction:.3f}). No se ejecuta.")
+            return f"fallo_planificacion: cartesiano incompleto ({result.fraction:.3f})"
+
+        self.get_logger().info(
+            f"Recta cartesiana planificada (fraction={result.fraction:.3f}).")
+        return self._execute_trajectory_msg(result.solution)
+
+    def _execute_trajectory_msg(self, trajectory) -> str:
+        timeout = self.get_parameter("cartesian_timeout").value
+
+        if not self.execute_client.wait_for_server(timeout_sec=5.0):
+            self.get_logger().error("Acción /execute_trajectory no disponible.")
+            return "fallo_ejecucion: /execute_trajectory no disponible"
+
+        goal = ExecuteTrajectory.Goal()
+        goal.trajectory = trajectory
+
+        sent = threading.Event()
+        send_future = self.execute_client.send_goal_async(goal)
+        send_future.add_done_callback(lambda _f: sent.set())
+        if not sent.wait(timeout):
+            self.get_logger().error("Timeout enviando el goal a /execute_trajectory.")
+            return "fallo_ejecucion: timeout enviando el goal"
+
+        goal_handle = send_future.result()
+        if not goal_handle.accepted:
+            self.get_logger().error("Goal rechazado por /execute_trajectory.")
+            return "fallo_ejecucion: goal rechazado"
+
+        finished = threading.Event()
+        result_future = goal_handle.get_result_async()
+        result_future.add_done_callback(lambda _f: finished.set())
+        if not finished.wait(timeout):
+            self.get_logger().error("Timeout esperando el resultado de /execute_trajectory.")
+            return "fallo_ejecucion: timeout esperando el resultado"
+
+        error_code = result_future.result().result.error_code
+        if error_code.val != MoveItErrorCodes.SUCCESS:
+            reason = get_error_string(error_code.val)
+            self.get_logger().error(f"Fallo de ejecución cartesiana: {reason}")
+            return f"fallo_ejecucion: {reason}"
 
         return "exito"
 
@@ -331,9 +443,9 @@ class GraspPickNode(Node):
             self.status_pub.publish(String(data=status))
             return
 
-        self.get_logger().info("Aproximación completada. Tramo 2: agarre final (g)...")
+        self.get_logger().info("Aproximación completada. Tramo 2: agarre final (g), cartesiano...")
 
-        status = self.execute_segment_to_state(q_g)
+        status = self.execute_segment_to_state(q_g, cartesian=True, target_pose=g)
         self.get_logger().info(f"Resultado final del agarre: {status}")
         self.status_pub.publish(String(data=status))
 
