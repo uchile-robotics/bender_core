@@ -3,7 +3,13 @@
 
   <xacro:include filename="$(find bender_description)/urdf/materials.xacro" />
   <xacro:include filename="$(find bender_description)/urdf/rgbd_camera.xacro"/>
-  <xacro:include filename="$(find bender_description)/urdf/ros2_control.xacro" />
+
+  <xacro:arg name="hardware" default="real"/>
+  <xacro:property name="hardware" value="$(arg hardware)"/>
+  <xacro:if value="${hardware not in ['real', 'mock', 'sim']}">
+    ${xacro.fatal("hardware param must be 'real', 'mock' o 'sim', got: " + hardware)}
+  </xacro:if>
+  <xacro:include filename="$(find bender_description)/urdf/bender_${hardware}.xacro"/>
 
   <xacro:property name="epsilon" value="1e-4"/>
 

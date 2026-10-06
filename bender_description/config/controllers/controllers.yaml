@@ -26,10 +26,8 @@ controller_manager:
     right_gripper_controller:
       type: position_controllers/GripperActionController
 
-    # DESHABILITADO temporalmente junto con el bloque Pioneer en
-    # ros2_control.xacro, para probar todo menos la base.
-    # pioneer_base_controller:
-    #   type: diff_drive_controller/DiffDriveController
+    pioneer_base_controller:
+      type: diff_drive_controller/DiffDriveController
 
 joint_state_broadcaster:
   ros__parameters:
@@ -52,9 +50,8 @@ joint_state_broadcaster:
       - g2ra_to_g1r
       - g2rb_to_g1r
       - gripper_base_to_movil
-      # Pioneer deshabilitado (ver ros2_control.xacro), sin hardware detrás:
-      # - wrl_to_base_link
-      # - wrr_to_base_link
+      - wrl_to_base_link
+      - wrr_to_base_link
     publish_rate: 50
 
 # =========================================

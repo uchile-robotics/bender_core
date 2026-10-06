@@ -422,12 +422,6 @@
 			<param name="Return Delay Time">5</param>
 		</gpio>
 	</ros2_control>
-	<!-- DESHABILITADO temporalmente para probar todo menos la base Pioneer.
-	     Recordar sacar también wrl_to_base_link/wrr_to_base_link de la lista
-	     de joints de joint_state_broadcaster en controllers.yaml: si quedan
-	     ahí sin hardware detrás, controller_manager aborta el proceso completo
-	     al no encontrar esas interfaces. -->
-	<!--
 	<ros2_control name="Pioneer" type="system">
     	<hardware>
             <plugin>bender_hardware_interfaces/PioneerInterface</plugin>
@@ -446,6 +440,4 @@
         <sensor name="E-stop">
         </sensor>
 	</ros2_control>
-	-->
-	<!-- FIN bloque Pioneer -->
 </robot>

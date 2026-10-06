@@ -28,7 +28,7 @@ def generate_launch_description():
     declare_use_sim_time = DeclareLaunchArgument('use_sim_time', default_value='false')
 
     # robot_description
-    robot_description_content = Command(["xacro ", urdf_path])
+    robot_description_content = Command(["xacro ", urdf_path, " hardware:=sim"])
     robot_description = {'robot_description': robot_description_content}
 
     # robot_state_publisher

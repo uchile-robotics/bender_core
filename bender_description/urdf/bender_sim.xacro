@@ -100,6 +100,13 @@
       <state_interface name="effort"/>
     </joint>
 
+    <joint name="l3h_to_l1h">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+
     <joint name="l1h_to_base_link">
       <command_interface name="position"/>
       <state_interface name="position"/>
@@ -108,13 +115,8 @@
     </joint>
 
      <!-- Gripper Izquierdo -->
-    <joint name="g2la_to_g1l">
+    <joint name="gripper_base_to_movil">
       <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-    <joint name="g2lb_to_g1l">
       <state_interface name="position"/>
       <state_interface name="velocity"/>
       <state_interface name="effort"/>
@@ -146,14 +148,13 @@
       <state_interface name="position"/>
     </joint>
 
+    <!-- Delanteras: mimic de las traseras (definido en bender.xacro), por eso sin comando -->
     <joint name="wfl_to_base_link">
-      <command_interface name="velocity"/>
       <state_interface name="velocity"/>
       <state_interface name="position"/>
     </joint>
 
     <joint name="wfr_to_base_link">
-      <command_interface name="velocity"/>
       <state_interface name="velocity"/>
       <state_interface name="position"/>
     </joint>
