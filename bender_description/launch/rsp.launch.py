@@ -63,6 +63,12 @@ def generate_launch_description():
         arguments=["pioneer_base_controller", "--controller-manager", "/controller_manager"],
     )
 
+    estop_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["estop_broadcaster", "--controller-manager", "/controller_manager"],
+    )
+
     # --- SPAWNERS DE LOS HOMBROS (ODrive) ---
     left_shoulder_controller_spawner = Node(
         package="controller_manager",
@@ -116,6 +122,7 @@ def generate_launch_description():
         ros2_control_node,
         joint_state_broadcaster_spawner,
         pioneer_base_controller_spawner,
+        estop_broadcaster_spawner,
 
         # Hombros
         left_shoulder_controller_spawner,

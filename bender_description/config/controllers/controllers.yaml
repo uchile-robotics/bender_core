@@ -29,6 +29,13 @@ controller_manager:
     pioneer_base_controller:
       type: diff_drive_controller/DiffDriveController
 
+    estop_broadcaster:
+      type: bender_hardware_interfaces/EstopBroadcaster
+
+estop_broadcaster:
+  ros__parameters:
+    interface_name: estop/pressed
+
 joint_state_broadcaster:
   ros__parameters:
     type: joint_state_broadcaster/JointStateBroadcaster
@@ -149,8 +156,8 @@ pioneer_base_controller:
 
     position_feedback: false
 
-    wheel_separation: 0.397 # TODO: check
-    wheel_radius: 0.21
+    wheel_separation: 0.397
+    wheel_radius: 0.1
 
     wheel_separation_multiplier: 1.0
     left_wheel_radius_multiplier: 1.0

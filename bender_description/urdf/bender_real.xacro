@@ -437,7 +437,8 @@
             <command_interface name="velocity"/>
             <state_interface name="velocity"/>
         </joint>
-        <sensor name="E-stop">
+        <sensor name="estop">
+            <state_interface name="pressed"/>
         </sensor>
 	</ros2_control>
 </robot>
