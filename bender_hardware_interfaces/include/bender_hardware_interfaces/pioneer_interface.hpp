@@ -60,6 +60,7 @@ namespace bender_hardware_interfaces {
             double left_wheel_vel_;
             double right_wheel_pos_;
             double right_wheel_vel_;
+            double estop_pressed_;
     };
 
 } // namespace bender_hardware_interfaces

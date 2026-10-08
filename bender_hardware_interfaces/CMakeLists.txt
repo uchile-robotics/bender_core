@@ -19,9 +19,11 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath -Wl,/usr/
 
 # 1. Buscar dependencias del sistema
 find_package(ament_cmake REQUIRED)
+find_package(controller_interface REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 # find_package(aria REQUIRED)  --> system package, not configured?
 
 # 2. Declarar la librería compartida (El Plugin)
@@ -29,6 +31,7 @@ find_package(rclcpp REQUIRED)
 add_library(${PROJECT_NAME} SHARED
   src/encoder_interface.cpp
   src/pioneer_interface.cpp
+  src/estop_broadcaster.cpp
 )
 
 # 3. Vincular dependencias a la librería
@@ -38,15 +41,18 @@ target_include_directories(${PROJECT_NAME} PRIVATE
   $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(${PROJECT_NAME}
+  controller_interface::controller_interface
   hardware_interface::hardware_interface
   pluginlib::pluginlib
   rclcpp::rclcpp
+  ${std_msgs_TARGETS}
   Aria
 )
 # target_link_libraries(${PROJECT_NAME} /usr/local/lib/libAria.so)
 
 # 4. EXPORTAR EL XML DEL PLUGIN (Crucial para pluginlib)
 pluginlib_export_plugin_description_file(hardware_interface bender_hardware_interfaces.xml)
+pluginlib_export_plugin_description_file(controller_interface bender_controllers.xml)
 
 # 5. Instalar los binarios y cabeceras
 install(TARGETS ${PROJECT_NAME}
@@ -60,7 +66,7 @@ install(DIRECTORY include/
 )
 
 # 6. Exportar dependencias aguas abajo
-ament_export_dependencies(hardware_interface pluginlib rclcpp)
+ament_export_dependencies(controller_interface hardware_interface pluginlib rclcpp std_msgs)
 ament_export_targets(export_${PROJECT_NAME})
 
 if(BUILD_TESTING)

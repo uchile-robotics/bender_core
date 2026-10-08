@@ -48,6 +48,13 @@ hardware_interface::CallbackReturn PioneerInterface::on_init(
         return hardware_interface::CallbackReturn::ERROR;
     }
 
+    if (info_.sensors.size() != 1 || info_.sensors[0].state_interfaces.size() != 1) {
+        RCLCPP_ERROR(get_logger(),
+                     "Expected 1 sensor with 1 state_interface (emergency stop) "
+                     "in the Pioneer block of the URDF.");
+        return hardware_interface::CallbackReturn::ERROR;
+    }
+
     // NOTA: se asume que info_.joints[0] es la rueda izquierda y
     // info_.joints[1] la derecha, según el orden declarado en el xacro
     // (joint1 -> izquierda, joint2 -> derecha). Verificar si el mapeo real
@@ -58,6 +65,7 @@ hardware_interface::CallbackReturn PioneerInterface::on_init(
     left_wheel_vel_ = 0.0;
     right_wheel_pos_ = 0.0;
     right_wheel_vel_ = 0.0;
+    estop_pressed_ = 0.0;
 
     return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -76,6 +84,9 @@ std::vector<hardware_interface::StateInterface> PioneerInterface::export_state_i
 
     state_interfaces.emplace_back(hardware_interface::StateInterface(
         info_.joints[1].name, hardware_interface::HW_IF_VELOCITY, &right_wheel_vel_));
+
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+        info_.sensors[0].name, info_.sensors[0].state_interfaces[0].name, &estop_pressed_));
 
     return state_interfaces;
 }
@@ -165,8 +176,12 @@ hardware_interface::return_type
 PioneerInterface::read(const rclcpp::Time& /*time*/,
                        const rclcpp::Duration& /*period*/) {
 
+    robot_->lock();
     double aria_v = robot_->getVel();
     double aria_w = robot_->getRotVel();
+    estop_pressed_ = robot_->getEstop() ? 1.0 : 0.0;
+    robot_->unlock();
+
     std::array<double, 2> velocities = this->inverse_kinematics(aria_v, aria_w);
     right_wheel_vel_ = velocities[0];
     left_wheel_vel_ = velocities[1];
