@@ -47,6 +47,7 @@ joint_state_broadcaster:
       - l6r_to_l5r
       - l1h_to_base_link
       - l2h_to_l1h
+      - l3h_to_l1h
       - g2ra_to_g1r
       - g2rb_to_g1r
       - gripper_base_to_movil

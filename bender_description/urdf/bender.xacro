@@ -13,6 +13,11 @@
 
   <xacro:property name="epsilon" value="1e-4"/>
 
+  <!-- TODO: change mass -->
+  <xacro:property name="gripper_l_base_mass" value="0.0733"/>   <!-- 118.2 cm3 -->
+  <xacro:property name="gripper_l_fijo_mass" value="0.0233"/>   <!-- 37.6 cm3 -->
+  <xacro:property name="gripper_l_movil_mass" value="0.0420"/>  <!-- 67.8 cm3 -->
+
   <xacro:rgbd_camera
       prefix=""
       camera_name="camera"
@@ -364,6 +369,12 @@
     </joint>
 
     <link name="gripper_l_base">
+          <inertial>
+            <origin xyz="-0.002432 0.002273 -0.032502" rpy="0 0 0"/>
+            <mass value="${gripper_l_base_mass}"/>
+            <inertia ixx="${gripper_l_base_mass * 4.79885e-4}" iyy="${gripper_l_base_mass * 5.64127e-4}" izz="${gripper_l_base_mass * 3.73860e-4}"
+                     ixy="${gripper_l_base_mass * -2.978e-6}" ixz="${gripper_l_base_mass * 1.7268e-5}" iyz="${gripper_l_base_mass * -1.48e-7}"/>
+          </inertial>
           <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry>
@@ -385,6 +396,12 @@
         </joint>
 
         <link name="fijo">
+          <inertial>
+            <origin xyz="0.038899 0.002262 0.018539" rpy="0 0 0"/>
+            <mass value="${gripper_l_fijo_mass}"/>
+            <inertia ixx="${gripper_l_fijo_mass * 1.404186e-3}" iyy="${gripper_l_fijo_mass * 1.246171e-3}" izz="${gripper_l_fijo_mass * 1.92308e-4}"
+                     ixy="${gripper_l_fijo_mass * 0.0}" ixz="${gripper_l_fijo_mass * -4.8706e-5}" iyz="${gripper_l_fijo_mass * 0.0}"/>
+          </inertial>
           <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry>
@@ -408,6 +425,12 @@
         </joint>
 
         <link name="movil">
+          <inertial>
+            <origin xyz="-0.003199 0.002041 0.044445" rpy="0 0 0"/>
+            <mass value="${gripper_l_movil_mass}"/>
+            <inertia ixx="${gripper_l_movil_mass * 1.909822e-3}" iyy="${gripper_l_movil_mass * 1.526318e-3}" izz="${gripper_l_movil_mass * 5.58397e-4}"
+                     ixy="${gripper_l_movil_mass * 1.487e-6}" ixz="${gripper_l_movil_mass * -4.0392e-5}" iyz="${gripper_l_movil_mass * 3.214e-6}"/>
+          </inertial>
           <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry>

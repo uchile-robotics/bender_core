@@ -1,164 +1,74 @@
 <?xml version="1.0"?>
 <robot name="bender" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+
+  <xacro:macro name="sim_position_joint" params="name">
+    <joint name="${name}">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </xacro:macro>
+  <xacro:macro name="sim_shoulder_joint" params="name">
+    <joint name="${name}">
+      <command_interface name="velocity"/>
+      <command_interface name="effort"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="sim_mimic_joint" params="name">
+    <joint name="${name}">
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="sim_wheel_joint" params="name">
+    <joint name="${name}">
+      <command_interface name="velocity"/>
+      <state_interface name="velocity"/>
+      <state_interface name="position"/>
+    </joint>
+  </xacro:macro>
+
   <ros2_control name="RobotSystem" type="system">
     <hardware>
-          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
     </hardware>
 
-    <!-- Brazo Izquierdo -->
-    <joint name="l1l_to_base_link">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
+    <!-- left arms -->
+    <xacro:sim_shoulder_joint name="l1l_to_base_link"/>
+    <xacro:sim_position_joint name="l2l_to_l1l"/>
+    <xacro:sim_position_joint name="l3l_to_l2l"/>
+    <xacro:sim_position_joint name="l4l_to_l3l"/>
+    <xacro:sim_position_joint name="l5l_to_l4l"/>
+    <xacro:sim_position_joint name="l6l_to_l5l"/>
 
-    <joint name="l2l_to_l1l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
+    <!-- right arms -->
+    <xacro:sim_shoulder_joint name="l1r_to_base_link"/>
+    <xacro:sim_position_joint name="l2r_to_l1r"/>
+    <xacro:sim_position_joint name="l3r_to_l2r"/>
+    <xacro:sim_position_joint name="l4r_to_l3r"/>
+    <xacro:sim_position_joint name="l5r_to_l4r"/>
+    <xacro:sim_position_joint name="l6r_to_l5r"/>
 
-    <joint name="l3l_to_l2l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
+    <!-- Head -->
+    <xacro:sim_position_joint name="l1h_to_base_link"/>
+    <xacro:sim_position_joint name="l2h_to_l1h"/>
+    <xacro:sim_position_joint name="l3h_to_l1h"/>
 
-    <joint name="l4l_to_l3l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
+    <!-- Grippers -->
+    <xacro:sim_position_joint name="gripper_base_to_movil"/>
+    <xacro:sim_position_joint name="g2ra_to_g1r"/>
+    <xacro:sim_mimic_joint name="g2rb_to_g1r"/>
 
-    <joint name="l5l_to_l4l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l6l_to_l5l">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <!-- Brazo Derecho -->
-    <joint name="l1r_to_base_link">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l2r_to_l1r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l3r_to_l2r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l4r_to_l3r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l5r_to_l4r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l6r_to_l5r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <!-- Cuello -->
-    <joint name="l2h_to_l1h">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l3h_to_l1h">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <joint name="l1h_to_base_link">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-     <!-- Gripper Izquierdo -->
-    <joint name="gripper_base_to_movil">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <!-- Gripper Derecho -->
-    <joint name="g2ra_to_g1r">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-    <joint name="g2rb_to_g1r">
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-
-    <!-- RUEDAS BASE -->
-    <joint name="wrl_to_base_link">
-      <command_interface name="velocity"/>
-      <state_interface name="velocity"/>
-      <state_interface name="position"/>
-    </joint>
-
-    <joint name="wrr_to_base_link">
-      <command_interface name="velocity"/>
-      <state_interface name="velocity"/>
-      <state_interface name="position"/>
-    </joint>
-
-    <!-- Delanteras: mimic de las traseras (definido en bender.xacro), por eso sin comando -->
-    <joint name="wfl_to_base_link">
-      <state_interface name="velocity"/>
-      <state_interface name="position"/>
-    </joint>
-
-    <joint name="wfr_to_base_link">
-      <state_interface name="velocity"/>
-      <state_interface name="position"/>
-    </joint>
-
+    <xacro:sim_wheel_joint name="wrl_to_base_link"/>
+    <xacro:sim_wheel_joint name="wrr_to_base_link"/>
+    <xacro:sim_mimic_joint name="wfl_to_base_link"/>
+    <xacro:sim_mimic_joint name="wfr_to_base_link"/>
   </ros2_control>
 
   <gazebo>
@@ -166,6 +76,5 @@
       <parameters>$(find bender_description)/config/controllers/controllers.yaml</parameters>
     </plugin>
   </gazebo>
-
 
 </robot>
