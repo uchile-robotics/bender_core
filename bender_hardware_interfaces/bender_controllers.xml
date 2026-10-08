@@ -1,0 +1,9 @@
+<library path="bender_hardware_interfaces">
+	<class name="bender_hardware_interfaces/EstopBroadcaster"
+         type="bender_hardware_interfaces::EstopBroadcaster"
+         base_class_type="controller_interface::ControllerInterface">
+		<description>
+      Publishes the emergency stop state interface as a std_msgs/Bool topic
+    </description>
+	</class>
+</library>
