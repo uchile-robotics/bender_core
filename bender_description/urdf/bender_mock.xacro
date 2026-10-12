@@ -38,6 +38,7 @@
       <plugin>mock_components/GenericSystem</plugin>
     </hardware>
 
+    <xacro:if value="$(arg use_arms)">
     <!-- Brazo izquierdo -->
     <xacro:mock_position_joint name="l1l_to_base_link"/>
     <xacro:mock_position_joint name="l2l_to_l1l"/>
@@ -63,12 +64,15 @@
     <xacro:mock_position_joint name="gripper_base_to_movil"/>
     <xacro:mock_position_joint name="g2ra_to_g1r"/>
     <xacro:mock_mimic_joint name="g2rb_to_g1r"/>
+    </xacro:if>
 
+    <xacro:if value="$(arg use_base)">
     <!-- Ruedas: sin controlador en mock, solo para que haya joint_states y TF -->
     <xacro:mock_wheel_joint name="wrl_to_base_link"/>
     <xacro:mock_wheel_joint name="wrr_to_base_link"/>
     <xacro:mock_mimic_joint name="wfl_to_base_link"/>
     <xacro:mock_mimic_joint name="wfr_to_base_link"/>
+    </xacro:if>
   </ros2_control>
 
 </robot>

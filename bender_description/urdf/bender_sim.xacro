@@ -71,6 +71,35 @@
     <xacro:sim_mimic_joint name="wfr_to_base_link"/>
   </ros2_control>
 
+  <gazebo reference="laser_1">
+    <sensor name="lidar" type="gpu_lidar">
+      <pose>0 0 0.037 0 0 0</pose>
+      <always_on>true</always_on>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+      <topic>scan</topic>
+      <gz_frame_id>laser_1</gz_frame_id>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>500</samples>
+            <min_angle>-3.14159</min_angle>
+            <max_angle>3.14159</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.05</min>
+          <max>12.0</max>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+
   <gazebo>
     <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <parameters>$(find bender_description)/config/controllers/controllers.yaml</parameters>

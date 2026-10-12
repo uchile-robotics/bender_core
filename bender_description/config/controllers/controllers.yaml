@@ -62,9 +62,6 @@
       - wrr_to_base_link
     publish_rate: 50
 
-# =========================================
-# BRAZO IZQUIERDO
-# =========================================
 /**/left_shoulder_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
@@ -94,9 +91,6 @@
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-# =========================================
-# BRAZO DERECHO
-# =========================================
 /**/right_shoulder_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
@@ -126,9 +120,6 @@
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-# =========================================
-# CABEZA Y GRIPPERS
-# =========================================
 /**/head_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
@@ -166,6 +157,7 @@
     publish_rate: 50.0
     base_frame_id: "base_link"
     odom_frame_id: "odom"
+    tf_frame_prefix_enable: false
     enable_odom_tf: true
     open_loop: false
 

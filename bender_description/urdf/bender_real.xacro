@@ -32,6 +32,8 @@
 		</ros2_control>
 	</xacro:macro>
 
+	<!-- use_arms: hombros (ODrive + encoders) y cadenas Dynamixel (brazos, grippers y cabeza) -->
+	<xacro:if value="$(arg use_arms)">
 	<xacro:odrive_ros2_control
     name="Odrive"
     serial_number="3690387D3333"
@@ -422,6 +424,10 @@
 			<param name="Return Delay Time">5</param>
 		</gpio>
 	</ros2_control>
+	</xacro:if>
+
+	<!-- use_base: base Pioneer y parada de emergencia -->
+	<xacro:if value="$(arg use_base)">
 	<ros2_control name="Pioneer" type="system">
     	<hardware>
             <plugin>bender_hardware_interfaces/PioneerInterface</plugin>
@@ -441,4 +447,5 @@
             <state_interface name="pressed"/>
         </sensor>
 	</ros2_control>
+	</xacro:if>
 </robot>
