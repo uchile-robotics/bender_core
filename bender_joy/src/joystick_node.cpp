@@ -1,7 +1,7 @@
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joy.hpp"
-#include "geometry_msgs/msg/twist.hpp"
+#include "geometry_msgs/msg/twist_stamped.hpp"
 
 class TeleopJoy : public rclcpp::Node
 {
@@ -18,7 +18,7 @@ public:
     scale_angular_ = this->get_parameter("scale_angular").as_double();
 
     // Publisher
-    cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>(
+    cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::TwistStamped>(
       "/cmd_vel_joy", rclcpp::QoS(10));
 
     // Subscriber
@@ -32,7 +32,9 @@ public:
 private:
   void joyCallback(const sensor_msgs::msg::Joy::SharedPtr msg)
   {
-    geometry_msgs::msg::Twist v;
+    geometry_msgs::msg::TwistStamped v;
+    v.header.stamp = this->now();
+    v.header.frame_id = "base_link";
 
     if (latched_) {
       cmd_vel_pub_->publish(v);
@@ -54,8 +56,8 @@ private:
     bool moved = (std::abs(lin) > 1e-3) || (std::abs(ang) > 1e-3);
 
     if (moved) {
-      v.linear.x = lin;
-      v.angular.z = ang;
+      v.twist.linear.x = lin;
+      v.twist.angular.z = ang;
       cmd_vel_pub_->publish(v);
     }
 
@@ -66,7 +68,7 @@ private:
   double scale_angular_;
 
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
-  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
+  rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr cmd_vel_pub_;
 }; 
 
 int main(int argc, char * argv[])

@@ -41,6 +41,7 @@ def generate_launch_description():
             }
         ],
         arguments=[],
+        remappings=[("joint_states", "/bender/joint_states")],
     )
 
     return LaunchDescription([move_group_node])

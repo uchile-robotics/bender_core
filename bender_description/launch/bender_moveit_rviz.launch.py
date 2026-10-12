@@ -21,7 +21,8 @@ def generate_launch_description():
         parameters=[
             moveit_config.to_dict(),
             {"use_sim_time": True}
-        ]
+        ],
+        remappings=[("joint_states", "/bender/joint_states")],
     )
 
     return LaunchDescription([rviz_node])

@@ -48,6 +48,8 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description, {"use_sim_time": True}],
+        # ros2_control corre en el namespace /bender
+        remappings=[("joint_states", "/bender/joint_states")],
     )
 
     static_tf = Node(
@@ -112,7 +114,11 @@ def generate_launch_description():
         "right_gripper_controller",
     ]
     spawners = [
-        Node(package="controller_manager", executable="spawner", arguments=[name])
+        Node(
+            package="controller_manager",
+            executable="spawner",
+            arguments=[name, "--controller-manager", "/bender/controller_manager"],
+        )
         for name in controller_names
     ]
 

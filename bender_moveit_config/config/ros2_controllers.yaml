@@ -1,7 +1,7 @@
 # Controladores para hardware:=mock (demo.launch.py). Los nombres deben coincidir
 # con moveit_controllers.yaml. Los del robot real están en
 # bender_description/config/controllers/controllers.yaml.
-controller_manager:
+/**/controller_manager:
   ros__parameters:
     update_rate: 50  # Hz
 
@@ -29,14 +29,14 @@ controller_manager:
     right_gripper_controller:
       type: position_controllers/GripperActionController
 
-left_shoulder_controller:
+/**/left_shoulder_controller:
   ros__parameters:
     joints:
       - l1l_to_base_link
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-left_arm_controller:
+/**/left_arm_controller:
   ros__parameters:
     joints:
       - l2l_to_l1l
@@ -47,14 +47,14 @@ left_arm_controller:
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-right_shoulder_controller:
+/**/right_shoulder_controller:
   ros__parameters:
     joints:
       - l1r_to_base_link
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-right_arm_controller:
+/**/right_arm_controller:
   ros__parameters:
     joints:
       - l2r_to_l1r
@@ -65,7 +65,7 @@ right_arm_controller:
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-head_controller:
+/**/head_controller:
   ros__parameters:
     joints:
       - l1h_to_base_link
@@ -74,10 +74,10 @@ head_controller:
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
-left_gripper_controller:
+/**/left_gripper_controller:
   ros__parameters:
     joint: gripper_base_to_movil
 
-right_gripper_controller:
+/**/right_gripper_controller:
   ros__parameters:
     joint: g2ra_to_g1r

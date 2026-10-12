@@ -74,6 +74,10 @@
   <gazebo>
     <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <parameters>$(find bender_description)/config/controllers/controllers.yaml</parameters>
+      <ros>
+        <namespace>/bender</namespace>
+        <remapping>robot_description:=/robot_description</remapping>
+      </ros>
     </plugin>
   </gazebo>
 

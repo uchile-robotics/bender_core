@@ -38,12 +38,16 @@ def generate_launch_description():
         parameters=[{
             'use_sim_time': use_sim_time,
             'robot_description': robot_description_content
-        }]
+        }],
+        # ros2_control corre en el namespace /bender
+        remappings=[('joint_states', '/bender/joint_states')],
     )
 
     ros2_control_node = Node(
         package='controller_manager',
         executable='ros2_control_node',
+        namespace='bender',
+        remappings=[('robot_description', '/robot_description')],
         parameters=[
             {'robot_description': robot_description_content},
             controllers_yaml_path
@@ -54,64 +58,64 @@ def generate_launch_description():
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["joint_state_broadcaster", "--controller-manager", "/bender/controller_manager"],
     )
 
     pioneer_base_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["pioneer_base_controller", "--controller-manager", "/controller_manager"],
+        arguments=["pioneer_base_controller", "--controller-manager", "/bender/controller_manager"],
     )
 
     estop_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["estop_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=["estop_broadcaster", "--controller-manager", "/bender/controller_manager"],
     )
 
     # --- SPAWNERS DE LOS HOMBROS (ODrive) ---
     left_shoulder_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["left_shoulder_controller", "--controller-manager", "/controller_manager"],
+        arguments=["left_shoulder_controller", "--controller-manager", "/bender/controller_manager"],
     )
 
     right_shoulder_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["right_shoulder_controller", "--controller-manager", "/controller_manager"],
+        arguments=["right_shoulder_controller", "--controller-manager", "/bender/controller_manager"],
     )
 
     # --- SPAWNERS DEL RESTO DEL BRAZO (Posición) ---
     left_arm_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["left_arm_controller", "--controller-manager", "/controller_manager"],
+        arguments=["left_arm_controller", "--controller-manager", "/bender/controller_manager"],
     )
 
     right_arm_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["right_arm_controller", "--controller-manager", "/controller_manager"],
+        arguments=["right_arm_controller", "--controller-manager", "/bender/controller_manager"],
     )
 
     # --- OTROS SPAWNERS ---
     head_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["head_controller", "--controller-manager", "/controller_manager"],
+        arguments=["head_controller", "--controller-manager", "/bender/controller_manager"],
     )
 
     left_gripper_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["left_gripper_controller", "--controller-manager", "/controller_manager"],
+        arguments=["left_gripper_controller", "--controller-manager", "/bender/controller_manager"],
     )
 
     right_gripper_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["right_gripper_controller", "--controller-manager", "/controller_manager"],
+        arguments=["right_gripper_controller", "--controller-manager", "/bender/controller_manager"],
     )
 
     # 3. Lanzar todo junto

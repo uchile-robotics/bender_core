@@ -1,9 +1,9 @@
 twist_mux:
   ros__parameters:
-    use_stamped: false
+    use_stamped: true
     topics:
       navigation:
-        topic   : cmd_vel_nav
+        topic   : cmd_vel_nav_safe
         timeout : 0.5
         priority: 10
       joystick:

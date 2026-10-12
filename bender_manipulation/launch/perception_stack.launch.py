@@ -102,6 +102,7 @@ def generate_launch_description():
         name="grasp_pick_node",
         output="screen",
         emulate_tty=True,
+        remappings=[("joint_states", "/bender/joint_states")],
     )
 
     graspgen_pick_bridge_node = Node(
