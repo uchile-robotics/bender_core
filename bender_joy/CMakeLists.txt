@@ -1,38 +1,42 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.8)
 project(bender_joy)
 
-find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
-  joy
-  roscpp
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+# find dependencies
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+
+# Install resources
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
+
+install(DIRECTORY
+  params
+  DESTINATION share/${PROJECT_NAME}/
+)
+
+# Executable
+add_executable(teleop_node src/joystick_node.cpp)
+ament_target_dependencies(teleop_node
+  rclcpp
   sensor_msgs
-  std_msgs
-  uchile_msgs
-  uchile_srvs
+  geometry_msgs
 )
 
-catkin_python_setup()
-
-###################################
-## catkin specific configuration ##
-###################################
-
-catkin_package(
-  LIBRARIES bender_joy
-  CATKIN_DEPENDS
-    geometry_msgs
-    joy
-    roscpp
-    sensor_msgs
-    std_msgs
-    uchile_msgs
-    uchile_srvs
+install(TARGETS
+  teleop_node
+  DESTINATION lib/${PROJECT_NAME}
 )
 
-###########
-## Build ##
-###########
-
-include_directories(
-    ${catkin_INCLUDE_DIRS}
-)
+ament_package()

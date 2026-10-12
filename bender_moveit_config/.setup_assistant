@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: bender_description
+    relative_path: urdf/bender.xacro
+  srdf:
+    relative_path: config/bender.srdf
+  package_settings:
+    author_name: Luis Cuevas
+    author_email: luis.cuevas@ug.uchile.cl
+    generated_timestamp: 1788541222
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

@@ -1,0 +1,13 @@
+joy_linux_node:
+  ros__parameters:
+    dev: /dev/joy
+    deadzone: 0.07
+    autorepeat_rate: 20.0
+    dev_ff: /dev/event_joy
+
+teleop_node:
+  ros__parameters:
+    scale_linear:
+      x: 1.0
+    scale_angular:
+      yaw: 1.0

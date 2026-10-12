@@ -1,7 +1,0 @@
-face_controller:
-  controller:
-    module: face_controller
-    package: bender_head
-    type: FaceController
-  rate: 5
-  id: 35

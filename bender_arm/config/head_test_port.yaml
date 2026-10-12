@@ -1,9 +1,0 @@
-# Config for head test
-namespace: head_test_manager
-serial_ports:
-  head_test_port:
-    port_name: "/dev/ttyUSB0"
-    baud_rate: 200000
-    min_motor_id: 11
-    max_motor_id: 21
-    update_rate: 30

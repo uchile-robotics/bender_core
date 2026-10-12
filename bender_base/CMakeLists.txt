@@ -1,8 +1,18 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.8)
 project(bender_base)
 
-find_package(catkin REQUIRED)
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+find_package(ament_cmake REQUIRED)
 
-catkin_package()
 
-
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
+install(DIRECTORY
+  params
+  DESTINATION share/${PROJECT_NAME}/
+)
+ament_package()

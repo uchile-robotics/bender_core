@@ -1,2 +1,0 @@
-# udev rule used to identify the pioneer 3AT mobile robot base
-SUBSYSTEMS=="usb", KERNEL=="ttyUSB[0-9]*", SUBSYSTEM=="tty",ATTRS{manufacturer}=="Prolific Technology Inc. ", ATTRS{product}=="USB-Serial Controller D", SYMLINK+="bender/base"

@@ -1,4 +1,0 @@
-# Regla udev para los controladores de los motores Dynamixel
-# Puerto izquierdo (l_port)
-
-SUBSYSTEMS=="usb", KERNEL=="ttyUSB[0-9]*", SUBSYSTEM=="tty",ATTRS{serial}=="A9I1TRRF", MODE="0660", GROUP="dialout", SYMLINK+="bender/l_port"

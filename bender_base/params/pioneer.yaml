@@ -1,0 +1,12 @@
+rosaria2:
+  ros__parameters:
+    'tf_prefix': ''
+    'odom_frame_id': 'odom'
+    'base_frame_id': 'base_link'
+    'bumper_frame_id': 'bumper'
+    'sonar_frame_id': 'sonar'
+    'serial_port': '/dev/pioneer'
+    'sonar_enabled': false
+    'publish_sonar': false
+    'publish_sonar_pointcloud2': false
+    'publish_motors_state': true

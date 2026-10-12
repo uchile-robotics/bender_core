@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="mock_position_joint" params="name">
+    <joint name="${name}">
+      <command_interface name="position"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+    </joint>
+  </xacro:macro>
+
+  <!-- Joints con <mimic> en el URDF: solo estado, el valor lo copia GenericSystem. -->
+  <xacro:macro name="mock_mimic_joint" params="name">
+    <joint name="${name}">
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="mock_wheel_joint" params="name">
+    <joint name="${name}">
+      <command_interface name="velocity"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+    </joint>
+  </xacro:macro>
+
+  <ros2_control name="BenderMock" type="system">
+    <hardware>
+      <plugin>mock_components/GenericSystem</plugin>
+    </hardware>
+
+    <!-- Brazo izquierdo -->
+    <xacro:mock_position_joint name="l1l_to_base_link"/>
+    <xacro:mock_position_joint name="l2l_to_l1l"/>
+    <xacro:mock_position_joint name="l3l_to_l2l"/>
+    <xacro:mock_position_joint name="l4l_to_l3l"/>
+    <xacro:mock_position_joint name="l5l_to_l4l"/>
+    <xacro:mock_position_joint name="l6l_to_l5l"/>
+
+    <!-- Brazo derecho -->
+    <xacro:mock_position_joint name="l1r_to_base_link"/>
+    <xacro:mock_position_joint name="l2r_to_l1r"/>
+    <xacro:mock_position_joint name="l3r_to_l2r"/>
+    <xacro:mock_position_joint name="l4r_to_l3r"/>
+    <xacro:mock_position_joint name="l5r_to_l4r"/>
+    <xacro:mock_position_joint name="l6r_to_l5r"/>
+
+    <!-- Cabeza -->
+    <xacro:mock_position_joint name="l1h_to_base_link"/>
+    <xacro:mock_position_joint name="l2h_to_l1h"/>
+    <xacro:mock_position_joint name="l3h_to_l1h"/>
+
+    <!-- Grippers -->
+    <xacro:mock_position_joint name="gripper_base_to_movil"/>
+    <xacro:mock_position_joint name="g2ra_to_g1r"/>
+    <xacro:mock_mimic_joint name="g2rb_to_g1r"/>
+
+    <!-- Ruedas: sin controlador en mock, solo para que haya joint_states y TF -->
+    <xacro:mock_wheel_joint name="wrl_to_base_link"/>
+    <xacro:mock_wheel_joint name="wrr_to_base_link"/>
+    <xacro:mock_mimic_joint name="wfl_to_base_link"/>
+    <xacro:mock_mimic_joint name="wfr_to_base_link"/>
+  </ros2_control>
+
+</robot>

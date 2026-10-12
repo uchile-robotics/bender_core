@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bender">
+    <!-- Se declara antes del include para que este default le gane al de bender.xacro (real). -->
+    <xacro:arg name="hardware" default="mock" />
+
+    <xacro:include filename="$(find bender_description)/urdf/bender.xacro" />
+</robot>

@@ -1,0 +1,175 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    left_shoulder_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    left_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    right_shoulder_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    right_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    head_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    left_gripper_controller:
+      type: position_controllers/GripperActionController
+
+    right_gripper_controller:
+      type: position_controllers/GripperActionController
+
+    pioneer_base_controller:
+      type: diff_drive_controller/DiffDriveController
+
+    estop_broadcaster:
+      type: bender_hardware_interfaces/EstopBroadcaster
+
+estop_broadcaster:
+  ros__parameters:
+    interface_name: estop/pressed
+
+joint_state_broadcaster:
+  ros__parameters:
+    type: joint_state_broadcaster/JointStateBroadcaster
+    joints:
+      - l1l_to_base_link
+      - l2l_to_l1l
+      - l3l_to_l2l
+      - l4l_to_l3l
+      - l5l_to_l4l
+      - l6l_to_l5l
+      - l1r_to_base_link
+      - l2r_to_l1r
+      - l3r_to_l2r
+      - l4r_to_l3r
+      - l5r_to_l4r
+      - l6r_to_l5r
+      - l1h_to_base_link
+      - l2h_to_l1h
+      - l3h_to_l1h
+      - g2ra_to_g1r
+      - g2rb_to_g1r
+      - gripper_base_to_movil
+      - wrl_to_base_link
+      - wrr_to_base_link
+    publish_rate: 50
+
+# =========================================
+# BRAZO IZQUIERDO
+# =========================================
+left_shoulder_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - l1l_to_base_link
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+    gains:
+      l1l_to_base_link:
+        p: 1.0
+        i: 0.0
+        d: 0.0
+        ff_velocity_scale: 1.0
+
+left_arm_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - l2l_to_l1l
+      - l3l_to_l2l
+      - l4l_to_l3l
+      - l5l_to_l4l
+      - l6l_to_l5l
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+
+# =========================================
+# BRAZO DERECHO
+# =========================================
+right_shoulder_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - l1r_to_base_link
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+    gains:
+      l1r_to_base_link:
+        p: 1.0
+        i: 0.0
+        d: 0.0
+        ff_velocity_scale: 1.0
+
+right_arm_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - l2r_to_l1r
+      - l3r_to_l2r
+      - l4r_to_l3r
+      - l5r_to_l4r
+      - l6r_to_l5r
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+
+# =========================================
+# CABEZA Y GRIPPERS
+# =========================================
+head_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - l1h_to_base_link
+      - l2h_to_l1h
+      - l3h_to_l1h
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+
+left_gripper_controller:
+  ros__parameters:
+    type: position_controllers/GripperActionController
+    joint: gripper_base_to_movil
+
+right_gripper_controller:
+  ros__parameters:
+    type: position_controllers/GripperActionController
+    joint: g2ra_to_g1r
+
+pioneer_base_controller:
+  ros__parameters:
+    left_wheel_names: ["wrl_to_base_link"]
+    right_wheel_names: ["wrr_to_base_link"]
+
+    position_feedback: false
+
+    wheel_separation: 0.397
+    wheel_radius: 0.1
+
+    wheel_separation_multiplier: 1.0
+    left_wheel_radius_multiplier: 1.0
+    right_wheel_radius_multiplier: 1.0
+
+    publish_rate: 50.0
+    base_frame_id: "base_link"
+    odom_frame_id: "odom"
+    enable_odom_tf: true
+    open_loop: false
+
+    cmd_vel_timeout: 0.5
+    # TODO: check covariance matrices
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+    pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]

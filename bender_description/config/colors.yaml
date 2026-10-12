@@ -1,0 +1,19 @@
+colors:
+  silver:
+    rgba: [0.75, 0.75, 0.75, 1.0]   # plateado
+    hex: "#C0C0C0"
+  gray:
+    rgba: [0.5, 0.5, 0.5, 1.0]      # gris
+    hex: "#808080"
+  white:
+    rgba: [1.0, 1.0, 1.0, 1.0]      # blanco
+    hex: "#FFFFFF"
+  black:
+    rgba: [0.0, 0.0, 0.0, 1.0]      # negro
+    hex: "#000000"
+  blue:
+    rgba: [0.0, 0.0, 1.0, 1.0]      # azul
+    hex: "#0000FF"
+  red:
+    rgba: [1.0, 0.0, 0.0, 1.0]      # rojo
+    hex: "#FF0000"

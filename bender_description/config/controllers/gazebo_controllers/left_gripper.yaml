@@ -1,0 +1,20 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    left_gripper:
+      type: position_controllers/JointGroupPositionController
+
+left_gripper:
+  ros__parameters:
+    type: position_controllers/JointGroupPositionController
+    joints:
+      - g2lb_to_g1l
+      - g2la_to_g1l
+
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+      - effort

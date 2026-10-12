@@ -1,7 +1,0 @@
-# Udev Rule for Xbox Joystick
-
-# ADD
-ACTION=="add", SUBSYSTEMS=="input", KERNEL=="js0", SUBSYSTEM=="input", ATTRS{name}=="Xbox 360 Wireless Receiver", MODE="0666", RUN+="/home/mpavez/run.sh"
-
-# REMOVE
-ACTION=="remove", SUBSYSTEM=="input", ENV{ID_VENDOR_ID}=="045e", ENV{ID_MODEL}=="Xbox_360_Wireless_Receiver_for_Windows", RUN+="/home/mpavez/run.sh"

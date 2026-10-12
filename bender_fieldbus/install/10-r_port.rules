@@ -1,4 +1,0 @@
-# Regla udev para los controladores de los motores Dynamixel
-# Puerto derecho (r_port)
-
-SUBSYSTEMS=="usb", KERNEL=="ttyUSB[0-9]*", SUBSYSTEM=="tty",ATTRS{serial}=="A921PNVN", MODE="0660", GROUP="dialout", SYMLINK+="bender/r_port"
