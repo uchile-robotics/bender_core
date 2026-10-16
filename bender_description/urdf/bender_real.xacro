@@ -434,6 +434,8 @@
             <param name="serial_device">/dev/pioneer</param>
             <param name="baud_rate">9600</param>
             <param name="wheel_separation">0.397</param>
+            <!-- Igual que wheel_radius de pioneer_base_controller (controllers.yaml) -->
+            <param name="wheel_radius">0.1</param>
         </hardware>
         <joint name="wrl_to_base_link">
             <command_interface name="velocity"/>

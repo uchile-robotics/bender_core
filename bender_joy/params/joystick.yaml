@@ -7,7 +7,5 @@ joy_linux_node:
 
 teleop_node:
   ros__parameters:
-    scale_linear:
-      x: 1.0
-    scale_angular:
-      yaw: 1.0
+    scale_linear: 1.0   # m/s con el stick al tope
+    scale_angular: 1.0  # rad/s con el stick al tope

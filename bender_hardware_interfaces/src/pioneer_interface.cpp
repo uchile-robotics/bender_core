@@ -29,15 +29,21 @@ hardware_interface::CallbackReturn PioneerInterface::on_init(
         serial_baud_ = 9600;
     }
 
-    // La separación entre ruedas es obligatoria: sin ella la cinemática
-    // (inverse_kinematics/forward_kinematics) no puede convertir entre v/w
-    // de ROS y las velocidades individuales de cada rueda para ARIA.
     if (info_.hardware_parameters.find("wheel_separation") != info_.hardware_parameters.end()) {
         wheel_separation_ = std::stod(info_.hardware_parameters["wheel_separation"]);
     } else {
         RCLCPP_ERROR(get_logger(),
                      "Falta el parámetro obligatorio 'wheel_separation' en el URDF "
                      "(ros2_control.xacro, bloque Pioneer).");
+        return hardware_interface::CallbackReturn::ERROR;
+    }
+
+    if (info_.hardware_parameters.find("wheel_radius") != info_.hardware_parameters.end()) {
+        wheel_radius_ = std::stod(info_.hardware_parameters["wheel_radius"]);
+    } else {
+        RCLCPP_ERROR(get_logger(),
+                     "Missing required parameter 'wheel_radius' in the URDF "
+                     "(bender_real.xacro, Pioneer block).");
         return hardware_interface::CallbackReturn::ERROR;
     }
 
@@ -55,10 +61,6 @@ hardware_interface::CallbackReturn PioneerInterface::on_init(
         return hardware_interface::CallbackReturn::ERROR;
     }
 
-    // NOTA: se asume que info_.joints[0] es la rueda izquierda y
-    // info_.joints[1] la derecha, según el orden declarado en el xacro
-    // (joint1 -> izquierda, joint2 -> derecha). Verificar si el mapeo real
-    // del robot es al revés.
     hw_cmd_wheel_left_ = 0.0;
     hw_cmd_wheel_right_ = 0.0;
     left_wheel_pos_ = 0.0;
@@ -73,12 +75,6 @@ hardware_interface::CallbackReturn PioneerInterface::on_init(
 std::vector<hardware_interface::StateInterface> PioneerInterface::export_state_interfaces() {
     std::vector<hardware_interface::StateInterface> state_interfaces;
 
-    // Solo se exportan interfaces de velocidad: es lo único que declara el
-    // URDF para "Pioneer" (joint1/joint2) y lo único que ARIA nos entrega
-    // directamente vía getVel()/getRotVel() en read(). Si más adelante se
-    // necesita posición (odometría por rueda), habría que agregar aquí el
-    // HW_IF_POSITION y calcularla integrando left_wheel_vel_/right_wheel_vel_
-    // en read().
     state_interfaces.emplace_back(hardware_interface::StateInterface(
         info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &left_wheel_vel_));
 
@@ -107,9 +103,6 @@ hardware_interface::CallbackReturn
 PioneerInterface::on_activate(const rclcpp_lifecycle::State& /*previous_state*/) {
     Aria::init();
 
-    // 1. Construir los argumentos que ARIA usa para conectar al robot,
-    // equivalentes a pasar "-robotPort <serial_port_> -robotBaud <serial_baud_>"
-    // por línea de comandos.
     args_ = std::make_shared<ArArgumentBuilder>();
     args_->add("-robotPort");
     args_->add("%s", serial_port_.c_str());
@@ -122,7 +115,6 @@ PioneerInterface::on_activate(const rclcpp_lifecycle::State& /*previous_state*/)
     robot_ = std::make_shared<ArRobot>();
     conn_ = std::make_shared<ArRobotConnector>(argparser_.get(), robot_.get());
 
-    // 2. Conectar al robot real.
     if (!conn_->connectRobot()) {
         RCLCPP_ERROR(get_logger(),
                      "No se pudo conectar al robot Pioneer en %s (%d baudios).",
@@ -135,8 +127,6 @@ PioneerInterface::on_activate(const rclcpp_lifecycle::State& /*previous_state*/)
         return hardware_interface::CallbackReturn::ERROR;
     }
 
-    // 3. Lanzar el hilo asíncrono de ARIA (se detiene si se pierde la conexión)
-    // y habilitar los motores.
     robot_->runAsync(true);
 
     robot_->lock();
@@ -152,13 +142,11 @@ PioneerInterface::on_activate(const rclcpp_lifecycle::State& /*previous_state*/)
 hardware_interface::CallbackReturn
 PioneerInterface::on_deactivate(const rclcpp_lifecycle::State& /*previous_state*/) {
     if (robot_) {
-        // 1. Detener el robot y desactivar motores antes de cortar la conexión.
         robot_->lock();
         robot_->stop();
         robot_->disableMotors();
         robot_->unlock();
 
-        // 2. Detener el hilo de procesamiento de ARIA y esperar a que termine.
         robot_->stopRunning();
         robot_->waitForRunExit();
     }
@@ -183,8 +171,8 @@ PioneerInterface::read(const rclcpp::Time& /*time*/,
     robot_->unlock();
 
     std::array<double, 2> velocities = this->inverse_kinematics(aria_v, aria_w);
-    right_wheel_vel_ = velocities[0];
-    left_wheel_vel_ = velocities[1];
+    right_wheel_vel_ = velocities[0] / wheel_radius_;
+    left_wheel_vel_ = velocities[1] / wheel_radius_;
 
     return hardware_interface::return_type::OK;
 }
@@ -192,8 +180,9 @@ PioneerInterface::read(const rclcpp::Time& /*time*/,
 hardware_interface::return_type
 PioneerInterface::write(const rclcpp::Time& /*time*/,
                         const rclcpp::Duration& /*period*/) {
-    double v_left = hw_cmd_wheel_left_;
-    double v_right = hw_cmd_wheel_right_;
+
+    double v_left = hw_cmd_wheel_left_ * wheel_radius_;
+    double v_right = hw_cmd_wheel_right_ * wheel_radius_;
 
     std::array<double, 2> velocities = this->forward_kinematics(v_left, v_right);
     double aria_v = velocities[0];
@@ -232,7 +221,5 @@ PioneerInterface::forward_kinematics(const double& left_wheel_speed,
 }
 } // namespace bender_hardware_interfaces
 
-// Exportación como plugin para que pluginlib y ros2_control puedan cargar esta clase
-// dinámicamente
 PLUGINLIB_EXPORT_CLASS(bender_hardware_interfaces::PioneerInterface,
                        hardware_interface::SystemInterface)

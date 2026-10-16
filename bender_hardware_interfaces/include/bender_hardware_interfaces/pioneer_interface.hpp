@@ -45,6 +45,7 @@ namespace bender_hardware_interfaces {
             std::string serial_port_;
             int serial_baud_;
             double wheel_separation_;
+            double wheel_radius_;
 
             // ariacoda stuff
             std::shared_ptr<ArRobot> robot_;
