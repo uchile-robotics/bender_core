@@ -8,4 +8,4 @@ joy_linux_node:
 teleop_node:
   ros__parameters:
     scale_linear: 1.0   # m/s con el stick al tope
-    scale_angular: 1.0  # rad/s con el stick al tope
+    scale_angular: 0.5  # rad/s con el stick al tope (límite de la base, ver controllers.yaml)
