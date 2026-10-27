@@ -32,11 +32,10 @@
 		</ros2_control>
 	</xacro:macro>
 
-	<!-- use_arms: hombros (ODrive + encoders) y cadenas Dynamixel (brazos, grippers y cabeza) -->
 	<xacro:if value="$(arg use_arms)">
 	<xacro:odrive_ros2_control
     name="Odrive"
-    serial_number="3690387D3333"
+    serial_number="336B33573235"
     joint_name_left="l1l_to_base_link"
     joint_name_right="l1r_to_base_link"
     axis_left="1"
@@ -99,16 +98,15 @@
 		</joint>
 		<gpio name="motor_l2r">
     		<param name="type">dxl</param>
-    		<param name="ID">4</param>
+    		<param name="ID">1</param>
     		<command_interface name="Goal Position" />
     		<state_interface name="Present Position" />
     		<state_interface name="Present Velocity" />
     		<state_interface name="Present Load" />
-    		<param name="[unit info]">Present Position, 0.001047198, rad, unsigned, -1.6221098; Goal Position, 0.001047198, rad, unsigned, -1.6221098</param>
-    		<param name="CW Compliance Margin">1</param>
-    		<param name="CCW Compliance Margin">1</param>
-    		<param name="CW Compliance Slope">50</param>
-    		<param name="CCW Compliance Slope">50</param>
+    		<param name="[unit info]">Present Position, -0.001533981, rad, unsigned, 3.113981; Goal Position, -0.001533981, rad, unsigned, 3.113981</param>
+    		<param name="P Gain">8</param>
+    		<param name="I Gain">2</param>
+    		<param name="D Gain">5</param>
     		<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l3r_to_l2r">
@@ -137,12 +135,12 @@
 		</joint>
 		<gpio name="motor_l4r">
 			<param name="type">dxl</param>
-			<param name="ID">13</param>
+			<param name="ID">11</param>
 			<command_interface name="Goal Position" />
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -3.05262219; Goal Position, 0.001533981, rad, unsigned, -3.05262219</param>
+			<param name="[unit info]">Present Position, -0.001533981, rad, unsigned, 3.983749; Goal Position, -0.001533981, rad, unsigned, 3.983749</param>
 			<param name="P Gain">50</param>
 			<param name="I Gain">32</param>
 			<param name="D Gain">22</param>
@@ -196,11 +194,12 @@
         </joint>
 		<gpio name="motor_g2ra">
 			<param name="type">dxl</param>
-			<param name="ID">16</param>
+			<param name="ID">6</param>
 			<command_interface name="Goal Position" />
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
+			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -2.647141; Goal Position, 0.005061455, rad, unsigned, -2.647141</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
 			<param name="CW Compliance Slope">32</param>
@@ -269,9 +268,11 @@
     		<state_interface name="Present Position" />
     		<state_interface name="Present Velocity" />
     		<state_interface name="Present Load" />
-    		<param name="P Gain">8</param>
-    		<param name="I Gain">2</param>
-    		<param name="D Gain">5</param>
+    		<param name="[unit info]">Present Position, -0.001047198, rad, unsigned, 3.878821; Goal Position, -0.001047198, rad, unsigned, 3.878821</param>
+    		<param name="CW Compliance Margin">1</param>
+    		<param name="CCW Compliance Margin">1</param>
+    		<param name="CW Compliance Slope">50</param>
+    		<param name="CCW Compliance Slope">50</param>
     		<param name="Return Delay Time">5</param>
 		</gpio>
 		<joint name="l3l_to_l2l">
@@ -300,12 +301,12 @@
 		</joint>
 		<gpio name="motor_l4l">
 			<param name="type">dxl</param>
-			<param name="ID">11</param>
+			<param name="ID">13</param>
 			<command_interface name="Goal Position" />
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -3.040350342; Goal Position, 0.001533981, rad, unsigned, -3.040350342</param>
+			<param name="[unit info]">Present Position, 0.001533981, rad, unsigned, -2.127632; Goal Position, 0.001533981, rad, unsigned, -2.127632</param>
 			<param name="P Gain">8</param>
 			<param name="I Gain">2</param>
 			<param name="D Gain">5</param>
@@ -336,11 +337,12 @@
 		</joint>
 		<gpio name="motor_l6l">
 			<param name="type">dxl</param>
-			<param name="ID">6</param>
+			<param name="ID">16</param>
 			<command_interface name="Goal Position" />
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
+			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -2.672448; Goal Position, 0.005061455, rad, unsigned, -2.672448</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
 			<param name="CW Compliance Slope">254</param>
@@ -426,7 +428,6 @@
 	</ros2_control>
 	</xacro:if>
 
-	<!-- use_base: base Pioneer y parada de emergencia -->
 	<xacro:if value="$(arg use_base)">
 	<ros2_control name="Pioneer" type="system">
     	<hardware>
@@ -434,7 +435,6 @@
             <param name="serial_device">/dev/pioneer</param>
             <param name="baud_rate">9600</param>
             <param name="wheel_separation">0.397</param>
-            <!-- Igual que wheel_radius de pioneer_base_controller (controllers.yaml) -->
             <param name="wheel_radius">0.1</param>
         </hardware>
         <joint name="wrl_to_base_link">
