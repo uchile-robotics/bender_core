@@ -59,10 +59,11 @@
 			<state_interface name="velocity" />
 		</sensor>
 	</ros2_control>
-	<ros2_control name="DynamixelChainRight" type="system">
+	<ros2_control name="DynamixelChainRight" type="system" is_async="true">
         <hardware>
             <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
             <param name="port_name">/dev/dynamixel_right</param>
+            <param name="read_timeout_ms">5</param>
             <param name="baud_rate">1000000</param>
             <param name="protocol_version">1.0</param>
             <param name="number_of_joints">7</param>
@@ -220,10 +221,11 @@
 			<param name="Return Delay Time">5</param>
 		</gpio>
 	</ros2_control>
-	<ros2_control name="DynamixelChainLeft" type="system">
+	<ros2_control name="DynamixelChainLeft" type="system" is_async="true">
         <hardware>
             <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
             <param name="port_name">/dev/dynamixel_left</param>
+            <param name="read_timeout_ms">5</param>
             <param name="baud_rate">1000000</param>
             <param name="protocol_version">1.0</param>
             <param name="number_of_joints">9</param>
