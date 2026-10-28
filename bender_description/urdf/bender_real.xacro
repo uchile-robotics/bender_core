@@ -406,11 +406,11 @@
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -1.012291; Goal Position, 0.005061455, rad, unsigned, -1.012291</param>
+			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -1.098335735; Goal Position, 0.005061455, rad, unsigned, -1.098335735</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
+			<param name="CW Compliance Slope">32</param>
+			<param name="CCW Compliance Slope">32</param>
 			<param name="Return Delay Time">5</param>
 		</gpio>
 		<gpio name="motor_l2h_2">
@@ -420,11 +420,11 @@
 			<state_interface name="Present Position" />
 			<state_interface name="Present Velocity" />
 			<state_interface name="Present Load" />
-			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -3.912504715; Goal Position, 0.005061455, rad, unsigned, -3.912504715</param>
+			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -3.831521435; Goal Position, 0.005061455, rad, unsigned, -3.831521435</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">254</param>
-			<param name="CCW Compliance Slope">254</param>
+			<param name="CW Compliance Slope">32</param>
+			<param name="CCW Compliance Slope">32</param>
 			<param name="Return Delay Time">5</param>
 		</gpio>
 	</ros2_control>

@@ -707,7 +707,7 @@
     <parent link="l1h_1"/>
     <child link="l2h_1"/>
     <axis xyz="-0.0 1.0 0.0"/>
-    <limit effort="50" lower="${-0.706858 - epsilon}" upper="${0.706858 + epsilon}" velocity="50"/>
+    <limit effort="50" lower="-0.726" upper="0.625" velocity="50"/>
   </joint>
 
   <joint name="l3h_to_l1h" type="revolute">
@@ -715,7 +715,7 @@
     <parent link="l1h_1"/>
     <child link="l3h_1"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="50" lower="${-0.706858 - epsilon}" upper="${0.706858 + epsilon}" velocity="50"/>
+    <limit effort="50" lower="-0.405" upper="0.458" velocity="50"/>
   </joint>
 
 

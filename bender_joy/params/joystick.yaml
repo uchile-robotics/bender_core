@@ -15,5 +15,6 @@ teleop_node:
     head_center_button: 3
     head_joints: [l1h_to_base_link, l2h_to_l1h, l3h_to_l1h]
     head_rates: [1.5, 1.0, 1.0]    # rad/s con el stick al tope (yaw, pitch, roll)
-    head_min: [-3.229, -0.70, -0.70]
-    head_max: [1.948, 0.70, 0.70]
+    # mismos límites que bender.xacro
+    head_min: [-3.229, -0.726, -0.405]
+    head_max: [1.948, 0.625, 0.458]
