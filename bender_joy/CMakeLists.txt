@@ -14,6 +14,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(trajectory_msgs REQUIRED)
 
 # Install resources
 install(DIRECTORY
@@ -32,6 +33,7 @@ ament_target_dependencies(teleop_node
   rclcpp
   sensor_msgs
   geometry_msgs
+  trajectory_msgs
 )
 
 install(TARGETS

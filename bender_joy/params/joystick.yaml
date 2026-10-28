@@ -9,3 +9,11 @@ teleop_node:
   ros__parameters:
     scale_linear: 1.0   # m/s con el stick al tope
     scale_angular: 0.5  # rad/s con el stick al tope (límite de la base, ver controllers.yaml)
+    # Modo cabeza: X alterna base/cabeza, Y centra la cabeza
+    # stick izq. X = yaw, stick der. Y = pitch, stick der. X = roll
+    head_mode_button: 2
+    head_center_button: 3
+    head_joints: [l1h_to_base_link, l2h_to_l1h, l3h_to_l1h]
+    head_rates: [1.5, 1.0, 1.0]    # rad/s con el stick al tope (yaw, pitch, roll)
+    head_min: [-3.229, -0.70, -0.70]
+    head_max: [1.948, 0.70, 0.70]
