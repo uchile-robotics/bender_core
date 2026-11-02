@@ -44,11 +44,14 @@
 	gear_ratio_right="250"
 	/>
 
-	<ros2_control name="ShoulderJoint" type="sensor">
+	<!-- Pico W del pecho: lee los encoders de los hombros y controla la luz del pecho -->
+	<ros2_control name="ShoulderJoint" type="system">
 		<hardware>
 			<plugin>bender_hardware_interfaces/EncoderInterface</plugin>
 			<param name="serial_device">/dev/encoders</param>
 			<param name="baud_rate">115200</param>
+			<!-- reenvío periódico de la luz [s]; debe ser menor al timeout de la Pico (0.5 s) -->
+			<param name="led_resend_period">0.1</param>
 		</hardware>
 		<sensor name="l1l_to_base_link">
 			<state_interface name="position" />
@@ -58,6 +61,12 @@
 			<state_interface name="position" />
 			<state_interface name="velocity" />
 		</sensor>
+		<gpio name="chest_led">
+			<command_interface name="r" />
+			<command_interface name="g" />
+			<command_interface name="b" />
+			<command_interface name="estop" />
+		</gpio>
 	</ros2_control>
 	<ros2_control name="DynamixelChainRight" type="system" is_async="true">
         <hardware>

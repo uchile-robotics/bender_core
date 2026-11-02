@@ -8,6 +8,7 @@
   - [Requirements](#requirements)
   - [Interfaces](#interfaces)
     - [EncoderInterface](#encoderinterface)
+    - [ChestLedController](#chestledcontroller)
     - [PioneerInterface](#pioneerinterface)
   - [Development](#development)
     - [Directory structure](#directory-structure)
@@ -36,14 +37,35 @@ If you are looking for how these plugins are wired into the robot's URDF or the 
 
 [`encoder_interface.hpp`](include/bender_hardware_interfaces/encoder_interface.hpp) / [`encoder_interface.cpp`](src/encoder_interface.cpp)
 
-A `hardware_interface::SensorInterface` that reads the shoulder encoders over a serial line and publishes their position/velocity. It expects the line-based JSON-ish protocol `{"left": {"pos": ..., "vel": ...}, "right": {"pos": ..., "vel": ...}}\n` and requires exactly 2 `<sensor>` entries in the URDF.
+A `hardware_interface::SystemInterface` for the chest Raspberry Pi Pico W, which shares a single serial line for two jobs:
+
+- `read()`: parses the shoulder encoders, line protocol `{"left": {"pos": ..., "vel": ...}, "right": {"pos": ..., "vel": ...}}\n`. Requires exactly 2 `<sensor>` entries in the URDF (left, then right).
+- `write()`: sends the chest light state `L,<estop 0|1>,<r>,<g>,<b>\n`. Only enabled if the URDF declares `<gpio name="chest_led">` with the command interfaces `r`, `g`, `b`, `estop`. The line is sent when it changes and re-sent every `led_resend_period` seconds; the Pico blinks red if it receives nothing for 500 ms. Nothing is sent until a controller writes the commands (they start as NaN).
 
 | Hardware parameter | Default | Description |
 | --- | --- | --- |
-| `serial_device` | `/dev/encoders` | Serial port of the encoder board. |
+| `serial_device` | `/dev/encoders` | Serial port of the Pico. |
 | `baud_rate` | `115200` | Baud rate for the serial connection. |
+| `led_resend_period` | `0.1` | Re-send period of the light line, in seconds. Must be below the Pico timeout (0.5 s). |
 
-Exported state interfaces per `<sensor>` (in URDF declaration order, left then right): `position`, `velocity`.
+Exported state interfaces per `<sensor>`: `position`, `velocity`. Exported command interfaces: `chest_led/r`, `chest_led/g`, `chest_led/b` (0-255) and `chest_led/estop` (0/1).
+
+### ChestLedController
+
+[`chest_led_controller.hpp`](include/bender_hardware_interfaces/chest_led_controller.hpp) / [`chest_led_controller.cpp`](src/chest_led_controller.cpp)
+
+A controller that claims the `chest_led/*` command interfaces. The color comes from `~/color` (`std_msgs/UInt8MultiArray`, `data = [r, g, b]`) and the e-stop is read directly from the `estop/pressed` state interface exported by `PioneerInterface`, so it does not depend on any topic. The Pico gives the e-stop priority over the color (solid red). If the e-stop interface cannot be read it is assumed pressed.
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `led_name` | `chest_led` | Name of the `<gpio>` in the URDF. |
+| `estop_interface` | `estop/pressed` | E-stop state interface. Set to `""` when running without the base. |
+| `default_color` | `[0, 0, 0]` | Color used until something is published on `~/color`. |
+
+```bash
+ros2 run controller_manager spawner chest_led_controller
+ros2 topic pub --once /chest_led_controller/color std_msgs/msg/UInt8MultiArray "{data: [0, 120, 255]}"
+```
 
 ### PioneerInterface
 

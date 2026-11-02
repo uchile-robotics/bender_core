@@ -32,9 +32,20 @@
     estop_broadcaster:
       type: bender_hardware_interfaces/EstopBroadcaster
 
+    chest_led_controller:
+      type: bender_hardware_interfaces/ChestLedController
+
 /**/estop_broadcaster:
   ros__parameters:
     interface_name: estop/pressed
+
+/**/chest_led_controller:
+  ros__parameters:
+    led_name: chest_led
+    # Lo exporta el Pioneer. Sin base (use_base:=false) bender_hardware.launch.py lo
+    # sobrescribe con "" al lanzar el controlador, así que aquí se deja fijo.
+    estop_interface: estop/pressed
+    default_color: [0, 0, 0]
 
 /**/joint_state_broadcaster:
   ros__parameters:

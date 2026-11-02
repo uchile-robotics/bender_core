@@ -1,7 +1,10 @@
 #include "bender_hardware_interfaces/encoder_interface.hpp"
 
+#include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <cerrno>
+#include <cstring>
 #include <iomanip>
 #include <limits>
 #include <memory>
@@ -18,10 +21,17 @@
 
 namespace bender_hardware_interfaces {
 
+namespace {
+// Convierte un comando double a un canal 0-255 (con saturación).
+int to_channel(double v) {
+  return static_cast<int>(std::lround(std::clamp(v, 0.0, 255.0)));
+}
+}  // namespace
+
 hardware_interface::CallbackReturn EncoderInterface::on_init(
     const hardware_interface::HardwareComponentInterfaceParams &params) {
 
-  if (hardware_interface::SensorInterface::on_init(params) !=
+  if (hardware_interface::SystemInterface::on_init(params) !=
       hardware_interface::CallbackReturn::SUCCESS) {
     return hardware_interface::CallbackReturn::ERROR;
   }
@@ -38,9 +48,40 @@ hardware_interface::CallbackReturn EncoderInterface::on_init(
     baud_rate_ = 115200;
   }
 
+  if (info_.hardware_parameters.find("led_resend_period") != info_.hardware_parameters.end()) {
+    led_resend_period_s_ = std::stod(info_.hardware_parameters["led_resend_period"]);
+  }
+
   if (info_.sensors.size() != 2) {
     RCLCPP_ERROR(get_logger(), "Se esperaban 2 sensores en el URDF (izq y der), se detectaron: %zu", info_.sensors.size());
     return hardware_interface::CallbackReturn::ERROR;
+  }
+
+  // ---- Luz del pecho: <gpio name="chest_led"> con r, g, b, estop
+  for (const auto & gpio : info_.gpios) {
+    if (gpio.name != led_gpio_name_) {
+      continue;
+    }
+    for (const char * name : {"r", "g", "b", "estop"}) {
+      const bool found = std::any_of(
+        gpio.command_interfaces.begin(), gpio.command_interfaces.end(),
+        [name](const hardware_interface::InterfaceInfo & ci) { return ci.name == name; });
+      if (!found) {
+        RCLCPP_ERROR(get_logger(),
+          "El <gpio name=\"%s\"> debe tener la command_interface \"%s\"",
+          led_gpio_name_.c_str(), name);
+        return hardware_interface::CallbackReturn::ERROR;
+      }
+    }
+    has_led_ = true;
+  }
+
+  if (has_led_) {
+    RCLCPP_INFO(get_logger(), "Luz del pecho habilitada (gpio '%s')", led_gpio_name_.c_str());
+  } else {
+    RCLCPP_WARN(get_logger(),
+      "No hay <gpio name=\"%s\"> en el URDF: solo se leerán los encoders",
+      led_gpio_name_.c_str());
   }
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -65,6 +106,21 @@ std::vector<hardware_interface::StateInterface> EncoderInterface::export_state_i
   return state_interfaces;
 }
 
+std::vector<hardware_interface::CommandInterface> EncoderInterface::export_command_interfaces() {
+  std::vector<hardware_interface::CommandInterface> command_interfaces;
+  if (!has_led_) {
+    return command_interfaces;
+  }
+
+  // Quedan expuestas como chest_led/r, chest_led/g, chest_led/b, chest_led/estop
+  command_interfaces.emplace_back(led_gpio_name_, "r", &led_cmd_r_);
+  command_interfaces.emplace_back(led_gpio_name_, "g", &led_cmd_g_);
+  command_interfaces.emplace_back(led_gpio_name_, "b", &led_cmd_b_);
+  command_interfaces.emplace_back(led_gpio_name_, "estop", &led_cmd_estop_);
+
+  return command_interfaces;
+}
+
 hardware_interface::CallbackReturn EncoderInterface::on_activate(
     const rclcpp_lifecycle::State & /*previous_state*/) {
 
@@ -80,6 +136,7 @@ hardware_interface::CallbackReturn EncoderInterface::on_activate(
   if (tcgetattr(serial_fd_, &tty) != 0) {
     RCLCPP_ERROR(get_logger(), "Error al obtener atributos del puerto serial");
     close(serial_fd_);
+    serial_fd_ = -1;
     return hardware_interface::CallbackReturn::ERROR;
   }
 
@@ -92,6 +149,8 @@ hardware_interface::CallbackReturn EncoderInterface::on_activate(
 
   tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;
   tty.c_iflag &= ~IGNBRK;
+  // Sin control de flujo por software ni traducción de CR/LF en la entrada
+  tty.c_iflag &= ~(IXON | IXOFF | IXANY | ICRNL | INLCR | IGNCR);
   tty.c_lflag = 0;
   tty.c_oflag = 0;
   tty.c_cc[VMIN]  = 0;
@@ -106,10 +165,14 @@ hardware_interface::CallbackReturn EncoderInterface::on_activate(
   if (tcsetattr(serial_fd_, TCSANOW, &tty) != 0) {
     RCLCPP_ERROR(get_logger(), "Error al aplicar la configuración termios.");
     close(serial_fd_);
+    serial_fd_ = -1;
     return hardware_interface::CallbackReturn::ERROR;
   }
 
   tcflush(serial_fd_, TCIOFLUSH);
+  rx_buffer_.clear();
+  last_led_line_.clear();
+  time_since_led_tx_ = 0.0;
   RCLCPP_INFO(get_logger(), "Puerto serial inicializado con éxito.");
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -135,7 +198,6 @@ hardware_interface::return_type EncoderInterface::read(
 
   char buf[256]; // Búfer de lectura en memoria
   int bytes_leidos;
-  static std::string buffer_acumulador = "";
 
   // 1. Leer todo lo disponible en el puerto de una sola vez
   while ((bytes_leidos = ::read(serial_fd_, buf, sizeof(buf))) > 0) {
@@ -145,8 +207,8 @@ hardware_interface::return_type EncoderInterface::read(
       char c = buf[i];
 
       if (c == '\n') {
-        std::string ultima_linea = buffer_acumulador;
-        buffer_acumulador.clear();
+        std::string ultima_linea = rx_buffer_;
+        rx_buffer_.clear();
 
         if (!ultima_linea.empty()) {
           try {
@@ -174,14 +236,57 @@ hardware_interface::return_type EncoderInterface::read(
           }
         }
       } else if (c != '\r') {
-        buffer_acumulador += c;
+        rx_buffer_ += c;
       }
 
       // Evitar desbordamiento de memoria por ruido en el serial
-      if (buffer_acumulador.length() > 500) {
-        buffer_acumulador.clear();
+      if (rx_buffer_.length() > 500) {
+        rx_buffer_.clear();
       }
     }
+  }
+
+  return hardware_interface::return_type::OK;
+}
+
+hardware_interface::return_type EncoderInterface::write(
+    const rclcpp::Time & /*time*/, const rclcpp::Duration & period) {
+
+  if (!has_led_ || serial_fd_ < 0) {
+    return hardware_interface::return_type::OK;
+  }
+
+  // Si ningún controlador ha mandado comandos todavía (NaN) no se envía nada:
+  // la Pico detecta el silencio y deja la luz en rojo parpadeando.
+  if (std::isnan(led_cmd_r_) || std::isnan(led_cmd_g_) ||
+      std::isnan(led_cmd_b_) || std::isnan(led_cmd_estop_)) {
+    return hardware_interface::return_type::OK;
+  }
+
+  // Formato que espera la Pico (parse_line en main.cpp): "L,<estop>,<r>,<g>,<b>\n"
+  char line[32];
+  const int len = std::snprintf(line, sizeof(line), "L,%d,%d,%d,%d\n",
+    led_cmd_estop_ > 0.5 ? 1 : 0,
+    to_channel(led_cmd_r_), to_channel(led_cmd_g_), to_channel(led_cmd_b_));
+  if (len <= 0 || len >= static_cast<int>(sizeof(line))) {
+    return hardware_interface::return_type::OK;
+  }
+
+  time_since_led_tx_ += period.seconds();
+  const bool changed = (last_led_line_ != line);
+  if (!changed && time_since_led_tx_ < led_resend_period_s_) {
+    return hardware_interface::return_type::OK;
+  }
+
+  const ssize_t written = ::write(serial_fd_, line, static_cast<size_t>(len));
+  if (written == len) {
+    last_led_line_ = line;
+    time_since_led_tx_ = 0.0;
+  } else {
+    // No es fatal: los encoders siguen funcionando y se reintenta el próximo ciclo.
+    RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 2000,
+      "No se pudo escribir la luz del pecho en %s (%zd/%d bytes): %s",
+      serial_device_.c_str(), written, len, written < 0 ? std::strerror(errno) : "escritura parcial");
   }
 
   return hardware_interface::return_type::OK;
@@ -192,4 +297,4 @@ hardware_interface::return_type EncoderInterface::read(
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(bender_hardware_interfaces::EncoderInterface,
-                       hardware_interface::SensorInterface)
+                       hardware_interface::SystemInterface)

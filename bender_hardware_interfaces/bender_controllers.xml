@@ -6,4 +6,11 @@
       Publishes the emergency stop state interface as a std_msgs/Bool topic
     </description>
 	</class>
+	<class name="bender_hardware_interfaces/ChestLedController"
+         type="bender_hardware_interfaces::ChestLedController"
+         base_class_type="controller_interface::ControllerInterface">
+		<description>
+      Drives the chest light: color from ~/color (std_msgs/UInt8MultiArray [r,g,b]) and e-stop from the estop/pressed state interface
+    </description>
+	</class>
 </library>

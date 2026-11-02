@@ -32,6 +32,7 @@ add_library(${PROJECT_NAME} SHARED
   src/encoder_interface.cpp
   src/pioneer_interface.cpp
   src/estop_broadcaster.cpp
+  src/chest_led_controller.cpp
 )
 
 # 3. Vincular dependencias a la librería
