@@ -68,6 +68,9 @@
 			<command_interface name="estop" />
 		</gpio>
 	</ros2_control>
+
+	<!-- Brazos, grippers y cabeza; use_dynamixel:=false deja solo los hombros -->
+	<xacro:if value="$(arg use_dynamixel)">
 	<ros2_control name="DynamixelChainRight" type="system" is_async="true">
         <hardware>
             <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
@@ -438,6 +441,7 @@
 		</gpio>
 	</ros2_control>
 	</xacro:if>
+	</xacro:if>
 
 	<xacro:if value="$(arg use_base)">
 	<ros2_control name="Pioneer" type="system">
@@ -450,10 +454,12 @@
         </hardware>
         <joint name="wrl_to_base_link">
             <command_interface name="velocity"/>
+            <state_interface name="position"/>
             <state_interface name="velocity"/>
         </joint>
         <joint name="wrr_to_base_link">
             <command_interface name="velocity"/>
+            <state_interface name="position"/>
             <state_interface name="velocity"/>
         </joint>
         <sensor name="estop">

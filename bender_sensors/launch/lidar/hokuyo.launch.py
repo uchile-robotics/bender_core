@@ -34,7 +34,6 @@ def generate_launch_description():
         get_package_share_directory('bender_sensors'),
         'params',
         'lidar',
-        'hokuyo',
         'hokuyo.yaml'
     )
 
@@ -88,7 +87,7 @@ def generate_launch_description():
     # About parameters
     # auto_start: Automatically transition to Active state when starting (default: true)
     # node_name: Node name (default: "urg_node2")
-    # scan_topic_name: Topic name (default: "scan") *Multi-echo not supported*    
+    # scan_topic_name: Topic name (default: "scan") *Multi-echo not supported*
     return LaunchDescription([
     DeclareLaunchArgument('auto_start', default_value='true'),
     DeclareLaunchArgument('node_name', default_value='urg_node2'),
@@ -97,4 +96,3 @@ def generate_launch_description():
     urg_node2_node_configure_event_handler,
     urg_node2_node_activate_event_handler,
 ])
-

@@ -75,6 +75,13 @@ hardware_interface::CallbackReturn PioneerInterface::on_init(
 std::vector<hardware_interface::StateInterface> PioneerInterface::export_state_interfaces() {
     std::vector<hardware_interface::StateInterface> state_interfaces;
 
+    // Sin posición, joint_state_broadcaster publica NaN y el TF de las ruedas queda inválido
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+        info_.joints[0].name, hardware_interface::HW_IF_POSITION, &left_wheel_pos_));
+
+    state_interfaces.emplace_back(hardware_interface::StateInterface(
+        info_.joints[1].name, hardware_interface::HW_IF_POSITION, &right_wheel_pos_));
+
     state_interfaces.emplace_back(hardware_interface::StateInterface(
         info_.joints[0].name, hardware_interface::HW_IF_VELOCITY, &left_wheel_vel_));
 
@@ -162,7 +169,7 @@ PioneerInterface::on_deactivate(const rclcpp_lifecycle::State& /*previous_state*
 
 hardware_interface::return_type
 PioneerInterface::read(const rclcpp::Time& /*time*/,
-                       const rclcpp::Duration& /*period*/) {
+                       const rclcpp::Duration& period) {
 
     robot_->lock();
     double aria_v = robot_->getVel();
@@ -173,6 +180,10 @@ PioneerInterface::read(const rclcpp::Time& /*time*/,
     std::array<double, 2> velocities = this->inverse_kinematics(aria_v, aria_w);
     right_wheel_vel_ = velocities[0] / wheel_radius_;
     left_wheel_vel_ = velocities[1] / wheel_radius_;
+
+    // Posición estimada integrando la velocidad (el Pioneer no entrega encoders por rueda)
+    right_wheel_pos_ += right_wheel_vel_ * period.seconds();
+    left_wheel_pos_ += left_wheel_vel_ * period.seconds();
 
     return hardware_interface::return_type::OK;
 }
