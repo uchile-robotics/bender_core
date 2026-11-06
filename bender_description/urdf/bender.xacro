@@ -261,46 +261,6 @@
       <mass value="3.4435410806483597"/>
       <inertia ixx="0.011996" iyy="0.015757" izz="0.017434" ixy="0.0" iyz="-0.0" ixz="-0.000256"/>
     </inertial>
-    <visual>
-      <origin xyz="-0.007987 0.007366 -1.331" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://$(find bender_description)/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="head"/>
-    </visual>
-    <!-- Ojo izquierdo -->
-    <visual>
-      <origin xyz="0.07 -0.03 0.02982" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
-      <geometry>
-        <cylinder radius="0.045" length="0.001"/> <!-- radio 4mm, grosor 1mm -->
-      </geometry>
-      <material name="light_blue"/>
-    </visual>
-
-    <!-- Ojo derecho -->
-    <visual>
-      <origin xyz="0.07 0.03 0.02982" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
-      <geometry>
-        <cylinder radius="0.045" length="0.001"/>
-      </geometry>
-      <material name="light_blue"/>
-    </visual>
-
-    <!-- Boca -->
-    <visual>
-      <origin xyz="0.07 0 -0.03482" rpy="0 0 0"/> <!-- rotado para que sea un disco plano -->
-      <geometry>
-        <box size="0.01 0.08 0.02"/>
-      </geometry>
-      <material name="casi_blue"/>
-    </visual>
-
-    <collision>
-      <origin xyz="-0.007987 0.037366 -1.31382" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://$(find bender_description)/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
   </link>
 
   <link name="g1r_1">
@@ -622,6 +582,47 @@
       <mass value="0.001"/>
       <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0.0" iyz="0.0" ixz="0.0"/>
     </inertial>
+
+    <visual>
+      <origin xyz="-0.007987 0.007366 -1.331" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="head"/>
+    </visual>
+    <!-- Ojo izquierdo -->
+    <visual>
+      <origin xyz="0.07 -0.03 0.02982" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
+      <geometry>
+        <cylinder radius="0.045" length="0.001"/> <!-- radio 4mm, grosor 1mm -->
+      </geometry>
+      <material name="light_blue"/>
+    </visual>
+
+    <!-- Ojo derecho -->
+    <visual>
+      <origin xyz="0.07 0.03 0.02982" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
+      <geometry>
+        <cylinder radius="0.045" length="0.001"/>
+      </geometry>
+      <material name="light_blue"/>
+    </visual>
+
+    <!-- Boca -->
+    <visual>
+      <origin xyz="0.07 0 -0.03482" rpy="0 0 0"/> <!-- rotado para que sea un disco plano -->
+      <geometry>
+        <box size="0.01 0.08 0.02"/>
+      </geometry>
+      <material name="casi_blue"/>
+    </visual>
+
+    <collision>
+      <origin xyz="-0.007987 0.037366 -1.31382" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
   </link>
   
   <joint name="l2l_to_l1l" type="revolute">
