@@ -25,9 +25,9 @@
   <xacro:rgbd_camera
       prefix=""
       camera_name="camera"
-      parent='l2h_1'
-      xyz_offset="0.0435 0.03 0.180"
-      rpy_offset="0 0.2 0"/>
+      parent='l3h_1'
+      xyz_offset="0.075 0 0.089"
+      rpy_offset="0 0.698132 0"/>
 
   <link name="base_link">
     <visual>
@@ -261,46 +261,6 @@
       <mass value="3.4435410806483597"/>
       <inertia ixx="0.011996" iyy="0.015757" izz="0.017434" ixy="0.0" iyz="-0.0" ixz="-0.000256"/>
     </inertial>
-    <visual>
-      <origin xyz="-0.007987 0.037366 -1.28382" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://$(find bender_description)/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="head"/>
-    </visual>
-    <!-- Ojo izquierdo -->
-    <visual>
-      <origin xyz="0.07 -0.00 0.055" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
-      <geometry>
-        <cylinder radius="0.045" length="0.001"/> <!-- radio 4mm, grosor 1mm -->
-      </geometry>
-      <material name="light_blue"/>
-    </visual>
-
-    <!-- Ojo derecho -->
-    <visual>
-      <origin xyz="0.07 0.06 0.055" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
-      <geometry>
-        <cylinder radius="0.045" length="0.001"/>
-      </geometry>
-      <material name="light_blue"/>
-    </visual>
-
-    <!-- Boca -->
-    <visual>
-      <origin xyz="0.07 0.03 0" rpy="0 0 0"/> <!-- rotado para que sea un disco plano -->
-      <geometry>
-        <box size="0.01 0.08 0.02"/>
-      </geometry>
-      <material name="casi_blue"/>
-    </visual>
-
-    <collision>
-      <origin xyz="-0.007987 0.037366 -1.28382" rpy="0 0 0"/>
-      <geometry>
-        <mesh filename="file://$(find bender_description)/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
   </link>
 
   <link name="g1r_1">
@@ -602,14 +562,14 @@
       <inertia ixx="0.000113" iyy="0.000108" izz="5.4e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
     </inertial>
     <visual>
-      <origin xyz="-0.007987 0.007366 -1.21382" rpy="0 0 0"/>
+      <origin xyz="-0.007987 0.007366 -1.22382" rpy="0 0 0"/>
       <geometry>
         <mesh filename="file://$(find bender_description)/meshes/l1h_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="grey"/>
     </visual>
     <collision>
-      <origin xyz="-0.007987 0.007366 -1.21382" rpy="0 0 0"/>
+      <origin xyz="-0.007987 0.007366 -1.22382" rpy="0 0 0"/>
       <geometry>
         <mesh filename="file://$(find bender_description)/meshes/l1h_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -622,7 +582,49 @@
       <mass value="0.001"/>
       <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0.0" iyz="0.0" ixz="0.0"/>
     </inertial>
+
+    <visual>
+      <origin xyz="-0.007987 0.007366 -1.331" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="head"/>
+    </visual>
+    <!-- Ojo izquierdo -->
+    <visual>
+      <origin xyz="0.07 -0.03 0.02982" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
+      <geometry>
+        <cylinder radius="0.045" length="0.001"/> <!-- radio 4mm, grosor 1mm -->
+      </geometry>
+      <material name="light_blue"/>
+    </visual>
+
+    <!-- Ojo derecho -->
+    <visual>
+      <origin xyz="0.07 0.03 0.02982" rpy="1.5708 1.5708 1.5708"/> <!-- rotado para que sea un disco plano -->
+      <geometry>
+        <cylinder radius="0.045" length="0.001"/>
+      </geometry>
+      <material name="light_blue"/>
+    </visual>
+
+    <!-- Boca -->
+    <visual>
+      <origin xyz="0.07 0 -0.03482" rpy="0 0 0"/> <!-- rotado para que sea un disco plano -->
+      <geometry>
+        <box size="0.01 0.08 0.02"/>
+      </geometry>
+      <material name="casi_blue"/>
+    </visual>
+
+    <collision>
+      <origin xyz="-0.007987 0.037366 -1.31382" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find bender_description)/meshes/l2h_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
   </link>
+  
   <joint name="l2l_to_l1l" type="revolute">
     <origin xyz="0.02775 0.0345 -0.018" rpy="0 0 0"/>
     <parent link="l1l_1"/>
@@ -637,6 +639,14 @@
     <child link="l3l_1"/>
     <axis xyz="0.0 -0.0 1.0"/>
     <limit upper="1.148" lower="-1.027" effort="100.0" velocity="100.0"/>
+  </joint>
+
+  <!-- Cámara del ojo izquierdo -->
+  <link name="camera_eye_link"/>
+  <joint name="camera_eye_joint" type="fixed">
+    <parent link="l3h_1"/>
+    <child link="camera_eye_link"/>
+    <origin xyz="0.075 0.041 0.021" rpy="-1.57079632679 0 -1.57079632679"/>
   </joint>
 
   <joint name="l4l_to_l3l" type="revolute">
@@ -705,16 +715,16 @@
 
   <!-- head pitch joint -->
   <joint name="l2h_to_l1h" type="revolute">
-    <origin rpy="0 0 0" xyz="0.0 -0.03 0.07"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.105"/>
     <parent link="l1h_1"/>
     <child link="l2h_1"/>
     <axis xyz="-0.0 1.0 0.0"/>
     <limit effort="50" lower="-0.726" upper="0.625" velocity="50"/>
   </joint>
 
-  <joint name="l3h_to_l1h" type="revolute">
-    <origin rpy="0 0 0" xyz="0.0 -0.03 0.07"/>
-    <parent link="l1h_1"/>
+  <joint name="l3h_to_l2h" type="revolute">
+    <origin rpy="0 0 0" xyz="0.0 0 0"/>
+    <parent link="l2h_1"/>
     <child link="l3h_1"/>
     <axis xyz="1.0 0.0 0.0"/>
     <limit effort="50" lower="-0.405" upper="0.458" velocity="50"/>

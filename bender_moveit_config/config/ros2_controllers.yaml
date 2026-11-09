@@ -70,7 +70,7 @@
     joints:
       - l1h_to_base_link
       - l2h_to_l1h
-      - l3h_to_l1h
+      - l3h_to_l2h
     command_interfaces: [position]
     state_interfaces: [position, velocity]
 
