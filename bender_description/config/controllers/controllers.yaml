@@ -161,7 +161,7 @@
     wheel_separation: 0.397
     wheel_radius: 0.1
 
-    wheel_separation_multiplier: 1.0
+    wheel_separation_multiplier: 1.24
     left_wheel_radius_multiplier: 1.0
     right_wheel_radius_multiplier: 1.0
 

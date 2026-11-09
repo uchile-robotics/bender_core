@@ -33,6 +33,7 @@
 	</xacro:macro>
 
 	<xacro:if value="$(arg use_arms)">
+	<xacro:if value="$(arg use_shoulders)">
 	<xacro:odrive_ros2_control
     name="Odrive"
     serial_number="336B33573235"
@@ -68,9 +69,10 @@
 			<command_interface name="estop" />
 		</gpio>
 	</ros2_control>
+	</xacro:if>
 
-	<!-- Brazos, grippers y cabeza; use_dynamixel:=false deja solo los hombros -->
 	<xacro:if value="$(arg use_dynamixel)">
+	<xacro:if value="$(arg use_dxl_right)">
 	<ros2_control name="DynamixelChainRight" type="system" is_async="true">
         <hardware>
             <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
@@ -233,6 +235,7 @@
 			<param name="Return Delay Time">5</param>
 		</gpio>
 	</ros2_control>
+	</xacro:if>
 	<ros2_control name="DynamixelChainLeft" type="system" is_async="true">
         <hardware>
             <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
@@ -421,8 +424,8 @@
 			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -1.098335735; Goal Position, 0.005061455, rad, unsigned, -1.098335735</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">32</param>
-			<param name="CCW Compliance Slope">32</param>
+			<param name="CW Compliance Slope">254</param>
+			<param name="CCW Compliance Slope">254</param>
 			<param name="Return Delay Time">5</param>
 		</gpio>
 		<gpio name="motor_l2h_2">
@@ -435,8 +438,8 @@
 			<param name="[unit info]">Present Position, 0.005061455, rad, unsigned, -3.831521435; Goal Position, 0.005061455, rad, unsigned, -3.831521435</param>
 			<param name="CW Compliance Margin">1</param>
 			<param name="CCW Compliance Margin">1</param>
-			<param name="CW Compliance Slope">32</param>
-			<param name="CCW Compliance Slope">32</param>
+			<param name="CW Compliance Slope">254</param>
+			<param name="CCW Compliance Slope">254</param>
 			<param name="Return Delay Time">5</param>
 		</gpio>
 	</ros2_control>
