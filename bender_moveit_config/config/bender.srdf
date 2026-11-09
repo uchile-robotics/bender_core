@@ -21,7 +21,7 @@
     <group name="head">
         <joint name="l1h_to_base_link"/>
         <joint name="l2h_to_l1h"/>
-        <joint name="l3h_to_l1h"/>
+        <joint name="l3h_to_l2h"/> <!-- l3h_to_l1h -->
     </group>
     <group name="right_gripper">
         <joint name="g1r_to_l6r"/>

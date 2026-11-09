@@ -9,8 +9,10 @@ Panels:
         - /PointCloud22/Topic1
         - /TF1/Frames1
         - /Path1
+        - /Map2
+        - /Map3
       Splitter Ratio: 0.5
-    Tree Height: 310
+    Tree Height: 293
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -602,37 +604,9 @@ Visualization Manager:
           Value: false
         g1r_1:
           Value: false
-        g2ra_1:
-          Value: false
-        g2rb_1:
-          Value: false
         gripper_l_base:
           Value: false
-        l1h_1:
-          Value: false
-        l1l_1:
-          Value: false
-        l1r_1:
-          Value: false
         l2h_1:
-          Value: false
-        l2l_1:
-          Value: false
-        l2r_1:
-          Value: false
-        l3h_1:
-          Value: false
-        l3l_1:
-          Value: false
-        l3r_1:
-          Value: false
-        l4l_1:
-          Value: false
-        l4r_1:
-          Value: false
-        l5l_1:
-          Value: false
-        l5r_1:
           Value: false
         l6l_1:
           Value: false
@@ -642,8 +616,6 @@ Visualization Manager:
           Value: false
         map:
           Value: true
-        movil:
-          Value: false
         odom:
           Value: true
         wfl_1:
@@ -665,47 +637,6 @@ Visualization Manager:
             base_link:
               base_footprint:
                 {}
-              l1h_1:
-                l2h_1:
-                  camera_link:
-                    camera_color_frame:
-                      camera_color_optical_frame:
-                        {}
-                    camera_depth_frame:
-                      camera_depth_optical_frame:
-                        {}
-                    camera_infra1_frame:
-                      camera_infra1_optical_frame:
-                        {}
-                    camera_infra2_frame:
-                      camera_infra2_optical_frame:
-                        {}
-                l3h_1:
-                  {}
-              l1l_1:
-                l2l_1:
-                  l3l_1:
-                    l4l_1:
-                      l5l_1:
-                        l6l_1:
-                          gripper_l_base:
-                            fijo:
-                              {}
-                            movil:
-                              {}
-              l1r_1:
-                l2r_1:
-                  l3r_1:
-                    l4r_1:
-                      l5r_1:
-                        l6r_1:
-                          g1r_1:
-                            TCP:
-                              {}
-                            g2ra_1:
-                              {}
-                            g2rb_1:
-                              {}
               laser_1:
                 {}
               wfl_1:
@@ -848,7 +779,7 @@ Visualization Manager:
       Binary representation: false
       Binary threshold: 100
       Class: rviz_default_plugins/Map
-      Color Scheme: map
+      Color Scheme: costmap
       Draw Behind: false
       Enabled: true
       Name: Map
@@ -865,6 +796,29 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /local_costmap/costmap_updates
+      Use Timestamp: false
+      Value: true
+    - Alpha: 0.30000001192092896
+      Binary representation: false
+      Binary threshold: 100
+      Class: rviz_default_plugins/Map
+      Color Scheme: costmap
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /global_costmap/costmap
+      Update Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /global_costmap/costmap_updates
       Use Timestamp: false
       Value: true
   Enabled: true
@@ -885,6 +839,16 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: goal_pose
+    - Class: rviz_default_plugins/SetInitialPose
+      Covariance x: 0.25
+      Covariance y: 0.25
+      Covariance yaw: 0.06853891909122467
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: initialpose
   Transformation:
     Current:
       Class: rviz_default_plugins/TF
@@ -892,7 +856,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 7.05088996887207
+      Distance: 11.266807556152344
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -910,12 +874,12 @@ Visualization Manager:
       Pitch: 1.5697963237762451
       Target Frame: base_link
       Value: Orbit (rviz_default_plugins)
-      Yaw: 4.17024040222168
+      Yaw: 3.0602407455444336
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1043
+  Height: 1011
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -924,11 +888,11 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002b4000003bdfc0200000006fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000003b0000017a0000016900fffffffb000000100044006900730070006c00610079007301000001bb00000171000000c700fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730100000332000000c6000000a000fffffffb0000001c005400720061006e00730066006f0072006d006100740069006f006e000000034a000000ae0000007900ffffff000004c6000003bd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000002b40000039dfc0200000006fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003f00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000003b000001740000016900fffffffb000000100044006900730070006c00610079007301000001b500000160000000c700fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a00560069006500770073010000031b000000bd000000a000fffffffb0000001c005400720061006e00730066006f0072006d006100740069006f006e000000034a000000ae0000007900ffffff000004840000039d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Transformation:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1920
-  X: 1920
-  Y: 0
+  Width: 1854
+  X: 66
+  Y: 32
