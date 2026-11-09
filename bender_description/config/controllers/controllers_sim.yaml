@@ -1,0 +1,8 @@
+# Ajustes solo para Gazebo, cargados después de controllers.yaml (ver bender_sim.xacro).
+/**/pioneer_base_controller:
+  ros__parameters:
+    # En la simulación la base skid steer patina al girar: con el ancho físico, la
+    # odometría marcaba ~16% más giro del real (bag del 19-oct, comparado con la pose
+    # de Gazebo: 1361° odom vs 1173° reales). Un ancho efectivo mayor lo compensa.
+    # El robot real hay que calibrarlo aparte, en controllers.yaml.
+    wheel_separation_multiplier: 1.16
