@@ -1,3 +1,4 @@
+# Customized for the /bender namespace, do not regenerate with the MoveIt Setup Assistant
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
