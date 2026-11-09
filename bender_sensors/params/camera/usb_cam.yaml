@@ -4,13 +4,13 @@
     video_device: "/dev/usb_cam"
     framerate: 30.0
     io_method: "mmap"
-    frame_id: "usb_cam_link"
+    frame_id: "camera_eye_link"
     # YUYV soporta 640x480 a 30 fps; 1280x720 baja a 10 fps
     pixel_format: "yuyv2rgb"
     av_device_format: "YUV422P"
     image_width: 640
     image_height: 480
-    camera_name: "usb_cam"
+    camera_name: "camera_eye"
     brightness: -1
     contrast: -1
     saturation: -1
