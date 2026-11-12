@@ -72,7 +72,7 @@ class BatteryMonitor(Node):
 
     def _open_serial(self, port: str, baud_rate: int) -> Optional[serial.Serial]:
         try:
-            return serial.Serial(port, baud_rate, timeout=0.25, write_timeout=0.25)
+            return serial.Serial(port, baud_rate, timeout=1.0, write_timeout=1.0)
         except (serial.SerialException, OSError) as exc:
             self.get_logger().warning(f'Cannot open serial port {port}: {exc}')
             return None
