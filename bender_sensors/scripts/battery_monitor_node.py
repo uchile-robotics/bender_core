@@ -5,8 +5,8 @@ from typing import Optional, Tuple
 import rclpy
 import serial
 from rclpy.node import Node
+from sensor_msgs.msg import BatteryState
 from std_msgs.msg import Float32
-from uchile_msgs.msg import BatteryMonitor as BatteryMonitorMsg
 
 
 BMS_COMMAND = bytes((0xDD, 0xA5, 0x03, 0x00, 0xFF, 0xFD, 0x77))
@@ -57,10 +57,10 @@ class BatteryMonitor(Node):
         if publish_period <= 0.0:
             raise ValueError('publish_period must be greater than zero')
 
-        self.battery_pub = self.create_publisher(BatteryMonitorMsg, battery_topic, 10)
+        self.battery_pub = self.create_publisher(BatteryState, battery_topic, 10)
         self.power_pub = self.create_publisher(Float32, power_topic, 10)
         self.pico_sub = self.create_subscription(
-            BatteryMonitorMsg, battery_topic, self.forward_soc_to_pico, 10)
+            BatteryState, battery_topic, self.forward_soc_to_pico, 10)
 
         self.bms_serial: Optional[serial.Serial] = None
         self.pico_serial: Optional[serial.Serial] = None
@@ -101,7 +101,7 @@ class BatteryMonitor(Node):
 
         voltage, current = decoded
         soc_percent = estimate_soc(voltage, self.voltage_min, self.voltage_max)
-        battery = BatteryMonitorMsg()
+        battery = BatteryState()
         battery.header.stamp = self.get_clock().now().to_msg()
         battery.voltage = voltage
         battery.current = current
@@ -113,7 +113,7 @@ class BatteryMonitor(Node):
         power.data = voltage * current
         self.power_pub.publish(power)
 
-    def forward_soc_to_pico(self, battery: BatteryMonitorMsg) -> None:
+    def forward_soc_to_pico(self, battery: BatteryState) -> None:
         if not battery.present or not math.isfinite(battery.percentage):
             return
 
