@@ -32,8 +32,8 @@ class BatteryMonitor(Node):
     def __init__(self) -> None:
         super().__init__('battery_monitor')
 
-        self.declare_parameter('bms_port', '/dev/ttyUSB0')
-        self.declare_parameter('pico_port', '/dev/ttyACM0')
+        self.declare_parameter('bms_port', '/dev/bms')
+        self.declare_parameter('pico_port', '/dev/encoders')
         self.declare_parameter('bms_baud_rate', 9600)
         self.declare_parameter('pico_baud_rate', 115200)
         self.declare_parameter('publish_period', 1.0)
