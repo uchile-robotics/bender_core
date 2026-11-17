@@ -45,6 +45,7 @@
     # Lo exporta el Pioneer. Sin base (use_base:=false) bender_hardware.launch.py lo
     # sobrescribe con "" al lanzar el controlador, así que aquí se deja fijo.
     estop_interface: estop/pressed
+    battery_state_topic: /battery_state
     default_color: [0, 0, 0]
 
 /**/joint_state_broadcaster:

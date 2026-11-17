@@ -9,6 +9,7 @@
 #include "rclcpp/subscription.hpp"
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/state.hpp"
+#include "sensor_msgs/msg/battery_state.hpp"
 #include "std_msgs/msg/u_int8_multi_array.hpp"
 
 namespace bender_hardware_interfaces {
@@ -42,11 +43,16 @@ namespace bender_hardware_interfaces {
             std::string estop_interface_;
             uint32_t default_color_ = 0;
 
-            // Color pedido, empaquetado 0x00RRGGBB. Atómico porque lo escribe el
-            // callback del tópico y lo lee update() (hilo de tiempo real).
-            std::atomic<uint32_t> color_{0};
+            std::string battery_state_topic_;
+
+            // Topic callbacks write these values while update() reads them.
+            std::atomic<uint32_t> manual_color_{0};
+            std::atomic<uint32_t> battery_color_{0};
+            std::atomic<bool> manual_color_received_{false};
+            std::atomic<bool> battery_state_received_{false};
 
             rclcpp::Subscription<std_msgs::msg::UInt8MultiArray>::SharedPtr color_sub_;
+            rclcpp::Subscription<sensor_msgs::msg::BatteryState>::SharedPtr battery_sub_;
     };
 
 } // namespace bender_hardware_interfaces

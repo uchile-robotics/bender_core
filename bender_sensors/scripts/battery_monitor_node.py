@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import math
 from typing import Optional, Tuple
 
 import rclpy
@@ -33,9 +32,7 @@ class BatteryMonitor(Node):
         super().__init__('battery_monitor')
 
         self.declare_parameter('bms_port', '/dev/bms')
-        self.declare_parameter('pico_port', '/dev/encoders')
         self.declare_parameter('bms_baud_rate', 9600)
-        self.declare_parameter('pico_baud_rate', 115200)
         self.declare_parameter('publish_period', 1.0)
         self.declare_parameter('voltage_min', 42.0)
         self.declare_parameter('voltage_max', 54.6)
@@ -43,9 +40,7 @@ class BatteryMonitor(Node):
         self.declare_parameter('power_topic', '/battery_power')
 
         self.bms_port = self.get_parameter('bms_port').value
-        self.pico_port = self.get_parameter('pico_port').value
         self.bms_baud_rate = self.get_parameter('bms_baud_rate').value
-        self.pico_baud_rate = self.get_parameter('pico_baud_rate').value
         self.voltage_min = float(self.get_parameter('voltage_min').value)
         self.voltage_max = float(self.get_parameter('voltage_max').value)
         publish_period = float(self.get_parameter('publish_period').value)
@@ -59,16 +54,12 @@ class BatteryMonitor(Node):
 
         self.battery_pub = self.create_publisher(BatteryState, battery_topic, 10)
         self.power_pub = self.create_publisher(Float32, power_topic, 10)
-        self.pico_sub = self.create_subscription(
-            BatteryState, battery_topic, self.forward_soc_to_pico, 10)
 
         self.bms_serial: Optional[serial.Serial] = None
-        self.pico_serial: Optional[serial.Serial] = None
         self.timer = self.create_timer(publish_period, self.read_and_publish)
 
         self.get_logger().info(
-            f'Reading BMS on {self.bms_port}; publishing {battery_topic} and {power_topic}; '
-            f'forwarding SOC to Pico on {self.pico_port}')
+            f'Reading BMS on {self.bms_port}; publishing {battery_topic} and {power_topic}')
 
     def _open_serial(self, port: str, baud_rate: int) -> Optional[serial.Serial]:
         try:
@@ -113,29 +104,9 @@ class BatteryMonitor(Node):
         power.data = voltage * current
         self.power_pub.publish(power)
 
-    def forward_soc_to_pico(self, battery: BatteryState) -> None:
-        if not battery.present or not math.isfinite(battery.percentage):
-            return
-
-        if self.pico_serial is None:
-            self.pico_serial = self._open_serial(self.pico_port, self.pico_baud_rate)
-            if self.pico_serial is None:
-                return
-
-        soc_percent = max(0.0, min(100.0, battery.percentage * 100.0))
-        line = f'B,{soc_percent:.1f}\n'.encode('ascii')
-        try:
-            self.pico_serial.write(line)
-        except (serial.SerialException, OSError) as exc:
-            self.get_logger().error(f'Pico serial write failed: {exc}')
-            self.pico_serial.close()
-            self.pico_serial = None
-
     def destroy_node(self) -> bool:
         if self.bms_serial is not None and self.bms_serial.is_open:
             self.bms_serial.close()
-        if self.pico_serial is not None and self.pico_serial.is_open:
-            self.pico_serial.close()
         return super().destroy_node()
 
 

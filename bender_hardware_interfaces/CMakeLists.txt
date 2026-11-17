@@ -23,6 +23,7 @@ find_package(controller_interface REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 # find_package(aria REQUIRED)  --> system package, not configured?
 
@@ -46,6 +47,7 @@ target_link_libraries(${PROJECT_NAME}
   hardware_interface::hardware_interface
   pluginlib::pluginlib
   rclcpp::rclcpp
+  ${sensor_msgs_TARGETS}
   ${std_msgs_TARGETS}
   Aria
 )
@@ -67,7 +69,7 @@ install(DIRECTORY include/
 )
 
 # 6. Exportar dependencias aguas abajo
-ament_export_dependencies(controller_interface hardware_interface pluginlib rclcpp std_msgs)
+ament_export_dependencies(controller_interface hardware_interface pluginlib rclcpp sensor_msgs std_msgs)
 ament_export_targets(export_${PROJECT_NAME})
 
 if(BUILD_TESTING)
