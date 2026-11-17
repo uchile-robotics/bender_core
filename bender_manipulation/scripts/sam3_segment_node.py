@@ -1,52 +1,57 @@
 #!/usr/bin/env python3
-"""Nodo de segmentación SAM3: de imagen+prompt a nube de puntos del objeto.
+"""Nodo de segmentación SAM3: de nube+prompt a nube de puntos del objeto.
 
 sam3 no es un nodo ROS2, es un servidor Flask aparte (http://localhost:5001),
 por eso este nodo le habla por HTTP (requests) en vez de un cliente de
 servicio ROS2. El pipeline, disparado por el servicio 'segment_scene'
-(std_srvs/Trigger), sigue estos pasos:
+(uchile_srvs/Segmentation), sigue estos pasos:
 
   Inferencia(imagen, prompt):
       POST /segment/all a sam3 -> máscaras [u, v] (una por objeto) + scores.
+      La imagen es el último frame de color recibido; el prompt viene en la
+      request (si viene vacío se usa el parámetro 'prompt').
 
   Selección:
       Se toma la máscara de mayor score (sam3 ya las entrega ordenadas
       descendente). Si ese score < min_mask_score, falla la inferencia.
 
-  Objeto = máscara AND profundidad_valida
-  Escena = NOT máscara AND profundidad_valida   (exclusion_mascara = la
-      máscara del objeto seleccionado: la escena es todo lo demás con
-      profundidad válida)
+  Proyección:
+      Cada punto de cloud_in se lleva al frame de la cámara de color (TF) y
+      se proyecta a la imagen con los intrínsecos de camera_info.
 
-  Nubes:
-      object_cloud = deproyección 3D de los píxeles de Objeto
-      scene_cloud  = deproyección 3D de los píxeles de Escena (con subsampling opcional)
+  Objeto = puntos cuyo píxel cae dentro de la máscara
+  Escena = todos los demás puntos de cloud_in (incluye los que quedan fuera
+      de la imagen de color)
+
+  Nubes (en el mismo frame y stamp de cloud_in):
+      object_segment = puntos de Objeto
+      scene_segment  = puntos de Escena (con subsampling opcional)
 
   Validación:
-      Si object_cloud tiene menos de min_object_points, falla la inferencia.
+      Si object_segment tiene menos de min_object_points, falla la inferencia.
 """
 import base64
-import io
 
 import cv2
 import numpy as np
 import requests
 import rclpy
+import tf2_ros
+from rclpy.duration import Duration
 from rclpy.node import Node
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image, CameraInfo, PointCloud2
 from sensor_msgs_py import point_cloud2
 from std_msgs.msg import Header
-from std_srvs.srv import Trigger
+from uchile_srvs.srv import Segmentation
 
 
 class Sam3SegmentNode(Node):
     def __init__(self):
         super().__init__('sam3_segment_node')
 
-        self.declare_parameter('sam3_url', 'http://192.168.1.133:5001')
+        self.declare_parameter('sam3_url', 'http://tesistas-MS-7E12.local:5001')
         self.declare_parameter('color_topic', '/camera/color/image_raw')
-        self.declare_parameter('depth_topic', '/camera/aligned_depth_to_color/image_raw')
         self.declare_parameter('camera_info_topic', '/camera/color/camera_info')
         self.declare_parameter('prompt', 'soda can')
         self.declare_parameter('min_mask_score', 0.20)
@@ -58,16 +63,21 @@ class Sam3SegmentNode(Node):
 
         self.bridge = CvBridge()
         self.last_color = None
-        self.last_depth = None
         self.last_camera_info = None
 
+        # the listener spins in its own thread, so TF keeps arriving while the service callback runs
+        self.tf_buffer = tf2_ros.Buffer()
+        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self, spin_thread=True)
+
         self.create_subscription(Image, self.get_parameter('color_topic').value, self._color_cb, 10)
-        self.create_subscription(Image, self.get_parameter('depth_topic').value, self._depth_cb, 10)
         self.create_subscription(CameraInfo, self.get_parameter('camera_info_topic').value, self._camera_info_cb, 10)
 
+        # same clouds as the service response, published for RViz
         self.object_cloud_pub = self.create_publisher(PointCloud2, '/sam3/object_cloud', 10)
         self.scene_cloud_pub = self.create_publisher(PointCloud2, '/sam3/scene_cloud', 10)
-        self.create_service(Trigger, 'segment_scene', self._segment_scene_cb)
+        # color frame sent to sam3 with the selected mask drawn on top
+        self.debug_image_pub = self.create_publisher(Image, '/sam3/debug_image', 10)
+        self.create_service(Segmentation, 'segment_scene', self._segment_scene_cb)
 
         self.get_logger().info(
             f"sam3_segment_node listo. servicio 'segment_scene' -> "
@@ -76,9 +86,6 @@ class Sam3SegmentNode(Node):
 
     def _color_cb(self, msg: Image):
         self.last_color = msg
-
-    def _depth_cb(self, msg: Image):
-        self.last_depth = msg
 
     def _camera_info_cb(self, msg: CameraInfo):
         self.last_camera_info = msg
@@ -116,37 +123,96 @@ class Sam3SegmentNode(Node):
         return arr > 127
 
     # ------------------------------------------------------------------
-    # Objeto = máscara AND profundidad ; Escena = NOT máscara AND profundidad
+    # Objeto = puntos dentro de la máscara ; Escena = el resto de la nube
     # ------------------------------------------------------------------
+    def _to_camera_frame(self, points: np.ndarray, cloud_frame: str, camera_frame: str):
+        """Points (Nx3) expressed in the color camera frame, or None if TF is not available."""
+        if cloud_frame == camera_frame:
+            return points
+        try:
+            # latest transform: the robot is expected to be still while it segments
+            tf = self.tf_buffer.lookup_transform(
+                camera_frame, cloud_frame, rclpy.time.Time(), timeout=Duration(seconds=1.0))
+        except tf2_ros.TransformException as exc:
+            self.get_logger().error(f"No transform from '{cloud_frame}' to '{camera_frame}': {exc}")
+            return None
+
+        q, t = tf.transform.rotation, tf.transform.translation
+        rotation = np.array([
+            [1 - 2 * (q.y * q.y + q.z * q.z), 2 * (q.x * q.y - q.w * q.z), 2 * (q.x * q.z + q.w * q.y)],
+            [2 * (q.x * q.y + q.w * q.z), 1 - 2 * (q.x * q.x + q.z * q.z), 2 * (q.y * q.z - q.w * q.x)],
+            [2 * (q.x * q.z - q.w * q.y), 2 * (q.y * q.z + q.w * q.x), 1 - 2 * (q.x * q.x + q.y * q.y)],
+        ])
+        return points @ rotation.T + np.array([t.x, t.y, t.z])
+
     @staticmethod
-    def _deproject(pixel_mask: np.ndarray, depth_m: np.ndarray, K: np.ndarray) -> np.ndarray:
-        """Puntos 3D (Nx3, metros) de los píxeles marcados en pixel_mask,
-        vía el modelo pinhole con los intrínsecos K de camera_info."""
+    def _project(points_cam: np.ndarray, K: np.ndarray, shape):
+        """Pixel (u, v) of every 3D point via the pinhole model with the camera_info intrinsics K,
+        plus a flag for the points that land inside the image."""
         fx, fy, cx, cy = K[0], K[4], K[2], K[5]
-        ys, xs = np.where(pixel_mask)
-        z = depth_m[ys, xs]
-        x = (xs - cx) * z / fx
-        y = (ys - cy) * z / fy
-        return np.stack([x, y, z], axis=-1).astype(np.float32)
+        u = np.zeros(points_cam.shape[0], dtype=np.int64)
+        v = np.zeros(points_cam.shape[0], dtype=np.int64)
+        # points behind the camera have no pixel
+        in_front = points_cam[:, 2] > 0.0
+        x, y, z = points_cam[in_front].T
+        u[in_front] = np.round(fx * x / z + cx).astype(np.int64)
+        v[in_front] = np.round(fy * y / z + cy).astype(np.int64)
+        visible = in_front & (u >= 0) & (u < shape[1]) & (v >= 0) & (v < shape[0])
+        return u, v, visible
 
-    def _build_cloud(self, points: np.ndarray, frame_id: str) -> PointCloud2:
-        header = self.get_clock().now().to_msg()
-        h = Header(frame_id=frame_id, stamp=header)
-        return point_cloud2.create_cloud_xyz32(h, points.tolist())
+    @staticmethod
+    def _build_cloud(points: np.ndarray, header: Header) -> PointCloud2:
+        return point_cloud2.create_cloud_xyz32(header, points.tolist())
+
+    def _publish_debug_image(self, color_bgr: np.ndarray, mask, text: str, accepted: bool):
+        """Publishes the frame with the mask filled and outlined, green if it was accepted
+        and red if it was rejected, plus a text line with the result."""
+        image = color_bgr.copy()
+        color = (0, 200, 0) if accepted else (0, 0, 220)
+        if mask is not None:
+            overlay = image.copy()
+            overlay[mask] = color
+            image = cv2.addWeighted(overlay, 0.4, image, 0.6, 0.0)
+            contours, _ = cv2.findContours(
+                mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            cv2.drawContours(image, contours, -1, color, 2)
+        cv2.putText(image, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
+        msg = self.bridge.cv2_to_imgmsg(image, encoding='bgr8')
+        msg.header = self.last_color.header
+        self.debug_image_pub.publish(msg)
+
+    @staticmethod
+    def _fail(response: Segmentation.Response, message: str):
+        # the clouds of the response stay empty
+        response.success = False
+        response.message = message
+        return response
 
     # ------------------------------------------------------------------
-    def _segment_scene_cb(self, request: Trigger.Request, response: Trigger.Response):
-        if self.last_color is None or self.last_depth is None or self.last_camera_info is None:
-            response.success = False
-            response.message = f'faltan datos de cámara (color{self.last_color} \n/depth{self.last_depth}\n/camera_info{self.last_camera_info})'
-            return response
+    def _segment_scene_cb(self, request: Segmentation.Request, response: Segmentation.Response):
+        if self.last_color is None or self.last_camera_info is None:
+            return self._fail(response, 'faltan datos de cámara (color o camera_info)')
+
+        cloud_in = request.cloud_in
+        if cloud_in.width * cloud_in.height == 0:
+            return self._fail(response, 'cloud_in is empty')
+        try:
+            points = point_cloud2.read_points_numpy(cloud_in, field_names=('x', 'y', 'z'), skip_nans=True)
+        except (AssertionError, ValueError, KeyError) as exc:
+            return self._fail(response, f'cloud_in has no usable x, y, z fields: {exc}')
+        points = np.asarray(points, dtype=np.float32).reshape(-1, 3)
 
         color_bgr = self.bridge.imgmsg_to_cv2(self.last_color, desired_encoding='bgr8')
-        depth_raw = self.bridge.imgmsg_to_cv2(self.last_depth, desired_encoding='passthrough')
-        depth_m = depth_raw.astype(np.float32) / 1000.0  # realsense entrega 16UC1 en mm
         K = np.array(self.last_camera_info.k)
+        camera_frame = self.last_camera_info.header.frame_id
 
-        prompt = self.get_parameter('prompt').value
+        points_cam = self._to_camera_frame(points, cloud_in.header.frame_id, camera_frame)
+        if points_cam is None:
+            return self._fail(
+                response, f"no TF from '{cloud_in.header.frame_id}' to '{camera_frame}'")
+
+        # an empty prompt in the request falls back to the node parameter
+        prompt = request.prompt or self.get_parameter('prompt').value
         min_mask_score = self.get_parameter('min_mask_score').value
         min_object_points = self.get_parameter('min_object_points').value
         scene_subsample_factor = self.get_parameter('scene_subsample_factor').value
@@ -155,50 +221,50 @@ class Sam3SegmentNode(Node):
         try:
             objects = self._infer(color_bgr, prompt)
         except (requests.exceptions.RequestException, ValueError) as exc:
-            response.success = False
-            response.message = f'error llamando a sam3: {exc}'
-            return response
+            return self._fail(response, f'error llamando a sam3: {exc}')
 
         if not objects:
-            response.success = False
-            response.message = f'sin_agarre_alcanzable: sam3 no detectó objetos de clase {prompt}'
-            return response
+            self._publish_debug_image(color_bgr, None, f"'{prompt}': no detections", False)
+            return self._fail(
+                response, f'sin_agarre_alcanzable: sam3 no detectó objetos de clase {prompt}')
 
         # Selecciona máscara con score más alto (sam3 ya las entrega ordenadas)
         best = objects[0]
-        if best['score'] < min_mask_score:
-            response.success = False
-            response.message = (
-                f"score {best['score']:.3f} bajo min_mask_score={min_mask_score}, {prompt = }"
-            )
-            return response
+        mask = self._decode_mask(best['mask_png'], color_bgr.shape[:2])
+        # drawn before the checks, so a rejected mask can be seen too
+        accepted = best['score'] >= min_mask_score
+        self._publish_debug_image(
+            color_bgr, mask, f"'{prompt}' score={best['score']:.3f}", accepted)
+        if not accepted:
+            return self._fail(
+                response,
+                f"score {best['score']:.3f} bajo min_mask_score={min_mask_score}, {prompt = }")
 
-        mask = self._decode_mask(best['mask_png'], depth_m.shape)
-        depth_valid = np.isfinite(depth_m) & (depth_m > 0.0)
+        # Objeto = puntos cuyo píxel cae en la máscara ; Escena = todos los demás
+        u, v, visible = self._project(points_cam, K, mask.shape)
+        in_mask = np.zeros(points.shape[0], dtype=bool)
+        in_mask[visible] = mask[v[visible], u[visible]]
 
-        # Objeto = máscara AND profundidad ; exclusion_mascara = máscara del objeto
-        object_px = mask & depth_valid
-        scene_px = (~mask) & depth_valid
-
-        frame_id = self.last_depth.header.frame_id
-        object_points = self._deproject(object_px, depth_m, K)
-        scene_points = self._deproject(scene_px, depth_m, K)
+        # the output keeps the coordinates of cloud_in, the camera frame is only used to project
+        object_points = points[in_mask]
+        scene_points = points[~in_mask]
 
         # Validación: object_cloud con menos de min_object_points -> falla
         if object_points.shape[0] < min_object_points:
-            response.success = False
-            response.message = (
+            return self._fail(
+                response,
                 f"sin_agarre_alcanzable: object_cloud tiene {object_points.shape[0]} puntos "
-                f"(< {min_object_points})"
-            )
-            return response
+                f"(< {min_object_points})")
 
         # Subsampling de la nube de puntos de la escena
         if scene_subsample_factor > 1:
             scene_points = scene_points[::scene_subsample_factor]
 
-        self.object_cloud_pub.publish(self._build_cloud(object_points, frame_id))
-        self.scene_cloud_pub.publish(self._build_cloud(scene_points, frame_id))
+        # same frame and stamp as cloud_in, so the segments match the capture they come from
+        response.object_segment = self._build_cloud(object_points, cloud_in.header)
+        response.scene_segment = self._build_cloud(scene_points, cloud_in.header)
+        self.object_cloud_pub.publish(response.object_segment)
+        self.scene_cloud_pub.publish(response.scene_segment)
 
         response.success = True
         response.message = (

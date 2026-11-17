@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
@@ -64,23 +64,30 @@ def generate_launch_description():
     )
 
     # --- CAMARA REALSENSE ---
-    realsense_camera_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            PathJoinSubstitution([
-                FindPackageShare("realsense2_camera"),
-                "launch",
-                "rs_launch.py",
-            ])
-        ),
-        launch_arguments={
-            "camera_name": "camera",
-            "camera_namespace": "",
-            "align_depth.enable": "true",
-            "pointcloud.enable": "true",
-            "enable_color": "true",
-            "enable_depth": "true",
-            "initial_reset": "true",
-        }.items(),
+    # rs_launch.py warns about every launch argument it does not know, including the ones of
+    # this file, so the include gets only its own arguments (forwarding=False)
+    realsense_camera_launch = GroupAction(
+        forwarding=False,
+        actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    PathJoinSubstitution([
+                        FindPackageShare("realsense2_camera"),
+                        "launch",
+                        "rs_launch.py",
+                    ])
+                ),
+                launch_arguments={
+                    "camera_name": "camera",
+                    "camera_namespace": "",
+                    "align_depth.enable": "true",
+                    "pointcloud.enable": "true",
+                    "enable_color": "true",
+                    "enable_depth": "true",
+                    "initial_reset": "true",
+                }.items(),
+            ),
+        ],
     )
 
     # --- NODOS DE PERCEPCIÓN Y MANIPULACIÓN ---
@@ -105,10 +112,10 @@ def generate_launch_description():
         remappings=[("joint_states", "/bender/joint_states")],
     )
 
-    graspgen_pick_bridge_node = Node(
+    graspgen_node = Node(
         package=pkg_manipulation,
-        executable="graspgen_pick_bridge_node.py",
-        name="graspgen_pick_bridge_node",
+        executable="graspgen.py",
+        name="graspgen_node",
         output="screen",
         emulate_tty=True,
     )
@@ -119,7 +126,6 @@ def generate_launch_description():
         name="sam3_segment_node",
         output="screen",
         emulate_tty=True,
-        parameters=[{"prompt": "bottle"}],
     )
 
     return LaunchDescription([
@@ -133,8 +139,8 @@ def generate_launch_description():
         realsense_camera_launch,
         camera_time_bridge_node,
         sam3_segment_node,
+        graspgen_node,
         # Nodos de Agarre y Control
-        graspgen_pick_bridge_node,
         grasp_pick_node,
         # Instancia única de RViz
         moveit_rviz_launch,

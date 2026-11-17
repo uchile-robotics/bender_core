@@ -33,8 +33,9 @@ install(
     scripts/saludo_node.py
     scripts/camera_time_bridge_node.py
     scripts/grasp_pick_node.py
-    scripts/graspgen_pick_bridge_node.py
+    scripts/graspgen.py
     scripts/sam3_segment_node.py
+    scripts/segment_scene_tester.py
     scripts/pub_pose.py
   DESTINATION lib/${PROJECT_NAME}
 )
