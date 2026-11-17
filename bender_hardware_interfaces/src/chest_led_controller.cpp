@@ -13,7 +13,8 @@ controller_interface::CallbackReturn ChestLedController::on_init() {
     auto_declare<std::string>("led_name", "chest_led");
     // State interface de la parada de emergencia ("" = no usar e-stop, p.ej. sin base)
     auto_declare<std::string>("estop_interface", "estop/pressed");
-    // Color mientras nadie publique en ~/color: [r, g, b]
+    auto_declare<std::string>("battery_state_topic", "/battery_state");
+    // Color base antes de recibir un color manual o un estado de batería.
     auto_declare<std::vector<int64_t>>("default_color", {0, 0, 0});
     return controller_interface::CallbackReturn::SUCCESS;
 }
@@ -37,6 +38,7 @@ controller_interface::CallbackReturn
 ChestLedController::on_configure(const rclcpp_lifecycle::State& /*previous_state*/) {
     led_name_ = get_node()->get_parameter("led_name").as_string();
     estop_interface_ = get_node()->get_parameter("estop_interface").as_string();
+    battery_state_topic_ = get_node()->get_parameter("battery_state_topic").as_string();
 
     const auto dc = get_node()->get_parameter("default_color").as_integer_array();
     if (dc.size() != 3) {
@@ -45,7 +47,10 @@ ChestLedController::on_configure(const rclcpp_lifecycle::State& /*previous_state
     }
     auto ch = [](int64_t v) { return static_cast<uint8_t>(v < 0 ? 0 : (v > 255 ? 255 : v)); };
     default_color_ = pack(ch(dc[0]), ch(dc[1]), ch(dc[2]));
-    color_.store(default_color_);
+    manual_color_.store(default_color_);
+    battery_color_.store(default_color_);
+    manual_color_received_.store(false);
+    battery_state_received_.store(false);
 
     color_sub_ = get_node()->create_subscription<std_msgs::msg::UInt8MultiArray>(
         "~/color", rclcpp::SystemDefaultsQoS(),
@@ -55,11 +60,45 @@ ChestLedController::on_configure(const rclcpp_lifecycle::State& /*previous_state
                     "~/color espera exactamente 3 valores [r, g, b], llegaron %zu", msg->data.size());
                 return;
             }
-            color_.store(pack(msg->data[0], msg->data[1], msg->data[2]));
+            manual_color_.store(pack(msg->data[0], msg->data[1], msg->data[2]));
+            manual_color_received_.store(true);
         });
 
-    RCLCPP_INFO(get_node()->get_logger(), "Luz del pecho: '%s', e-stop: '%s'",
-        led_name_.c_str(), estop_interface_.empty() ? "(deshabilitado)" : estop_interface_.c_str());
+    battery_sub_ = get_node()->create_subscription<sensor_msgs::msg::BatteryState>(
+        battery_state_topic_, rclcpp::SystemDefaultsQoS(),
+        [this](const sensor_msgs::msg::BatteryState::SharedPtr msg) {
+            if (!msg->present || !std::isfinite(msg->percentage) ||
+                msg->percentage < 0.0f || msg->percentage > 1.0f) {
+                RCLCPP_WARN_THROTTLE(get_node()->get_logger(), *get_node()->get_clock(), 2000,
+                    "Ignorando estado de batería ausente o con porcentaje inválido");
+                return;
+            }
+
+            const float soc = msg->percentage * 100.0f;
+            uint8_t r = 0;
+            uint8_t g = 0;
+            uint8_t b = 0;
+            if (soc < 20.0f) {
+                r = 255;
+            } else if (soc < 50.0f) {
+                r = 255;
+                g = 128;
+            } else if (soc < 80.0f) {
+                r = 255;
+                g = 255;
+            } else {
+                g = 255;
+            }
+
+            battery_color_.store(pack(r, g, b));
+            battery_state_received_.store(true);
+        });
+
+    RCLCPP_INFO(get_node()->get_logger(),
+        "Luz del pecho: '%s', e-stop: '%s', batería: '%s' "
+        "(e-stop > color manual > batería)",
+        led_name_.c_str(), estop_interface_.empty() ? "(deshabilitado)" : estop_interface_.c_str(),
+        battery_state_topic_.c_str());
     return controller_interface::CallbackReturn::SUCCESS;
 }
 
@@ -77,10 +116,11 @@ ChestLedController::update(const rclcpp::Time& /*time*/, const rclcpp::Duration&
         estop = !value || std::isnan(*value) || *value > 0.5;
     }
 
-    const uint32_t c = color_.load();
-    (void)command_interfaces_[0].set_value(static_cast<double>((c >> 16) & 0xFF));
-    (void)command_interfaces_[1].set_value(static_cast<double>((c >> 8) & 0xFF));
-    (void)command_interfaces_[2].set_value(static_cast<double>(c & 0xFF));
+    const uint32_t c = manual_color_received_.load() ? manual_color_.load() :
+        (battery_state_received_.load() ? battery_color_.load() : default_color_);
+    (void)command_interfaces_[0].set_value(estop ? 255.0 : static_cast<double>((c >> 16) & 0xFF));
+    (void)command_interfaces_[1].set_value(estop ? 0.0 : static_cast<double>((c >> 8) & 0xFF));
+    (void)command_interfaces_[2].set_value(estop ? 0.0 : static_cast<double>(c & 0xFF));
     (void)command_interfaces_[3].set_value(estop ? 1.0 : 0.0);
 
     return controller_interface::return_type::OK;

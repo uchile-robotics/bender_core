@@ -25,12 +25,12 @@ install(DIRECTORY
 install(DIRECTORY
   params
   DESTINATION share/${PROJECT_NAME}/
-) 
+)
 
 install(PROGRAMS
   scripts/laser_filter_node.py
+  scripts/battery_monitor_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
-
 
 ament_package()

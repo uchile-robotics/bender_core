@@ -54,17 +54,39 @@ Exported state interfaces per `<sensor>`: `position`, `velocity`. Exported comma
 
 [`chest_led_controller.hpp`](include/bender_hardware_interfaces/chest_led_controller.hpp) / [`chest_led_controller.cpp`](src/chest_led_controller.cpp)
 
-A controller that claims the `chest_led/*` command interfaces. The color comes from `~/color` (`std_msgs/UInt8MultiArray`, `data = [r, g, b]`) and the e-stop is read directly from the `estop/pressed` state interface exported by `PioneerInterface`, so it does not depend on any topic. The Pico gives the e-stop priority over the color (solid red). If the e-stop interface cannot be read it is assumed pressed.
+A controller that claims the `chest_led/*` command interfaces. It reads the e-stop directly from the `estop/pressed` state interface exported by `PioneerInterface`; when pressed or unreadable, it commands solid red and asserts the e-stop command. Otherwise, a manual color from `~/color` (`std_msgs/UInt8MultiArray`, `data = [r, g, b]`) takes precedence over the battery indicator. If no manual color has been received since controller startup, the color is derived from `sensor_msgs/msg/BatteryState` on `/battery_state`: red below 20%, orange below 50%, yellow below 80%, and green otherwise. The percentage must be present and in the ROS range 0.0–1.0.
 
 | Parameter | Default | Description |
 | --- | --- | --- |
 | `led_name` | `chest_led` | Name of the `<gpio>` in the URDF. |
 | `estop_interface` | `estop/pressed` | E-stop state interface. Set to `""` when running without the base. |
-| `default_color` | `[0, 0, 0]` | Color used until something is published on `~/color`. |
+| `battery_state_topic` | `/battery_state` | `sensor_msgs/msg/BatteryState` topic with battery percentage. |
+| `default_color` | `[0, 0, 0]` | Color used until a battery state or manual color is received. |
 
 ```bash
 ros2 run controller_manager spawner chest_led_controller
 ros2 topic pub --once /chest_led_controller/color std_msgs/msg/UInt8MultiArray "{data: [0, 120, 255]}"
+```
+
+The battery indicator uses the `sensor_msgs/msg/BatteryState` percentage on
+`/battery_state` (0.0–1.0), which is also published by
+[`bender_sensors/battery_monitor_node.py`](../bender_sensors/scripts/battery_monitor_node.py).
+The manual `~/color` command remains available and, once used, stays as the
+selected color until the controller is restarted. The emergency stop always
+overrides both sources and forces red.
+
+To test the battery colors with the controller running and before publishing a
+manual color:
+
+```bash
+ros2 topic pub --once /battery_state sensor_msgs/msg/BatteryState \
+  "{percentage: 0.15, present: true}" # red
+ros2 topic pub --once /battery_state sensor_msgs/msg/BatteryState \
+  "{percentage: 0.35, present: true}" # orange
+ros2 topic pub --once /battery_state sensor_msgs/msg/BatteryState \
+  "{percentage: 0.65, present: true}" # yellow
+ros2 topic pub --once /battery_state sensor_msgs/msg/BatteryState \
+  "{percentage: 0.90, present: true}" # green
 ```
 
 ### PioneerInterface
