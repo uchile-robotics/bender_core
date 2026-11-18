@@ -75,6 +75,19 @@ The manual `~/color` command remains available and, once used, stays as the
 selected color until the controller is restarted. The emergency stop always
 overrides both sources and forces red.
 
+To run a standalone bridge that publishes RGB values to the controller's
+`~/color` topic:
+
+```bash
+ros2 run bender_hardware_interfaces battery_state_to_chest_led.py
+```
+
+By default, it subscribes to `/battery_state` and publishes
+`std_msgs/msg/UInt8MultiArray` (`data: [r, g, b]`) to
+`/bender/chest_led_controller/color`. Override `led_color_topic` if the
+controller uses a different namespace. The bridge ignores absent battery
+states and percentages outside 0.0–1.0.
+
 To test the battery colors with the controller running and before publishing a
 manual color:
 
