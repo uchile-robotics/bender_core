@@ -67,11 +67,6 @@ install(TARGETS ${PROJECT_NAME}
 install(DIRECTORY include/
   DESTINATION include
 )
-install(PROGRAMS
-  scripts/battery_state_to_chest_led.py
-  DESTINATION lib/${PROJECT_NAME}
-)
-
 # 6. Exportar dependencias aguas abajo
 ament_export_dependencies(controller_interface hardware_interface pluginlib rclcpp sensor_msgs std_msgs)
 ament_export_targets(export_${PROJECT_NAME})

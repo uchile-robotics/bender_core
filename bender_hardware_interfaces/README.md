@@ -54,7 +54,7 @@ Exported state interfaces per `<sensor>`: `position`, `velocity`. Exported comma
 
 [`chest_led_controller.hpp`](include/bender_hardware_interfaces/chest_led_controller.hpp) / [`chest_led_controller.cpp`](src/chest_led_controller.cpp)
 
-A controller that claims the `chest_led/*` command interfaces. It reads the e-stop directly from the `estop/pressed` state interface exported by `PioneerInterface`; when pressed or unreadable, it commands solid red and asserts the e-stop command. Otherwise, a manual color from `~/color` (`std_msgs/UInt8MultiArray`, `data = [r, g, b]`) takes precedence over the battery indicator. If no manual color has been received since controller startup, the color is derived from `sensor_msgs/msg/BatteryState` on `/battery_state`: red below 20%, orange below 50%, yellow below 80%, and green otherwise. The percentage must be present and in the ROS range 0.0–1.0.
+A controller that claims the `chest_led/*` command interfaces. It reads the e-stop directly from the `estop/pressed` state interface exported by `PioneerInterface`; when pressed or unreadable, it commands solid red and asserts the e-stop command. Otherwise, a manual color from `~/manual_color` (`std_msgs/UInt8MultiArray`, `data = [r, g, b]`) takes precedence over the battery indicator. For each valid `sensor_msgs/msg/BatteryState` received on `/battery_state`, it publishes the battery-derived RGB on `~/color`: red below 20%, orange below 50%, yellow below 80%, and green otherwise. The percentage must be present and in the ROS range 0.0–1.0.
 
 | Parameter | Default | Description |
 | --- | --- | --- |
@@ -65,31 +65,20 @@ A controller that claims the `chest_led/*` command interfaces. It reads the e-st
 
 ```bash
 ros2 run controller_manager spawner chest_led_controller
-ros2 topic pub --once /chest_led_controller/color std_msgs/msg/UInt8MultiArray "{data: [0, 120, 255]}"
+ros2 topic echo /bender/chest_led_controller/color
+ros2 topic pub --once /bender/chest_led_controller/manual_color std_msgs/msg/UInt8MultiArray "{data: [0, 120, 255]}"
 ```
 
 The battery indicator uses the `sensor_msgs/msg/BatteryState` percentage on
 `/battery_state` (0.0–1.0), which is also published by
 [`bender_sensors/battery_monitor_node.py`](../bender_sensors/scripts/battery_monitor_node.py).
-The manual `~/color` command remains available and, once used, stays as the
-selected color until the controller is restarted. The emergency stop always
-overrides both sources and forces red.
+The computed battery color is published on `~/color`. The manual `~/manual_color`
+command remains available and, once used, stays as the selected LED color until
+the controller is restarted. The emergency stop always overrides both sources
+and forces red.
 
-To run a standalone bridge that publishes RGB values to the controller's
-`~/color` topic:
-
-```bash
-ros2 run bender_hardware_interfaces battery_state_to_chest_led.py
-```
-
-By default, it subscribes to `/battery_state` and publishes
-`std_msgs/msg/UInt8MultiArray` (`data: [r, g, b]`) to
-`/bender/chest_led_controller/color`. Override `led_color_topic` if the
-controller uses a different namespace. The bridge ignores absent battery
-states and percentages outside 0.0–1.0.
-
-To test the battery colors with the controller running and before publishing a
-manual color:
+To test the battery colors with the controller running, inspect `~/color` and
+publish battery states:
 
 ```bash
 ros2 topic pub --once /battery_state sensor_msgs/msg/BatteryState \

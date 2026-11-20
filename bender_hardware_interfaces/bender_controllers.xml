@@ -10,7 +10,7 @@
          type="bender_hardware_interfaces::ChestLedController"
          base_class_type="controller_interface::ControllerInterface">
 		<description>
-      Drives the chest light: color from ~/color (std_msgs/UInt8MultiArray [r,g,b]) and e-stop from the estop/pressed state interface
+      Publishes the battery-derived color on ~/color, accepts manual RGB on ~/manual_color, and reads e-stop from the estop/pressed state interface
     </description>
 	</class>
 </library>

@@ -6,6 +6,7 @@
 #include <string>
 
 #include "controller_interface/controller_interface.hpp"
+#include "rclcpp/publisher.hpp"
 #include "rclcpp/subscription.hpp"
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/state.hpp"
@@ -16,7 +17,8 @@ namespace bender_hardware_interfaces {
     // Controla la luz del pecho (Pico W) a través de las command interfaces
     // <led_name>/r, /g, /b, /estop que exporta EncoderInterface.
     //
-    //  - El color viene del tópico ~/color (std_msgs/UInt8MultiArray, data = [r, g, b]).
+    //  - El color calculado desde la batería se publica en ~/color.
+    //  - Un color manual opcional se recibe en ~/manual_color.
     //  - El estado de la parada de emergencia se lee DIRECTO de la state interface
     //    del Pioneer (estop/pressed), dentro del mismo ciclo de control, sin pasar
     //    por tópicos. La Pico le da prioridad al e-stop sobre el color.
@@ -51,7 +53,8 @@ namespace bender_hardware_interfaces {
             std::atomic<bool> manual_color_received_{false};
             std::atomic<bool> battery_state_received_{false};
 
-            rclcpp::Subscription<std_msgs::msg::UInt8MultiArray>::SharedPtr color_sub_;
+            rclcpp::Publisher<std_msgs::msg::UInt8MultiArray>::SharedPtr battery_color_pub_;
+            rclcpp::Subscription<std_msgs::msg::UInt8MultiArray>::SharedPtr manual_color_sub_;
             rclcpp::Subscription<sensor_msgs::msg::BatteryState>::SharedPtr battery_sub_;
     };
 

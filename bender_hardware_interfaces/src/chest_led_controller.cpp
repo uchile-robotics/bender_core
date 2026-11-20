@@ -53,12 +53,16 @@ ChestLedController::on_configure(const rclcpp_lifecycle::State& /*previous_state
     manual_color_received_.store(false);
     battery_state_received_.store(false);
 
-    color_sub_ = get_node()->create_subscription<std_msgs::msg::UInt8MultiArray>(
-        "~/color", rclcpp::SystemDefaultsQoS(),
+    battery_color_pub_ = get_node()->create_publisher<std_msgs::msg::UInt8MultiArray>(
+        "~/color", rclcpp::SystemDefaultsQoS());
+
+    manual_color_sub_ = get_node()->create_subscription<std_msgs::msg::UInt8MultiArray>(
+        "~/manual_color", rclcpp::SystemDefaultsQoS(),
         [this](const std_msgs::msg::UInt8MultiArray::SharedPtr msg) {
             if (msg->data.size() != 3) {
                 RCLCPP_WARN_THROTTLE(get_node()->get_logger(), *get_node()->get_clock(), 2000,
-                    "~/color espera exactamente 3 valores [r, g, b], llegaron %zu", msg->data.size());
+                    "~/manual_color espera exactamente 3 valores [r, g, b], llegaron %zu",
+                    msg->data.size());
                 return;
             }
             manual_color_.store(pack(msg->data[0], msg->data[1], msg->data[2]));
@@ -93,10 +97,15 @@ ChestLedController::on_configure(const rclcpp_lifecycle::State& /*previous_state
 
             battery_color_.store(pack(r, g, b));
             battery_state_received_.store(true);
+
+            std_msgs::msg::UInt8MultiArray color;
+            color.data = {r, g, b};
+            battery_color_pub_->publish(color);
         });
 
     RCLCPP_INFO(get_node()->get_logger(),
-        "Luz del pecho: '%s', e-stop: '%s', batería: '%s' "
+        "Luz del pecho: '%s', e-stop: '%s', batería: '%s'; "
+        "color de batería en ~/color, entrada manual en ~/manual_color "
         "(e-stop > color manual > batería)",
         led_name_.c_str(), estop_interface_.empty() ? "(deshabilitado)" : estop_interface_.c_str(),
         battery_state_topic_.c_str());

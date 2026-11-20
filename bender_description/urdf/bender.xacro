@@ -655,7 +655,8 @@
     <parent link="l3l_1"/>
     <child link="l4l_1"/>
     <axis xyz="-0.0 -1.0 0.0"/>
-    <limit upper="2.011" lower="-2.127" effort="100.0" velocity="100.0"/>
+    <!-- Límites del motor (ID 11: pasos 1243 a 3985, cero en 2556) -->
+    <limit upper="2.192" lower="-2.014" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l5l_to_l4l" type="revolute">
@@ -695,7 +696,8 @@
     <parent link="l3r_1"/>
     <child link="l4r_1"/>
     <axis xyz="-0.0 1.0 0.0"/>
-    <limit upper="1.974" lower="-2.100" effort="100.0" velocity="100.0"/>
+    <!-- Límites del motor (ID 13: pasos 160 a 2940, cero en 1545) -->
+    <limit upper="2.139" lower="-2.124" effort="100.0" velocity="100.0"/>
   </joint>
 
   <joint name="l5r_to_l4r" type="revolute">
